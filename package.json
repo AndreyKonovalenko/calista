@@ -8,7 +8,8 @@
     "dev": "npm run dev --prefix server",
     "type-check": "npm run type-check --prefix server",
     "lint": "npm run lint --prefix server",
-    "format": "prettier . --check && prettier . --write"
+    "format": "prettier . --check",
+    "format-fix": "prettier . --write"
   },
   "keywords": [],
   "author": "",
