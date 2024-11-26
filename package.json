@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npm run dev --prefix server",
+    "prod-client":"NODE_ENV=production npm run dev --prefix server",
     "type-check": "npm run type-check --prefix server",
     "lint": "npm run lint --prefix server",
     "format": "prettier . --check",
