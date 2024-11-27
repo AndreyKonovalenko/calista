@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npm run dev --prefix server",
-    "prod-client":"NODE_ENV=production npm run dev --prefix server",
+    "dev": "concurrently \"npm run dev --prefix server \" \" npm run start --prefix client\"",
+    "prod-client": "NODE_ENV=production npm run dev --prefix server",
     "type-check": "npm run type-check --prefix server",
-    "lint": "npm run lint --prefix server",
+    "lint": "concurrently \"npm run lint --prefix server \" \" npm run lint --prefix client\"",
     "format": "prettier . --check",
     "format-fix": "prettier . --write"
   },
@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "concurrently": "^9.1.0",
     "eslint-config-prettier": "^9.1.0",
     "prettier": "3.3.3"
   }
