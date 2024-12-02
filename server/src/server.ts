@@ -1,31 +1,40 @@
 import express, { Request, Response } from 'express';
-import path from 'path';
+import colors from 'colors';
+import dotenv from 'dotenv';
+import { connectDB } from './db';
+import { authRouter } from './routes/authRoutes';
+import cookieParser from 'cookie-parser';
+import { boardsRouter } from './routes/boardsRoutes';
+import cors from 'cors';
+
+const terminalColors = colors;
+
+dotenv.config({path: '../.env'});
+connectDB();
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 5002;
 
-// // Serve frontend
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(
+	cors({
+		credentials: true,
+		origin:
+			process.env.NODE_ENV === 'production'
+				? process.env.CLIENT_URL
+				: terminalColors.yellow(`http://localhost:${port}`),
+	})
+);
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../../', 'client', 'build')));
-  app.get('*', (req: Request, res: Response) =>
-    res.sendFile(
-      path.resolve(__dirname, '../../', 'client', 'build', 'index.html'),
-    ),
-  );
-  console.log(
-    path.resolve(__dirname, '../../', 'client', 'build', 'index.html'),
-  );
-} else {
-  app.get('/', (req: Request, res: Response) => {
-    res.send('Please set to production');
-  });
-}
+app.use('/api/auth', authRouter);
+app.use('/api/boards', boardsRouter);
 
-app.get('/', (req, res) => {
-  res.send('Hello New World!');
+app.get('/', (req: Request, res: Response) => {
+	res.send('Hello World');
 });
 
 app.listen(port, () => {
-  return console.log(`Express is listening at http://localhost:${port}`);
+	console.log(terminalColors.yellow(`App listening at http://localhost:${port}`));
 });
