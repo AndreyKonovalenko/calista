@@ -1,3 +1,3 @@
 export type TForm = {
-	[key: string]: string;
+  [key: string]: string;
 };

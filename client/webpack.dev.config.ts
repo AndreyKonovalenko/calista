@@ -38,11 +38,11 @@ const config: Configuration = {
         test: /\.(sa|sc|c)ss$/i,
         use: [
           // Creates `style` nodes from JS strings
-          "style-loader",
+          'style-loader',
           // Translates CSS into CommonJS
-          "css-loader",
+          'css-loader',
           // Compiles Sass to CSS
-          "sass-loader",
+          'sass-loader',
         ],
       },
     ],
@@ -69,7 +69,12 @@ const config: Configuration = {
     historyApiFallback: true,
     port: 4000,
     open: true,
-    hot: true,
+    proxy: [
+      {
+      context: ['/api'],
+      target: 'http://localhost:5003', 
+      }
+    ]
   },
 };
 

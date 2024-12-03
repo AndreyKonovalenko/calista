@@ -7,7 +7,7 @@ export const connectDB = async () => {
     });
     console.log(
       `MongoDB Connected! db:${connection.name} host:${connection.host}`.cyan
-        .underline
+        .underline,
     );
   } catch (error) {
     console.log(error);

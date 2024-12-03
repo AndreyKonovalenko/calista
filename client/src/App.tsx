@@ -12,16 +12,16 @@ import { useUserStore } from './services/user/user-store';
 const queryClient = new QueryClient();
 
 const App = (): JSX.Element => {
-	useUserStore();
-	return (
-		<QueryClientProvider client={queryClient}>
-			<ThemeProvider theme={theme}>
-				<CssBaseline />
-				<ToastContainer />
-				<RouterProvider router={router} />
-			</ThemeProvider>
-		</QueryClientProvider>
-	);
+  useUserStore();
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <ToastContainer />
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
 };
 
 export default App;
