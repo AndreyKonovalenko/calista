@@ -27,7 +27,7 @@ app.use(cookieParser());
 //         : terminalColors.yellow(`http://localhost:${port}`),
 //   }),
 // );
-app.use(cors())
+app.use(cors());
 
 app.use('/api/auth', authRouter);
 app.use('/api/boards', boardsRouter);

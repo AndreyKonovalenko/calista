@@ -11,6 +11,13 @@ type TProps = {
   element: JSX.Element;
 };
 
+// const useUser = () => {
+//   return useQuery({
+//     queryKey: ['user'],
+//     queryFn: api.auth.fetchUser,
+//   });
+// };
+
 const ProtectedRoute = ({ element }: TProps): JSX.Element => {
   const user = useUserStore(state => state.user);
   const navigate = useNavigate();

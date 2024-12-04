@@ -1,5 +1,5 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { Request, Response, NextFunction} from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { getErrorMessage } from '../utils';
 import { IUser } from '../models';
@@ -17,7 +17,8 @@ export const protect = (async (
   res: Response,
   next: NextFunction,
 ) => {
-  const  token = req.cookies.jwt;
+  const token = req.cookies.jwt;
+  console.log(token);
   try {
     if (!token) {
       return res
@@ -25,9 +26,11 @@ export const protect = (async (
         .send(ReasonPhrases.UNAUTHORIZED);
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-    const user: HydratedDocument<IUser> | null = await findUserByUserId(decoded.user_id);
-    if (user){
-      (req as CustomRequest).user = user
+    const user: HydratedDocument<IUser> | null = await findUserByUserId(
+      decoded.user_id,
+    );
+    if (user) {
+      (req as CustomRequest).user = user;
       next();
     } else {
       return res

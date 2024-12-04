@@ -36,17 +36,18 @@ export default function Login() {
   };
 
   useEffect(() => {
+    console.log('data-mute', data);
     if (data) {
       setUser(data);
     }
   }, [data, setUser]);
 
   useEffect(() => {
-    console.log(location)
+    console.log(location);
     if (user) {
-      console.log(location)
+      console.log(location);
       // navigate(location?.state?.from || '/');
-      navigate(TO_MAIN)
+      navigate(TO_MAIN);
     }
   }, [user, navigate, location]);
 
