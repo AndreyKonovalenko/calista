@@ -7,7 +7,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Person } from '@mui/icons-material';
 import { useMutation } from '@tanstack/react-query';
 import { useUserStore } from '../../services/user/user-store';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink} from 'react-router-dom';
 import Link from '@mui/material/Link';
 import api from '../../utils/calista-api';
 
@@ -36,7 +36,6 @@ export default function HeaderBar() {
             underline="none"
             to={TO_MAIN}
             color="inherit"
-            onClick={() => console.info('click')}
           >
             Todo-boards
           </Link>
@@ -49,10 +48,10 @@ export default function HeaderBar() {
             </Stack>
             <IconButton
               size="large"
+              onClick={handleLogout} 
               aria-label="account of current user"
               aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleLogout}
+              aria-haspopup="true"  
               color="inherit"
             >
               <LogoutIcon fontSize="large" />

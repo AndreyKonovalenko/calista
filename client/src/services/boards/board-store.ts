@@ -5,7 +5,7 @@ export type TBoard = {
   _id: string;
   title: string;
   creater_id: string;
-  lists: Array<String>;
+  lists: Array<string>;
 };
 
 // type TBaordsState = {

@@ -182,31 +182,31 @@ const BoardPage = (): JSX.Element => {
           }}
         >
           <ListItem>
-            <BoardList title="to Do" />
+            <BoardList title="to Do" id="test222_id" />
           </ListItem>
           <ListItem>
-            <BoardList title="in progress" />
+            <BoardList title="in progress" id="test222_id" />
           </ListItem>
           <ListItem>
-            <BoardList title="to Do" />
+            <BoardList title="to Do" id="test222_id"/>
           </ListItem>
           <ListItem>
-            <BoardList title="in progress" />
+            <BoardList title="in progress" id="test222_id" />
           </ListItem>
           <ListItem>
-            <BoardList title="to Do" />
+            <BoardList title="to Do" id="test222_id" />
           </ListItem>
           <ListItem>
-            <BoardList title="in progress" />
+            <BoardList title="in progress" id="test222_id" />
           </ListItem>
           <ListItem>
-            <BoardList title="in progress" />
+            <BoardList title="in progress" id="test222_id" />
           </ListItem>
           <ListItem>
-            <BoardList title="to Do" />
+            <BoardList title="to Do" id="test222_id"/>
           </ListItem>
           <ListItem>
-            <BoardList title="in progress last" />
+            <BoardList title="in progress last" id="test222_id"/>
           </ListItem>
 
           {AddList}

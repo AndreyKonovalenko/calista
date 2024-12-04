@@ -12,6 +12,7 @@ import Container from '@mui/material/Container';
 import { useUserStore } from '../../services/user/user-store';
 import { useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { TO_MAIN } from '../../utils/route-constants';
 
 import api from '../../utils/calista-api';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -41,8 +42,11 @@ export default function Login() {
   }, [data, setUser]);
 
   useEffect(() => {
+    console.log(location)
     if (user) {
-      navigate(location?.state?.from || '/');
+      console.log(location)
+      // navigate(location?.state?.from || '/');
+      navigate(TO_MAIN)
     }
   }, [user, navigate, location]);
 

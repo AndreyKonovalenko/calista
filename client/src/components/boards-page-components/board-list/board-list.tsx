@@ -7,16 +7,16 @@ import {
   Stack,
   List,
   ListItem,
-  IconButton,
 } from '@mui/material';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+
 import { v4 as uuidv4 } from 'uuid';
 import { TitleTextAreaStyled } from '../boards-page-styled-elements/boards-page-styled-elements';
 
 import CardComponent from '../card-component/card-component';
+import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-menu';
 import { useState } from 'react';
 
-const BoardList = (props: { title: string }) => {
+const BoardList = (props: { title: string, id: string }) => {
   const { title } = props;
   const [listTitle, setListTitle] = useState(title);
   const [editing, setEditing] = useState(false);
@@ -34,8 +34,8 @@ const BoardList = (props: { title: string }) => {
           scrollbarWidth: 'thin',
         }}
       >
-        {cardsMoch.map(element => (
-          <ListItem key={uuidv4()}>
+        {cardsMoch.map((element, index) => (
+          <ListItem key={uuidv4()} id={index.toString()}>
             <CardComponent text={element} />
           </ListItem>
         ))}
@@ -75,13 +75,7 @@ const BoardList = (props: { title: string }) => {
                 <Typography variant="h6">{listTitle}</Typography>
               </Box>
             )}
-            <IconButton
-              color="inherit"
-              aria-label="list menu"
-              onClick={() => {}}
-            >
-              <MoreHorizIcon fontSize="medium" />
-            </IconButton>
+          <BoardListActionMenu/>
           </Stack>
         </Box>
         {cardsList}
@@ -89,7 +83,6 @@ const BoardList = (props: { title: string }) => {
           <Button>+ Add a card</Button>
         </Box>
       </Stack>
-      ``
     </Box>
   );
 };
