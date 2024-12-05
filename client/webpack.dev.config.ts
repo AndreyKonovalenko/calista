@@ -7,6 +7,7 @@ import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-serv
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
+import Dotenv from 'dotenv-webpack'
 
 interface Configuration extends WebpackConfiguration {
   devServer?: WebpackDevServerConfiguration;
@@ -57,6 +58,9 @@ const config: Configuration = {
     new HotModuleReplacementPlugin(),
     new ForkTsCheckerWebpackPlugin({
       async: false,
+    }),
+    new Dotenv({ 
+      path: './../.env'
     }),
     new ESLintPlugin({
       extensions: ['js', 'jsx', 'ts', 'tsx'],

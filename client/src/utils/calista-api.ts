@@ -4,13 +4,16 @@ import { TUser } from '../services/user/user-store';
 import { TBoard } from '../services/boards/board-store';
 import { TList } from '../services/lists/list-store';
 import { TForm } from './types';
+import validEnv from './utils';
 
-const LOGIN = '/auth/login';
-const LOGOUT = '/auth/logout';
-const BOARDS = '/boards';
-const LISTS = '/lists';
+const BASE_URL = validEnv(process.env.BASE_URL);
+const LOGIN = validEnv(process.env.LOGIN);
+const LOGOUT= validEnv(process.env.LOGOUT);
+const LISTS = validEnv(process.env.LISTS);
+const BOARDS = validEnv(process.env.BOARDS);
+// const AUTH = env('AUTH');
 
-axios.defaults.baseURL = 'api/';
+axios.defaults.baseURL = BASE_URL;
 
 axios.interceptors.response.use(
   res => {
@@ -26,7 +29,7 @@ axios.interceptors.response.use(
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 const request = {
-  get: <T>(url: string) => axios.get<T>(url).then(responseBody),
+  get: <T>(url: string ) => axios.get<T>(url).then(responseBody),
   post: <T>(url: string, body?: object) =>
     axios.post<T>(url, body).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody),

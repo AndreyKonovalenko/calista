@@ -6,6 +6,24 @@ import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { generateToken } from '../services/authService';
 import { IUser } from '../models';
 import { HydratedDocument } from 'mongoose';
+import { CustomRequest } from '../middleware/protected';
+
+
+// GET: auth/
+export const getUser = (async(req: Request, res:Response) => {
+  const {user} = req as CustomRequest;
+  try {
+    if (user) {
+      console.log(user)
+      return res.status(StatusCodes.OK).json({user});
+    }
+  } catch (error) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(getErrorMessage(error));
+  }
+}) as Application;
+
 
 // POST: auth/
 export const register = (async (req: Request, res: Response) => {
