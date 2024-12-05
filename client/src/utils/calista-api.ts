@@ -11,7 +11,7 @@ const LOGIN = validEnv(process.env.LOGIN);
 const LOGOUT= validEnv(process.env.LOGOUT);
 const LISTS = validEnv(process.env.LISTS);
 const BOARDS = validEnv(process.env.BOARDS);
-// const AUTH = env('AUTH');
+const AUTH = validEnv(process.env.AUTH);
 
 axios.defaults.baseURL = BASE_URL;
 
@@ -36,6 +36,7 @@ const request = {
 };
 
 const auth = {
+  fetchUser: () => request.get<TUser>(AUTH),
   login: (data: TForm) => request.post<TUser>(LOGIN, data),
   logout: () => request.post<void>(LOGOUT),
 };
