@@ -10,11 +10,13 @@ import { useUserStore } from '../../services/user/user-store';
 import { Link as RouterLink} from 'react-router-dom';
 import Link from '@mui/material/Link';
 import api from '../../utils/calista-api';
+import { useNavigate } from 'react-router-dom';
 
-import { TO_MAIN } from '../../utils/route-constants';
+import { TO_LOGIN, TO_MAIN } from '../../utils/route-constants';
 import { Stack, Typography } from '@mui/material';
 
 export default function HeaderBar() {
+  const navitage = useNavigate();
   const user = useUserStore(state => state.user);
   const { reset } = useUserStore();
   const { mutate } = useMutation({
@@ -22,8 +24,9 @@ export default function HeaderBar() {
   });
 
   const handleLogout = () => {
-    mutate();
     reset();
+    mutate();
+    navitage(TO_LOGIN)
   };
 
   return (

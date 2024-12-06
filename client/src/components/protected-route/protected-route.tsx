@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 import { TO_LOGIN } from '../../utils/route-constants';
 import { useUserStore } from '../../services/user/user-store';
 import { useQuery} from '@tanstack/react-query';
@@ -20,31 +19,29 @@ const useUser = () => {
 
 const ProtectedRoute = ({ element }: TProps): JSX.Element => {
   const {setUser} = useUserStore();
-  const { data } = useUser()  
-  const user  = useUserStore(state => state.user);
+  const {data, isFetched, isSuccess} = useUser();
+  const user = useUserStore(state => state.user);
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+  useEffect(() =>{
+    if(!user && data){
+      setUser(data)
+    }
+  },[user,data])
 
   useEffect(() => {
-    if (!user) {
-      if( data ){
-        console.log(data)
-        setUser(data)
-      } else {
-        navigate(TO_LOGIN, { state: { from: pathname }, replace: true });
-      }
-    }
+    console.log(data, isFetched, isSuccess)
+    if (!data && !isSuccess) {
+      console.log('to login')
+      navigate(TO_LOGIN, { state: { from: pathname }, replace: true });
+     }
   }, [navigate, pathname, user, setUser]);
 
-  useEffect(()=>{
-    console.log(user)
-  }, [user])
-  // if (loading) {
-  //   return (<LoadingBage/>);
+  // if(!isFetched && !user) {
+  //   return <h1>LOADING</h1>;
   // }
-
-  return user ? element : <></>;
+  return user? element : <h1>LOADING</h1>
 };
 
 export default ProtectedRoute;
