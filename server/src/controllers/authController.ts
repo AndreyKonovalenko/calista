@@ -13,9 +13,16 @@ import { CustomRequest } from '../middleware/protected';
 export const getUser = (async(req: Request, res:Response) => {
   const {user} = req as CustomRequest;
   try {
+    if(!user) {
+        return res
+          .status(StatusCodes.UNAUTHORIZED)
+          .send(ReasonPhrases.UNAUTHORIZED);
+    }
     if (user) {
-      console.log(user)
-      return res.status(StatusCodes.OK).json({isAuth: true});
+      return res.status(StatusCodes.OK).json({
+        isAuth: true,
+        username: user.username,
+      });        
     }
   } catch (error) {
     return res
@@ -62,7 +69,7 @@ export const login = (async (req: Request, res: Response) => {
     if (user && bcrypt.compareSync(password, user.password)) {
       generateToken(res, user._id);
       return res.status(StatusCodes.OK).json({
-        _id: user._id,
+        isAuth: true,
         username: user.username,
       });
     } else {

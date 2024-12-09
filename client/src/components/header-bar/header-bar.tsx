@@ -17,7 +17,7 @@ import { Stack, Typography } from '@mui/material';
 
 export default function HeaderBar() {
   const navitage = useNavigate();
-  const { isAuth, reset } = useAuthStore(state => state);
+  const { isAuth, username,  reset } = useAuthStore(state => state);
   const { mutate } = useMutation({
     mutationFn: api.auth.logout,
   });
@@ -42,11 +42,11 @@ export default function HeaderBar() {
             Todo-boards
           </Link>
         </Box>
-        {user && (
+        {isAuth && (
           <Stack direction="row" spacing={4}>
             <Stack direction="row" sx={{ alignItems: 'center' }} spacing={1}>
               <Person color="inherit" fontSize="large" />
-              <Typography variant="h6">{user.username}</Typography>
+              <Typography variant="h6">{username}</Typography>
             </Stack>
             <IconButton
               size="large"

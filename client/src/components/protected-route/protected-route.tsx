@@ -14,7 +14,7 @@ const useUser = (isAuth:boolean) => {
   return useQuery({
     queryKey: ['user'],
     queryFn: api.auth.fetchUser,
-    enabled: !isAuth,
+    enabled: isAuth === false,
     retry: false
   });
 };
@@ -26,23 +26,29 @@ const ProtectedRoute = ({ element }: TProps): JSX.Element => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  // useEffect(() =>{
-  //   if(!user && data){
-  //     setUser(data)
-  //   }
-  // },[user,data])
-
   useEffect(() => {
-    console.log(data,  isSuccess,isPending)
-    if (!isAuth) {
-      console.log('to login')
-      navigate(TO_LOGIN, { state: { from: pathname }, replace: true });
-     }
-  }, [navigate, pathname, setAuthStatus, isAuth]);
+    if(!isPending){
+      console.log(isSuccess, isPending)
+      if(!isAuth&&isSuccess) {
+        setAuthStatus(data)
+      }
+      if(!isSuccess&&!isAuth){
+        navigate(TO_LOGIN, { state: { from: pathname }, replace: true });
+      }
+    }
+  },[isAuth, data, isSuccess, setAuthStatus, isPending])
 
-  // if(!isFetched && !user) {
-  //   return <h1>LOADING</h1>;
-  // }
+  // useEffect(() => {
+  //   console.log(data,  isSuccess, isPending)
+  //   if (!isAuth&&!isSuccess&&!isPending) {
+  //     console.log('to login')
+  //     navigate(TO_LOGIN, { state: { from: pathname }, replace: true });
+  //    }
+  // }, [navigate, pathname, setAuthStatus, isAuth]);
+
+  // // if(!isFetched && !user) {
+  // //   return <h1>LOADING</h1>;
+  // // }
   return isAuth? element : <h1>LOADING</h1>
 };
 
