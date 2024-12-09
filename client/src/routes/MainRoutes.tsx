@@ -7,15 +7,15 @@ import MainLayout from '../layout/MainLayout';
 
 const MainRoutes = {
   path: '/',
-  element: <MainLayout />,
+  element: <ProtectedRoute element={<MainLayout />}/>,
   children: [
     {
       path: '/',
-      element: <ProtectedRoute element={<MainPage />} />,
+      element: <MainPage />,
     },
     {
       path: `${TO_BOARDS}/:name`,
-      element: <ProtectedRoute element={<BoardPage />} />,
+      element: <BoardPage />,
     },
   ],
 };

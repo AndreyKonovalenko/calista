@@ -7,12 +7,10 @@ import { theme } from './styles/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useUserStore } from './services/user/user-store';
 
 const queryClient = new QueryClient();
 
 const App = (): JSX.Element => {
-  useUserStore();
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>

@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { useUserStore } from '../../services/user/user-store';
+import { useAuthStore } from '../../services/auth/auth-store';
 import { useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { TO_MAIN } from '../../utils/route-constants';
@@ -24,8 +24,7 @@ export default function Login() {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { setUser } = useUserStore();
-  const user = useUserStore(state => state.user);
+  const {setAuthStatus, isAuth} = useAuthStore(state => state);
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -38,18 +37,18 @@ export default function Login() {
   useEffect(() => {
     console.log('data-mute', data);
     if (data) {
-      setUser(data);
+      setAuthStatus(data);
     }
-  }, [data, setUser]);
+  }, [data, setAuthStatus]);
 
   useEffect(() => {
     console.log(location);
-    if (user) {
+    if (isAuth) {
       console.log(location);
       // navigate(location?.state?.from || '/');
       navigate(TO_MAIN);
     }
-  }, [user, navigate, location]);
+  }, [isAuth, navigate, location]);
 
   return (
     <Container component="main" maxWidth="xs">

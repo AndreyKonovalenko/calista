@@ -15,7 +15,7 @@ export const getUser = (async(req: Request, res:Response) => {
   try {
     if (user) {
       console.log(user)
-      return res.status(StatusCodes.OK).json({user});
+      return res.status(StatusCodes.OK).json({isAuth: true});
     }
   } catch (error) {
     return res

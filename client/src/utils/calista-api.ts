@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import { toast } from 'react-toastify';
-import { TUser } from '../services/user/user-store';
+import { TUser } from '../services/auth/auth-store';
 import { TBoard } from '../services/boards/board-store';
 import { TList } from '../services/lists/list-store';
 import { TForm } from './types';

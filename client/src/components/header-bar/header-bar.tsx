@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Person } from '@mui/icons-material';
 import { useMutation } from '@tanstack/react-query';
-import { useUserStore } from '../../services/user/user-store';
+import { useAuthStore } from '../../services/auth/auth-store';
 import { Link as RouterLink} from 'react-router-dom';
 import Link from '@mui/material/Link';
 import api from '../../utils/calista-api';
@@ -17,8 +17,7 @@ import { Stack, Typography } from '@mui/material';
 
 export default function HeaderBar() {
   const navitage = useNavigate();
-  const user = useUserStore(state => state.user);
-  const { reset } = useUserStore();
+  const { isAuth, reset } = useAuthStore(state => state);
   const { mutate } = useMutation({
     mutationFn: api.auth.logout,
   });
