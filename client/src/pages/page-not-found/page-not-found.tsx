@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Link, Typography} from "@mui/material";
 import { Link as RouterLink} from 'react-router-dom';
-import { TO_MAIN } from "../../utils/route-constants";
+import { TO_BOARDS} from "../../utils/route-constants";
 
 const NotFoundPage = (): JSX.Element => {
   return (
@@ -17,7 +17,7 @@ const NotFoundPage = (): JSX.Element => {
       <Link
         component={RouterLink}
         variant="h6"
-        to={TO_MAIN}
+        to={`/${TO_BOARDS}`}
         underline="none"
       >
       Return to main page

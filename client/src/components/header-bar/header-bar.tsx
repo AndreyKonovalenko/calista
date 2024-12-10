@@ -1,4 +1,4 @@
-import * as React from 'react';
+import  React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,7 +7,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Person } from '@mui/icons-material';
 import { useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '../../services/auth/auth-store';
-import { Link as RouterLink} from 'react-router-dom';
+import { Link as RouterLink, useLocation} from 'react-router-dom';
 import Link from '@mui/material/Link';
 import api from '../../utils/calista-api';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +16,8 @@ import { TO_LOGIN, TO_MAIN } from '../../utils/route-constants';
 import { Stack, Typography } from '@mui/material';
 
 export default function HeaderBar() {
-  const navitage = useNavigate();
+  const navigate = useNavigate();
+  const {pathname} = useLocation()
   const { isAuth, username,  reset } = useAuthStore(state => state);
   const { mutate } = useMutation({
     mutationFn: api.auth.logout,
@@ -25,8 +26,15 @@ export default function HeaderBar() {
   const handleLogout = () => {
     reset();
     mutate();
-    navitage(TO_LOGIN)
+    navigate(`/${TO_LOGIN}`, { state: { from: pathname }, replace: true });
   };
+
+  // useEffect(()=>{
+  //   if(isSuccess && !isPending){
+  //     reset();
+  //     navitage(`/${TO_LOGIN}`)
+  //   }
+  // },[isSuccess, isPending])
 
   return (
     <AppBar position="fixed">

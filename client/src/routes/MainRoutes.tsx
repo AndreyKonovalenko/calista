@@ -6,16 +6,15 @@ import ProtectedRoute from '../components/protected-route/protected-route';
 import MainLayout from '../layout/MainLayout';
 
 const MainRoutes = {
-  path: '/',
-  element: <ProtectedRoute element={<MainLayout />}/>,
+  element: <MainLayout />,
   children: [
     {
-      path: '/',
-      element:  <MainPage />,
+      path: TO_BOARDS,
+      element: <ProtectedRoute element={<MainPage />}/>,
     },
     {
-      path: `${TO_BOARDS}/:name`,
-      element: <BoardPage />,
+      path: ':name',
+      element: <ProtectedRoute element={<BoardPage />}/>,
     },
   ],
 };

@@ -6,7 +6,7 @@ import AuthRoutes from './AuthRoutes';
 import MainRoutes from './MainRoutes';
 
 const NotFoundRoute = {
-  path: '*',
+  path: '/*',
   element:<NotFoundPage />
 }
 

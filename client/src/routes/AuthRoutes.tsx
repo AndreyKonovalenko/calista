@@ -5,7 +5,6 @@ import RegisterPage from '../pages/register-page/register-page';
 import LoginPage from '../pages/login-page/login-page';
 
 const AuthRoutes = {
-  path: '/',
   element: <AuthLayout />,
   children: [
     {

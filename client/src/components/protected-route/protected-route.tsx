@@ -27,6 +27,7 @@ const ProtectedRoute = ({ element }: TProps): JSX.Element => {
   const { pathname } = useLocation();
 
   useEffect(() => {
+    console.log("protected componetn mount")
     if(!isPending){
       console.log(isSuccess, isPending)
       if(!isAuth&&isSuccess) {
