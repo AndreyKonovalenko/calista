@@ -11,7 +11,7 @@ const MainRoutes = {
   children: [
     {
       path: '/',
-      element: <MainPage />,
+      element:  <MainPage />,
     },
     {
       path: `${TO_BOARDS}/:name`,
