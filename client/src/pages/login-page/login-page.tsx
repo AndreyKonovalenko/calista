@@ -12,9 +12,8 @@ import Container from '@mui/material/Container';
 import { useAuthStore } from '../../services/auth/auth-store';
 import { useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
-
-import api from '../../utils/calista-api';
 import { useNavigate } from 'react-router';
+import api from '../../utils/calista-api';
 
 export default function LoginPage() {
   const { mutate, data } = useMutation({
