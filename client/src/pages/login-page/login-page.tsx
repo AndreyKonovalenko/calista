@@ -14,16 +14,14 @@ import { useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 
 import api from '../../utils/calista-api';
-import { useLocation, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 
 export default function LoginPage() {
   const { mutate, data } = useMutation({
     mutationFn: api.auth.login,
   });
-
-  const location = useLocation();
   const navigate = useNavigate();
-  const {setAuthStatus, isAuth} = useAuthStore(state => state);
+  const { setAuthStatus } = useAuthStore(state => state);
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -37,18 +35,10 @@ export default function LoginPage() {
     console.log('data-mute', data);
     if (data) {
       setAuthStatus(data);
+      navigate('/');
+      // navigate(location?.state?.from || '/');
     }
   }, [data, setAuthStatus]);
-
-  useEffect(() => {
-    console.log('isAuth state in login page');
-    if (isAuth) {
-      console.log(location);
-      // navigate(location?.state?.from || '/');
-      navigate("/");
-    }
-  }, [isAuth, navigate, location]);
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
