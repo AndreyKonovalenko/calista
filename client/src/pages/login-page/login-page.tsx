@@ -41,7 +41,7 @@ export default function LoginPage() {
   }, [data, setAuthStatus]);
 
   useEffect(() => {
-    console.log(location);
+    console.log('isAuth state in login page');
     if (isAuth) {
       console.log(location);
       // navigate(location?.state?.from || '/');

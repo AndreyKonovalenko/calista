@@ -5,7 +5,7 @@ import { theme } from './styles/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import ProtectedRoute from './components/protected-route/protected-route';
+import ProtectedRoute from './components/protected-route/protected-route';
 import MainPage from './pages/main-page/main-page';
 import BoardPage from './pages/board-page/board-page';
 import MainLayout from './layout/MainLayout';
@@ -25,8 +25,8 @@ const App = (): JSX.Element => {
         <BrowserRouter>
           <Routes>    
             <Route element={<MainLayout />}>
-              <Route index element={<MainPage />}/>
-              <Route path="boards/:name" element={<BoardPage />} />           
+              <Route index element={<ProtectedRoute element={<MainPage />} />}/>
+              <Route path="boards/:name" element={<ProtectedRoute element={<BoardPage />} />} />           
             </Route>
             <Route element={<AuthLayout/>}>
               <Route path='login' element={<LoginPage />} />
