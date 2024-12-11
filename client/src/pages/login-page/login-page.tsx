@@ -12,12 +12,11 @@ import Container from '@mui/material/Container';
 import { useAuthStore } from '../../services/auth/auth-store';
 import { useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { TO_BOARDS } from '../../utils/route-constants';
 
 import api from '../../utils/calista-api';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 
-export default function Login() {
+export default function LoginPage() {
   const { mutate, data } = useMutation({
     mutationFn: api.auth.login,
   });
@@ -46,7 +45,7 @@ export default function Login() {
     if (isAuth) {
       console.log(location);
       // navigate(location?.state?.from || '/');
-      navigate(`/${TO_BOARDS}`);
+      navigate("/");
     }
   }, [isAuth, navigate, location]);
 

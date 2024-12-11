@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import { Box } from '@mui/material';
 import HeaderBar from '../components/header-bar/header-bar';
 import { HEADER } from './config-layout';

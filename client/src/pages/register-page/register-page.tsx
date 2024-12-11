@@ -31,7 +31,7 @@ import Container from '@mui/material/Container';
 //   return response.json();
 // };
 
-export default function Register(): JSX.Element {
+export default function RegisterPage(): JSX.Element {
   // const mutation = useMutation({
   //   mutationFn: (formData) => {
   //     return fetch(REGISTER_ROUTE, formData);

@@ -1,9 +1,13 @@
-import React from "react";
+import React , { useEffect } from "react";
 import { Box, Link, Typography} from "@mui/material";
-import { Link as RouterLink} from 'react-router-dom';
+import { Link as RouterLink} from 'react-router';
 import { TO_BOARDS} from "../../utils/route-constants";
 
 const NotFoundPage = (): JSX.Element => {
+
+  useEffect(()=> {
+    console.log('Notfound mounts')
+  })
   return (
     <Box sx={{ margin: 10 }}>
       <Typography

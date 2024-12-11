@@ -7,10 +7,10 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Person } from '@mui/icons-material';
 import { useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '../../services/auth/auth-store';
-import { Link as RouterLink, useLocation} from 'react-router-dom';
+import { Link as RouterLink, useLocation} from 'react-router';
 import Link from '@mui/material/Link';
 import api from '../../utils/calista-api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { TO_LOGIN, TO_MAIN } from '../../utils/route-constants';
 import { Stack, Typography } from '@mui/material';

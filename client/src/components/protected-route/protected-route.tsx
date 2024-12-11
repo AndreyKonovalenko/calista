@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import { TO_LOGIN } from '../../utils/route-constants';
 import {useAuthStore } from '../../services/auth/auth-store';
 import { useQuery} from '@tanstack/react-query';
