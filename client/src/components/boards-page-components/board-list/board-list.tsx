@@ -16,7 +16,7 @@ import CardComponent from '../card-component/card-component';
 import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-menu';
 import { useState } from 'react';
 
-const BoardList = (props: { title: string, id: string }) => {
+const BoardList = (props: { title: string; id: string }) => {
   const { title } = props;
   const [listTitle, setListTitle] = useState(title);
   const [editing, setEditing] = useState(false);
@@ -75,7 +75,7 @@ const BoardList = (props: { title: string, id: string }) => {
                 <Typography variant="h6">{listTitle}</Typography>
               </Box>
             )}
-          <BoardListActionMenu/>
+            <BoardListActionMenu />
           </Stack>
         </Box>
         {cardsList}

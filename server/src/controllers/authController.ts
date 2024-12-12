@@ -8,21 +8,20 @@ import { IUser } from '../models';
 import { HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 
-
 // GET: auth/
-export const getUser = (async(req: Request, res:Response) => {
-  const {user} = req as CustomRequest;
+export const getUser = (async (req: Request, res: Response) => {
+  const { user } = req as CustomRequest;
   try {
-    if(!user) {
-        return res
-          .status(StatusCodes.UNAUTHORIZED)
-          .send(ReasonPhrases.UNAUTHORIZED);
+    if (!user) {
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .send(ReasonPhrases.UNAUTHORIZED);
     }
     if (user) {
       return res.status(StatusCodes.OK).json({
         isAuth: true,
         username: user.username,
-      });        
+      });
     }
   } catch (error) {
     return res
@@ -30,7 +29,6 @@ export const getUser = (async(req: Request, res:Response) => {
       .send(getErrorMessage(error));
   }
 }) as Application;
-
 
 // POST: auth/
 export const register = (async (req: Request, res: Response) => {
@@ -44,7 +42,7 @@ export const register = (async (req: Request, res: Response) => {
           `${ReasonPhrases.CONFLICT}: username: ${username} already exists`,
         );
     }
-    const user: HydratedDocument<IUser>  | null = await registerUser(req.body);
+    const user: HydratedDocument<IUser> | null = await registerUser(req.body);
     if (user) {
       generateToken(res, user._id);
       return res.status(StatusCodes.OK).send('Successfuly Registered!');
@@ -82,7 +80,7 @@ export const login = (async (req: Request, res: Response) => {
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(getErrorMessage(error));
   }
-}) as Application
+}) as Application;
 
 // POST: auth/logout
 // clear cookies

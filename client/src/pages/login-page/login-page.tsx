@@ -14,6 +14,7 @@ import { useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import api from '../../utils/calista-api';
+import { TO_MAIN } from '../../utils/route-constants';
 
 export default function LoginPage() {
   const { mutate, data } = useMutation({
@@ -31,11 +32,9 @@ export default function LoginPage() {
   };
 
   useEffect(() => {
-    console.log('data-mute', data);
     if (data) {
       setAuthStatus(data);
-      navigate('/');
-      // navigate(location?.state?.from || '/');
+      navigate(TO_MAIN);
     }
   }, [data, setAuthStatus]);
   return (

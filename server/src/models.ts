@@ -1,4 +1,4 @@
-import { Schema, Types, model} from 'mongoose';
+import { Schema, Types, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 // user
@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt';
 export interface IUser {
   username: string;
   password: string;
-};
+}
 
 const userSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
@@ -23,51 +23,42 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-export const UserModal = model<IUser>(
-  'User',
-  userSchema,
-);
+export const UserModal = model<IUser>('User', userSchema);
 
 // card
 export interface ICard {
   title: string;
   description: string;
   complition: boolean;
-};
+}
 
 const cardSchema = new Schema<ICard>({
   title: { type: String, required: true },
   description: { type: String },
   complition: { type: Boolean },
 });
-export const CardModal = model<ICard>(
-  'Card',
-  cardSchema,
-);
+export const CardModal = model<ICard>('Card', cardSchema);
 
 // list
 export interface IList {
   title: string;
   creater_id: Types.ObjectId;
   cards: Array<Types.ObjectId>;
-};
+}
 
 const listSchema = new Schema<IList>({
   title: { type: String, required: true },
   creater_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   cards: [{ type: Schema.Types.ObjectId, ref: 'Card' }],
 });
-export const ListModal = model<IList>(
-  'List',
-  listSchema,
-);
+export const ListModal = model<IList>('List', listSchema);
 
 // board
 export interface IBoard {
   title: string;
   creater_id: Types.ObjectId;
   lists: Array<Types.ObjectId>;
-};
+}
 // need to rewrite TBoard to Board Document
 
 const boardSchema = new Schema<IBoard>({
@@ -76,7 +67,4 @@ const boardSchema = new Schema<IBoard>({
   lists: [{ type: Schema.Types.ObjectId, ref: 'List' }],
 });
 
-export const BoardModal = model<IBoard>(
-  'Board',
-  boardSchema,
-);
+export const BoardModal = model<IBoard>('Board', boardSchema);

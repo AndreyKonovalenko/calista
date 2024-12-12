@@ -19,7 +19,6 @@ import { useParams } from 'react-router';
 import BoardList from '../../components/boards-page-components/board-list/board-list';
 import { HEADER, drawerWidth } from '../../layout/config-layout';
 import BoardDrawer from '../../components/boards-page-components/board-drawer/board-drawer';
-import { useLocation } from 'react-router';
 import { useNavigate } from 'react-router';
 import { TO_MAIN } from '../../utils/route-constants';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
@@ -74,11 +73,8 @@ const BoardPage = (): JSX.Element => {
   const [open, setOpen] = useState(false);
   const [addListEditMode, setAddListEditMode] = useState(false);
   const [newListTitle, setNewListTitle] = useState('');
-  const { name } = useParams();
+  const { id } = useParams();
   const { spacing } = useTheme();
-  const { state, pathname } = useLocation();
-  const { board_id } = state;
-
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: api.boards.deleleBoard,
@@ -91,8 +87,8 @@ const BoardPage = (): JSX.Element => {
   });
 
   const handleDeleteBoard = (): void => {
-    mutate(board_id as string);
-    navigate(TO_MAIN, { state: { from: pathname }, replace: true });
+    mutate(id as string);
+    navigate(TO_MAIN);
   };
 
   const handleDrawerOpen = () => {
@@ -152,7 +148,7 @@ const BoardPage = (): JSX.Element => {
       <ContentPaperBar open={open}>
         <Toolbar>
           <Typography variant="h6" component="div" noWrap sx={{ flexGrow: 1 }}>
-            {name}
+            board name placeholder {id}
           </Typography>
           <IconButton
             color="inherit"
@@ -188,7 +184,7 @@ const BoardPage = (): JSX.Element => {
             <BoardList title="in progress" id="test222_id" />
           </ListItem>
           <ListItem>
-            <BoardList title="to Do" id="test222_id"/>
+            <BoardList title="to Do" id="test222_id" />
           </ListItem>
           <ListItem>
             <BoardList title="in progress" id="test222_id" />
@@ -203,10 +199,10 @@ const BoardPage = (): JSX.Element => {
             <BoardList title="in progress" id="test222_id" />
           </ListItem>
           <ListItem>
-            <BoardList title="to Do" id="test222_id"/>
+            <BoardList title="to Do" id="test222_id" />
           </ListItem>
           <ListItem>
-            <BoardList title="in progress last" id="test222_id"/>
+            <BoardList title="in progress last" id="test222_id" />
           </ListItem>
 
           {AddList}

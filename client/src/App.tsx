@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router'
+import { BrowserRouter, Routes, Route } from 'react-router';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { theme } from './styles/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -23,16 +23,22 @@ const App = (): JSX.Element => {
         <CssBaseline />
         <ToastContainer />
         <BrowserRouter>
-          <Routes>    
+          <Routes>
             <Route element={<MainLayout />}>
-              <Route index element={<ProtectedRoute element={<MainPage />} />}/>
-              <Route path="boards/:name" element={<ProtectedRoute element={<BoardPage />} />} />           
+              <Route
+                index
+                element={<ProtectedRoute element={<MainPage />} />}
+              />
+              <Route
+                path="boards/:id"
+                element={<ProtectedRoute element={<BoardPage />} />}
+              />
             </Route>
-            <Route element={<AuthLayout/>}>
-              <Route path='login' element={<LoginPage />} />
-              <Route path='register' element={<RegisterPage />}/>
+            <Route element={<AuthLayout />}>
+              <Route path="login" element={<LoginPage />} />
+              <Route path="register" element={<RegisterPage />} />
             </Route>
-             <Route path="*" element={<NotFoundPage />} /> 
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
@@ -41,16 +47,3 @@ const App = (): JSX.Element => {
 };
 
 export default App;
-
-// <Routes>
-// <Route path='/' element={<Layout />}>
-//   <Route index element={<ProtectedRoute element={<MainPage />} />} />
-//   <Route path={TO_LOGIN} element={<LoginPage />} />
-//   <Route path={TO_REGISTER} element={<RegisterPage />} />
-//   {/* <Route path={`${TO_BOARDS}/:id`} element={<BoardPage/>}/> */}
-//   <Route
-//     path={`${TO_BOARDS}/:name`}
-//     element={<ProtectedRoute element={<BoardPage />} />}
-//   />
-// </Route>
-// </Routes>

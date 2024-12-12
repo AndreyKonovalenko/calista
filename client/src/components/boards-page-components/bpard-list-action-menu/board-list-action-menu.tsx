@@ -1,11 +1,9 @@
-import React from "react";
-import { Menu, IconButton} from '@mui/material';
+import React from 'react';
+import { Menu, IconButton } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
-
-const BoardListActionMenu = ():JSX.Element => {
-
+const BoardListActionMenu = (): JSX.Element => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -28,18 +26,17 @@ const BoardListActionMenu = ():JSX.Element => {
         <MoreHorizIcon fontSize="medium" />
       </IconButton>
       <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'basic-button',
-          }}
-        >
-          <MenuItem onClick={handleClose}>Delete List</MenuItem>
-        </Menu>
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={handleClose}>Delete List</MenuItem>
+      </Menu>
     </div>
-
-  )
-}
-export default BoardListActionMenu
+  );
+};
+export default BoardListActionMenu;

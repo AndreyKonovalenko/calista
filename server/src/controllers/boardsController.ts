@@ -1,6 +1,6 @@
 import { Request, Response, Application } from 'express';
-import { IBoard} from '../models';
-import { StatusCodes} from 'http-status-codes';
+import { IBoard } from '../models';
+import { StatusCodes } from 'http-status-codes';
 import { getErrorMessage } from '../utils';
 import { HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
@@ -15,7 +15,8 @@ import {
 export const getBoards = (async (req: Request, res: Response) => {
   const { user } = req as CustomRequest;
   try {
-    const boards: Array<HydratedDocument<IBoard>> | null = await findBoardsByCreaterId(user._id);
+    const boards: Array<HydratedDocument<IBoard>> | null =
+      await findBoardsByCreaterId(user._id);
     return res.status(StatusCodes.OK).json(boards);
   } catch (error) {
     return res
@@ -31,7 +32,7 @@ export const addBoard = (async (req: Request, res: Response) => {
     title: req.body.title,
     creater_id: user._id,
     lists: [],
-  }; 
+  };
   try {
     const newBoard = await createBoard(board);
     return res.status(StatusCodes.OK).json(newBoard);
@@ -95,7 +96,7 @@ export const addListToBoard = (async (req: Request, res: Response) => {
   }
 
   if (currentBoard) {
-    const list  = {
+    const list = {
       title: req.body.title,
       creater_id: user?._id,
       cards: [],

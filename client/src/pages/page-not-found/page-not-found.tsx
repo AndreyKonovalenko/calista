@@ -1,13 +1,9 @@
-import React , { useEffect } from "react";
-import { Box, Link, Typography} from "@mui/material";
-import { Link as RouterLink} from 'react-router';
-import { TO_BOARDS} from "../../utils/route-constants";
+import React from 'react';
+import { Box, Link, Typography } from '@mui/material';
+import { Link as RouterLink } from 'react-router';
+import { TO_MAIN } from '../../utils/route-constants';
 
 const NotFoundPage = (): JSX.Element => {
-
-  useEffect(()=> {
-    console.log('Notfound mounts')
-  })
   return (
     <Box sx={{ margin: 10 }}>
       <Typography
@@ -16,16 +12,11 @@ const NotFoundPage = (): JSX.Element => {
           color: theme.palette.text.secondary,
         })}
       >
-          Page not found 404
+        Page not found 404
       </Typography>
-      <Link
-        component={RouterLink}
-        variant="h6"
-        to={`/${TO_BOARDS}`}
-        underline="none"
-      >
-      Return to main page
-    </Link>
+      <Link component={RouterLink} variant="h6" to={TO_MAIN} underline="none">
+        Return to main page
+      </Link>
     </Box>
   );
 };

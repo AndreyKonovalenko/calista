@@ -2,8 +2,8 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
 export type TAuthState = {
-  isAuth: boolean,
-  username: string
+  isAuth: boolean;
+  username: string;
 };
 
 type Actions = {
@@ -13,19 +13,20 @@ type Actions = {
 
 const initialState: TAuthState = {
   isAuth: false,
-  username: "" 
+  username: '',
 };
 
 export const useAuthStore = create<TAuthState & Actions>()(
   devtools(
     set => ({
       ...initialState,
-      setAuthStatus: (data: TAuthState) => set({
-        isAuth: data.isAuth,
-        username: data.username
+      setAuthStatus: (data: TAuthState) =>
+        set({
+          isAuth: data.isAuth,
+          username: data.username,
         }),
       reset: () => {
-        set(initialState)
+        set(initialState);
       },
     }),
     { name: 'authStore' },

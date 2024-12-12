@@ -34,8 +34,7 @@ const BoardCard = (props: TBoradCardProps) => {
       component={RouterLink}
       variant="h6"
       underline="none"
-      to={`${TO_BOARDS}/${title.split(' ').join('-')}`}
-      state={{ board_id: id }}
+      to={`${TO_BOARDS}/${id}`}
       color="inherit"
     >
       <Card sx={BoardCardStyled}>

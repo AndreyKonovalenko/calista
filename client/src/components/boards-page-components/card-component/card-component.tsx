@@ -7,8 +7,8 @@ import {
   Button,
 } from '@mui/material';
 
-const CardComponent = (props: {text: string | number}) => {
-  const {text} = props;
+const CardComponent = (props: { text: string | number }) => {
+  const { text } = props;
   return (
     <Card sx={{ minWidth: '100%' }}>
       <CardContent>

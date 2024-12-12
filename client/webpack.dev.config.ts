@@ -7,7 +7,7 @@ import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-serv
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
-import Dotenv from 'dotenv-webpack'
+import Dotenv from 'dotenv-webpack';
 
 interface Configuration extends WebpackConfiguration {
   devServer?: WebpackDevServerConfiguration;
@@ -59,8 +59,8 @@ const config: Configuration = {
     new ForkTsCheckerWebpackPlugin({
       async: false,
     }),
-    new Dotenv({ 
-      path: './../.env'
+    new Dotenv({
+      path: './../.env',
     }),
     new ESLintPlugin({
       extensions: ['js', 'jsx', 'ts', 'tsx'],
@@ -75,10 +75,10 @@ const config: Configuration = {
     open: true,
     proxy: [
       {
-      context: ['/api'],
-      target: 'http://localhost:5003', 
-      }
-    ]
+        context: ['/api'],
+        target: 'http://localhost:5003',
+      },
+    ],
   },
 };
 

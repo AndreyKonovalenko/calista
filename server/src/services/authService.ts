@@ -1,11 +1,13 @@
 import { Types } from 'mongoose';
-import { UserModal,} from '../models';
+import { UserModal } from '../models';
 import { Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { HydratedDocument } from 'mongoose';
 import { IUser } from '../models';
 
-export async function registerUser(user: HydratedDocument<IUser>): Promise<null | HydratedDocument<IUser>> {
+export async function registerUser(
+  user: HydratedDocument<IUser>,
+): Promise<null | HydratedDocument<IUser>> {
   const newUser: HydratedDocument<IUser> = await UserModal.create(user);
   return newUser ? newUser : null;
 }
