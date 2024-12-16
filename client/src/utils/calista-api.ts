@@ -12,7 +12,7 @@ const LOGOUT = validEnv(process.env.LOGOUT);
 const LISTS = validEnv(process.env.LISTS);
 const BOARDS = validEnv(process.env.BOARDS);
 const AUTH = validEnv(process.env.AUTH);
-
+const SSE = validEnv(process.env.SSE)
 axios.defaults.baseURL = BASE_URL;
 
 axios.interceptors.response.use(
@@ -50,9 +50,14 @@ const boards = {
     request.post<TList>(`${BOARDS}/${boardId}${LISTS}`, data),
 };
 
+const sse = {
+  setConnection: () => new EventSource(BASE_URL+SSE)
+}
+
 const api = {
   auth,
   boards,
+  sse
 };
 
 export default api;
