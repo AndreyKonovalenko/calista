@@ -2,8 +2,9 @@ import { Application, Request, Response } from 'express';
 import { CustomRequest } from "../middleware/protected";
 import { StatusCodes,ReasonPhrases } from 'http-status-codes';
 import { getErrorMessage } from '../utils';
-import { TSseClient } from '../services/sseSevice';
-import { addClient, removeClient } from '../services/sseSevice';
+import { TSseClient } from '../services/sseService';
+import { addClient, removeClient } from '../services/sseService';
+import {v4 as uuidv4} from 'uuid'
 
 // GET:sse/
 export const connectToSse = (async (req: Request, res: Response) => {
@@ -20,14 +21,20 @@ export const connectToSse = (async (req: Request, res: Response) => {
           'Connection': 'keep-alive',
           'Cache-Control': 'no-cache'
         };
+        const clientId = uuidv4()
         res.writeHead(StatusCodes.OK, headers);
+        res.write(`retry: 1000\n`);
         const newClient: TSseClient = {
-          res, 
-          id: user._id
+          clientId,
+          userId: user._id
+      
         }
+        console.log('newclient', newClient)
         addClient(newClient);
-        req.on('close', ()=> {
-          removeClient(res)
+
+        req.on('close', (err:string) => {
+          console.log(err)
+          console.log('connection canciled')
         })
       }
     } catch (error) {

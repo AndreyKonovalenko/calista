@@ -4,7 +4,11 @@ import api from '../utils/calista-api'
 const useSse = () => {
   useEffect(()=> {
     const eventSource = api.sse.setConnection() 
-    return () => eventSource.close()
+    console.log('set up', eventSource)
+    return () => {
+      console.log('clean up')
+      eventSource.close()
+    }
   }, [])
  
 }

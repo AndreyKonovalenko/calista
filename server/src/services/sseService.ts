@@ -1,20 +1,20 @@
-import { Response } from "express";
+
 import { Types } from "mongoose";
 
 export type TSseClient = {
-  res: Response,
-  id: Types.ObjectId 
+  clientId: string,
+  userId: Types.ObjectId 
 }
 
 const clients:Array<TSseClient> = [];
 
 export const addClient = (client: TSseClient) => {
    clients.push(client)
-   console.log(`Edded new client ${client.id}. Client list length: ${clients.length}`)
+   console.log(`Edded new client ${client.clientId} Client list length: ${clients.length}`)
 }
 
-export const removeClient = (res: Response) => {
-  const index = clients.findIndex(client => client.res === res);
+export const removeClient = (clientId: string ) => {
+  const index = clients.findIndex(element => element.clientId === clientId);
   if (index >= 0) {
     clients.splice(index, 1);
     console.log(`Client removed from list. Client list length: ${clients.length}`)

@@ -18,6 +18,7 @@ import { Person } from '@mui/icons-material';
 import BoardCard from '../../components/main-page-components/board-card/board-card';
 import { v4 as uuidv4 } from 'uuid';
 import { TBoard } from '../../services/boards/board-store';
+import useSse from '../../hooks/useSse';
 
 const useBoards = () => {
   return useQuery({
@@ -38,6 +39,7 @@ const MainPage = () => {
       });
     },
   });
+  useSse();
 
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
