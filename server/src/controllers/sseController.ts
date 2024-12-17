@@ -1,4 +1,4 @@
-import { Application, Request, Response } from 'express';
+import { Application, NextFunction, Request, Response } from 'express';
 import { CustomRequest } from "../middleware/protected";
 import { StatusCodes,ReasonPhrases } from 'http-status-codes';
 import { getErrorMessage } from '../utils';
@@ -23,7 +23,7 @@ export const connectToSse = (async (req: Request, res: Response) => {
         };
         const clientId = uuidv4()
         res.writeHead(StatusCodes.OK, headers);
-        res.write(`retry: 1000\n`);
+        // res.write(`retry: 1000\n`);
         const newClient: TSseClient = {
           clientId,
           userId: user._id
@@ -32,7 +32,7 @@ export const connectToSse = (async (req: Request, res: Response) => {
         console.log('newclient', newClient)
         addClient(newClient);
 
-        req.on('close', (err:string) => {
+        res.on('close', (err:string) => {
           console.log(err)
           console.log('connection canciled')
         })
