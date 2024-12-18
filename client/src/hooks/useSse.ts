@@ -1,20 +1,14 @@
-import {useEffect, useState} from 'react'
+import {useEffect} from 'react'
 import api from '../utils/calista-api'
 
 const useSse = () => {
-
-  const [status, setStatus]= useState(4)
-  
-  useEffect(() => {
-    console.log(status) 
-  }, [status])
-
-  useEffect(()=> {
+   useEffect(()=> {
     const eventSource = api.sse.setConnection() 
-    setStatus(eventSource.readyState)
+    eventSource.onopen = () => console.log(">>> Connection open", eventSource.readyState)
+    eventSource.onerror = (err) => console.log("Error",err) 
     return () => {
-      console.log('clean up')
       eventSource.close()
+      console.log('clean up', eventSource.readyState)
     }
   }, [])
  

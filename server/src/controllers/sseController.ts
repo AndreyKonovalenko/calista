@@ -23,7 +23,7 @@ export const connectToSse = (async (req: Request, res: Response) => {
         };
         const clientId = uuidv4()
         res.writeHead(StatusCodes.OK, headers);
-        // res.write(`retry: 1000\n`);
+        res.write(`retry: 1000\n`);
         const newClient: TSseClient = {
           clientId,
           userId: user._id
