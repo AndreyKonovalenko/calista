@@ -12,7 +12,7 @@ const LOGOUT = validEnv(process.env.LOGOUT);
 const LISTS = validEnv(process.env.LISTS);
 const BOARDS = validEnv(process.env.BOARDS);
 const AUTH = validEnv(process.env.AUTH);
-const SSE = validEnv(process.env.SSE)
+const SSE = validEnv(process.env.SSE);
 axios.defaults.baseURL = BASE_URL;
 
 axios.interceptors.response.use(
@@ -51,13 +51,14 @@ const boards = {
 };
 
 const sse = {
-  setConnection: () => new EventSource(BASE_URL+SSE)
-}
+  setConnection: () =>
+    new EventSource(BASE_URL + SSE, { withCredentials: true }),
+};
 
 const api = {
   auth,
   boards,
-  sse
+  sse,
 };
 
 export default api;
