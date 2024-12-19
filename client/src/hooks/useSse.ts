@@ -4,7 +4,7 @@ import api from '../utils/calista-api'
 const useSse = () => {
    useEffect(()=> {
     const eventSource = api.sse.setConnection() 
-    eventSource.onopen = () => console.log(">>> Connection open", eventSource.readyState)
+    eventSource.onopen = (event) => console.log(">>> Connection open", eventSource.readyState, event)
     eventSource.onerror = (err) => console.log("Error",err) 
 
     eventSource.onmessage = (event) => {

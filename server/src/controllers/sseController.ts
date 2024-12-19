@@ -35,8 +35,8 @@ export const connectToSse = ((req: Request, res: Response) => {
   const interval = setInterval(() => {
     const stock1Rate = Math.floor(Math.random() * 100000);
     const stock2Rate = Math.floor(Math.random() * 60000);
-    console.log(stock1Rate)
     res.write(`data: ${JSON.stringify({ stock1Rate, stock2Rate })}\n\n`);
+    res.write(`event: message\n`);
   }, 2000);
 
   res.on('close', (err:string) => {
