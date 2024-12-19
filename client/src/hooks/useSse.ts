@@ -6,11 +6,17 @@ const useSse = () => {
     const eventSource = api.sse.setConnection() 
     eventSource.onopen = () => console.log(">>> Connection open", eventSource.readyState)
     eventSource.onerror = (err) => console.log("Error",err) 
-    return () => {
+
+    eventSource.onmessage = (event) => {
+      const stockData = JSON.parse(event.data);
+      console.log(stockData)
+    };
+
+   const  handleClose = () => {
       eventSource.close()
       console.log('clean up', eventSource.readyState)
     }
+    return handleClose;
   }, [])
- 
 }
 export default useSse

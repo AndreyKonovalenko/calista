@@ -7,39 +7,41 @@ import { addClient, removeClient } from '../services/sseService';
 import {v4 as uuidv4} from 'uuid'
 
 // GET:sse/
-export const connectToSse = (async (req: Request, res: Response) => {
+export const connectToSse = ((req: Request, res: Response) => {
   const { user } = req as CustomRequest;
-    try {
-      if (!user) {
-        return res
-          .status(StatusCodes.UNAUTHORIZED)
-          .send(ReasonPhrases.UNAUTHORIZED);
-      }
-      if (user) {
-        const headers = {
-          'Content-Type': 'text/event-stream',
-          'Connection': 'keep-alive',
-          'Cache-Control': 'no-cache'
-        };
-        const clientId = uuidv4()
-        res.writeHead(StatusCodes.OK, headers);
-        res.write(`retry: 1000\n`);
-        const newClient: TSseClient = {
-          clientId,
-          userId: user._id
-      
-        }
-        console.log('newclient', newClient)
-        addClient(newClient);
+  if (!user) {
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .send(ReasonPhrases.UNAUTHORIZED);
+  }
+  
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Cache-Control": "no-cache",
+    'Connection': "keep-alive", // allowing TCP connection to remain open for multiple HTTP requests/responses
+    "Content-Type": "text/event-stream" 
+  };
 
-        res.on('close', (err:string) => {
-          console.log(err)
-          console.log('connection canciled')
-        })
-      }
-    } catch (error) {
-      return res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send(getErrorMessage(error));
-    }
+  const clientId = uuidv4()
+  res.writeHead(StatusCodes.OK, headers);
+  res.write(`retry: 1000\n`);
+  const newClient: TSseClient = {
+    clientId,
+    userId: user._id   
+  }
+  console.log('newclient', newClient)
+  addClient(newClient);
+
+  const interval = setInterval(() => {
+    const stock1Rate = Math.floor(Math.random() * 100000);
+    const stock2Rate = Math.floor(Math.random() * 60000);
+    console.log(stock1Rate)
+    res.write(`data: ${JSON.stringify({ stock1Rate, stock2Rate })}\n\n`);
+  }, 2000);
+
+  res.on('close', (err:string) => {
+    clearInterval(interval)
+    console.log(err)
+    console.log('connection canciled')
+  })
 }) as Application;

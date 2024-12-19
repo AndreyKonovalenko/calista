@@ -19,6 +19,7 @@ import BoardCard from '../../components/main-page-components/board-card/board-ca
 import { v4 as uuidv4 } from 'uuid';
 import { TBoard } from '../../services/boards/board-store';
 import useSse from '../../hooks/useSse';
+// import useSse from '../../hooks/useSse';
 
 const useBoards = () => {
   return useQuery({
@@ -39,7 +40,9 @@ const MainPage = () => {
       });
     },
   });
-  useSse();
+
+  const  handleClose  =  useSse();
+  console.log(handleClose)
 
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -63,6 +66,25 @@ const MainPage = () => {
       ))
     : [];
 
+  // useEffect(()=>{
+  //   const evtSource = api.sse.setConnection()
+  //   // const evtSource = api.sse.setConnection() 
+  //   evtSource.onopen = () => console.log(">>> Connection open",  evtSource.readyState)
+  //   evtSource.onerror = (err) => console.log("Error",err) 
+  //   ref.current = evtSource;
+  //   return () => {
+  //     console.log('close connetion')
+  //     evtSource.close()
+  //   } 
+  // },[])
+
+  const closeSSEHandler = () => {
+    // if (ref.current !== null ){
+    //   ref.current.close()
+    // }
+    // // console.log("Connection closed");
+    // // evtSource.close();
+  }
   const AddBoardPopper = (
     <Popper
       sx={{ zIndex: 1200 }}
@@ -122,6 +144,22 @@ const MainPage = () => {
     </>
   );
 
+  const CloseSSE = (
+    <>
+      {AddBoardPopper}
+      <Card sx={{ minWidth: 180, minHeight: 100 }}>
+        <Button
+          sx={{ minHeight: 'inherit' }}
+          fullWidth={true}
+          onClick={closeSSEHandler}
+        >
+          {' '}
+          Close SSE{' '}
+        </Button>
+      </Card>
+    </>
+  );
+
   return (
     <Box sx={{ margin: 10 }}>
       <Stack direction="row" spacing={2}>
@@ -152,6 +190,7 @@ const MainPage = () => {
       >
         {boards}
         {AddBoradCard}
+        {CloseSSE}
       </Stack>
     </Box>
   );
