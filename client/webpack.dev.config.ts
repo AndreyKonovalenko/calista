@@ -77,6 +77,11 @@ const config: Configuration = {
       {
         context: ['/api'],
         target: 'http://localhost:5003',
+        changeOrigin: true,
+        ws: true,
+        onProxyReq: (proxyReq, req, res) => {
+          res.on('close', () => proxyReq.destroy())
+        }
       },
     ],
   },

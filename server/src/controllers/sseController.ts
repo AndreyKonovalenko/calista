@@ -20,6 +20,7 @@ export const connectToSse = ((req: Request, res: Response) => {
   res.setHeader('Content-Encoding', 'none');
   res.setHeader('Connection', 'keep-alive');
   res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Transfer-Encoding', 'chunked');
   res.flushHeaders();
 
   // res.write(`retry: 1000\n`);
