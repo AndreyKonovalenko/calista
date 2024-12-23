@@ -5,9 +5,10 @@ import { getErrorMessage } from '../utils';
 import { TSseClient } from '../services/sseService';
 import { addClient, removeClient } from '../services/sseService';
 import { v4 as uuidv4 } from 'uuid';
+import { BoardModal } from '../models';
 
 // GET:sse/
-export const connectToSse = ((req: Request, res: Response) => {
+export const connectToSse =  (async (req: Request, res: Response) => {
   const { user } = req as CustomRequest;
   if (!user) {
     return res
@@ -34,16 +35,20 @@ export const connectToSse = ((req: Request, res: Response) => {
   console.log('newclient', newClient);
   addClient(newClient);
 
-  const interval = setInterval(() => {
-    const stock1Rate = Math.floor(Math.random() * 100000);
-    const stock2Rate = Math.floor(Math.random() * 60000);
-    console.log(stock1Rate);
-    res.write(`data: ${JSON.stringify({ stock1Rate, stock2Rate })}\n\n`);
-    res.write(`event: message\n`);
-  }, 2000);
+
+  BoardModal.watch().on('change', data => res.write(`data: ${JSON.stringify(data)}\n\n`))
+  // res.write(`data: ${JSON.stringify(data)}\n\n`);
+
+  // const interval = setInterval(() => {
+  //   const stock1Rate = Math.floor(Math.random() * 100000);
+  //   const stock2Rate = Math.floor(Math.random() * 60000);
+  //   console.log(stock1Rate);
+  //   res.write(`data: ${JSON.stringify({ stock1Rate, stock2Rate })}\n\n`);
+  //   res.write(`event: message\n`);
+  // }, 2000);
 
   res.on('close', (err: string) => {
-    clearInterval(interval);
+    // clearInterval(interval);
     removeClient(clientId)
     if(err) {
       console.log(err);
