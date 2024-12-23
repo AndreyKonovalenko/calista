@@ -19,7 +19,7 @@ export const removeClient = (clientId: string) => {
   if (index >= 0) {
     clients.splice(index, 1);
     console.log(
-      `Client removed from list. Client list length: ${clients.length}`,
+      `Client ${clientId} removed from list. Client list length: ${clients.length}`,
     );
   }
 };

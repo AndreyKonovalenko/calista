@@ -44,7 +44,10 @@ export const connectToSse = ((req: Request, res: Response) => {
 
   res.on('close', (err: string) => {
     clearInterval(interval);
-    console.log(err);
+    removeClient(clientId)
+    if(err) {
+      console.log(err);
+    }
     console.log('connection canciled');
   });
 }) as Application;
