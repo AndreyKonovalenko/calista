@@ -16,11 +16,11 @@ export const connectDB = async () => {
     process.exit(1);
   }
 };
- export const monitor = async (connection: mongoose.Connection, pipeline = []) => {
-  const collection = connection.collections['boards'];
-  const changedStream = collection.watch(pipeline);
-  changedStream.on('change', data => {
-    console.log(data)
-    return data;
-  });
-};
+//  export const monitor = async (connection: mongoose.Connection, pipeline = []) => {
+//   const collection = connection.collections['boards'];
+//   const changedStream = collection.watch(pipeline);
+//   changedStream.on('change', data => {
+//     console.log(data)
+//     return data;
+//   });
+// };
