@@ -19,7 +19,7 @@ import BoardCard from '../../components/main-page-components/board-card/board-ca
 import { v4 as uuidv4 } from 'uuid';
 import { TBoard } from '../../services/boards/board-store';
 import useSse from '../../hooks/useSse';
-// import useSse from '../../hooks/useSse';
+import { useEscapeKey } from '../../hooks/use-escape-key';
 
 const useBoards = () => {
   return useQuery({
@@ -29,6 +29,8 @@ const useBoards = () => {
 };
 
 const MainPage = () => {
+  useSse();
+
   const queryClient = useQueryClient();
   const { data } = useBoards();
   const { mutate } = useMutation({
@@ -40,13 +42,8 @@ const MainPage = () => {
       });
     },
   });
-
-  const  handleClose  =  useSse();
-  console.log(handleClose)
-
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-
   const handleCreateNewBoardSubmit = (
     event: React.FocusEvent<HTMLFormElement>,
   ) => {
@@ -54,12 +51,14 @@ const MainPage = () => {
     const data = new FormData(event.currentTarget);
     mutate({ title: data.get('text') });
   };
-
-  const hadndleAddBoardClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAddBoardMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
     setOpen(previeousOpen => !previeousOpen);
   };
-
+  const handleAddBoardMenuClose = () => {
+    setOpen(false);
+  };
+  useEscapeKey(handleAddBoardMenuClose)
   const boards = data
     ? data.map((element: TBoard) => (
         <BoardCard title={element.title} id={element._id} key={uuidv4()} />
@@ -78,13 +77,7 @@ const MainPage = () => {
   //   } 
   // },[])
 
-  const closeSSEHandler = () => {
-    // if (ref.current !== null ){
-    //   ref.current.close()
-    // }
-    // // console.log("Connection closed");
-    // // evtSource.close();
-  }
+
   const AddBoardPopper = (
     <Popper
       sx={{ zIndex: 1200 }}
@@ -135,26 +128,10 @@ const MainPage = () => {
         <Button
           sx={{ minHeight: 'inherit' }}
           fullWidth={true}
-          onClick={hadndleAddBoardClick}
+          onClick={handleAddBoardMenuOpen}
         >
           {' '}
           Create new board{' '}
-        </Button>
-      </Card>
-    </>
-  );
-
-  const CloseSSE = (
-    <>
-      {AddBoardPopper}
-      <Card sx={{ minWidth: 180, minHeight: 100 }}>
-        <Button
-          sx={{ minHeight: 'inherit' }}
-          fullWidth={true}
-          onClick={closeSSEHandler}
-        >
-          {' '}
-          Close SSE{' '}
         </Button>
       </Card>
     </>
@@ -190,7 +167,6 @@ const MainPage = () => {
       >
         {boards}
         {AddBoradCard}
-        {CloseSSE}
       </Stack>
     </Box>
   );

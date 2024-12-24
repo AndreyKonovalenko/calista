@@ -35,7 +35,6 @@ export const connectToSse =  (async (req: Request, res: Response) => {
   console.log('newclient', newClient);
   addClient(newClient);
 
-
   BoardModal.watch().on('change', data => res.write(`data: ${JSON.stringify(data)}\n\n`))
   // res.write(`data: ${JSON.stringify(data)}\n\n`);
 
@@ -53,6 +52,6 @@ export const connectToSse =  (async (req: Request, res: Response) => {
     if(err) {
       console.log(err);
     }
-    console.log('connection canciled');
+    console.log('connection canceled');
   });
 }) as Application;
