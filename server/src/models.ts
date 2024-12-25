@@ -27,12 +27,16 @@ export const UserModal = model<IUser>('User', userSchema);
 
 // card
 export interface ICard {
+  creator_id: Types.ObjectId;
+  list_id: Types.ObjectId;
   title: string;
   description: string;
   complition: boolean;
 }
 
 const cardSchema = new Schema<ICard>({
+  creator_id: {type:Schema.Types.ObjectId, ref: 'User', required: true},
+  list_id: {type: Schema.Types.ObjectId, ref: 'List', required: true},
   title: { type: String, required: true },
   description: { type: String },
   complition: { type: Boolean },
@@ -41,16 +45,21 @@ export const CardModal = model<ICard>('Card', cardSchema);
 
 // list
 export interface IList {
-  title: string;
   creater_id: Types.ObjectId;
+  border_id: Types.ObjectId;
+  title: string;
   cards: Array<Types.ObjectId>;
+  position: number;
 }
 
 const listSchema = new Schema<IList>({
-  title: { type: String, required: true },
   creater_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  border_id: {type:Schema.Types.ObjectId, ref: 'Board', required: true},
+  title: { type: String, required: true },
   cards: [{ type: Schema.Types.ObjectId, ref: 'Card' }],
+  position: {type: Number, required: true}
 });
+
 export const ListModal = model<IList>('List', listSchema);
 
 // board
