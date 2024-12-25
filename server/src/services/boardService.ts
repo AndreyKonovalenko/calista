@@ -1,4 +1,4 @@
-import { BoardModal, IBoard, IList, ListModal } from '../models';
+import { BoardModal, IBoard } from '../models';
 import { Types, HydratedDocument } from 'mongoose';
 
 export async function createBoard(
@@ -26,9 +26,3 @@ export async function findBoardByBoardId(
   return board;
 }
 
-export async function createList(
-  list: IList,
-): Promise<HydratedDocument<IList>> {
-  const newList: HydratedDocument<IList> = await ListModal.create(list);
-  return newList;
-}

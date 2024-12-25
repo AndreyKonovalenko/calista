@@ -8,8 +8,11 @@ import {
   createBoard,
   findBoardsByCreaterId,
   findBoardByBoardId,
-  createList,
 } from '../services/boardService';
+import { createList } from '../services/listService';
+import { IList } from '../models';
+import {Types} from 'mongoose';
+
 
 // GET: borads/
 export const getBoards = (async (req: Request, res: Response) => {
@@ -96,14 +99,16 @@ export const addListToBoard = (async (req: Request, res: Response) => {
   }
 
   if (currentBoard) {
-    const list = {
+    const list: IList = {
+      creater_id: user._id,
+      board_id: new Types.ObjectId(`${req.params.boardId}`),
       title: req.body.title,
-      creater_id: user?._id,
       cards: [],
+      position: req.body.position
     };
     try {
       const newList = await createList(list);
-      const newListId = newList?._id;
+      const newListId = newList._id;
       // save to specific board by it id
       try {
         currentBoard.lists.push(newListId);
@@ -130,3 +135,4 @@ export const addListToBoard = (async (req: Request, res: Response) => {
     }
   }
 }) as Application;
+

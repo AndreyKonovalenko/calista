@@ -46,15 +46,15 @@ export const CardModal = model<ICard>('Card', cardSchema);
 // list
 export interface IList {
   creater_id: Types.ObjectId;
-  border_id: Types.ObjectId;
+  board_id: Types.ObjectId;
   title: string;
   cards: Array<Types.ObjectId>;
   position: number;
 }
 
-const listSchema = new Schema<IList>({
+export const listSchema = new Schema<IList>({
   creater_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  border_id: {type:Schema.Types.ObjectId, ref: 'Board', required: true},
+  board_id: {type:Schema.Types.ObjectId, ref: 'Board', required: true},
   title: { type: String, required: true },
   cards: [{ type: Schema.Types.ObjectId, ref: 'Card' }],
   position: {type: Number, required: true}
