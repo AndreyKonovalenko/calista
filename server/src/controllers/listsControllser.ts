@@ -12,12 +12,12 @@ import {Types} from 'mongoose';
 // POST: lists/
 // Add new list
 
-export const addList = async (req: Request, res: Response): Promise<addList> => {
+export const addList = async (req: Request, res: Response): Promise<void> => {
   const { user } = req as CustomRequest;
   const currentBoard = await findBoardByBoardId(req.body.id);
 
   if (!currentBoard) {
-    return res
+     res
       .status(StatusCodes.BAD_REQUEST)
       .send(getErrorMessage(`Board by id: ${req.params.id} not found`));
   }
@@ -38,13 +38,13 @@ export const addList = async (req: Request, res: Response): Promise<addList> => 
         currentBoard.lists.push(newListId);
         const upadatedBorad = await currentBoard.save();
         console.log(upadatedBorad);
-        return res
+        res
           .status(StatusCodes.OK)
           .json(
             `list id: ${newListId} added to board ${req.body.id} successfully`,
           );
       } catch (error) {
-        return res
+        res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .send(
             getErrorMessage(
@@ -53,7 +53,7 @@ export const addList = async (req: Request, res: Response): Promise<addList> => 
           );
       }
     } catch (error) {
-      return res
+       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .send(getErrorMessage(error));
     }

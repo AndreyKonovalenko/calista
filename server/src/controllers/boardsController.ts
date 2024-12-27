@@ -1,4 +1,4 @@
-import { Request, Response, Application } from 'express';
+import { Request, Response} from 'express';
 import { IBoard } from '../models';
 import { StatusCodes } from 'http-status-codes';
 import { getErrorMessage } from '../utils';
@@ -13,21 +13,18 @@ import {
 
 
 // GET: borads/
-export const getBoards = (async (req: Request, res: Response) => {
+export const getBoards = async (req: Request, res: Response): Promise<void> => {
   const { user } = req as CustomRequest;
   try {
-    const boards: Array<HydratedDocument<IBoard>> | null =
-      await findBoardsByCreaterId(user._id);
-    return res.status(StatusCodes.OK).json(boards);
+    const boards: Array<HydratedDocument<IBoard>> | null = await findBoardsByCreaterId(user._id);
+    res.status(StatusCodes.OK).json(boards);
   } catch (error) {
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .send(getErrorMessage(error));
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(getErrorMessage(error));
   }
-}) as Application;
+};
 
 // POST: boards/
-export const addBoard = (async (req: Request, res: Response) => {
+export const addBoard = async (req: Request, res: Response): Promise<void> => {
   const { user } = req as CustomRequest;
   const board: IBoard = {
     title: req.body.title,
@@ -36,13 +33,11 @@ export const addBoard = (async (req: Request, res: Response) => {
   };
   try {
     const newBoard = await createBoard(board);
-    return res.status(StatusCodes.OK).json(newBoard);
+    res.status(StatusCodes.OK).json(newBoard);
   } catch (error) {
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .send(getErrorMessage(error));
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(getErrorMessage(error));
   }
-}) as Application;
+}
 
 // DELETE: boards/:id
 type TDeleteOneResult = {
@@ -50,12 +45,10 @@ type TDeleteOneResult = {
   deletedCount: number;
 };
 
-export const deleteBoard = (async (req: Request, res: Response) => {
+export const deleteBoard = async (req: Request, res: Response): Promise<void> => {
   const board = await findBoardByBoardId(req.params.id);
   if (!board) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(getErrorMessage(`Board by id: ${req.params.id} not found`));
+    res.status(StatusCodes.BAD_REQUEST).send(getErrorMessage(`Board by id: ${req.params.id} not found`));
   }
   if (board) {
     try {
@@ -63,13 +56,9 @@ export const deleteBoard = (async (req: Request, res: Response) => {
         .deleteOne()
         .then((result: TDeleteOneResult) => {
           if (result.deletedCount > 0) {
-            return res
-              .status(StatusCodes.OK)
-              .json(` boad id: ${req.params.id} deleted`);
+            res.status(StatusCodes.OK).json(` boad id: ${req.params.id} deleted`);
           } else {
-            return res
-              .status(StatusCodes.OK)
-              .json(` bourd id: ${req.params.id} not found `);
+            res.status(StatusCodes.OK).json(` bourd id: ${req.params.id} not found `);
           }
         })
         .catch((error: unknown) => {
@@ -78,12 +67,10 @@ export const deleteBoard = (async (req: Request, res: Response) => {
             .send(getErrorMessage(error));
         });
     } catch (error) {
-      return res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send(getErrorMessage(error));
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(getErrorMessage(error));
     }
   }
-}) as Application;
+}
 
 
 

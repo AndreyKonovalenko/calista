@@ -1,19 +1,17 @@
-import { Application, NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { CustomRequest } from '../middleware/protected';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
-import { getErrorMessage } from '../utils';
+// import { getErrorMessage } from '../utils';
 import { TSseClient } from '../services/sseService';
 import { addClient, removeClient } from '../services/sseService';
 import { v4 as uuidv4 } from 'uuid';
 import { BoardModal } from '../models';
 
 // GET:sse/
-export const connectToSse =  (async (req: Request, res: Response) => {
+export const connectToSse =  async (req: Request, res: Response): Promise<void> => {
   const { user } = req as CustomRequest;
-  if (!user) {
-    return res
-      .status(StatusCodes.UNAUTHORIZED)
-      .send(ReasonPhrases.UNAUTHORIZED);
+  if (!user) { 
+    res.status(StatusCodes.UNAUTHORIZED).send(ReasonPhrases.UNAUTHORIZED);
   }
 
   res.setHeader('Content-Type', 'text/event-stream');
@@ -54,4 +52,4 @@ export const connectToSse =  (async (req: Request, res: Response) => {
     }
     console.log('connection canceled');
   });
-}) as Application;
+};
