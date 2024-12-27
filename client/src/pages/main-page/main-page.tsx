@@ -51,14 +51,16 @@ const MainPage = () => {
     const data = new FormData(event.currentTarget);
     mutate({ title: data.get('text') });
   };
-  const handleAddBoardMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAddBoardMenuOpen = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     setAnchorEl(event.currentTarget);
     setOpen(previeousOpen => !previeousOpen);
   };
   const handleAddBoardMenuClose = () => {
     setOpen(false);
   };
-  useEscapeKey(handleAddBoardMenuClose)
+  useEscapeKey(handleAddBoardMenuClose);
   const boards = data
     ? data.map((element: TBoard) => (
         <BoardCard title={element.title} id={element._id} key={uuidv4()} />
@@ -67,16 +69,15 @@ const MainPage = () => {
 
   // useEffect(()=>{
   //   const evtSource = api.sse.setConnection()
-  //   // const evtSource = api.sse.setConnection() 
+  //   // const evtSource = api.sse.setConnection()
   //   evtSource.onopen = () => console.log(">>> Connection open",  evtSource.readyState)
-  //   evtSource.onerror = (err) => console.log("Error",err) 
+  //   evtSource.onerror = (err) => console.log("Error",err)
   //   ref.current = evtSource;
   //   return () => {
   //     console.log('close connetion')
   //     evtSource.close()
-  //   } 
+  //   }
   // },[])
-
 
   const AddBoardPopper = (
     <Popper

@@ -16,18 +16,18 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
       res.status(StatusCodes.UNAUTHORIZED).send(ReasonPhrases.UNAUTHORIZED);
     }
     if (user) {
-     res.status(StatusCodes.OK).json({
+      res.status(StatusCodes.OK).json({
         isAuth: true,
         username: user.username,
       });
     }
   } catch (error) {
-     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(getErrorMessage(error));
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(getErrorMessage(error));
   }
-}
+};
 
 // POST: auth/
-export const register = async (req: Request, res: Response):Promise<void> => {
+export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const { username } = req.body;
     const userExists = await findUserByUsername(username);
@@ -46,7 +46,7 @@ export const register = async (req: Request, res: Response):Promise<void> => {
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(getErrorMessage(error));
   }
-}
+};
 
 // POST: auth/login
 export const login = async (req: Request, res: Response): Promise<void> => {
@@ -54,7 +54,9 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await findUserByUsername(username);
     if (!user) {
-      res.status(StatusCodes.UNAUTHORIZED).send(`${ReasonPhrases.UNAUTHORIZED}: User ${username} not found.`);
+      res
+        .status(StatusCodes.UNAUTHORIZED)
+        .send(`${ReasonPhrases.UNAUTHORIZED}: User ${username} not found.`);
     }
     if (user && bcrypt.compareSync(password, user.password)) {
       generateToken(res, user._id);
@@ -63,12 +65,14 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         username: user.username,
       });
     } else {
-      res.status(StatusCodes.UNAUTHORIZED).send(`${ReasonPhrases.UNAUTHORIZED}: Password is not correct`);
+      res
+        .status(StatusCodes.UNAUTHORIZED)
+        .send(`${ReasonPhrases.UNAUTHORIZED}: Password is not correct`);
     }
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(getErrorMessage(error));
   }
-}
+};
 
 // POST: auth/logout
 // clear cookies

@@ -8,9 +8,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { BoardModal } from '../models';
 
 // GET:sse/
-export const connectToSse =  async (req: Request, res: Response): Promise<void> => {
+export const connectToSse = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   const { user } = req as CustomRequest;
-  if (!user) { 
+  if (!user) {
     res.status(StatusCodes.UNAUTHORIZED).send(ReasonPhrases.UNAUTHORIZED);
   }
 
@@ -33,7 +36,9 @@ export const connectToSse =  async (req: Request, res: Response): Promise<void> 
   console.log('newclient', newClient);
   addClient(newClient);
 
-  BoardModal.watch().on('change', data => res.write(`data: ${JSON.stringify(data)}\n\n`))
+  BoardModal.watch().on('change', data =>
+    res.write(`data: ${JSON.stringify(data)}\n\n`),
+  );
   // res.write(`data: ${JSON.stringify(data)}\n\n`);
 
   // const interval = setInterval(() => {
@@ -46,8 +51,8 @@ export const connectToSse =  async (req: Request, res: Response): Promise<void> 
 
   res.on('close', (err: string) => {
     // clearInterval(interval);
-    removeClient(clientId)
-    if(err) {
+    removeClient(clientId);
+    if (err) {
       console.log(err);
     }
     console.log('connection canceled');

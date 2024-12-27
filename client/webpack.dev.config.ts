@@ -80,8 +80,8 @@ const config: Configuration = {
         changeOrigin: true,
         ws: true,
         onProxyReq: (proxyReq, req, res) => {
-          res.on('close', () => proxyReq.destroy())
-        }
+          res.on('close', () => proxyReq.destroy());
+        },
       },
     ],
   },

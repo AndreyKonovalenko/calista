@@ -1,13 +1,11 @@
-
-import {  Request, RequestHandler, Response } from 'express';
+import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { getErrorMessage } from '../utils';
 import { CustomRequest } from '../middleware/protected';
-import {  findBoardByBoardId } from '../services/boardService';
+import { findBoardByBoardId } from '../services/boardService';
 import { createList } from '../services/listService';
 import { IList } from '../models';
-import {Types} from 'mongoose';
-
+import { Types } from 'mongoose';
 
 // POST: lists/
 // Add new list
@@ -17,7 +15,7 @@ export const addList = async (req: Request, res: Response): Promise<void> => {
   const currentBoard = await findBoardByBoardId(req.body.id);
 
   if (!currentBoard) {
-     res
+    res
       .status(StatusCodes.BAD_REQUEST)
       .send(getErrorMessage(`Board by id: ${req.params.id} not found`));
   }
@@ -28,7 +26,7 @@ export const addList = async (req: Request, res: Response): Promise<void> => {
       board_id: new Types.ObjectId(`${req.body.id}`),
       title: req.body.title,
       cards: [],
-      position: req.body.position
+      position: req.body.position,
     };
     try {
       const newList = await createList(list);
@@ -53,9 +51,9 @@ export const addList = async (req: Request, res: Response): Promise<void> => {
           );
       }
     } catch (error) {
-       res
+      res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .send(getErrorMessage(error));
     }
   }
-}
+};

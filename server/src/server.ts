@@ -32,7 +32,7 @@ app.use(cors());
 
 app.use('/api/auth', authRouter);
 app.use('/api/boards', boardsRouter);
-app.use('/api/sse', sseRouter)
+app.use('/api/sse', sseRouter);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World');

@@ -16,4 +16,3 @@ export async function findListByListId(
   });
   return list;
 }
-
