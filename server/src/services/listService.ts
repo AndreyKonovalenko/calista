@@ -1,6 +1,11 @@
 import { IList, ListModal } from '../models';
 import { HydratedDocument } from 'mongoose';
 
+export type TDeleteOneResult = {
+  acknowledged: boolean;
+  deletedCount: number;
+};
+
 export async function createList(
   list: IList,
 ): Promise<HydratedDocument<IList>> {
@@ -16,3 +21,4 @@ export async function findListByListId(
   });
   return list;
 }
+

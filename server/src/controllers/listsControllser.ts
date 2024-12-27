@@ -3,7 +3,8 @@ import { StatusCodes } from 'http-status-codes';
 import { getErrorMessage } from '../utils';
 import { CustomRequest } from '../middleware/protected';
 import { findBoardByBoardId } from '../services/boardService';
-import { createList } from '../services/listService';
+import { findListByListId } from '../services/listService';
+import { createList,  } from '../services/listService';
 import { IList } from '../models';
 import { Types } from 'mongoose';
 
@@ -50,6 +51,51 @@ export const addList = async (req: Request, res: Response): Promise<void> => {
             ),
           );
       }
+    } catch (error) {
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .send(getErrorMessage(error));
+    }
+  }
+};
+
+
+// DELETE: lists/:id
+type TDeleteOneResult = {
+  acknowledged: boolean;
+  deletedCount: number;
+};
+
+export const deleteList = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const list = await findListByListId(req.params.id);
+  if (!list) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .send(getErrorMessage(`List by id: ${req.params.id} not found`));
+  }
+  if (list) {
+    try {
+      list
+        .deleteOne()
+        .then((result: TDeleteOneResult) => {
+          if (result.deletedCount > 0) {
+            res
+              .status(StatusCodes.OK)
+              .json(` list id: ${req.params.id} deleted`);
+          } else {
+            res
+              .status(StatusCodes.OK)
+              .json(` list id: ${req.params.id} not found `);
+          }
+        })
+        .catch((error: unknown) => {
+          res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .send(getErrorMessage(error));
+        });
     } catch (error) {
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)

@@ -62,11 +62,11 @@ export const deleteBoard = async (
           if (result.deletedCount > 0) {
             res
               .status(StatusCodes.OK)
-              .json(` boad id: ${req.params.id} deleted`);
+              .json(` board id: ${req.params.id} deleted`);
           } else {
             res
               .status(StatusCodes.OK)
-              .json(` bourd id: ${req.params.id} not found `);
+              .json(` board id: ${req.params.id} not found `);
           }
         })
         .catch((error: unknown) => {
