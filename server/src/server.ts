@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import { boardsRouter } from './routes/boardsRoutes';
 import cors from 'cors';
 import { sseRouter } from './routes/sseRoutes';
+import ErrorHandler from './middleware/error-handler';
 
 const terminalColors = colors;
 
@@ -33,6 +34,7 @@ app.use(cors());
 app.use('/api/auth', authRouter);
 app.use('/api/boards', boardsRouter);
 app.use('/api/sse', sseRouter);
+app.use(ErrorHandler)
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World');
