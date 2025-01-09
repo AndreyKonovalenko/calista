@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { getErrorMessage } from '../utils';
 import { CustomRequest } from '../middleware/protected';
@@ -11,7 +11,7 @@ import { Types } from 'mongoose';
 // POST: lists/
 // Add new list
 
-export const addList = async (req: Request, res: Response): Promise<void> => {
+export const addList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { user } = req as CustomRequest;
   const currentBoard = await findBoardByBoardId(req.body.id);
 
@@ -52,9 +52,7 @@ export const addList = async (req: Request, res: Response): Promise<void> => {
           );
       }
     } catch (error) {
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send(getErrorMessage(error));
+      next(error)
     }
   }
 };

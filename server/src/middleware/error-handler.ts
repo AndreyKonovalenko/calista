@@ -1,10 +1,11 @@
 
 import { ErrorRequestHandler } from "express";
-const ErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
+import { getReasonPhrase } from "http-status-codes";
+const ErrorHandler: ErrorRequestHandler = (err, req, res) => {
   console.log("Middleware Error Hadnling");
-  const errStatus = err.statusCode || 500;
-  const errMsg = err.message || 'Something went wrong';
-  res.status(errStatus).json({
+  const errStatus = err.statusCode 
+  const errMsg = getReasonPhrase(errStatus) || 'Something went wrong';
+   res.status(errStatus).json({
       success: false,
       status: errStatus,
       message: errMsg,

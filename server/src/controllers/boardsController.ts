@@ -1,8 +1,7 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { IBoard } from '../models';
 import { StatusCodes } from 'http-status-codes';
-import { getErrorMessage } from '../utils';
-import { HydratedDocument } from 'mongoose';
+import { CastError, HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 import {
   createBoard,
@@ -11,19 +10,19 @@ import {
 } from '../services/boardService';
 
 // GET: borads/
-export const getBoards = async (req: Request, res: Response): Promise<void> => {
+export const getBoards = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { user } = req as CustomRequest;
   try {
     const boards: Array<HydratedDocument<IBoard>> | null =
       await findBoardsByCreaterId(user._id);
     res.status(StatusCodes.OK).json(boards);
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(getErrorMessage(error));
+    next(error)
   }
 };
 
 // POST: boards/
-export const addBoard = async (req: Request, res: Response): Promise<void> => {
+export const addBoard = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { user } = req as CustomRequest;
   const board: IBoard = {
     title: req.body.title,
@@ -34,7 +33,7 @@ export const addBoard = async (req: Request, res: Response): Promise<void> => {
     const newBoard = await createBoard(board);
     res.status(StatusCodes.OK).json(newBoard);
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(getErrorMessage(error));
+    next(error)
   }
 };
 
@@ -46,14 +45,19 @@ type TDeleteOneResult = {
 
 export const deleteBoard = async (
   req: Request,
-  res: Response,
+  res: Response, next: NextFunction
 ): Promise<void> => {
-  const board = await findBoardByBoardId(req.params.id);
-  if (!board) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(getErrorMessage(`Board by id: ${req.params.id} not found`));
+  let board = null;
+  try {
+     board =  await findBoardByBoardId(req.params.id);
+  } catch (error: CastError) {
+    error.message(`Board by id: ${req.params.id} not found`)
+    next(error)
   }
+
+  // if (!board) {
+  //   throw new Error(`Board by id: ${req.params.id} not found`)
+  // }
   if (board) {
     try {
       board
@@ -69,15 +73,11 @@ export const deleteBoard = async (
               .json(` board id: ${req.params.id} not found `);
           }
         })
-        .catch((error: unknown) => {
-          res
-            .status(StatusCodes.INTERNAL_SERVER_ERROR)
-            .send(getErrorMessage(error));
+        .catch((error: Error) => {
+          next(error)
         });
     } catch (error) {
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send(getErrorMessage(error));
+        next(error)
     }
   }
 };

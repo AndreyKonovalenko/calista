@@ -1,6 +1,5 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { getErrorMessage } from '../utils';
 import { registerUser, findUserByUsername } from '../services/authService';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { generateToken } from '../services/authService';
@@ -9,7 +8,7 @@ import { HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 
 // GET: auth/
-export const getUser = async (req: Request, res: Response): Promise<void> => {
+export const getUser = async (req: Request, res: Response, next:NextFunction): Promise<void> => {
   const { user } = req as CustomRequest;
   try {
     if (!user) {
@@ -22,12 +21,12 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
       });
     }
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(getErrorMessage(error));
+    next(error)
   }
 };
 
 // POST: auth/
-export const register = async (req: Request, res: Response): Promise<void> => {
+export const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { username } = req.body;
     const userExists = await findUserByUsername(username);
@@ -44,12 +43,12 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       res.status(StatusCodes.OK).send('Successfuly Registered!');
     }
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(getErrorMessage(error));
+    next(error)
   }
 };
 
 // POST: auth/login
-export const login = async (req: Request, res: Response): Promise<void> => {
+export const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { username, password } = req.body;
   try {
     const user = await findUserByUsername(username);
@@ -70,7 +69,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         .send(`${ReasonPhrases.UNAUTHORIZED}: Password is not correct`);
     }
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(getErrorMessage(error));
+    next(error)
   }
 };
 
