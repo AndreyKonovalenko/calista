@@ -75,5 +75,9 @@ const boardSchema = new Schema<IBoard>({
   creater_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   lists: [{ type: Schema.Types.ObjectId, ref: 'List' }],
 });
+// boardSchema.pre('deleteOne', (next) => {
+//   const err = new Error('somthing went wrong')
+//   next(err)
+// }) 
 
 export const BoardModal = model<IBoard>('Board', boardSchema);

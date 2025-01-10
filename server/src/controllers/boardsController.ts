@@ -1,13 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 import { IBoard } from '../models';
 import { StatusCodes } from 'http-status-codes';
-import { CastError, HydratedDocument } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 import {
   createBoard,
   findBoardsByCreaterId,
   findBoardByBoardId,
 } from '../services/boardService';
+import { getErrorMessage, CustomError } from '../utils';
+
 
 // GET: borads/
 export const getBoards = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -45,39 +47,33 @@ type TDeleteOneResult = {
 
 export const deleteBoard = async (
   req: Request,
-  res: Response, next: NextFunction
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
-  let board = null;
-  try {
-     board =  await findBoardByBoardId(req.params.id);
-  } catch (error: CastError) {
-    error.message(`Board by id: ${req.params.id} not found`)
-    next(error)
-  }
+
+  const board =  await findBoardByBoardId(req.params.id);
 
   // if (!board) {
-  //   throw new Error(`Board by id: ${req.params.id} not found`)
+  //   const error = new CustomError(`List by id: ${req.params.id} not found`, StatusCodes.INTERNAL_SERVER_ERROR )
+  // //   next(error)
   // }
+
   if (board) {
-    try {
-      board
-        .deleteOne()
+    board
+      .deleteOne()
         .then((result: TDeleteOneResult) => {
           if (result.deletedCount > 0) {
-            res
+            return  res
               .status(StatusCodes.OK)
               .json(` board id: ${req.params.id} deleted`);
           } else {
-            res
+            return res
               .status(StatusCodes.OK)
               .json(` board id: ${req.params.id} not found `);
           }
         })
-        .catch((error: Error) => {
+        .catch((error) => {
           next(error)
         });
-    } catch (error) {
-        next(error)
-    }
-  }
-};
+      } 
+}; 
