@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { IBoard } from '../models';
 import { StatusCodes } from 'http-status-codes';
-import { HydratedDocument } from 'mongoose';
+import { MongooseError, HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 import {
   createBoard,
@@ -51,13 +51,8 @@ export const deleteBoard = async (
   next: NextFunction
 ): Promise<void> => {
 
+ try {
   const board =  await findBoardByBoardId(req.params.id);
-
-  // if (!board) {
-  //   const error = new CustomError(`List by id: ${req.params.id} not found`, StatusCodes.INTERNAL_SERVER_ERROR )
-  // //   next(error)
-  // }
-
   if (board) {
     board
       .deleteOne()
@@ -71,9 +66,13 @@ export const deleteBoard = async (
               .status(StatusCodes.OK)
               .json(` board id: ${req.params.id} not found `);
           }
-        })
-        .catch((error) => {
-          next(error)
-        });
-      } 
+      })
+    }
+  } catch (error){
+    if(error instanceof MongooseError && error.name === 'CastError'){ 
+      next(new CustomError(`Borad by id: ${req.params.id} not found`, StatusCodes.INTERNAL_SERVER_ERROR ))
+    } else {
+      next(error) 
+     }
+   }
 }; 
