@@ -8,12 +8,13 @@ import {
   findBoardsByCreaterId,
   findBoardByBoardId,
 } from '../services/boardService';
-import { getErrorMessage, CustomError } from '../utils';
+import { CustomError } from '../utils';
 
 
 // GET: borads/
 export const getBoards = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { user } = req as CustomRequest;
+  console.log(user)
   try {
     const boards: Array<HydratedDocument<IBoard>> | null =
       await findBoardsByCreaterId(user._id);
@@ -68,11 +69,11 @@ export const deleteBoard = async (
           }
       })
     }
-  } catch (error){
+  } catch (error) {
     if(error instanceof MongooseError && error.name === 'CastError'){ 
       next(new CustomError(`Borad by id: ${req.params.id} not found`, StatusCodes.INTERNAL_SERVER_ERROR ))
     } else {
       next(error) 
-     }
-   }
+    }
+  }
 }; 
