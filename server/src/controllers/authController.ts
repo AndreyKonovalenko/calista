@@ -8,22 +8,28 @@ import { HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 
 // GET: auth/
-export const getUser = async (req: Request, res: Response, next:NextFunction): Promise<void> => {
+export const getUser = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void => {
   const { user } = req as CustomRequest;
   try {
-    if (user) {
-      res.status(StatusCodes.OK).json({
-        isAuth: true,
-        username: user.username,
-      });
-    }
+    res.status(StatusCodes.OK).json({
+      isAuth: true,
+      username: user.username,
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 // POST: auth/
-export const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const register = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const { username } = req.body;
     const userExists = await findUserByUsername(username);
@@ -40,12 +46,16 @@ export const register = async (req: Request, res: Response, next: NextFunction):
       res.status(StatusCodes.OK).send('Successfuly Registered!');
     }
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 // POST: auth/login
-export const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   const { username, password } = req.body;
   try {
     const user = await findUserByUsername(username);
@@ -66,7 +76,7 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
         .send(`${ReasonPhrases.UNAUTHORIZED}: Password is not correct`);
     }
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
