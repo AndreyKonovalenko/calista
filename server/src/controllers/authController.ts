@@ -11,9 +11,6 @@ import { CustomRequest } from '../middleware/protected';
 export const getUser = async (req: Request, res: Response, next:NextFunction): Promise<void> => {
   const { user } = req as CustomRequest;
   try {
-    if (!user) {
-      res.status(StatusCodes.UNAUTHORIZED).send(ReasonPhrases.UNAUTHORIZED);
-    }
     if (user) {
       res.status(StatusCodes.OK).json({
         isAuth: true,

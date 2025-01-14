@@ -10,17 +10,15 @@ import {
 } from '../services/boardService';
 import { CustomError } from '../utils';
 
-
 // GET: borads/
 export const getBoards = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { user } = req as CustomRequest;
-  console.log(user)
   try {
     const boards: Array<HydratedDocument<IBoard>> | null =
       await findBoardsByCreaterId(user._id);
     res.status(StatusCodes.OK).json(boards);
   } catch (error) {
-    next(error)
+      next(error) 
   }
 };
 
