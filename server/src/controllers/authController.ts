@@ -1,11 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { registerUser, findUserByUsername } from '../services/authService';
+import { findUserByUsername } from '../services/authService';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { generateToken } from '../services/authService';
 import { IUser } from '../models';
 import { HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
+import { UserModal } from '../models';
+import { CustomError } from '../utils';
 
 // GET: auth/
 export const getUser = (
@@ -32,19 +34,17 @@ export const register = async (
 ): Promise<void> => {
   try {
     const { username } = req.body;
-    const userExists = await findUserByUsername(username);
+    const userExists: HydratedDocument<IUser> | null = await UserModal.findOne({ username });
     if (userExists) {
-      res
-        .status(StatusCodes.CONFLICT)
-        .send(
-          `${ReasonPhrases.CONFLICT}: username: ${username} already exists`,
-        );
+      throw new CustomError(`${ReasonPhrases.CONFLICT}: username: ${username} already exists`, StatusCodes.CONFLICT)
     }
-    const user: HydratedDocument<IUser> | null = await registerUser(req.body);
+
+    const user: HydratedDocument<IUser> =  await UserModal.create(req.body)
     if (user) {
       generateToken(res, user._id);
       res.status(StatusCodes.OK).send('Successfuly Registered!');
     }
+
   } catch (error) {
     next(error);
   }
@@ -58,23 +58,19 @@ export const login = async (
 ): Promise<void> => {
   const { username, password } = req.body;
   try {
-    const user = await findUserByUsername(username);
+    const user = await UserModal.findOne({ username });
     if (!user) {
-      res
-        .status(StatusCodes.UNAUTHORIZED)
-        .send(`${ReasonPhrases.UNAUTHORIZED}: User ${username} not found.`);
+     throw new CustomError(`${ReasonPhrases.UNAUTHORIZED}: User ${username} not found.`, StatusCodes.UNAUTHORIZED);
     }
-    if (user && bcrypt.compareSync(password, user.password)) {
-      generateToken(res, user._id);
-      res.status(StatusCodes.OK).json({
-        isAuth: true,
-        username: user.username,
-      });
-    } else {
-      res
-        .status(StatusCodes.UNAUTHORIZED)
-        .send(`${ReasonPhrases.UNAUTHORIZED}: Password is not correct`);
+    if(!bcrypt.compareSync(password, user.password)) {
+        throw new CustomError(`${ReasonPhrases.UNAUTHORIZED}: Password is not correct.`, StatusCodes.UNAUTHORIZED);
     }
+    generateToken(res, user._id);
+    res.status(StatusCodes.OK).json({
+      isAuth: true,
+      username: user.username,
+    });
+    
   } catch (error) {
     next(error);
   }

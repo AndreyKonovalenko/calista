@@ -1,8 +1,9 @@
 import { ErrorRequestHandler } from "express";
+import { StatusCodes } from "http-status-codes";
 const ErrorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
-  console.log("Middleware Error Hadnling");
+  console.log("Middleware Error Handling");
     const {statusCode } = err;
-    const errStatus = statusCode ? statusCode : 400
+    const errStatus = statusCode ? statusCode : StatusCodes.BAD_REQUEST
     const errMsg = err.message || 'Something went wrong';
     res.status(errStatus).json({
         success: false,
