@@ -16,14 +16,7 @@ export async function findUserByUsername(
   username: string,
 ): Promise<null | HydratedDocument<IUser>> {
   const user = await UserModal.findOne({ username });
-  return user ? user : null;
-}
-
-export async function findUserByUserId(
-  id: string,
-): Promise<null | HydratedDocument<IUser>> {
-  const user = await UserModal.findById(id).select('-password');
-  return user ? user : null;
+  return user;
 }
 
 export function generateToken(

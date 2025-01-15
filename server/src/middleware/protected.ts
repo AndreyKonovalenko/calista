@@ -1,11 +1,10 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import { StatusCodes } from 'http-status-codes';
+import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { CustomError } from '../utils';
 import { IUser } from '../models';
 import { HydratedDocument, MongooseError } from 'mongoose';
-import { findUserByUserId } from '../services/authService';
-
+import { UserModal } from '../models';
 
 export interface CustomRequest extends Request {
   user: HydratedDocument<IUser>;
@@ -19,12 +18,10 @@ export const protect = async (
   try {
     const token = req.cookies.jwt;
     if (!token) {
-      throw new CustomError('Token not provided', StatusCodes.UNAUTHORIZED)
+      throw new CustomError(ReasonPhrases.UNAUTHORIZED, StatusCodes.UNAUTHORIZED)
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-    const user: HydratedDocument<IUser> | null = await findUserByUserId(
-      decoded.user_id,
-    );
+    const user: HydratedDocument<IUser> | null =  await UserModal.findById(decoded.user_id).select('-password')
     if (user) {
       (req as CustomRequest).user = user;
       next();
