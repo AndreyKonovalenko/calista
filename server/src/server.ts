@@ -45,3 +45,6 @@ app.listen(port, () => {
     terminalColors.yellow(`App listening at http://localhost:${port}`),
   );
 });
+
+
+export default app;

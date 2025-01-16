@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { findUserByUsername } from '../services/authService';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { generateToken } from '../services/authService';
 import { IUser } from '../models';
@@ -38,13 +37,11 @@ export const register = async (
     if (userExists) {
       throw new CustomError(`${ReasonPhrases.CONFLICT}: username: ${username} already exists`, StatusCodes.CONFLICT)
     }
-
     const user: HydratedDocument<IUser> =  await UserModal.create(req.body)
     if (user) {
       generateToken(res, user._id);
       res.status(StatusCodes.OK).send('Successfuly Registered!');
     }
-
   } catch (error) {
     next(error);
   }
@@ -60,17 +57,16 @@ export const login = async (
   try {
     const user = await UserModal.findOne({ username });
     if (!user) {
-     throw new CustomError(`${ReasonPhrases.UNAUTHORIZED}: User ${username} not found.`, StatusCodes.UNAUTHORIZED);
+      throw new CustomError(`${ReasonPhrases.UNAUTHORIZED}: User ${username} not found.`, StatusCodes.UNAUTHORIZED);
     }
     if(!bcrypt.compareSync(password, user.password)) {
-        throw new CustomError(`${ReasonPhrases.UNAUTHORIZED}: Password is not correct.`, StatusCodes.UNAUTHORIZED);
+      throw new CustomError(`${ReasonPhrases.UNAUTHORIZED}: Password is not correct.`, StatusCodes.UNAUTHORIZED);
     }
     generateToken(res, user._id);
     res.status(StatusCodes.OK).json({
       isAuth: true,
       username: user.username,
     });
-    
   } catch (error) {
     next(error);
   }
