@@ -9,18 +9,8 @@ export const connectDB = async () => {
       `MongoDB Connected! db:${connection.name} host:${connection.host}`.cyan
         .underline,
     );
-    // await monitor(connection);
-    // return connection
   } catch (error) {
     console.log(error);
     process.exit(1);
   }
 };
-//  export const monitor = async (connection: mongoose.Connection, pipeline = []) => {
-//   const collection = connection.collections['boards'];
-//   const changedStream = collection.watch(pipeline);
-//   changedStream.on('change', data => {
-//     console.log(data)
-//     return data;
-//   });
-// };
