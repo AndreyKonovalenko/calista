@@ -10,7 +10,7 @@ export const connectDB = async () => {
         .underline,
     );
   } catch (error) {
-    console.log(error);
+    console.log('in db', error);
     process.exit(1);
   }
 };

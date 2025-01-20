@@ -7,10 +7,12 @@ import { port } from './config';
 
 const terminalColors = colors;
 
-connectDB().then(() =>
-  app.listen(port, () => {
-    console.log(
-      terminalColors.yellow(`App listening at http://localhost:${port}`),
-    );
-  }),
-);
+connectDB()
+  .then(() =>
+    app.listen(port, () => {
+      console.log(
+        terminalColors.yellow(`App listening at http://localhost:${port}`),
+      );
+    }),
+  )
+  .catch(error => console.log('in server', error));

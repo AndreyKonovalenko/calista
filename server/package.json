@@ -8,7 +8,8 @@
     "dev": "npx nodemon src/server.ts",
     "build": "tsc",
     "type-check": "tsc --pretty --noEmit",
-    "lint": "eslint" 
+    "lint": "eslint",
+    "start": "ts-node src/server.ts"
   },
   "keywords": [],
   "author": "",
