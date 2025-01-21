@@ -8,7 +8,7 @@ import { CustomRequest } from '../middleware/protected';
 import { UserModal } from '../models';
 import { CustomError } from '../utils';
 
-// GET: auth/
+//GET: auth/ @private
 export const getUser = (
   req: Request,
   res: Response,
@@ -24,6 +24,19 @@ export const getUser = (
     next(error);
   }
 };
+
+
+//GET: auth/users @publict for tests
+// get all users 
+export const getUsers = async (req: Request, res: Response, next: NextFunction):Promise<void> => {
+  try {
+    const users = await UserModal.find({})
+    res.status(StatusCodes.OK).json(users)
+  } catch(error){
+    next(error)
+  }
+
+}
 
 // POST: auth/
 export const register = async (

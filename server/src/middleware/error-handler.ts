@@ -12,5 +12,4 @@ const ErrorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
         stack: process.env.NODE_ENV === 'development' ? err.stack : {}
     })
 }
-
 export default ErrorHandler;
