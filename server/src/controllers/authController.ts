@@ -38,7 +38,7 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction):
 
 }
 
-// POST: auth/
+// POST: auth/ @public
 export const register = async (
   req: Request,
   res: Response,
