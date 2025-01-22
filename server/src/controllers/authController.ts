@@ -26,16 +26,19 @@ export const getUser = (
 };
 
 //GET: auth/users @publict for tests
-// get all users 
-export const getUsers = async (req: Request, res: Response, next: NextFunction):Promise<void> => {
+// get all users
+export const getUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
-    const users = await UserModal.find({})
-    console.log(users)
-    res.status(StatusCodes.OK).json(users)
-  } catch(error){
-    next(error)
+    const users = await UserModal.find({});
+    res.status(StatusCodes.OK).json(users);
+  } catch (error) {
+    next(error);
   }
-}
+};
 
 // POST: auth/ @public
 export const register = async (
@@ -45,15 +48,22 @@ export const register = async (
 ): Promise<void> => {
   try {
     const { username } = req.body;
-    const userExists: HydratedDocument<IUser> | null = await UserModal.findOne({ username });
+    const userExists: HydratedDocument<IUser> | null = await UserModal.findOne({
+      username,
+    });
     if (userExists) {
-      throw new CustomError(`${ReasonPhrases.CONFLICT}: username: ${username} already exists`, StatusCodes.CONFLICT)
+      throw new CustomError(
+        `${ReasonPhrases.CONFLICT}: username: ${username} already exists`,
+        StatusCodes.CONFLICT,
+      );
     }
-    const user: HydratedDocument<IUser> =  await UserModal.create(req.body)
+    const user: HydratedDocument<IUser> = await UserModal.create(req.body);
     if (user) {
-      const {username} = user;
+      const { username } = user;
       generateToken(res, user._id);
-      res.status(StatusCodes.CREATED).send(`New user ${username} successfully created`);
+      res
+        .status(StatusCodes.CREATED)
+        .send(`New user ${username} successfully created`);
     }
   } catch (error) {
     next(error);
@@ -67,14 +77,19 @@ export const login = async (
   next: NextFunction,
 ): Promise<void> => {
   const { username, password } = req.body;
-  console.log(req.body)
   try {
     const user = await UserModal.findOne({ username });
     if (!user) {
-      throw new CustomError(`${ReasonPhrases.UNAUTHORIZED}: User ${username} not found.`, StatusCodes.UNAUTHORIZED);
+      throw new CustomError(
+        `${ReasonPhrases.UNAUTHORIZED}: User ${username} not found.`,
+        StatusCodes.UNAUTHORIZED,
+      );
     }
-    if(!bcrypt.compareSync(password, user.password)) {
-      throw new CustomError(`${ReasonPhrases.UNAUTHORIZED}: Password is not correct.`, StatusCodes.UNAUTHORIZED);
+    if (!bcrypt.compareSync(password, user.password)) {
+      throw new CustomError(
+        `${ReasonPhrases.UNAUTHORIZED}: Password is not correct.`,
+        StatusCodes.UNAUTHORIZED,
+      );
     }
     generateToken(res, user._id);
     res.status(StatusCodes.OK).json({
@@ -82,7 +97,6 @@ export const login = async (
       username: user.username,
     });
   } catch (error) {
-    console.log(error)
     next(error);
   }
 };

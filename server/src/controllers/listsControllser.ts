@@ -4,14 +4,18 @@ import { getErrorMessage } from '../utils';
 import { CustomRequest } from '../middleware/protected';
 import { findBoardByBoardId } from '../services/boardService';
 import { findListByListId } from '../services/listService';
-import { createList,  } from '../services/listService';
+import { createList } from '../services/listService';
 import { IList } from '../models';
 import { Types } from 'mongoose';
 
 // POST: lists/
 // Add new list
 
-export const addList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const addList = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   const { user } = req as CustomRequest;
   const currentBoard = await findBoardByBoardId(req.body.id);
 
@@ -52,11 +56,10 @@ export const addList = async (req: Request, res: Response, next: NextFunction): 
           );
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 };
-
 
 // DELETE: lists/:id
 type TDeleteOneResult = {

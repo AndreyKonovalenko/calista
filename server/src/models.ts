@@ -78,6 +78,6 @@ const boardSchema = new Schema<IBoard>({
 // boardSchema.pre('deleteOne', (next) => {
 //   const err = new Error('somthing went wrong')
 //   next(err)
-// }) 
+// })
 
 export const BoardModal = model<IBoard>('Board', boardSchema);
