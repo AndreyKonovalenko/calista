@@ -67,6 +67,7 @@ export const login = async (
   next: NextFunction,
 ): Promise<void> => {
   const { username, password } = req.body;
+  console.log(req.body)
   try {
     const user = await UserModal.findOne({ username });
     if (!user) {
@@ -81,6 +82,7 @@ export const login = async (
       username: user.username,
     });
   } catch (error) {
+    console.log(error)
     next(error);
   }
 };

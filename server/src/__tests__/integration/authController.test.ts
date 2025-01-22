@@ -1,19 +1,12 @@
 import request from 'supertest';
 import app from '../../app';
 import { dbConnect, dbDisconnect } from './db-handler';
+// import { generateToken } from '../../services/authService';
 
 const testUser = {
   username: 'Mark',
   password: '132'
 }
-
-const userCreated = {
-  _id: '6790ac474cbb2277a42b517f',
-  username: 'Mark',
-  password: '$2b$10$Z4QfZeln57bS4RzgG9F/LOJSzMt5KR37qj49cqu6SkhnI/o0z9jti',
-  __v: '0', 
-}
-
 
 beforeAll(async () => dbConnect())
 afterAll(async () => dbDisconnect())
@@ -25,20 +18,40 @@ describe("Auth Controller", () => {
       expect(response.status).toBe(200);
       expect(response.body).toEqual([])
     })
-    
-    it('should create new user', async () => {
-      const response = await request(app).post('/api/auth').send(testUser);
-      expect(response.status).toBe(201)
-      expect(response.text).toBe(`New user ${testUser.username} successfully created`)
+
+    describe('create user', () => {
+      it('should create new user', async () => {
+        const response = await request(app).post('/api/auth').send(testUser);
+        expect(response.status).toBe(201)
+        expect(response.text).toBe(`New user ${testUser.username} successfully created`)
+      })
     })
-    
-    it('it should return one user', async () => {
-      const response = await request(app).get('/api/auth/users');
-      console.log(response.body)
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual([userCreated])
+   
+    describe('get all users', () => {
+      it('should return array of  users', async () => {
+        const response = await request(app).get('/api/auth/users');
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual(expect.arrayContaining([expect.objectContaining({
+          __v: expect.any(Number), _id: expect.any(String), password: expect.any(String),  username: expect.any(String)})]))
+      })
     })
-    
+      
+    describe('login', () => {
+      it('should login and return user', async () => {
+        const response = await request(app).post('/api/auth/login').send(testUser)
+        expect(response.status).toBe(200)
+        expect(response.body).toEqual({username: 'Mark', isAuth:true})
+      })
+      const wronguser = {...testUser, password: '1111'}
+      it('should not grant access if wrong password', async () => {
+        const response = await request(app).post('/api/auth/login').send(wronguser)
+        expect(response.status).toBe(401)
+        expect(response.body.message).toBe('UNAUTHORIZED: Password is not correct.')
+      })
+    })
+      
+  })
+   
     
     // it('should create a user', async() => {
     //   const response = await request(app).post('/api/atuh').send(testUser);
@@ -46,5 +59,3 @@ describe("Auth Controller", () => {
     //   expect(response.statusCode).toBe(200);
     //   expect(response.body).toEqual(testUser);
     // });
-
-})
