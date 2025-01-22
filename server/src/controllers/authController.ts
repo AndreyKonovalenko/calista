@@ -25,17 +25,16 @@ export const getUser = (
   }
 };
 
-
 //GET: auth/users @publict for tests
 // get all users 
 export const getUsers = async (req: Request, res: Response, next: NextFunction):Promise<void> => {
   try {
     const users = await UserModal.find({})
+    console.log(users)
     res.status(StatusCodes.OK).json(users)
   } catch(error){
     next(error)
   }
-
 }
 
 // POST: auth/ @public
@@ -52,8 +51,9 @@ export const register = async (
     }
     const user: HydratedDocument<IUser> =  await UserModal.create(req.body)
     if (user) {
+      const {username} = user;
       generateToken(res, user._id);
-      res.status(StatusCodes.OK).send('Successfuly Registered!');
+      res.status(StatusCodes.CREATED).send(`New user ${username} successfully created`);
     }
   } catch (error) {
     next(error);

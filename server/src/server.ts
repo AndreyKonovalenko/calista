@@ -3,15 +3,15 @@ import app from './app';
 
 import { connectDB } from './db';
 
-import { port } from './config';
+import { PORT } from './config';
 
 const terminalColors = colors;
 
 connectDB()
   .then(() =>
-    app.listen(port, () => {
+    app.listen(PORT, () => {
       console.log(
-        terminalColors.yellow(`App listening at http://localhost:${port}`),
+        terminalColors.yellow(`App listening at http://localhost:${PORT}`),
       );
     }),
   )

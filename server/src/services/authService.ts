@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 import { Response } from 'express';
+import { JWT_SECRET, NODE_ENV, TOKEN_EXPIRES_IN } from '../config';
 import jwt from 'jsonwebtoken';
-
 
 // export async function registerUser(
 //   user: HydratedDocument<IUser>,
@@ -21,14 +21,14 @@ export function generateToken(
   res: Response,
   user_id: Types.ObjectId | undefined | null,
 ): void {
-  const token = jwt.sign({ user_id }, process.env.JWT_SECRET!, {
-    expiresIn: process.env.TOKEN_EXPIRES_IN,
+  const token = jwt.sign({ user_id }, JWT_SECRET!, {
+    expiresIn: TOKEN_EXPIRES_IN,
   });
   res.cookie('jwt', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV !== 'development',
+    secure: NODE_ENV !== 'development',
     sameSite: 'strict',
-    maxAge: parseInt(process.env.TOKEN_EXPIRES_IN!),
+    maxAge: parseInt(TOKEN_EXPIRES_IN!),
   });
 }
 
