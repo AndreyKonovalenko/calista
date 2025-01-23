@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
-import { generateToken } from '../services/authService';
+import { setGeneratedToken } from '../services/authService';
 import { IUser } from '../models';
 import { HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
@@ -60,7 +60,7 @@ export const register = async (
     const user: HydratedDocument<IUser> = await UserModal.create(req.body);
     if (user) {
       const { username } = user;
-      generateToken(res, user._id);
+      setGeneratedToken(res, user._id);
       res
         .status(StatusCodes.CREATED)
         .send(`New user ${username} successfully created`);
@@ -91,7 +91,7 @@ export const login = async (
         StatusCodes.UNAUTHORIZED,
       );
     }
-    generateToken(res, user._id);
+    setGeneratedToken(res, user._id);
     res.status(StatusCodes.OK).json({
       isAuth: true,
       username: user.username,

@@ -3,8 +3,9 @@ import { Request, Response, NextFunction } from 'express';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { CustomError } from '../utils';
 import { IUser } from '../models';
-import { HydratedDocument, MongooseError } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 import { UserModal } from '../models';
+import { JWT_SECRET } from '../config';
 
 export interface CustomRequest extends Request {
   user: HydratedDocument<IUser>;
@@ -23,7 +24,7 @@ export const protect = async (
         StatusCodes.UNAUTHORIZED,
       );
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+    const decoded = jwt.verify(token, JWT_SECRET!) as JwtPayload;
     const user: HydratedDocument<IUser> | null = await UserModal.findById(
       decoded.user_id,
     ).select('-password');
@@ -32,15 +33,6 @@ export const protect = async (
       next();
     }
   } catch (error) {
-    if (error instanceof MongooseError && error.name === 'CastError') {
-      next(
-        new CustomError(
-          `Borad by id: ${req.params.id} not found`,
-          StatusCodes.INTERNAL_SERVER_ERROR,
-        ),
-      );
-    } else {
-      next(error);
-    }
+    next(error);
   }
 };

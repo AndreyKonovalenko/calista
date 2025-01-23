@@ -18,12 +18,19 @@ import jwt from 'jsonwebtoken';
 // }
 
 export function generateToken(
-  res: Response,
-  user_id: Types.ObjectId | undefined | null,
-): void {
-  const token = jwt.sign({ user_id }, JWT_SECRET!, {
-    expiresIn: TOKEN_EXPIRES_IN,
+  user_id: Types.ObjectId,
+  expiration: string | undefined,
+): string {
+  return jwt.sign({ user_id }, JWT_SECRET!, {
+    expiresIn: expiration,
   });
+}
+
+export function setGeneratedToken(
+  res: Response,
+  user_id: Types.ObjectId,
+): void {
+  const token = generateToken(user_id, TOKEN_EXPIRES_IN);
   res.cookie('jwt', token, {
     httpOnly: true,
     secure: NODE_ENV !== 'development',

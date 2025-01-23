@@ -1,7 +1,8 @@
 import request from 'supertest';
 import app from '../../app';
 import { dbConnect, dbDisconnect } from './db-handler';
-// import { generateToken } from '../../services/authService';
+import { generateToken } from '../../services/authService';
+import { UserModal } from '../../models';
 
 const testUser = {
   username: 'Mark',
@@ -77,11 +78,40 @@ describe('Auth Controller', () => {
       );
     });
   });
-});
 
-// it('should create a user', async() => {
-//   const response = await request(app).post('/api/atuh').send(testUser);
-//   console.log(response.body)
-//   expect(response.statusCode).toBe(200);
-//   expect(response.body).toEqual(testUser);
-// });
+  describe('getUser', () => {
+    it('should return  isAuth:true  and username if cookie presists and jwt and not expired', async () => {
+      const user = await UserModal.create({
+        username: 'Mark2',
+        password: '1111',
+      });
+      if (user) {
+        const token = generateToken(user._id, '20000');
+        const response = await request(app)
+          .get('/api/auth')
+          .set('Cookie', [`jwt=${token}`]);
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual({ isAuth: true, username: 'Mark2' });
+      }
+    });
+    it('should return unauthorized if no token, async', async () => {
+      const response = await request(app)
+        .get('/api/auth')
+        .set('Cookie', [`jwt=`]);
+      expect(response.status).toBe(401);
+    });
+    it('should return  Expiration Error', async () => {
+      const user = await UserModal.create({
+        username: 'Mark3',
+        password: '1111',
+      });
+      if (user) {
+        const token = generateToken(user._id, '0');
+        const response = await request(app)
+          .get('/api/auth')
+          .set('Cookie', [`jwt=${token}`]);
+        expect(response.status).toBe(401);
+      }
+    });
+  });
+});
