@@ -10,5 +10,5 @@
     "outDir": "./dist",
     "rootDir": "./src"
   },
-  "include": ["./src", "src/__tests__/integration/.ts"]
+  "include": ["./src", "src/__tests__/controllers/.ts"]
 }

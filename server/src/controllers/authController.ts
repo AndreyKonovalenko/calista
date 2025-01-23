@@ -7,6 +7,7 @@ import { HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 import { UserModal } from '../models';
 import { CustomError } from '../utils';
+import { NODE_ENV } from '../config';
 
 //GET: auth/ @private
 export const getUser = (
@@ -25,20 +26,20 @@ export const getUser = (
   }
 };
 
-//GET: auth/users @publict for tests
-// get all users
-export const getUsers = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  try {
-    const users = await UserModal.find({});
-    res.status(StatusCodes.OK).json(users);
-  } catch (error) {
-    next(error);
-  }
-};
+// //GET: auth/users @publict for tests
+// // get all users
+// export const getUsers = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction,
+// ): Promise<void> => {
+//   try {
+//     const users = await UserModal.find({});
+//     res.status(StatusCodes.OK).json(users);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 // POST: auth/ @public
 export const register = async (
@@ -103,10 +104,10 @@ export const login = async (
 
 // POST: auth/logout
 // clear cookies
-export const logout = (req: Request, res: Response) => {
+export const logout = (_req: Request, res: Response) => {
   res.cookie('jwt', '', {
     httpOnly: true,
-    secure: process.env.NODE_ENV !== 'development',
+    secure: NODE_ENV !== 'development',
     sameSite: 'strict',
     expires: new Date(0),
   });
