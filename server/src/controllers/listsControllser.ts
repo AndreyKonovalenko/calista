@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { getErrorMessage } from '../utils';
 import { CustomRequest } from '../middleware/protected';
-import { findBoardByBoardId } from '../services/boardService';
 import { findListByListId } from '../services/listService';
 import { createList } from '../services/listService';
-import { IList } from '../models';
+import { BoardModal, IList } from '../models';
 import { Types } from 'mongoose';
+import { CustomError } from '../utils/CustomError';
+import { MongooseError } from 'mongoose';
 
 // POST: lists/
 // Add new list
@@ -17,12 +17,9 @@ export const addList = async (
   next: NextFunction,
 ): Promise<void> => {
   const { user } = req as CustomRequest;
-  const currentBoard = await findBoardByBoardId(req.body.id);
-
+  const currentBoard = await BoardModal.find({_id: req.body.id});
   if (!currentBoard) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(getErrorMessage(`Board by id: ${req.params.id} not found`));
+    throw new CustomError(`Board by id: ${req.params.id} not found`, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 
   if (currentBoard) {
@@ -31,7 +28,7 @@ export const addList = async (
       board_id: new Types.ObjectId(`${req.body.id}`),
       title: req.body.title,
       cards: [],
-      position: req.body.position,
+      pos: req.body.position,
     };
     try {
       const newList = await createList(list);
@@ -47,13 +44,15 @@ export const addList = async (
             `list id: ${newListId} added to board ${req.body.id} successfully`,
           );
       } catch (error) {
-        res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .send(
-            getErrorMessage(
-              `Board id: ${req.body.id} has not been updated with list id: ${newListId} ${error}`,
+        if (error instanceof MongooseError && error.name === 'CastError') {
+          next(new CustomError(
+            `Board id: ${req.body.id} has not been updated with list id: ${newListId}`,
+              StatusCodes.INTERNAL_SERVER_ERROR,
             ),
-          );
+          )
+        }else {
+          next(error)
+        } 
       }
     } catch (error) {
       next(error);

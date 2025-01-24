@@ -3,7 +3,7 @@ import { IBoard } from '../models';
 import { StatusCodes } from 'http-status-codes';
 import { MongooseError, HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
-import { CustomError } from '../utils';
+import { CustomError } from '../utils/CustomError';
 import { BoardModal } from '../models';
 
 // GET: borads/

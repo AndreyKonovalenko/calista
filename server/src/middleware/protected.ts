@@ -1,7 +1,7 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
-import { CustomError } from '../utils';
+import { CustomError } from '../utils/CustomError';
 import { IUser } from '../models';
 import { HydratedDocument } from 'mongoose';
 import { UserModal } from '../models';

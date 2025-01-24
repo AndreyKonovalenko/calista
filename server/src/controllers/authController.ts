@@ -5,9 +5,10 @@ import { setGeneratedToken } from '../services/authService';
 import { IUser } from '../models';
 import { HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
+import { CustomError } from '../utils/CustomError';
 import { UserModal } from '../models';
-import { CustomError } from '../utils';
 import { NODE_ENV } from '../config';
+
 
 //GET: auth/ @private
 export const getUser = (
