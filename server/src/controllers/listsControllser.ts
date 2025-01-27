@@ -3,8 +3,9 @@ import { StatusCodes } from 'http-status-codes';
 import { CustomRequest } from '../middleware/protected';
 import { findListByListId } from '../services/listService';
 import { createList } from '../services/listService';
-import { BoardModal, IList } from '../models';
-import { Types } from 'mongoose';
+import { BoardModel, IBoard } from '../models/boardModel';
+import { HydratedDocument } from 'mongoose'
+import { IList } from '../models/ListModel';
 import { CustomError } from '../utils/CustomError';
 import { MongooseError } from 'mongoose';
 
@@ -17,18 +18,18 @@ export const addList = async (
   next: NextFunction,
 ): Promise<void> => {
   const { user } = req as CustomRequest;
-  const currentBoard = await BoardModal.find({_id: req.body.id});
+  const currentBoard: HydratedDocument<IBoard> | null = await BoardModel.findOne({_id: req.body.board_id});
   if (!currentBoard) {
-    throw new CustomError(`Board by id: ${req.params.id} not found`, StatusCodes.INTERNAL_SERVER_ERROR);
+    throw new CustomError(`Board by id: ${req.body.board_id} not found`, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 
   if (currentBoard) {
     const list: IList = {
       creater_id: user._id,
-      board_id: new Types.ObjectId(`${req.body.id}`),
-      title: req.body.title,
-      cards: [],
-      pos: req.body.position,
+      board_id: req.body.board_is,
+      name: req.body.title,
+      cards:[],
+      pos: req.body.pos
     };
     try {
       const newList = await createList(list);

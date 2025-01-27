@@ -1,15 +1,19 @@
 import { NextFunction, Request, Response } from 'express';
-import { CardModal, ICard, ICheckList } from '../models';
+import { CardModal, ICard } from '../models/CardModel';
 import { StatusCodes } from 'http-status-codes';
+import { CustomRequest } from '../middleware/protected';
 
 // POST /cards @pirvate 
 
 export const addCard = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const { user } = req as CustomRequest;
   const data: ICard = {
-      board_id: req.body.board_id,
-      list_id: req.body.list_id,
-      name: req.body.name,
-      description: ""
+    creater_id: user._id,
+    board_id: req.body.board_id,
+    list_id: req.body.list_id,
+    name: req.body.name,
+    description: req.body.description,
+    pos: req.body.pos
   }
   try {
     const card = await CardModal.create(data)

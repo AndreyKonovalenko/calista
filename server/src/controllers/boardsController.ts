@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
-import { IBoard } from '../models';
+import { IBoard } from '../models/boardModel';
 import { StatusCodes } from 'http-status-codes';
 import { MongooseError, HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 import { CustomError } from '../utils/CustomError';
-import { BoardModal } from '../models';
-
+import { BoardModel } from '../models/boardModel';
 // GET: borads/
 export const getBoards = async (
   req: Request,
@@ -15,7 +14,7 @@ export const getBoards = async (
   const { user } = req as CustomRequest;
   try {
     const boards: Array<HydratedDocument<IBoard>> | null =
-      await BoardModal.find({ creater_id: user._id });
+      await BoardModel.find({ creater_id: user._id });
     res.status(StatusCodes.OK).json(boards);
   } catch (error) {
     next(error);
@@ -35,7 +34,7 @@ export const addBoard = async (
     lists: [],
   };
   try {
-    const newBoard = await BoardModal.create(board);
+    const newBoard: HydratedDocument<IBoard> = await BoardModel.create(board);
     res.status(StatusCodes.OK).json(newBoard);
   } catch (error) {
     next(error);
@@ -49,7 +48,7 @@ export const deleteBoard = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const result = await BoardModal.deleteOne({ _id: req.params.id });
+    const result = await BoardModel.deleteOne({ _id: req.params.id });
     console.log(result);
     if (result.deletedCount > 0) {
       res.status(StatusCodes.OK).json(` board id: ${req.params.id} deleted`);

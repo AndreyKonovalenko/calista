@@ -2,7 +2,7 @@ import request from 'supertest';
 import app from '../../app';
 import { dbConnect, dbDisconnect } from './db-handler';
 import { generateToken } from '../../services/authService';
-import { UserModal } from '../../models';
+import { UserModal } from '../../models/userModel';
 
 const testUser = {
   username: 'Mark',
