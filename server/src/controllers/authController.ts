@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
-import { setGeneratedToken } from '../services/authService';
+import { findUserByUsername, setGeneratedToken, createUser } from '../services/authService';
 import { IUser, UserModal} from '../models/UserModel'; 
 import { HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
@@ -48,23 +48,20 @@ export const register = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { username } = req.body;
-    const userExists: HydratedDocument<IUser> | null = await UserModal.findOne({
-      username,
-    });
-    if (userExists) {
+    const userDTO = {...req.body}
+    const userExists: HydratedDocument<IUser> | null = await findUserByUsername(userDTO.username)
+    if (!userExists) {
       throw new CustomError(
-        `${ReasonPhrases.CONFLICT}: username: ${username} already exists`,
+        `${ReasonPhrases.CONFLICT}: username: ${userDTO.username} already exists`,
         StatusCodes.CONFLICT,
       );
     }
-    const user: HydratedDocument<IUser> = await UserModal.create(req.body);
-    if (user) {
-      const { username } = user;
-      setGeneratedToken(res, user._id);
+    const newUser: HydratedDocument<IUser> | null = await createUser(userDTO);
+    if (newUser) {
+      setGeneratedToken(res, newUser._id);
       res
         .status(StatusCodes.CREATED)
-        .send(`New user ${username} successfully created`);
+        .send(`New user ${newUser.username} successfully created`);
     }
   } catch (error) {
     next(error);
