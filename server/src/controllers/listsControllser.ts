@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { CustomRequest } from '../middleware/protected';
 import { findListByListId } from '../services/listService';
 import { createList } from '../services/listService';
-import { BoardModel, IBoard } from '../models/boardModel';
+import { BoardModel, IBoard } from '../models/BoardModel';
 import { HydratedDocument } from 'mongoose'
 import { IList } from '../models/ListModel';
 import { CustomError } from '../utils/CustomError';
@@ -25,8 +25,8 @@ export const addList = async (
 
   if (currentBoard) {
     const list: IList = {
-      creater_id: user._id,
-      board_id: req.body.board_is,
+      createrId: user._id,
+      boardId: req.body.boardId,
       name: req.body.title,
       cards:[],
       pos: req.body.pos
@@ -37,8 +37,7 @@ export const addList = async (
       // save to specific board by it id
       try {
         currentBoard.lists.push(newListId);
-        const upadatedBorad = await currentBoard.save();
-        console.log(upadatedBorad);
+        await currentBoard.save()
         res
           .status(StatusCodes.OK)
           .json(
@@ -51,7 +50,7 @@ export const addList = async (
               StatusCodes.INTERNAL_SERVER_ERROR,
             ),
           )
-        }else {
+        } else {
           next(error)
         } 
       }

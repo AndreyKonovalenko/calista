@@ -2,11 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { setGeneratedToken } from '../services/authService';
-import { IUser } from '../models/userModel'; 
+import { IUser, UserModal} from '../models/UserModel'; 
 import { HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 import { CustomError } from '../utils/CustomError';
-import { UserModal } from '../models/userModel';
 import { NODE_ENV } from '../config';
 
 
@@ -78,7 +77,10 @@ export const login = async (
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
-  const { username, password } = req.body;
+  const userDTO = {...req.body}
+  // data transfer object
+  const { username, password } = userDTO;
+  // const isValid = validator.user(userDTO)
   try {
     const user = await UserModal.findOne({ username });
     if (!user) {

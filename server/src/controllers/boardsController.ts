@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
-import { IBoard } from '../models/boardModel';
 import { StatusCodes } from 'http-status-codes';
 import { MongooseError, HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 import { CustomError } from '../utils/CustomError';
-import { BoardModel } from '../models/boardModel';
+import { BoardModel, IBoard } from '../models/BoardModel';
+
 // GET: borads/
 export const getBoards = async (
   req: Request,
