@@ -1,21 +1,23 @@
 import { Types } from 'mongoose';
 import { Response } from 'express';
 import { JWT_SECRET, NODE_ENV, TOKEN_EXPIRES_IN } from '../config';
+import { HydratedDocument } from 'mongoose';
 import jwt from 'jsonwebtoken';
+import { UserModal, IUser } from '../models/UserModel';
 
-// export async function registerUser(
-//   user: HydratedDocument<IUser>,
-// ): Promise<null | HydratedDocument<IUser>> {
-//   const newUser: HydratedDocument<IUser> = await UserModal.create(user);
-//   return newUser ? newUser : null;
-// }
+export async function createUser(
+  user: IUser,
+): Promise<null | HydratedDocument<IUser>> {
+  const newUser: HydratedDocument<IUser> = await UserModal.create(user);
+  return newUser;
+}
 
-// export async function findUserByUsername(
-//   username: string,
-// ): Promise<null | HydratedDocument<IUser>> {
-//   const user = await UserModal.findOne({ username });
-//   return user;
-// }
+export async function findUserByUsername(
+  username: string,
+): Promise<null | HydratedDocument<IUser>> {
+  const user = await UserModal.findOne({ username });
+  return user;
+}
 
 export function generateToken(
   user_id: Types.ObjectId,
