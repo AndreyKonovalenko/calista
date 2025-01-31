@@ -9,8 +9,8 @@ const testUser = {
   username: 'Mark',
   password: '132',
 };
-const app = express();
 
+const app = express();
 beforeAll(async () => dbConnect());
 beforeAll(async () => await expressLoader(app));
 afterAll(async () => dbDisconnect());
