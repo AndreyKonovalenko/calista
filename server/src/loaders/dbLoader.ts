@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-export const connectDB = async () => {
+ const dbLoader = async () => {
   try {
     const { connection } = await mongoose.connect(process.env.MONGO_URI!, {
       dbName: process.env.MONGO_DB,
@@ -14,3 +14,4 @@ export const connectDB = async () => {
     process.exit(1);
   }
 };
+export default dbLoader;

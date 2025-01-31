@@ -1,8 +1,12 @@
 import request from 'supertest';
-import app from '../../app';
+import express from 'express';
+import  expressLoader  from '../../loaders/expressLoader';
 import { dbConnect, dbDisconnect } from './db-handler';
 import { generateToken } from '../../services/authService';
 import { UserModal } from '../../models/UserModel';
+import { App } from 'supertest/types';
+
+const app = expressLoader(express())
 
 const testUser = {
   username: 'Mark',

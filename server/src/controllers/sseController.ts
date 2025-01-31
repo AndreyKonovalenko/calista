@@ -5,7 +5,7 @@ import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { TSseClient } from '../services/sseService';
 import { addClient, removeClient } from '../services/sseService';
 import { v4 as uuidv4 } from 'uuid';
-import { BoardModal } from '../models';
+import { BoardModel } from '../models/BoardModel';
 
 // GET:sse/
 export const connectToSse = async (
@@ -36,7 +36,7 @@ export const connectToSse = async (
   console.log('newclient', newClient);
   addClient(newClient);
 
-  BoardModal.watch().on('change', data =>
+  BoardModel.watch().on('change', data =>
     res.write(`data: ${JSON.stringify(data)}\n\n`),
   );
   // res.write(`data: ${JSON.stringify(data)}\n\n`);

@@ -30,7 +30,7 @@ export const addBoard = async (
   const { user } = req as CustomRequest;
   const board: IBoard = {
     title: req.body.title,
-    creater_id: user._id,
+    createrId: user._id,
     lists: [],
   };
   try {

@@ -8,9 +8,9 @@ import { CustomRequest } from '../middleware/protected';
 export const addCard = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { user } = req as CustomRequest;
   const data: ICard = {
-    creater_id: user._id,
-    board_id: req.body.board_id,
-    list_id: req.body.list_id,
+    createrId: user._id,
+    boardId: req.body.board_id,
+    listId: req.body.list_id,
     name: req.body.name,
     description: req.body.description,
     pos: req.body.pos
