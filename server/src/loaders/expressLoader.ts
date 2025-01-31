@@ -1,4 +1,4 @@
-import express, {Express } from 'express';
+import express, { Express } from 'express';
 import { authRouter } from '../routes/authRoutes';
 import cookieParser from 'cookie-parser';
 import { boardsRouter } from '../routes/boardsRoutes';
@@ -6,6 +6,7 @@ import { cardsRouter } from '../routes/cardsRoutes';
 import cors from 'cors';
 import { sseRouter } from '../routes/sseRoutes';
 import ErrorHandler from '../middleware/error-handler';
+import { statusRouter } from '../routes/statusRouter';
 
 const expressLoader = async (app: Express) => {
   app.use(express.json());
@@ -14,15 +15,10 @@ const expressLoader = async (app: Express) => {
   app.use(cors());
   app.use('/api/auth', authRouter);
   app.use('/api/boards', boardsRouter);
-  app.use('/api/cards', cardsRouter)
+  app.use('/api/cards', cardsRouter);
   app.use('/api/sse', sseRouter);
-  // app.use('/', (req: Request, res: Response, next: NextFunction) => {
-  //   try {
-  //     res.send('Hello World');
-  //   } catch (err) {
-  //     next(err);
-  //   }
-  // });
-  app.use(ErrorHandler)
-}
+  app.use('/api/status', statusRouter);
+
+  app.use(ErrorHandler);
+};
 export default expressLoader;

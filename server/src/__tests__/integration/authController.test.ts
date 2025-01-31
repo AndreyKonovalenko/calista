@@ -1,20 +1,20 @@
 import request from 'supertest';
 import express from 'express';
-import  expressLoader  from '../../loaders/expressLoader';
+import expressLoader from '../../loaders/expressLoader';
 import { dbConnect, dbDisconnect } from './db-handler';
 import { generateToken } from '../../services/authService';
 import { UserModal } from '../../models/UserModel';
-import { App } from 'supertest/types';
-
-const app = expressLoader(express())
 
 const testUser = {
   username: 'Mark',
   password: '132',
 };
+const app = express();
 
 beforeAll(async () => dbConnect());
+beforeAll(async () => await expressLoader(app));
 afterAll(async () => dbDisconnect());
+
 // afterEach(async () => clearCollections())
 
 describe('Auth Controller', () => {
