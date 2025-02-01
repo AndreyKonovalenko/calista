@@ -4,7 +4,7 @@ import { CustomRequest } from '../middleware/protected';
 import { findListByListId } from '../services/listService';
 import { createList } from '../services/listService';
 import { BoardModel, IBoard } from '../models/BoardModel';
-import { HydratedDocument } from 'mongoose'
+import { HydratedDocument } from 'mongoose';
 import { IList } from '../models/ListModel';
 import { CustomError } from '../utils/CustomError';
 import { MongooseError } from 'mongoose';
@@ -18,9 +18,13 @@ export const addList = async (
   next: NextFunction,
 ): Promise<void> => {
   const { user } = req as CustomRequest;
-  const currentBoard: HydratedDocument<IBoard> | null = await BoardModel.findOne({_id: req.body.board_id});
+  const currentBoard: HydratedDocument<IBoard> | null =
+    await BoardModel.findOne({ _id: req.body.board_id });
   if (!currentBoard) {
-    throw new CustomError(`Board by id: ${req.body.board_id} not found`, StatusCodes.INTERNAL_SERVER_ERROR);
+    throw new CustomError(
+      `Board by id: ${req.body.board_id} not found`,
+      StatusCodes.INTERNAL_SERVER_ERROR,
+    );
   }
 
   if (currentBoard) {
@@ -28,8 +32,8 @@ export const addList = async (
       createrId: user._id,
       boardId: req.body.boardId,
       name: req.body.title,
-      cards:[],
-      pos: req.body.pos
+      cards: [],
+      pos: req.body.pos,
     };
     try {
       const newList = await createList(list);
@@ -37,7 +41,7 @@ export const addList = async (
       // save to specific board by it id
       try {
         currentBoard.lists.push(newListId);
-        await currentBoard.save()
+        await currentBoard.save();
         res
           .status(StatusCodes.OK)
           .json(
@@ -45,14 +49,15 @@ export const addList = async (
           );
       } catch (error) {
         if (error instanceof MongooseError && error.name === 'CastError') {
-          next(new CustomError(
-            `Board id: ${req.body.id} has not been updated with list id: ${newListId}`,
+          next(
+            new CustomError(
+              `Board id: ${req.body.id} has not been updated with list id: ${newListId}`,
               StatusCodes.INTERNAL_SERVER_ERROR,
             ),
-          )
+          );
         } else {
-          next(error)
-        } 
+          next(error);
+        }
       }
     } catch (error) {
       next(error);

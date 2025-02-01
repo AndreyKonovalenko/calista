@@ -25,17 +25,21 @@ export async function findListByListId(
   return list;
 }
 
-export const addListIdToBoard = async (boardId:Types.ObjectId, listId:Types.ObjectId) => {
+export const addListIdToBoard = async (
+  boardId: Types.ObjectId,
+  listId: Types.ObjectId,
+) => {
   try {
-    const board = await BoardModel.findById({boardId})
-    if(!board) {
-      throw new CustomError(`Board id: ${boardId} not found`, StatusCodes.INTERNAL_SERVER_ERROR)
+    const board = await BoardModel.findById({ boardId });
+    if (!board) {
+      throw new CustomError(
+        `Board id: ${boardId} not found`,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      );
     }
-    board.lists.push(listId)
-    await board.save()
-  } catch(error) {
-    console.log(error)
+    board.lists.push(listId);
+    await board.save();
+  } catch (error) {
+    console.log(error);
   }
-
-}
-
+};

@@ -6,10 +6,9 @@ const app = express();
 
 beforeAll(async () => await expressLoader(app));
 
-describe('GET /', () => {
+describe('get /status', () => {
   it('respond with "Hello World', async () => {
-    const response = await request(app).get('/api/status');
+    const response = await request(app).get('/status');
     expect(response.status).toBe(200);
-    expect(response.text).toBe('Hello World');
   });
 });

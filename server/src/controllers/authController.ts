@@ -1,13 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
-import { findUserByUsername, setGeneratedToken, createUser } from '../services/authService';
-import { IUser, UserModal} from '../models/UserModel'; 
+import {
+  findUserByUsername,
+  setGeneratedToken,
+  createUser,
+} from '../services/authService';
+import { IUser, UserModal } from '../models/UserModel';
 import { HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 import { CustomError } from '../utils/CustomError';
 import { NODE_ENV } from '../config';
-
 
 //GET: auth/ @private
 export const getUser = (
@@ -48,8 +51,10 @@ export const register = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const userDTO = {...req.body}
-    const userExists: HydratedDocument<IUser> | null = await findUserByUsername(userDTO.username)
+    const userDTO = { ...req.body };
+    const userExists: HydratedDocument<IUser> | null = await findUserByUsername(
+      userDTO.username,
+    );
     if (!userExists) {
       throw new CustomError(
         `${ReasonPhrases.CONFLICT}: username: ${userDTO.username} already exists`,
@@ -74,7 +79,7 @@ export const login = async (
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
-  const userDTO = {...req.body}
+  const userDTO = { ...req.body };
   // data transfer object
   const { username, password } = userDTO;
   // const isValid = validator.user(userDTO)

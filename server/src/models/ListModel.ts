@@ -1,4 +1,4 @@
-import { Types, Schema, model } from "mongoose";
+import { Types, Schema, model } from 'mongoose';
 
 export interface IList {
   createrId: Types.ObjectId;

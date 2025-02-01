@@ -1,10 +1,10 @@
-import { Types, Schema, model } from "mongoose";
+import { Types, Schema, model } from 'mongoose';
 
 export interface ICheckListItem {
   createrId: Types.ObjectId;
   checkListId?: Types.ObjectId;
   name: string;
-  state: "complite" | "incomplite";
+  state: 'complite' | 'incomplite';
   pos: number;
 }
 
@@ -26,8 +26,8 @@ export const ListModal = model<ICheckList>('CheckList', CheckListSchema);
 
 export const CheckListItemSchema = new Schema<ICheckListItem>({
   createrId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  checkListId: { type:Schema.Types.ObjectId, ref: 'CheckList'},
-  name: { type: String, required: true},
-  state: { type: String, required: true},
-  pos: {type: Number, required: true}
-})
+  checkListId: { type: Schema.Types.ObjectId, ref: 'CheckList' },
+  name: { type: String, required: true },
+  state: { type: String, required: true },
+  pos: { type: Number, required: true },
+});
