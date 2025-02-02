@@ -10,8 +10,7 @@ import { IUser, UserModal } from '../models/UserModel';
 import { HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 import { CustomError } from '../utils/CustomError';
-import { NODE_ENV } from '../config';
-
+import config from '../config';
 //GET: auth/ @private
 export const getUser = (
   req: Request,
@@ -112,7 +111,7 @@ export const login = async (
 export const logout = (_req: Request, res: Response) => {
   res.cookie('jwt', '', {
     httpOnly: true,
-    secure: NODE_ENV !== 'development',
+    secure: config.nodeEnv !== 'development',
     sameSite: 'strict',
     expires: new Date(0),
   });

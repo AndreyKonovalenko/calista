@@ -4,7 +4,7 @@ import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { CustomError } from '../utils/CustomError';
 import { IUser, UserModal } from '../models/UserModel';
 import { HydratedDocument } from 'mongoose';
-import { JWT_SECRET } from '../config';
+import config from '../config';
 
 export interface CustomRequest extends Request {
   user: HydratedDocument<IUser>;
@@ -23,7 +23,7 @@ export const protect = async (
         StatusCodes.UNAUTHORIZED,
       );
     }
-    const decoded = jwt.verify(token, JWT_SECRET!) as JwtPayload;
+    const decoded = jwt.verify(token, config.app.jwtSecret) as JwtPayload;
     const user: HydratedDocument<IUser> | null = await UserModal.findById(
       decoded.user_id,
     ).select('-password');

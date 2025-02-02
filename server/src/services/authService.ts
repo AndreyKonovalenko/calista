@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import { Response } from 'express';
-import { JWT_SECRET, NODE_ENV, TOKEN_EXPIRES_IN } from '../config';
+import config from '../config';
 import { HydratedDocument } from 'mongoose';
 import jwt from 'jsonwebtoken';
 import { UserModal, IUser } from '../models/UserModel';
@@ -23,7 +23,7 @@ export function generateToken(
   user_id: Types.ObjectId,
   expiration: string | undefined,
 ): string {
-  return jwt.sign({ user_id }, JWT_SECRET!, {
+  return jwt.sign({ user_id }, config.app.jwtSecret!, {
     expiresIn: expiration,
   });
 }
@@ -32,12 +32,12 @@ export function setGeneratedToken(
   res: Response,
   user_id: Types.ObjectId,
 ): void {
-  const token = generateToken(user_id, TOKEN_EXPIRES_IN);
+  const token = generateToken(user_id, config.app.tokenExpiresIn);
   res.cookie('jwt', token, {
     httpOnly: true,
-    secure: NODE_ENV !== 'development',
+    secure: config.nodeEnv !== 'development',
     sameSite: 'strict',
-    maxAge: parseInt(TOKEN_EXPIRES_IN!),
+    maxAge: parseInt(config.app.tokenExpiresIn!),
   });
 }
 

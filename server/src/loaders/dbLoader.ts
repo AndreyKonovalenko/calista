@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
+import config from '../config';
 
 const dbLoader = async () => {
   try {
-    const { connection } = await mongoose.connect(process.env.MONGO_URI!, {
-      dbName: process.env.MONGO_DB,
+    const { connection } = await mongoose.connect(config.mongodb.mongoUri!, {
+      dbName: config.mongodb.dbName,
     });
     console.log(
       `MongoDB Connected! db:${connection.name} host:${connection.host}`.cyan
