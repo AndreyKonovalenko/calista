@@ -1,7 +1,7 @@
 import request from 'supertest';
 import express from 'express';
 import expressLoader from '../../loaders/expressLoader';
-import { dbConnect, dbDisconnect, clearCollections } from './db-handler';
+import { dbConnect, dbDisconnect } from './db-handler';
 import { generateToken } from '../../services/authService';
 import { UserModal } from '../../models/UserModel';
 
@@ -13,7 +13,6 @@ const testUser = {
 const app = express();
 beforeAll(async () => dbConnect());
 beforeAll(async () => await expressLoader(app));
-afterEach(async () => clearCollections())
 afterAll(async () => dbDisconnect());
 
 describe('Auth Controller', () => {
@@ -26,7 +25,6 @@ describe('Auth Controller', () => {
   describe('create user', () => {
     it('should create new user', async () => {
       const response = await request(app).post('/api/auth').send(testUser);
-      console.log(response.body)
       expect(response.status).toBe(201);
       expect(response.text).toBe(
         `New user ${testUser.username} successfully created`,

@@ -13,9 +13,9 @@ export async function createUser(
 }
 
 export async function findUserByUsername(
-  username: string,
+  data: string,
 ): Promise<null | HydratedDocument<IUser>> {
-  const user = await UserModal.findOne({ username });
+  const user = await UserModal.findOne({ usernamdsfe: data }).exec();
   return user;
 }
 

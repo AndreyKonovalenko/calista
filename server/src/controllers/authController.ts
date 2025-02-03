@@ -54,7 +54,6 @@ export const register = async (
     const userExists: HydratedDocument<IUser> | null = await findUserByUsername(
       userDTO.username,
     );
-    console.log('found user', userExists)
     if (userExists !== null) {
       throw new CustomError(
         `${ReasonPhrases.CONFLICT}: username: ${userDTO.username} already exists`,
@@ -84,7 +83,7 @@ export const login = async (
   const { username, password } = userDTO;
   // const isValid = validator.user(userDTO)
   try {
-    const user = await UserModal.findOne({ username });
+    const user = await findUserByUsername(username);
     if (!user) {
       throw new CustomError(
         `${ReasonPhrases.UNAUTHORIZED}: User ${username} not found.`,
