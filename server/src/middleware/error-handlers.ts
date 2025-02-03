@@ -1,5 +1,5 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
-import { NODE_ENV } from '../config';
+import config from '../config';
 import { StatusCodes } from 'http-status-codes';
 import { CustomError } from '../utils/CustomError';
 import { TokenExpiredError } from 'jsonwebtoken';
@@ -31,13 +31,13 @@ export const globalErrorHandler: ErrorRequestHandler = (
     errStatus = StatusCodes.UNAUTHORIZED;
   }
   const errMsg = err.message || 'Something went wrong';
-  if (NODE_ENV === 'test') {
+  if (config.nodeEnv === 'test'|| config.nodeEnv === 'development') {
     console.log(err);
   }
   res.status(errStatus).json({
     success: false,
     status: errStatus,
     message: errMsg,
-    stack: NODE_ENV === 'development' || NODE_ENV === 'test' ? err.stack : {},
+    stack: config.nodeEnv === 'development' || config.nodeEnv === 'test' ? err.stack : {},
   });
 };

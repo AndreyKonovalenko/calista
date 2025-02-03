@@ -54,7 +54,8 @@ export const register = async (
     const userExists: HydratedDocument<IUser> | null = await findUserByUsername(
       userDTO.username,
     );
-    if (!userExists) {
+    console.log('found user', userExists)
+    if (userExists !== null) {
       throw new CustomError(
         `${ReasonPhrases.CONFLICT}: username: ${userDTO.username} already exists`,
         StatusCodes.CONFLICT,
