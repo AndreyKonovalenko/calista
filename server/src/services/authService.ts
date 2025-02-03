@@ -15,8 +15,13 @@ export async function createUser(
 export async function findUserByUsername(
   data: string,
 ): Promise<null | HydratedDocument<IUser>> {
-  const user = await UserModal.findOne({ usernamdsfe: data }).exec();
-  return user;
+  try {
+    const user = await UserModal.findOne({ usernamdsfe: data }).exec();
+    return user;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 }
 
 export function generateToken(
