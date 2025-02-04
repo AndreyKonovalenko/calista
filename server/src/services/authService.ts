@@ -5,6 +5,7 @@ import { HydratedDocument } from 'mongoose';
 import jwt from 'jsonwebtoken';
 import { UserModal, IUser } from '../models/UserModel';
 
+
 export async function createUser(
   user: IUser,
 ): Promise<null | HydratedDocument<IUser>> {
@@ -13,15 +14,10 @@ export async function createUser(
 }
 
 export async function findUserByUsername(
-  data: string,
+  username: string,
 ): Promise<null | HydratedDocument<IUser>> {
-  try {
-    const user = await UserModal.findOne({ usernamdsfe: data }).exec();
-    return user;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
+  const user = await UserModal.findOne({username}).exec();
+  return user;
 }
 
 export function generateToken(
