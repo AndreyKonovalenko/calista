@@ -1,10 +1,11 @@
 import { Types } from 'mongoose';
 import { Response } from 'express';
-import config from '../config';
+import {ReasonPhrases, StatusCodes} from 'http-status-codes';
 import { HydratedDocument } from 'mongoose';
-import jwt from 'jsonwebtoken';
 import { UserModal, IUser } from '../models/UserModel';
-
+import { CustomError } from '../utils/CustomError';
+import config from '../config';
+import jwt from 'jsonwebtoken';
 
 export async function createUser(
   user: IUser,
@@ -12,6 +13,29 @@ export async function createUser(
   const newUser: HydratedDocument<IUser> = await UserModal.create(user);
   return newUser;
 }
+
+
+export async function registerService(formData: IUser): Promise<HydratedDocument<IUser> | null> {
+  const {username} = formData;
+  try {
+    const userExists = await UserModal.findOne({username}).exec()
+    if (userExists) {
+      throw new CustomError(
+        `${ReasonPhrases.CONFLICT}: username: ${username} already exists`,
+        StatusCodes.CONFLICT,
+      );
+    }
+    const newUser = await UserModal.create(formData)
+    if(!newUser){
+      return null
+    }
+    return newUser;
+  } catch(err) {
+    console.log(err)
+    throw err
+  }
+}
+
 
 export async function findUserByUsername(
   username: string,
