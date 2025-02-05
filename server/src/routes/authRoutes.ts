@@ -7,10 +7,10 @@ import {
 } from '../controllers/authController';
 import { protect } from '../middleware/protected';
 import { validateUser } from '../models/UserModel';
-import { validate } from '../middleware/validate';
+import { validateHandler } from '../middleware/validate-handler';
 
 export const authRouter = express.Router();
 authRouter.get('/', protect, getUser);
-authRouter.post('/', validate(validateUser), register);
+authRouter.post('/', validateHandler(validateUser), register);
 authRouter.post('/login', login);
 authRouter.post('/logout', logout);

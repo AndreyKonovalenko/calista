@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import Joi from 'joi';
-import { TValidator } from '../middleware/validate';
+import { TValidator } from '../middleware/validate-handler';
 
 export interface IUser {
   username: string;
@@ -28,7 +28,10 @@ export const UserModal = model<IUser>('User', userSchema);
 export const validateUser: TValidator<IUser> = (user: IUser) => {
   const schema = Joi.object({
     username: Joi.string().min(5).max(20).required(),
-    password: Joi.string().min(6).max(50).required()
-  })
-  return schema.validate(user)
-}
+
+    password: Joi.string().pattern(
+      new RegExp('/^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm'),
+    ),
+  });
+  return schema.validate(user);
+};
