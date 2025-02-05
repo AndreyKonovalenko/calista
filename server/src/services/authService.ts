@@ -14,26 +14,20 @@ export async function createUser(
   return newUser;
 }
 
-
 export async function registerService(formData: IUser): Promise<HydratedDocument<IUser> | null> {
   const {username} = formData;
-  try {
-    const userExists = await UserModal.findOne({username}).exec()
-    if (userExists) {
-      throw new CustomError(
-        `${ReasonPhrases.CONFLICT}: username: ${username} already exists`,
-        StatusCodes.CONFLICT,
-      );
-    }
-    const newUser = await UserModal.create(formData)
-    if(!newUser){
-      return null
-    }
-    return newUser;
-  } catch(err) {
-    console.log(err)
-    throw err
+  const userExists = await UserModal.findOne({username}).exec()
+  if (userExists) {
+    throw new CustomError(
+       `${ReasonPhrases.CONFLICT}: username: ${username} already exists`,
+      StatusCodes.CONFLICT,
+    );
   }
+  const newUser = await UserModal.create(formData)
+  if(newUser) {
+    return newUser
+  }
+  return null;
 }
 
 

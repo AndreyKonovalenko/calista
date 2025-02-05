@@ -52,18 +52,8 @@ export const register = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const userDTO = { ...req.body };
-    // const userExists: HydratedDocument<IUser> | null = await findUserByUsername(
-    //   userDTO.username,
-    // );
-    // if (userExists) {
-    //   throw new CustomError(
-    //     `${ReasonPhrases.CONFLICT}: username: ${userDTO.username} already exists`,
-    //     StatusCodes.CONFLICT,
-    //   );
-    // }
-    // const newUser: HydratedDocument<IUser> | null = await createUser(userDTO);
-    const newUser = await registerService(userDTO)
+    const formData:IUser = { ...req.body };
+    const newUser = await registerService(formData)
     if (newUser) {
       setGeneratedToken(res, newUser._id);
       res
