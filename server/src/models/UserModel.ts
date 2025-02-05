@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
+import Joi from 'joi';
+import { TValidator } from '../middleware/validate';
 
 export interface IUser {
   username: string;
@@ -22,3 +24,11 @@ userSchema.pre('save', async function (next) {
 });
 
 export const UserModal = model<IUser>('User', userSchema);
+
+export const validateUser: TValidator<IUser> = (user: IUser) => {
+  const schema = Joi.object({
+    username: Joi.string().min(5).max(20).required(),
+    password: Joi.string().min(6).max(50).required()
+  })
+  return schema.validate(user)
+}

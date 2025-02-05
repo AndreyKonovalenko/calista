@@ -6,8 +6,8 @@ import { generateToken } from '../../services/authService';
 import { UserModal } from '../../models/UserModel';
 
 const testUser = {
-  username: 'Mark',
-  password: '132',
+  username: 'Mark Zuckerberg',
+  password: '133452',
 };
 
 const app = express();
