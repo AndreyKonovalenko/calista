@@ -1,8 +1,8 @@
 import { validateUser } from '../../models/UserModel';
 
 const user = {
-  username: 'Mark Zuker',
-  password: 'Zukeradf334',
+  username: 'Mar',
+  password: 'Zuk',
 };
 
 describe('Validators', () => {

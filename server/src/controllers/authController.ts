@@ -52,8 +52,8 @@ export const register = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const formData:IUser = { ...req.body };
-    const newUser = await registerService(formData)
+    const formData: IUser = { ...req.body };
+    const newUser = await registerService(formData);
     if (newUser) {
       setGeneratedToken(res, newUser._id);
       res

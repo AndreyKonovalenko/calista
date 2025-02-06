@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import { Response } from 'express';
-import {ReasonPhrases, StatusCodes} from 'http-status-codes';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { HydratedDocument } from 'mongoose';
 import { UserModal, IUser } from '../models/UserModel';
 import { CustomError } from '../utils/CustomError';
@@ -14,27 +14,28 @@ export async function createUser(
   return newUser;
 }
 
-export async function registerService(formData: IUser): Promise<HydratedDocument<IUser> | null> {
-  const {username} = formData;
-  const userExists = await UserModal.findOne({username}).exec()
+export async function registerService(
+  formData: IUser,
+): Promise<HydratedDocument<IUser> | null> {
+  const { username } = formData;
+  const userExists = await UserModal.findOne({ username }).exec();
   if (userExists) {
     throw new CustomError(
-       `${ReasonPhrases.CONFLICT}: username: ${username} already exists`,
+      `${ReasonPhrases.CONFLICT}: username: ${username} already exists`,
       StatusCodes.CONFLICT,
     );
   }
-  const newUser = await UserModal.create(formData)
-  if(newUser) {
-    return newUser
+  const newUser = await UserModal.create(formData);
+  if (newUser) {
+    return newUser;
   }
   return null;
 }
 
-
 export async function findUserByUsername(
   username: string,
 ): Promise<null | HydratedDocument<IUser>> {
-  const user = await UserModal.findOne({username}).exec();
+  const user = await UserModal.findOne({ username }).exec();
   return user;
 }
 

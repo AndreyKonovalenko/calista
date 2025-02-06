@@ -31,13 +31,16 @@ export const globalErrorHandler: ErrorRequestHandler = (
     errStatus = StatusCodes.UNAUTHORIZED;
   }
   const errMsg = err.message || 'Something went wrong';
-  if (config.nodeEnv === 'test'|| config.nodeEnv === 'development') {
+  if (config.nodeEnv === 'test' || config.nodeEnv === 'development') {
     console.log(err);
   }
   res.status(errStatus).json({
     success: false,
     status: errStatus,
     message: errMsg,
-    stack: config.nodeEnv === 'development' || config.nodeEnv === 'test' ? err.stack : {},
+    stack:
+      config.nodeEnv === 'development' || config.nodeEnv === 'test'
+        ? err.stack
+        : {},
   });
 };
