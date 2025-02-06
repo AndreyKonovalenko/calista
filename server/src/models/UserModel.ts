@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import Joi from 'joi';
 import { joiPasswordExtendCore } from 'joi-password';
-import { TValidator } from '../middleware/validation-handler';
+import { IValidator } from '../middleware/validation-handler';
 const joiPassoword = Joi.extend(joiPasswordExtendCore);
 
 export interface IUser {
@@ -27,16 +27,24 @@ userSchema.pre('save', async function (next) {
 
 export const UserModal = model<IUser>('User', userSchema);
 
-export const validateUser: TValidator<IUser> = (user: IUser) => {
+export const validateUser: IValidator<IUser> = (user: IUser) => {
   const schema = Joi.object({
-    username: Joi.string().alphanum().min(5).max(30).required().messages({
-      'any.required': '{#label} is required',
-      'string.empty': '{#label} cannot be empty',
-      'string.min': '{#label} should be at least {#min} characters long.',
-      'string.max': '{#label}should not exceed {#max} character',
-      'string.alphanum':
-        '{#label} should only contain alphanumeric characters. ',
-    }),
+    username: joiPassoword
+      .string()
+      .pattern(/^[-._]+$/, { name: 'special' })
+      .min(5)
+      .max(30)
+      .required()
+      .messages({
+        'any.required': '{#label} is required',
+        'string.pattern':
+          'should contain only "-", "." and "_" {#name"} charaters',
+        'username.empty': '{#label} cannot be empty',
+        'username.min': '{#label} should be at least {#min} characters long.',
+        'username.max': '{#label} should not exceed {#max} character',
+        'username.alphanum':
+          '{#label} should only contain alphanumeric characters. ',
+      }),
     password: joiPassoword
       .string()
       .min(5)

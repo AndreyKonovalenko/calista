@@ -1,13 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
-import {
-  findUserByUsername,
-  setGeneratedToken,
-  createUser,
-} from '../services/authService';
+import { findUserByUsername, setGeneratedToken } from '../services/authService';
 import { IUser } from '../models/UserModel';
-import { HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 import { CustomError } from '../utils/CustomError';
 import config from '../config';
