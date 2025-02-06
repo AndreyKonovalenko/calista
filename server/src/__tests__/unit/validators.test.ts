@@ -1,7 +1,7 @@
 import { validateUser } from '../../models/UserModel';
 
 const user = {
-  username: 'Mark_Z@kerberg',
+  username: 'Mark_Z@kerbserg',
   password: 'Zuk',
 };
 

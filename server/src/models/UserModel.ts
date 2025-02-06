@@ -37,8 +37,8 @@ export const validateUser: IValidator<IUser> = (user: IUser) => {
       .required()
       .messages({
         'any.required': '{#label} is required',
-        'string.pattern':
-          'should contain only "-", "." and "_" {#name"} charaters',
+        'string.pattern.base':
+          'should contain only "-", "." and "_" spcial charaters',
         'username.empty': '{#label} cannot be empty',
         'username.min': '{#label} should be at least {#min} characters long.',
         'username.max': '{#label} should not exceed {#max} character',
