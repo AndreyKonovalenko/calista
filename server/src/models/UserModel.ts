@@ -31,16 +31,16 @@ export const validateUser: IValidator<IUser> = (user: IUser) => {
   const schema = Joi.object({
     username: joiPassoword
       .string()
-      .pattern(/^[-._]+$/, { name: 'special' })
       .min(5)
+      .pattern(/^[-._]+$/, { name: 'special' })
       .max(30)
       .required()
       .messages({
         'any.required': '{#label} is required',
-        'string.pattern.base':
-          'should contain only "-", "." and "_" spcial charaters',
-        'username.empty': '{#label} cannot be empty',
         'username.min': '{#label} should be at least {#min} characters long.',
+        'string.pattern.name':
+          '{#label} should contain only "-", "." and "_" special charaters',
+        'username.empty': '{#label} cannot be empty',
         'username.max': '{#label} should not exceed {#max} character',
         'username.alphanum':
           '{#label} should only contain alphanumeric characters. ',

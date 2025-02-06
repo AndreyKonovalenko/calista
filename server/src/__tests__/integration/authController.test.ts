@@ -6,7 +6,7 @@ import { generateToken } from '../../services/authService';
 import { UserModal } from '../../models/UserModel';
 
 const testUser = {
-  username: 'Mark Zuckerberg',
+  username: 'M@rk',
   password: '133452',
 };
 
