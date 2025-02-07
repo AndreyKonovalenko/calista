@@ -2,20 +2,20 @@ import { StatusCodes } from 'http-status-codes';
 import { CustomError } from '../utils/CustomError';
 import { Request, Response, NextFunction } from 'express';
 
-import Joi from 'joi';
-import { IUser } from '../models/UserModel';
+import Joi, {ValidationError} from 'joi';
 
-export interface IValidator<T> {
-  (schema: T): Joi.ValidationResult<T>;
-}
-
-export const validationHandler = (validator: IValidator<IUser>) => {
-  return (req: Request, _res: Response, next: NextFunction) => {
-    const { error } = validator(req.body);
-    console.log('error', error);
-    if (error) {
-      next(new CustomError(error.details[0].message, StatusCodes.BAD_REQUEST));
+export const validationHandler = (schema: Joi.Schema) => {
+  return async (req: Request, _res: Response, next: NextFunction) => {   
+    try {
+      const validated = await schema.validateAsync(req.body);
+      req.body = validated;
+      next()
+    } catch (err) {
+      if (err instanceof ValidationError) {
+        console.error(err.details[0].type)
+        next(new CustomError(err.details[0].message, StatusCodes.UNPROCESSABLE_ENTITY));
+      }
+      next(err)
     }
-    next();
   };
 };
