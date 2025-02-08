@@ -9,13 +9,19 @@ const method: CustomValidator = (value, helpers) => {
   const last = valueArr[valueArr.length - 1];
 
   if (first === '.' || first === '-' || first === '_') {
-    return helpers.error('any.custom');
+    return helpers.message({
+      custom: '{#label} should not starts with "-", "_", "."',
+    });
   }
   if (last === '.' || last === '-' || last === '_') {
-    return helpers.error('any.custom');
+    return helpers.message({
+      custom: '{#lablel} should not ends with "-", "_", "."',
+    });
   }
-  if (Number.isNaN(first)) {
-    return helpers.error('any.custom');
+  if (!isNaN(first)) {
+    return helpers.message({
+      custom: '{#label} should not starts with number',
+    });
   }
   return value;
 };
@@ -31,24 +37,24 @@ export const userValidator = Joi.object({
     .custom(method, 'custom validation')
     .messages({
       'any.required': '{#label} is required',
-      'username.empty': '{#label} cannot be empty',
+      'string.empty': '{#label} cannot be empty',
       'username.min': '{#label} should be at least {#min} characters long.',
       'username.max': '{#label} should not exceed {#max} character',
       'string.pattern.name':
         '{#label} should contain only one of "-", "." and "_" special characters',
-      'any.custom':
-        '{#label} should not starts or ends with "-", ".", "_" and should not starts with a number',
     }),
   password: joiPassoword
     .string()
+    .required()
     .min(5)
     .minOfSpecialCharacters(1)
-    .minOfLowercase(3)
+    .minOfLowercase(5)
     .minOfNumeric(1)
     .noWhiteSpaces()
     .onlyLatinCharacters()
-    .doesNotInclude(['password'])
+    .doesNotInclude(['password', 'PASSWORD', 'Password', 'qwerty', 'QWERTY'])
     .messages({
+      'any.required': '{#label} is required',
       'string.min': '{#label} should be at least {#min} characters long ',
       'password.minOfUppercase':
         '{#label} should contain at least {#min} uppercase character',
