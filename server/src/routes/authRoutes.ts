@@ -6,7 +6,7 @@ import {
   getUser,
 } from '../controllers/authController';
 import { protect } from '../middleware/protected';
-import {userValidator}  from '../middleware/validators/user-validator';
+import { userValidator } from '../middleware/validators/user-validator';
 
 import { validationHandler } from '../middleware/validation-handler';
 

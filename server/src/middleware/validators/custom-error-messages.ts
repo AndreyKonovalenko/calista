@@ -15,6 +15,7 @@ const usernameCustomValidator = {
 
 const password = {
   'any.required': 'password is required',
+  'string.empty': 'password cannot be empty',
   'string.min': 'password should be at least 5 characters long ',
   'string.max': 'password should not exceed 30 character',
   'password.minOfUppercase':
@@ -28,7 +29,6 @@ const password = {
   'password.noWhiteSpaces': 'password should not contain white spaces',
   'password.onlyLatinCharacters':
     'password should contain only latin characters',
-  'password.doesNotInclude': 'password is too common',
 };
 
 export default {

@@ -41,6 +41,7 @@ export const userValidator: Joi.ObjectSchema<IUser> = Joi.object({
   password: joiPassoword
     .string()
     .required()
+    .empty()
     .min(5)
     .max(30)
     .minOfUppercase(1)
@@ -49,6 +50,5 @@ export const userValidator: Joi.ObjectSchema<IUser> = Joi.object({
     .minOfNumeric(1)
     .noWhiteSpaces()
     .onlyLatinCharacters()
-    .doesNotInclude(['password', 'PASSWORD', 'Password', 'qwerty', 'QWERTY'])
     .messages(customErrorMessages.password),
 });

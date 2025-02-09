@@ -22,4 +22,3 @@ userSchema.pre('save', async function (next) {
 });
 
 export const UserModal = model<IUser>('User', userSchema);
-
