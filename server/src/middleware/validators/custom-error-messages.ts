@@ -1,7 +1,7 @@
 const username = {
   'any.required': 'username is required',
   'string.empty': 'username cannot be empty',
-  'string.min': 'username should be at least 5 characters long.',
+  'string.min': 'username should be at least 5 characters long',
   'string.max': 'username should not exceed 30 character',
   'string.pattern.name':
     'username should contain only one of "-", "." and "_" special characters',
@@ -16,7 +16,7 @@ const usernameCustomValidator = {
 const password = {
   'any.required': 'password is required',
   'string.empty': 'password cannot be empty',
-  'string.min': 'password should be at least 5 characters long ',
+  'string.min': 'password should be at least 5 characters long',
   'string.max': 'password should not exceed 30 character',
   'password.minOfUppercase':
     'password should contain at least 1 uppercase character',

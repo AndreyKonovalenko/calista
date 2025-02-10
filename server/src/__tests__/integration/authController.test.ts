@@ -52,7 +52,7 @@ describe('Auth Controller', () => {
         .send(wrongUser);
       expect(response.status).toBe(401);
       expect(response.body.message).toBe(
-        `Unauthorized: User ${wrongUser.username} not found.`,
+        `Unauthorized: User ${wrongUser.username} not found`,
       );
     });
 
@@ -62,7 +62,7 @@ describe('Auth Controller', () => {
         .send({ ...testUser, password: '1111' });
       expect(response.status).toBe(401);
       expect(response.body.message).toBe(
-        'Unauthorized: Password is not correct.',
+        'Unauthorized: Password is not correct',
       );
     });
   });

@@ -6,7 +6,6 @@ import { IUser } from '../models/UserModel';
 import { CustomRequest } from '../middleware/protected';
 import config from '../config';
 import { registerService } from '../services/authService';
-import { HydratedDocument } from 'mongoose';
 
 //GET: auth/ @private
 export const getUser = (
@@ -34,12 +33,10 @@ export const register = async (
   try {
     const data: IUser = { ...req.body };
     const result = await registerService(data);
-    if (result) {
-      setGeneratedToken(res, result._id);
-      res
-        .status(StatusCodes.CREATED)
-        .send(`New user ${result.username} successfully created`);
-    }
+    setGeneratedToken(res, result._id);
+    res
+      .status(StatusCodes.CREATED)
+      .send(`New user ${result.username} successfully created`);
   } catch (error) {
     next(error);
   }
@@ -53,11 +50,11 @@ export const login = async (
 ): Promise<void> => {
   const data: IUser = { ...req.body };
   try {
-    const user: HydratedDocument<IUser> = await loginService(data);
-    setGeneratedToken(res, user._id);
+    const result = await loginService(data);
+    setGeneratedToken(res, result._id);
     res.status(StatusCodes.OK).json({
       isAuth: true,
-      username: user.username,
+      username: result.username,
     });
   } catch (error) {
     next(error);
