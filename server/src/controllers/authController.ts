@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
-import bcrypt from 'bcrypt';
-import { StatusCodes, ReasonPhrases } from 'http-status-codes';
-import { findUserByUsername, setGeneratedToken } from '../services/authService';
+
+import { StatusCodes } from 'http-status-codes';
+import { loginService, setGeneratedToken } from '../services/authService';
 import { IUser } from '../models/UserModel';
 import { CustomRequest } from '../middleware/protected';
-import { CustomError } from '../utils/CustomError';
 import config from '../config';
 import { registerService } from '../services/authService';
+import { HydratedDocument } from 'mongoose';
 
 //GET: auth/ @private
 export const getUser = (
@@ -25,21 +25,6 @@ export const getUser = (
   }
 };
 
-// //GET: auth/users @publict for tests
-// // get all users
-// export const getUsers = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction,
-// ): Promise<void> => {
-//   try {
-//     const users = await UserModal.find({});
-//     res.status(StatusCodes.OK).json(users);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
 // POST: auth/ @public
 export const register = async (
   req: Request,
@@ -47,13 +32,13 @@ export const register = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const formData: IUser = { ...req.body };
-    const newUser = await registerService(formData);
-    if (newUser) {
-      setGeneratedToken(res, newUser._id);
+    const data: IUser = { ...req.body };
+    const result = await registerService(data);
+    if (result) {
+      setGeneratedToken(res, result._id);
       res
         .status(StatusCodes.CREATED)
-        .send(`New user ${newUser.username} successfully created`);
+        .send(`New user ${result.username} successfully created`);
     }
   } catch (error) {
     next(error);
@@ -66,24 +51,9 @@ export const login = async (
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
-  const userDTO = { ...req.body };
-  // data transfer object
-  const { username, password } = userDTO;
-  // const isValid = validator.user(userDTO)
+  const data: IUser = { ...req.body };
   try {
-    const user = await findUserByUsername(username);
-    if (!user) {
-      throw new CustomError(
-        `${ReasonPhrases.UNAUTHORIZED}: User ${username} not found.`,
-        StatusCodes.UNAUTHORIZED,
-      );
-    }
-    if (!bcrypt.compareSync(password, user.password)) {
-      throw new CustomError(
-        `${ReasonPhrases.UNAUTHORIZED}: Password is not correct.`,
-        StatusCodes.UNAUTHORIZED,
-      );
-    }
+    const user: HydratedDocument<IUser> = await loginService(data);
     setGeneratedToken(res, user._id);
     res.status(StatusCodes.OK).json({
       isAuth: true,
@@ -105,3 +75,18 @@ export const logout = (_req: Request, res: Response) => {
   });
   res.status(StatusCodes.OK).json({ message: 'Logged out successfully' });
 };
+
+// //GET: auth/users @publict for tests
+// // get all users
+// export const getUsers = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction,
+// ): Promise<void> => {
+//   try {
+//     const users = await UserModal.find({});
+//     res.status(StatusCodes.OK).json(users);
+//   } catch (error) {
+//     next(error);
+//   }
+// };

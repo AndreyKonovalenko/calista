@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
 import { Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
@@ -14,10 +15,13 @@ export async function createUser(
   return newUser;
 }
 
-export async function registerService(
-  formData: IUser,
-): Promise<HydratedDocument<IUser> | null> {
-  const { username } = formData;
+type TResult = {
+  _id: Types.ObjectId;
+  username: string;
+};
+
+export async function registerService(data: IUser): Promise<TResult | null> {
+  const { username } = data;
   const userExists = await UserModal.findOne({ username }).exec();
   if (userExists) {
     throw new CustomError(
@@ -25,11 +29,31 @@ export async function registerService(
       StatusCodes.CONFLICT,
     );
   }
-  const newUser = await UserModal.create(formData);
+  const newUser = await UserModal.create(data);
   if (newUser) {
-    return newUser;
+    return { _id: newUser._id, username: newUser.username };
   }
   return null;
+}
+
+export async function loginService(
+  data: IUser,
+): Promise<HydratedDocument<IUser>> {
+  const { username, password } = data;
+  const user = await UserModal.findOne({ username });
+  if (!user) {
+    throw new CustomError(
+      `${ReasonPhrases.UNAUTHORIZED}: User ${username} not found.`,
+      StatusCodes.UNAUTHORIZED,
+    );
+  }
+  if (!bcrypt.compareSync(password, user.password)) {
+    throw new CustomError(
+      `${ReasonPhrases.UNAUTHORIZED}: Password is not correct.`,
+      StatusCodes.UNAUTHORIZED,
+    );
+  }
+  return user;
 }
 
 export async function findUserByUsername(
