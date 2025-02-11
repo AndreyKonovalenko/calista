@@ -4,7 +4,7 @@ import { MongooseError, HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 import { CustomError } from '../utils/CustomError';
 import { BoardModel, IBoard } from '../models/BoardModel';
-
+import { getBoardsService } from '../services/boardService';
 // GET: borads/
 export const getBoards = async (
   req: Request,
@@ -13,8 +13,8 @@ export const getBoards = async (
 ): Promise<void> => {
   const { user } = req as CustomRequest;
   try {
-    const boards: Array<HydratedDocument<IBoard>> | null =
-      await BoardModel.find({ creater_id: user._id });
+    const boards: Array<HydratedDocument<IBoard>> | [] =
+      await getBoardsService(user._id);
     res.status(StatusCodes.OK).json(boards);
   } catch (error) {
     next(error);
