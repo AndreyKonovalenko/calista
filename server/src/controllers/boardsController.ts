@@ -4,7 +4,7 @@ import { MongooseError, HydratedDocument } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 import { CustomError } from '../utils/CustomError';
 import { BoardModel, IBoard } from '../models/BoardModel';
-import boardsService from '../services/boardService';
+import boardsService from '../services/boardsService';
 // GET: borads/
 export const getBoards = async (
   req: Request,
@@ -12,7 +12,6 @@ export const getBoards = async (
   next: NextFunction,
 ): Promise<void> => {
   const { user } = req as CustomRequest;
-  console.log(user);
   try {
     const boards: Array<HydratedDocument<IBoard>> | [] =
       await boardsService.getBoards(user._id);
