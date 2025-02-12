@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { MongooseError, HydratedDocument } from 'mongoose';
+import {  HydratedDocument, DeleteResult } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
-import { CustomError } from '../utils/CustomError';
 import { BoardModel, IBoard } from '../models/BoardModel';
 import boardsService from '../services/boardsService';
 // GET: borads/
@@ -48,23 +47,15 @@ export const deleteBoard = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const result = await BoardModel.deleteOne({ _id: req.params.id });
-    console.log(result);
+    const result:DeleteResult = await boardsService.deleteBoardById(req.params.id)
     if (result.deletedCount > 0) {
       res.status(StatusCodes.OK).json(` board id: ${req.params.id} deleted`);
     } else {
       res.status(StatusCodes.OK).json(` board id: ${req.params.id} not found `);
     }
-  } catch (error) {
-    if (error instanceof MongooseError && error.name === 'CastError') {
-      next(
-        new CustomError(
-          `Borad by id: ${req.params.id} not found`,
-          StatusCodes.INTERNAL_SERVER_ERROR,
-        ),
-      );
-    } else {
-      next(error);
-    }
+  } catch(err){
+    next(err)
   }
-};
+}
+
+// need to create method o deleting board and all nested lista and cards

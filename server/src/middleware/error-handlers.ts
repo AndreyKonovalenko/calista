@@ -3,6 +3,7 @@ import config from '../config';
 import { StatusCodes } from 'http-status-codes';
 import { CustomError } from '../utils/CustomError';
 import { TokenExpiredError } from 'jsonwebtoken';
+import { MongooseError } from 'mongoose';
 
 export const notFoundHandler = (
   req: Request,
@@ -29,6 +30,10 @@ export const globalErrorHandler: ErrorRequestHandler = (
   }
   if (err instanceof TokenExpiredError) {
     errStatus = StatusCodes.UNAUTHORIZED;
+  }
+
+  if (err instanceof MongooseError && err.name === ''){
+    errStatus = StatusCodes.INTERNAL_SERVER_ERROR
   }
   const errMsg = err.message || 'Something went wrong';
   if (config.nodeEnv === 'test' || config.nodeEnv === 'development') {
