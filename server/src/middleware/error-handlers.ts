@@ -32,8 +32,8 @@ export const globalErrorHandler: ErrorRequestHandler = (
     errStatus = StatusCodes.UNAUTHORIZED;
   }
 
-  if (err instanceof MongooseError && err.name === ''){
-    errStatus = StatusCodes.BAD_REQUEST
+  if (err instanceof MongooseError && err.name === '') {
+    errStatus = StatusCodes.BAD_REQUEST;
   }
   const errMsg = err.message || 'Something went wrong';
   if (config.nodeEnv === 'test' || config.nodeEnv === 'development') {
