@@ -33,7 +33,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
   }
 
   if (err instanceof MongooseError && err.name === ''){
-    errStatus = StatusCodes.INTERNAL_SERVER_ERROR
+    errStatus = StatusCodes.BAD_REQUEST
   }
   const errMsg = err.message || 'Something went wrong';
   if (config.nodeEnv === 'test' || config.nodeEnv === 'development') {
