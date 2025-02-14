@@ -1,5 +1,5 @@
 import express from 'express';
-import { addList } from '../controllers/listsControllser';
+import { addList } from '../controllers/lists-controller';
 
 import { protect } from '../middleware/protected';
 

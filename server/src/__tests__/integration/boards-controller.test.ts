@@ -1,9 +1,9 @@
 import express from 'express';
 import request from 'supertest';
-import expressLoader from '../../loaders/expressLoader';
+import expressLoader from '../../loaders/express-loader';
 import { dbConnect, dbDisconnect } from './db-handler';
 import { UserModal } from '../../models/UserModel';
-import { generateToken } from '../../services/authService';
+import { generateToken } from '../../services/auth-service';
 import { Types } from 'mongoose';
 
 import { BoardModel } from '../../models/BoardModel';

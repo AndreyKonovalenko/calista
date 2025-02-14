@@ -4,7 +4,7 @@ import {
   login,
   logout,
   getUser,
-} from '../controllers/authController';
+} from '../controllers/auth-controller';
 import { protect } from '../middleware/protected';
 import { userValidator } from '../middleware/validators/user-validator';
 

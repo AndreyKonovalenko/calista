@@ -1,9 +1,9 @@
 import colors from 'colors';
 import express from 'express';
-import expressLoader from './loaders/expressLoader';
-import dbLoader from './loaders/dbLoader';
+import expressLoader from './loaders/express-loader';
+import dbLoader from './loaders/db-loader';
 
-import { PORT } from './config';
+import config from './config';
 const terminalColors = colors;
 
 async function startServer() {
@@ -12,9 +12,9 @@ async function startServer() {
   await expressLoader(app);
   console.log(terminalColors.magenta('Express loaded'));
   app
-    .listen(PORT, () => {
+    .listen(config.app.port, () => {
       console.log(
-        terminalColors.yellow(`App listening at http://localhost:${PORT}`),
+        terminalColors.yellow(`App listening at http://localhost:${config.app.port}`),
       );
     })
     .on('error', error => {

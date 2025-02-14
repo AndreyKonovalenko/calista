@@ -6,10 +6,10 @@ import {
   notFoundHandler,
   globalErrorHandler,
 } from '../middleware/error-handlers';
-import { authRouter } from '../routes/authRoutes';
-import { boardsRouter } from '../routes/boardsRoutes';
-import { cardsRouter } from '../routes/cardsRoutes';
-import { sseRouter } from '../routes/sseRoutes';
+import { authRouter } from '../routes/auth-routes';
+import { boardsRouter } from '../routes/boards-routes';
+import { cardsRouter } from '../routes/cards-routes';
+import { sseRouter } from '../routes/sse-routes';
 
 const expressLoader = async (app: Express) => {
   // status checkpoints

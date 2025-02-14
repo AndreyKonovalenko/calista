@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { CustomRequest } from '../middleware/protected';
-import { findListByListId } from '../services/listService';
-import { createList } from '../services/listService';
+import { findListByListId } from '../services/list-service';
+import { createList } from '../services/list-service';
 import { BoardModel, IBoard } from '../models/BoardModel';
 import { HydratedDocument } from 'mongoose';
 import { IList } from '../models/ListModel';

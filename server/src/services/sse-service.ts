@@ -22,4 +22,4 @@ export const removeClient = (clientId: string) => {
       `Client ${clientId} removed from list. Client list length: ${clients.length}`,
     );
   }
-};
+};s

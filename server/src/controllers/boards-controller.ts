@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { HydratedDocument, DeleteResult } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 import { BoardModel, IBoard } from '../models/BoardModel';
-import boardsService from '../services/boardsService';
+import {findBoards, deleteBoardById} from '../services/boards-service';
 // GET: borads/
 export const getBoards = async (
   req: Request,
@@ -13,7 +13,7 @@ export const getBoards = async (
   const { user } = req as CustomRequest;
   try {
     const boards: Array<HydratedDocument<IBoard>> | [] =
-      await boardsService.getBoards(user._id);
+      await findBoards(user._id);
     res.status(StatusCodes.OK).json(boards);
   } catch (error) {
     next(error);
@@ -47,7 +47,7 @@ export const deleteBoard = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const result: DeleteResult = await boardsService.deleteBoardById(
+    const result: DeleteResult = await deleteBoardById(
       req.params.id,
     );
     if (result.deletedCount > 0) {

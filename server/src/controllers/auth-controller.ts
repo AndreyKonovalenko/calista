@@ -1,11 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
-
 import { StatusCodes } from 'http-status-codes';
-import { loginService, setGeneratedToken } from '../services/authService';
+import {registerServcie, setGeneratedToken, loginService} from '../services/auth-service';
 import { IUser } from '../models/UserModel';
 import { CustomRequest } from '../middleware/protected';
 import config from '../config';
-import { registerService } from '../services/authService';
 
 //GET: auth/ @private
 export const getUser = (
@@ -32,7 +30,7 @@ export const register = async (
 ): Promise<void> => {
   try {
     const data: IUser = { ...req.body };
-    const result = await registerService(data);
+    const result = await registerServcie(data);
     setGeneratedToken(res, result._id);
     res
       .status(StatusCodes.CREATED)

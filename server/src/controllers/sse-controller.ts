@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import { CustomRequest } from '../middleware/protected';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 // import { getErrorMessage } from '../utils';
-import { TSseClient } from '../services/sseService';
-import { addClient, removeClient } from '../services/sseService';
+import { TSseClient } from '../services/sse-service';
+import { addClient, removeClient } from '../services/sse-service';
 import { v4 as uuidv4 } from 'uuid';
 import { BoardModel } from '../models/BoardModel';
 

@@ -7,7 +7,7 @@ import { CustomError } from '../utils/CustomError';
 import config from '../config';
 import jwt from 'jsonwebtoken';
 
-export async function registerService(
+export async function registerServcie(
   data: IUser,
 ): Promise<{ _id: Types.ObjectId; username: string }> {
   const { username } = data;
