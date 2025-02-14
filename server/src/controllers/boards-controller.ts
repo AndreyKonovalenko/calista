@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { HydratedDocument, DeleteResult } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
-import { BoardModel, IBoard } from '../models/BoardModel';
-import {findBoards, deleteBoardById} from '../services/boards-service';
+import { IBoard } from '../models/BoardModel';
+import {findBoards, deleteBoardById, cerateBoard} from '../services/boards-service';
 // GET: borads/
 export const getBoards = async (
   req: Request,
@@ -33,8 +33,8 @@ export const addBoard = async (
     lists: [],
   };
   try {
-    const newBoard: HydratedDocument<IBoard> = await BoardModel.create(board);
-    res.status(StatusCodes.OK).json(newBoard);
+    await cerateBoard(board);
+    res.status(StatusCodes.OK).send(`board ${board.title} successfuly created`);
   } catch (error) {
     next(error);
   }

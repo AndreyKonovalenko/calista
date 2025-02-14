@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { BoardModel } from '../models/BoardModel';
+import { BoardModel, IBoard } from '../models/BoardModel';
 
 export async function findBoards(id: Types.ObjectId) {
   return await BoardModel.find({ createrId: id });
@@ -13,3 +13,6 @@ export async function deleteBoardById(id: string) {
   return await BoardModel.deleteOne({ _id: new Types.ObjectId(id) });
 }
 
+export async function cerateBoard(data:IBoard) {
+ return await BoardModel.create(data)
+}
