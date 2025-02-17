@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { HydratedDocument, DeleteResult } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 import { IBoard } from '../models/BoardModel';
-import {findBoards, deleteBoardById, cerateBoard} from '../services/boards-service';
+import {findBoards, deleteBoardById, cerateBoard, findBoardById} from '../services/boards-service';
 // GET: borads/
 export const getBoards = async (
   req: Request,
@@ -39,6 +39,23 @@ export const addBoard = async (
     next(error);
   }
 };
+
+// GET: boards/id
+
+export const getBoard = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const board = await findBoardById(req.params.id)
+    if (board) {
+      res.status(StatusCodes.OK).json(board)
+    }
+    if (!board) {
+      res.status(StatusCodes.OK).send("Board not found")
+    }
+  } catch(error){
+    next(error)
+  }
+
+}
 
 // DELETE: boards/:id
 export const deleteBoard = async (

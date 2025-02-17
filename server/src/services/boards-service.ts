@@ -16,3 +16,7 @@ export async function deleteBoardById(id: string) {
 export async function cerateBoard(data:IBoard) {
  return await BoardModel.create(data)
 }
+
+export async function findBoardById(id:string) {
+ return await BoardModel.findById(id).populate('lists').populate('cards')
+}

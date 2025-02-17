@@ -7,6 +7,7 @@ import { generateToken } from '../../services/auth-service';
 import { Types } from 'mongoose';
 
 import { BoardModel } from '../../models/BoardModel';
+import { ListModal } from '../../models/ListModel';
 
 const testUser = {
   username: 'Marck.7_cker-berg',
@@ -61,5 +62,24 @@ describe('BoardController', () => {
       expect((await BoardModel.find({})).length).toBe(0);
       expect(response.status).toBe(200);
     });
+
+    it('shoukd return populated board', async () => {
+      const testBoard = await BoardModel.create({
+        title: 'test board',
+        createrId: createrId,
+        lists: [],
+      });
+
+      const testList = await ListModal.create({
+         createrId: createrId,
+          boardId: testBoard._id,
+          name: "TO DO",
+          cards:[],
+          pos: 16384,
+        })
+      
+ 
+    })
+
   });
 });
