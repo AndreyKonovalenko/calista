@@ -1,5 +1,13 @@
 import { Types, Schema, model } from 'mongoose';
 
+export interface ICheckList {
+  createrId: Types.ObjectId;
+  boardId: Types.ObjectId;
+  cardId: Types.ObjectId;
+  checkItems: Array<Types.ObjectId>;
+  name: string;
+}
+
 export interface ICheckListItem {
   createrId: Types.ObjectId;
   checkListId?: Types.ObjectId;
@@ -8,21 +16,13 @@ export interface ICheckListItem {
   pos: number;
 }
 
-export interface ICheckList {
-  createrId: Types.ObjectId;
-  boardId: Types.ObjectId;
-  checkItems: Array<Types.ObjectId>;
-  name: string;
-}
-
 export const CheckListSchema = new Schema<ICheckList>({
   createrId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   boardId: { type: Schema.Types.ObjectId, ref: 'Board', required: true },
+  cardId: {type: Schema.Types.ObjectId, ref: 'Card', required: true},
   checkItems: Array<Types.ObjectId>,
   name: { type: String, required: true },
 });
-
-export const ListModal = model<ICheckList>('CheckList', CheckListSchema);
 
 export const CheckListItemSchema = new Schema<ICheckListItem>({
   createrId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
@@ -31,3 +31,6 @@ export const CheckListItemSchema = new Schema<ICheckListItem>({
   state: { type: String, required: true },
   pos: { type: Number, required: true },
 });
+
+export const CheckListItemModal = model<ICheckListItem>('CheckListItem', CheckListItemSchema)
+export const CheckListModal = model<ICheckList>('CheckList', CheckListSchema);

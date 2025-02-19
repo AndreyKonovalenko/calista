@@ -6,6 +6,7 @@ export interface ICard {
   listId: Types.ObjectId;
   name: string;
   description: string;
+  checkList?: Types.ObjectId | null;
   pos: number;
 }
 
@@ -14,7 +15,7 @@ const cardSchema = new Schema<ICard>({
   createrId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   description: { type: String },
   listId: { type: Schema.Types.ObjectId, ref: 'List', required: true },
-  name: { type: String, required: true },
+  checkList: {type: Schema.Types.ObjectId, ref: "CheckList", default: null}
 });
 
 export const CardModal = model<ICard>('Card', cardSchema);

@@ -18,5 +18,13 @@ export async function cerateBoard(data:IBoard) {
 }
 
 export async function findBoardById(id:string) {
- return await BoardModel.findById(id).populate('lists').populate('cards')
+ return await BoardModel.findById(id).populate({path: "lists", populate: {
+  path: 'cards',
+  populate: {
+    path: 'checkList',
+    populate: {
+      path: 'checkItems'
+    }
+  }
+ }}).exec()
 }

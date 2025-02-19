@@ -8,6 +8,8 @@ import { Types } from 'mongoose';
 
 import { BoardModel } from '../../models/BoardModel';
 import { ListModal } from '../../models/ListModel';
+import { CardModal } from '../../models/CardModel';
+import { CheckListItemModal, CheckListModal } from '../../models/CheckListModel';
 
 const testUser = {
   username: 'Marck.7_cker-berg',
@@ -64,21 +66,58 @@ describe('BoardController', () => {
     });
 
     it('shoukd return populated board', async () => {
-      const testBoard = await BoardModel.create({
+      const board = await BoardModel.create({
         title: 'test board',
         createrId: createrId,
         lists: [],
       });
 
-      const testList = await ListModal.create({
+      const list = await ListModal.create({
          createrId: createrId,
-          boardId: testBoard._id,
+          boardId: board._id,
           name: "TO DO",
           cards:[],
           pos: 16384,
         })
       
- 
+      board.lists.push(list._id)
+      await board.save()
+      
+      const card  =  await CardModal.create({
+        createrId: createrId,
+        boardId: board._id,
+        listId: list._id,
+        name: "Shoping lists",
+        description: "my favorite food",
+        pos: 16384,
+      })
+  
+      list.cards.push(card._id);
+      await list.save()
+  
+      const  checkList = await CheckListModal.create({
+        createrId: createrId,
+        boardId: board._id, 
+        cardId: card._id,
+        checkItems: [],
+        name: 'Fruits',
+      })
+      card.checkList = checkList._id;
+      await card.save()
+
+      const item =  await CheckListItemModal.create({
+        createrId: createrId,
+        checkListId: checkList._id,
+        name: "Apple",
+        state: 'incomplite',
+        pos: 16384,
+      })
+      checkList.checkItems.push(item._id)
+      await checkList.save()
+           
+      const response = await request(app).get(`/api/boards/${board._id}`).set('Cookie', [`jwt=${token}`]);
+      console.log(response.body.lists[0].cards)
+      expect(response.status).toBe(200);
     })
 
   });
