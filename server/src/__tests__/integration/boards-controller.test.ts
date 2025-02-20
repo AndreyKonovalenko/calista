@@ -24,25 +24,73 @@ afterAll(async () => dbDisconnect());
 // create test user and get token for passing protected route
 let token: string;
 let createrId: Types.ObjectId;
+let testBoardId: Types.ObjectId
 
 beforeAll(async () => {
+  // create test user 
   const user = await UserModal.create(testUser);
   if (user) {
     createrId = user._id;
     token = generateToken(user._id, '20000');
   }
+  // crete test board
+  const board = await BoardModel.create({
+    title: 'test board',
+    createrId: createrId,
+    lists: [],
+  });
+  const list = await ListModal.create({
+     createrId: createrId,
+      boardId: board._id,
+      name: "TO DO",
+      cards:[],
+      pos: 16384,
+    })
+  board.lists.push(list._id)
+  testBoardId = board._id
+  await board.save()
+  const card  =  await CardModal.create({
+    createrId: createrId,
+    boardId: board._id,
+    listId: list._id,
+    name: "Shoping lists",
+    description: "my favorite food",
+    pos: 16384,
+  })
+  list.cards.push(card._id);
+  await list.save()
+  const  checkList = await CheckListModal.create({
+    createrId: createrId,
+    boardId: board._id, 
+    cardId: card._id,
+    checkItems: [],
+    name: 'Fruits',
+  })
+  card.checkList = checkList._id;
+  await card.save()
+  const item =  await CheckListItemModal.create({
+    createrId: createrId,
+    checkListId: checkList._id,
+    boardId: board._id, 
+    name: "Apple",
+    state: 'incomplite',
+    pos: 16384,
+  })
+  checkList.checkItems.push(item._id)
+  await checkList.save()
 });
 
 describe('BoardController', () => {
   describe('/', () => {
-    it('should return empty array if there are no boards for current user', async () => {
+    it('should return array of boards for current user, in current case there is one board', async () => {
       const response = await request(app)
         .get('/api/boards/')
         .set('Cookie', [`jwt=${token}`]);
       expect(response.status).toBe(200);
-      expect(response.body).toEqual([]);
+      expect(response.body.length).toEqual(1);
     });
   });
+
   describe('/:id', () => {
     it('should return error if attempt to delete non existing board ', async () => {
       const response = await request(app)
@@ -51,74 +99,33 @@ describe('BoardController', () => {
       expect(response.status).toBe(400);
     });
 
-    it('should delete board ', async () => {
-      const testBoard = await BoardModel.create({
-        title: 'test board',
-        createrId: createrId,
-        lists: [],
-      });
-      expect((await BoardModel.find({})).length).toBe(1);
-      const response = await request(app)
-        .delete(`/api/boards/${testBoard._id}`)
-        .set('Cookie', [`jwt=${token}`]);
-      expect((await BoardModel.find({})).length).toBe(0);
-      expect(response.status).toBe(200);
-    });
-
-    it('shoukd return populated board', async () => {
-      const board = await BoardModel.create({
-        title: 'test board',
-        createrId: createrId,
-        lists: [],
-      });
-
-      const list = await ListModal.create({
-         createrId: createrId,
-          boardId: board._id,
-          name: "TO DO",
-          cards:[],
-          pos: 16384,
-        })
-      
-      board.lists.push(list._id)
-      await board.save()
-      
-      const card  =  await CardModal.create({
-        createrId: createrId,
-        boardId: board._id,
-        listId: list._id,
-        name: "Shoping lists",
-        description: "my favorite food",
-        pos: 16384,
-      })
-  
-      list.cards.push(card._id);
-      await list.save()
-  
-      const  checkList = await CheckListModal.create({
-        createrId: createrId,
-        boardId: board._id, 
-        cardId: card._id,
-        checkItems: [],
-        name: 'Fruits',
-      })
-      card.checkList = checkList._id;
-      await card.save()
-
-      const item =  await CheckListItemModal.create({
-        createrId: createrId,
-        checkListId: checkList._id,
-        name: "Apple",
-        state: 'incomplite',
-        pos: 16384,
-      })
-      checkList.checkItems.push(item._id)
-      await checkList.save()
-           
-      const response = await request(app).get(`/api/boards/${board._id}`).set('Cookie', [`jwt=${token}`]);
+    it('should return populated board', async () => {          
+      const response = await request(app).get(`/api/boards/${testBoardId}`).set('Cookie', [`jwt=${token}`]);
       console.log(response.body.lists[0].cards)
       expect(response.status).toBe(200);
     })
+
+    it('should delete board ', async () => {
+      const response = await request(app)
+        .delete(`/api/boards/${testBoardId}`)
+        .set('Cookie', [`jwt=${token}`]);
+      expect((await BoardModel.find({})).length).toBe(0);
+      expect((await ListModal.find({})).length).toBe(0);
+      expect((await CardModal.find({})).length).toBe(0);
+      expect((await CheckListModal.find({})).length).toBe(0);
+      expect((await CheckListItemModal.find({})).length).toBe(0);
+      expect(response.status).toBe(200);
+    });
+
+    describe('/', () => {
+      it('should return empty array if there are no boards for current user', async () => {
+        const response = await request(app)
+          .get('/api/boards/')
+          .set('Cookie', [`jwt=${token}`]);
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual([]);
+      });
+    });
 
   });
 });

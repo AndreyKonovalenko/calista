@@ -11,6 +11,7 @@ export interface ICheckList {
 export interface ICheckListItem {
   createrId: Types.ObjectId;
   checkListId?: Types.ObjectId;
+  boardId: Types.ObjectId;
   name: string;
   state: 'complite' | 'incomplite';
   pos: number;
@@ -27,6 +28,7 @@ export const CheckListSchema = new Schema<ICheckList>({
 export const CheckListItemSchema = new Schema<ICheckListItem>({
   createrId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   checkListId: { type: Schema.Types.ObjectId, ref: 'CheckList' },
+  boardId: {type: Schema.Types.ObjectId, ref: 'Board'},
   name: { type: String, required: true },
   state: { type: String, required: true },
   pos: { type: Number, required: true },
