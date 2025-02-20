@@ -15,7 +15,7 @@ const cardSchema = new Schema<ICard>({
   createrId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   description: { type: String },
   listId: { type: Schema.Types.ObjectId, ref: 'List', required: true },
-  checkList: {type: Schema.Types.ObjectId, ref: "CheckList", default: null}
+  checkList: { type: Schema.Types.ObjectId, ref: 'CheckList', default: null },
 });
 
-export const CardModal = model<ICard>('Card', cardSchema);
+export const CardModel = model<ICard>('Card', cardSchema);

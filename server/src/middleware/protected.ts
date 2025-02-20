@@ -2,7 +2,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { CustomError } from '../utils/CustomError';
-import { IUser, UserModal } from '../models/UserModel';
+import { IUser, UserModel } from '../models/UserModel';
 import { HydratedDocument } from 'mongoose';
 import config from '../config';
 
@@ -24,7 +24,7 @@ export const protect = async (
       );
     }
     const decoded = jwt.verify(token, config.app.jwtSecret) as JwtPayload;
-    const user: HydratedDocument<IUser> | null = await UserModal.findById(
+    const user: HydratedDocument<IUser> | null = await UserModel.findById(
       decoded.user_id,
     ).select('-password');
     if (user) {

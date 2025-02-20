@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CardModal, ICard } from '../models/CardModel';
+import { CardModel, ICard } from '../models/CardModel';
 import { StatusCodes } from 'http-status-codes';
 import { CustomRequest } from '../middleware/protected';
 
@@ -20,7 +20,7 @@ export const addCard = async (
     pos: req.body.pos,
   };
   try {
-    const card = await CardModal.create(data);
+    const card = await CardModel.create(data);
     res.status(StatusCodes.OK).json(card);
   } catch (error) {
     next(error);

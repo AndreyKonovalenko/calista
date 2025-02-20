@@ -2,14 +2,17 @@ import express from 'express';
 import request from 'supertest';
 import expressLoader from '../../loaders/express-loader';
 import { dbConnect, dbDisconnect } from './db-handler';
-import { UserModal } from '../../models/UserModel';
+import { UserModel } from '../../models/UserModel';
 import { generateToken } from '../../services/auth-service';
 import { Types } from 'mongoose';
 
 import { BoardModel } from '../../models/BoardModel';
-import { ListModal } from '../../models/ListModel';
-import { CardModal } from '../../models/CardModel';
-import { CheckListItemModal, CheckListModal } from '../../models/CheckListModel';
+import { ListModel } from '../../models/ListModel';
+import { CardModel } from '../../models/CardModel';
+import {
+  CheckListItemModel,
+  CheckListModel,
+} from '../../models/CheckListModel';
 
 const testUser = {
   username: 'Marck.7_cker-berg',
@@ -24,60 +27,60 @@ afterAll(async () => dbDisconnect());
 // create test user and get token for passing protected route
 let token: string;
 let createrId: Types.ObjectId;
-let testBoardId: Types.ObjectId
+let testBoardId: Types.ObjectId;
 
 beforeAll(async () => {
-  // create test user 
-  const user = await UserModal.create(testUser);
+  // create test user
+  const user = await UserModel.create(testUser);
   if (user) {
     createrId = user._id;
     token = generateToken(user._id, '20000');
   }
-  // crete test board
+  // create test board
   const board = await BoardModel.create({
     title: 'test board',
     createrId: createrId,
     lists: [],
   });
-  const list = await ListModal.create({
-     createrId: createrId,
-      boardId: board._id,
-      name: "TO DO",
-      cards:[],
-      pos: 16384,
-    })
-  board.lists.push(list._id)
-  testBoardId = board._id
-  await board.save()
-  const card  =  await CardModal.create({
+  const list = await ListModel.create({
+    createrId: createrId,
+    boardId: board._id,
+    name: 'TO DO',
+    cards: [],
+    pos: 16384,
+  });
+  board.lists.push(list._id);
+  testBoardId = board._id;
+  await board.save();
+  const card = await CardModel.create({
     createrId: createrId,
     boardId: board._id,
     listId: list._id,
-    name: "Shoping lists",
-    description: "my favorite food",
+    name: 'Shoping lists',
+    description: 'my favorite food',
     pos: 16384,
-  })
+  });
   list.cards.push(card._id);
-  await list.save()
-  const  checkList = await CheckListModal.create({
+  await list.save();
+  const checkList = await CheckListModel.create({
     createrId: createrId,
-    boardId: board._id, 
+    boardId: board._id,
     cardId: card._id,
     checkItems: [],
     name: 'Fruits',
-  })
+  });
   card.checkList = checkList._id;
-  await card.save()
-  const item =  await CheckListItemModal.create({
+  await card.save();
+  const item = await CheckListItemModel.create({
     createrId: createrId,
     checkListId: checkList._id,
-    boardId: board._id, 
-    name: "Apple",
+    boardId: board._id,
+    name: 'Apple',
     state: 'incomplite',
     pos: 16384,
-  })
-  checkList.checkItems.push(item._id)
-  await checkList.save()
+  });
+  checkList.checkItems.push(item._id);
+  await checkList.save();
 });
 
 describe('BoardController', () => {
@@ -99,21 +102,23 @@ describe('BoardController', () => {
       expect(response.status).toBe(400);
     });
 
-    it('should return populated board', async () => {          
-      const response = await request(app).get(`/api/boards/${testBoardId}`).set('Cookie', [`jwt=${token}`]);
-      console.log(response.body.lists[0].cards)
+    it('should return populated board', async () => {
+      const response = await request(app)
+        .get(`/api/boards/${testBoardId}`)
+        .set('Cookie', [`jwt=${token}`]);
+      console.log(response.body.lists[0].cards);
       expect(response.status).toBe(200);
-    })
+    });
 
     it('should delete board ', async () => {
       const response = await request(app)
         .delete(`/api/boards/${testBoardId}`)
         .set('Cookie', [`jwt=${token}`]);
       expect((await BoardModel.find({})).length).toBe(0);
-      expect((await ListModal.find({})).length).toBe(0);
-      expect((await CardModal.find({})).length).toBe(0);
-      expect((await CheckListModal.find({})).length).toBe(0);
-      expect((await CheckListItemModal.find({})).length).toBe(0);
+      expect((await ListModel.find({})).length).toBe(0);
+      expect((await CardModel.find({})).length).toBe(0);
+      expect((await CheckListModel.find({})).length).toBe(0);
+      expect((await CheckListItemModel.find({})).length).toBe(0);
       expect(response.status).toBe(200);
     });
 
@@ -126,6 +131,5 @@ describe('BoardController', () => {
         expect(response.body).toEqual([]);
       });
     });
-
   });
 });

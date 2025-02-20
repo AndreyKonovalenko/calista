@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
 import { Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { UserModal, IUser } from '../models/UserModel';
+import { UserModel, IUser } from '../models/UserModel';
 import { CustomError } from '../utils/CustomError';
 import config from '../config';
 import jwt from 'jsonwebtoken';
@@ -11,14 +11,14 @@ export async function registerServcie(
   data: IUser,
 ): Promise<{ _id: Types.ObjectId; username: string }> {
   const { username } = data;
-  const userExists = await UserModal.findOne({ username }).exec();
+  const userExists = await UserModel.findOne({ username }).exec();
   if (userExists) {
     throw new CustomError(
       `${ReasonPhrases.CONFLICT}: username: ${username} already exists`,
       StatusCodes.CONFLICT,
     );
   }
-  const newUser = await UserModal.create(data);
+  const newUser = await UserModel.create(data);
   if (!newUser) {
     throw new CustomError(
       `${ReasonPhrases.INTERNAL_SERVER_ERROR}: User ${username} was not created`,
@@ -32,7 +32,7 @@ export async function loginService(
   data: IUser,
 ): Promise<{ _id: Types.ObjectId; username: string }> {
   const { username, password } = data;
-  const user = await UserModal.findOne({ username });
+  const user = await UserModel.findOne({ username });
   if (!user) {
     throw new CustomError(
       `${ReasonPhrases.UNAUTHORIZED}: User ${username} not found`,

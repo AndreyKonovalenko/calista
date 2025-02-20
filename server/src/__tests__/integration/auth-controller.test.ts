@@ -3,7 +3,7 @@ import express from 'express';
 import expressLoader from '../../loaders/express-loader';
 import { dbConnect, dbDisconnect } from './db-handler';
 import { generateToken } from '../../services/auth-service';
-import { UserModal } from '../../models/UserModel';
+import { UserModel } from '../../models/UserModel';
 
 const testUser = {
   username: 'Marck.7_cker-berg',
@@ -69,7 +69,7 @@ describe('Auth Controller', () => {
 
   describe('getUser, generateToken, !there are no usermodal validation in this test cases!', () => {
     it('should return  isAuth:true  and username if cookie presists and jwt and not expired', async () => {
-      const user = await UserModal.create({
+      const user = await UserModel.create({
         username: 'Mark2',
         password: '1111',
       });
@@ -92,7 +92,7 @@ describe('Auth Controller', () => {
     });
 
     it('should return  Expiration Error', async () => {
-      const user = await UserModal.create({
+      const user = await UserModel.create({
         username: 'Mark3',
         password: '1111',
       });

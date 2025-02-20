@@ -1,5 +1,5 @@
 import { BoardModel } from '../models/BoardModel';
-import { IList, ListModal } from '../models/ListModel';
+import { IList, ListModel } from '../models/ListModel';
 import { HydratedDocument, Types } from 'mongoose';
 import { CustomError } from '../utils/CustomError';
 import { StatusCodes } from 'http-status-codes';
@@ -12,14 +12,14 @@ export type TDeleteOneResult = {
 export async function createList(
   list: IList,
 ): Promise<HydratedDocument<IList>> {
-  const newList: HydratedDocument<IList> = await ListModal.create(list);
+  const newList: HydratedDocument<IList> = await ListModel.create(list);
   return newList;
 }
 
 export async function findListByListId(
   id: string,
 ): Promise<HydratedDocument<IList> | null> {
-  const list: HydratedDocument<IList> | null = await ListModal.findOne({
+  const list: HydratedDocument<IList> | null = await ListModel.findOne({
     _id: id,
   });
   return list;

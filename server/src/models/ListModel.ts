@@ -16,4 +16,4 @@ export const listSchema = new Schema<IList>({
   name: { type: String, required: true },
 });
 
-export const ListModal = model<IList>('List', listSchema);
+export const ListModel = model<IList>('List', listSchema);
