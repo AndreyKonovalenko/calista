@@ -41,7 +41,6 @@ export const addBoard = async (
 };
 
 // GET: boards/id
-
 export const getBoard = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const board = await findBoardById(req.params.id)

@@ -106,7 +106,6 @@ describe('BoardController', () => {
       const response = await request(app)
         .get(`/api/boards/${testBoardId}`)
         .set('Cookie', [`jwt=${token}`]);
-      console.log(response.body.lists[0].cards);
       expect(response.status).toBe(200);
     });
 
