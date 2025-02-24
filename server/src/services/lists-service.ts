@@ -3,19 +3,32 @@ import { IList, ListModel } from '../models/ListModel';
 import { HydratedDocument, Types } from 'mongoose';
 import { CustomError } from '../utils/CustomError';
 import { StatusCodes } from 'http-status-codes';
-
+import { CheckListItemModel, CheckListModel } from '../models/CheckListModel';
+import { CardModel } from '../models/CardModel';
 
 export async function createList(data: IList) {
-  const list = await ListModel.create(data);
-  const board = await BoardModel.findById(list.boardId)
-  if(!board) {
-    throw new CustomError(`Board id: ${list.boardId} not found`, StatusCodes.INTERNAL_SERVER_ERROR)
+  const board = await BoardModel.findById(data.boardId);
+  if (!board) {
+    throw new CustomError(
+      `Board id: ${data.boardId} not found`,
+      StatusCodes.INTERNAL_SERVER_ERROR,
+    );
   }
-  if(board) {
+  if (board) {
+    const list = await ListModel.create(data);
     board.lists.push(list._id);
-    await board.save()
-  } 
-} 
+    await board.save();
+  }
+}
+
+// need to add list postion validation logic
+
+export async function deleteListById(id: string) {
+  await CheckListItemModel.deleteMany({ boardId: new Types.ObjectId(id) });
+  await CheckListModel.deleteMany({ boardId: new Types.ObjectId(id) });
+  await CardModel.deleteMany({ boardId: new Types.ObjectId(id) });
+  return await ListModel.deleteOne({ _id: new Types.ObjectId(id) });
+}
 
 export type TDeleteOneResult = {
   acknowledged: boolean;

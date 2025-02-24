@@ -28,7 +28,7 @@ export async function findBoardById(id: string) {
         path: 'cards',
         populate: {
           path: 'checkList',
-          select: "name",
+          select: 'name',
         },
       },
     })
