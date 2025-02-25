@@ -21,7 +21,7 @@ export async function createList(data: IList) {
   }
 }
 
-// need to add list postion validation logic
+
 
 export async function deleteListById(id: string) {
   await CheckListItemModel.deleteMany({ boardId: new Types.ObjectId(id) });
@@ -29,6 +29,14 @@ export async function deleteListById(id: string) {
   await CardModel.deleteMany({ boardId: new Types.ObjectId(id) });
   return await ListModel.deleteOne({ _id: new Types.ObjectId(id) });
 }
+
+
+
+export async function  updateListById(id: string, data:{[key:string]: string | Types.ObjectId |Array<Types.ObjectId> | number}) {
+  await ListModel.findByIdAndUpdate(new Types.ObjectId(id), data , {new: true} ) 
+}
+
+
 
 export type TDeleteOneResult = {
   acknowledged: boolean;
