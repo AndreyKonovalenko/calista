@@ -10,6 +10,7 @@ import { authRouter } from '../routes/auth-routes';
 import { boardsRouter } from '../routes/boards-routes';
 import { cardsRouter } from '../routes/cards-routes';
 import { sseRouter } from '../routes/sse-routes';
+import { listsRouter } from '../routes/lists-routes';
 
 const expressLoader = async (app: Express) => {
   // status checkpoints
@@ -30,6 +31,7 @@ const expressLoader = async (app: Express) => {
   // routes
   app.use('/api/auth', authRouter);
   app.use('/api/boards', boardsRouter);
+  app.use('/api/lists', listsRouter);
   app.use('/api/cards', cardsRouter);
   app.use('/api/sse', sseRouter);
 
