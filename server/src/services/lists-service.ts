@@ -25,16 +25,16 @@ export async function findListById(id: string) {
   return await ListModel.findById(new Types.ObjectId(id)).populate({
     path: 'cards',
     populate: {
-      path: 'checkList',
+      path: 'checkLists',
       select: 'name',
     },
   });
 }
 
 export async function deleteListById(id: string) {
-  await CheckListItemModel.deleteMany({ boardId: new Types.ObjectId(id) });
-  await CheckListModel.deleteMany({ boardId: new Types.ObjectId(id) });
-  await CardModel.deleteMany({ boardId: new Types.ObjectId(id) });
+  await CheckListItemModel.deleteMany({ listId: new Types.ObjectId(id) });
+  await CheckListModel.deleteMany({ listId: new Types.ObjectId(id) });
+  await CardModel.deleteMany({ listId: new Types.ObjectId(id) });
   return await ListModel.deleteOne({ _id: new Types.ObjectId(id) });
 }
 

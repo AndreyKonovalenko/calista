@@ -56,11 +56,11 @@ export const getBoard = async (
 ): Promise<void> => {
   try {
     const board = await findBoardById(req.params.id);
-    if (board) {
-      res.status(StatusCodes.OK).json(board);
-    }
     if (!board) {
       res.status(StatusCodes.OK).send('Board not found');
+    }
+    if (board) {
+      res.status(StatusCodes.OK).json(board);
     }
   } catch (error) {
     next(error);

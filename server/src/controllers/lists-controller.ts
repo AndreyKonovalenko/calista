@@ -21,7 +21,7 @@ export const addList = async (
   const list: IList = {
     createrId: user._id,
     boardId: req.body.boardId,
-    name: req.body.title,
+    name: req.body.name,
     cards: [],
     pos: req.body.pos ? req.body.pos : 16384,
   };
@@ -41,11 +41,11 @@ export const getList = async (
 ): Promise<void> => {
   try {
     const list = await findListById(req.params.id);
-    if (list) {
-      res.status(StatusCodes.OK).json(list);
-    }
     if (!list) {
       res.status(StatusCodes.OK).send('list not found');
+    }
+    if (list) {
+      res.status(StatusCodes.OK).json(list);
     }
   } catch (error) {
     next(error);
@@ -80,7 +80,7 @@ export const deleteList = async (
     } else {
       res.status(StatusCodes.OK).json(` list id: ${req.params.id} not found `);
     }
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };

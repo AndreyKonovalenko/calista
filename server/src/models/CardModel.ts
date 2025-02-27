@@ -5,8 +5,8 @@ export interface ICard {
   boardId: Types.ObjectId;
   listId: Types.ObjectId;
   name: string;
-  description: string;
-  checkList?: Types.ObjectId | null;
+  description?: string;
+  checkLists?: Array<Types.ObjectId>;
   pos: number;
 }
 
@@ -15,7 +15,7 @@ const cardSchema = new Schema<ICard>({
   createrId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   description: { type: String },
   listId: { type: Schema.Types.ObjectId, ref: 'List', required: true },
-  checkList: { type: Schema.Types.ObjectId, ref: 'CheckList', default: null },
+  checkLists: [{ type: Schema.Types.ObjectId, ref: 'CheckList' }],
 });
 
 export const CardModel = model<ICard>('Card', cardSchema);

@@ -1,39 +1,82 @@
 import { NextFunction, Request, Response } from 'express';
-import { CardModel, ICard } from '../models/CardModel';
+import { ICard } from '../models/CardModel';
 import { StatusCodes } from 'http-status-codes';
 import { CustomRequest } from '../middleware/protected';
+import { createCard, deletedCardById, findCardById, updateCardById } from '../services/cards-service';
+import { DeleteResult } from 'mongoose';
 
-// POST /cards @pirvate
-
+// POST cards/ @pirvate
+// Add new card
 export const addCard = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
   const { user } = req as CustomRequest;
-  const data: ICard = {
+  const card: ICard = {
     createrId: user._id,
     boardId: req.body.board_id,
     listId: req.body.list_id,
     name: req.body.name,
-    description: req.body.description,
-    pos: req.body.pos,
+    pos: req.body.pos ? req.body.pos: 16384,
   };
   try {
-    const card = await CardModel.create(data);
-    res.status(StatusCodes.OK).json(card);
+    await createCard(card)
+    res.status(StatusCodes.OK).send(`card ${card.name} successuly created`);
   } catch (error) {
     next(error);
   }
 };
 
-// board_id: Types.ObjectId;
-// card_id: Types.ObjectId;
-// pos: number;
-// checkItems: Array<ICheckItem>
+// GET cards/:id @private
+export const getCard = async (
+req: Request,
+res: Response,
+next: NextFunction
+): Promise<void> => {
+  try {
+    const card = findCardById(req.params.id);
+    if(!card) {
+      res.status(StatusCodes.OK).json(card)
+    }
+    if (card){
+      res.status(StatusCodes.OK).json(card)
+    }
+  } catch(error) {
+    next(error)
+  }
+}
 
-// POST /cards/:id/checklist/:id/:name
-// export const addCheckList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-//   const
+// PUT cards/:id @private
+export const updateCard = async (
+  req: Request,
+  res: Response, 
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const data = {...req.body};
+    await updateCardById(req.params.id, data)
+    res.status(StatusCodes.OK).send('card successfuly updated')
+  } catch(error) {
+    next(error)
+  }
+}
+// DELETE: cards/id @private
+export const deleteCard = async (
+  req: Request, 
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const result: DeleteResult = await deletedCardById(req.params.id)
+      if (result.deletedCount > 0) {
+        res.status(StatusCodes.OK).json(` card id: ${req.params.id} deleted`);
+      } else {
+        res.status(StatusCodes.OK).json(` card id: ${req.params.id} not found `);
+      }
+  } catch (error) {
+    next(error)
+  }
+   
 
-// }
+}
