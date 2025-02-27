@@ -3,7 +3,14 @@ import { StatusCodes } from 'http-status-codes';
 import { HydratedDocument, DeleteResult } from 'mongoose';
 import { CustomRequest } from '../middleware/protected';
 import { IBoard } from '../models/BoardModel';
-import {findBoards, deleteBoardById, cerateBoard, findBoardById} from '../services/boards-service';
+import {
+  findBoards,
+  deleteBoardById,
+  cerateBoard,
+  findBoardById,
+  updateBoardById,
+} from '../services/boards-service';
+
 // GET: borads/
 export const getBoards = async (
   req: Request,
@@ -12,8 +19,9 @@ export const getBoards = async (
 ): Promise<void> => {
   const { user } = req as CustomRequest;
   try {
-    const boards: Array<HydratedDocument<IBoard>> | [] =
-      await findBoards(user._id);
+    const boards: Array<HydratedDocument<IBoard>> | [] = await findBoards(
+      user._id,
+    );
     res.status(StatusCodes.OK).json(boards);
   } catch (error) {
     next(error);
@@ -41,20 +49,39 @@ export const addBoard = async (
 };
 
 // GET: boards/id
-export const getBoard = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const getBoard = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
-    const board = await findBoardById(req.params.id)
+    const board = await findBoardById(req.params.id);
     if (board) {
-      res.status(StatusCodes.OK).json(board)
+      res.status(StatusCodes.OK).json(board);
     }
     if (!board) {
-      res.status(StatusCodes.OK).send("Board not found")
+      res.status(StatusCodes.OK).send('Board not found');
     }
-  } catch(error){
-    next(error)
+  } catch (error) {
+    next(error);
   }
+};
 
-}
+// PUT: boards/id
+
+export const upatedBoard = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const data = { ...req.body };
+    await updateBoardById(req.params.id, data);
+    res.status(StatusCodes.OK).send('board successfyly updated');
+  } catch (error) {
+    next(error);
+  }
+};
 
 // DELETE: boards/:id
 export const deleteBoard = async (
@@ -63,9 +90,7 @@ export const deleteBoard = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const result: DeleteResult = await deleteBoardById(
-      req.params.id,
-    );
+    const result: DeleteResult = await deleteBoardById(req.params.id);
     if (result.deletedCount > 0) {
       res.status(StatusCodes.OK).json(` board id: ${req.params.id} deleted`);
     } else {
@@ -75,5 +100,3 @@ export const deleteBoard = async (
     next(err);
   }
 };
-
-// need to create method o deleting board and all nested lista and cards

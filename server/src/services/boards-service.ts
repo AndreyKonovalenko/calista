@@ -4,8 +4,12 @@ import { CheckListItemModel, CheckListModel } from '../models/CheckListModel';
 import { CardModel } from '../models/CardModel';
 import { ListModel } from '../models/ListModel';
 
+export async function cerateBoard(data: IBoard) {
+  await BoardModel.create(data);
+}
+
 export async function findBoards(id: Types.ObjectId) {
-  return await BoardModel.find({ createrId: id });
+  return await BoardModel.find({ _id: id });
 }
 
 export async function deleteBoardById(id: string) {
@@ -16,12 +20,8 @@ export async function deleteBoardById(id: string) {
   return await BoardModel.deleteOne({ _id: new Types.ObjectId(id) });
 }
 
-export async function cerateBoard(data: IBoard) {
-  await BoardModel.create(data);
-}
-
 export async function findBoardById(id: string) {
-  return await BoardModel.findById(id)
+  return await BoardModel.findById(new Types.ObjectId(id))
     .populate({
       path: 'lists',
       populate: {
@@ -33,4 +33,15 @@ export async function findBoardById(id: string) {
       },
     })
     .exec();
+}
+
+export async function updateBoardById(
+  id: string,
+  data: {
+    [key: string]: string | Types.ObjectId | Array<Types.ObjectId> | number;
+  },
+) {
+  await BoardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
+    new: true,
+  });
 }

@@ -14,7 +14,9 @@ async function startServer() {
   app
     .listen(config.app.port, () => {
       console.log(
-        terminalColors.yellow(`App listening at http://localhost:${config.app.port}`),
+        terminalColors.yellow(
+          `App listening at http://localhost:${config.app.port}`,
+        ),
       );
     })
     .on('error', error => {

@@ -28,7 +28,7 @@ afterAll(async () => dbDisconnect());
 let token: string;
 let createrId: Types.ObjectId;
 let testBoardId: Types.ObjectId;
-let listId: Types.ObjectId
+let listId: Types.ObjectId;
 
 beforeAll(async () => {
   // create test user
@@ -50,7 +50,7 @@ beforeAll(async () => {
     cards: [],
     pos: 16384,
   });
-  listId = list._id
+  listId = list._id;
   board.lists.push(list._id);
   testBoardId = board._id;
   await board.save();
@@ -86,20 +86,22 @@ beforeAll(async () => {
 });
 
 describe('ListsController', () => {
-  describe('/:id', () => { 
+  describe('/:id', () => {
     it('should updeate list pos', async () => {
-      const response = await request(app).put(`/api/lists/${listId}`).set('Cookie', [`jwt=${token}`]).send({pos: 8192});
+      const response = await request(app)
+        .put(`/api/lists/${listId}`)
+        .set('Cookie', [`jwt=${token}`])
+        .send({ pos: 8192 });
       const list = await ListModel.findById(listId);
-      expect(list).not.toBeNull()
-      if(list){
-        expect(list.pos).toBe(8192)
+      expect(list).not.toBeNull();
+      if (list) {
+        expect(list.pos).toBe(8192);
       }
-      expect(response.status).toBe(200)
-      expect(response.text).toBe('list successfuly upated')
-
-    })
-  })
-})
+      expect(response.status).toBe(200);
+      expect(response.text).toBe('list successfuly upated');
+    });
+  });
+});
 
 describe('BoardsController', () => {
   describe('/', () => {
@@ -150,4 +152,3 @@ describe('BoardsController', () => {
     });
   });
 });
-

@@ -1,6 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import {registerServcie, setGeneratedToken, loginService} from '../services/auth-service';
+import {
+  registerServcie,
+  setGeneratedToken,
+  loginService,
+} from '../services/auth-service';
 import { IUser } from '../models/UserModel';
 import { CustomRequest } from '../middleware/protected';
 import config from '../config';

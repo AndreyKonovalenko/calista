@@ -1,6 +1,6 @@
 import { BoardModel } from '../models/BoardModel';
 import { IList, ListModel } from '../models/ListModel';
-import { HydratedDocument, Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { CustomError } from '../utils/CustomError';
 import { StatusCodes } from 'http-status-codes';
 import { CheckListItemModel, CheckListModel } from '../models/CheckListModel';
@@ -21,7 +21,15 @@ export async function createList(data: IList) {
   }
 }
 
-
+export async function findListById(id: string) {
+  return await ListModel.findById(new Types.ObjectId(id)).populate({
+    path: 'cards',
+    populate: {
+      path: 'checkList',
+      select: 'name',
+    },
+  });
+}
 
 export async function deleteListById(id: string) {
   await CheckListItemModel.deleteMany({ boardId: new Types.ObjectId(id) });
@@ -30,50 +38,13 @@ export async function deleteListById(id: string) {
   return await ListModel.deleteOne({ _id: new Types.ObjectId(id) });
 }
 
-
-
-export async function  updateListById(id: string, data:{[key:string]: string | Types.ObjectId |Array<Types.ObjectId> | number}) {
-  await ListModel.findByIdAndUpdate(new Types.ObjectId(id), data , {new: true} ) 
-}
-
-
-
-export type TDeleteOneResult = {
-  acknowledged: boolean;
-  deletedCount: number;
-};
-
-// export async function createList(
-//   list: IList,
-// ): Promise<HydratedDocument<IList>> {
-//   const newList: HydratedDocument<IList> = await ListModel.create(list);
-//   return newList;
-// }
-
-export async function findListByListId(
+export async function updateListById(
   id: string,
-): Promise<HydratedDocument<IList> | null> {
-  const list: HydratedDocument<IList> | null = await ListModel.findOne({
-    _id: id,
+  data: {
+    [key: string]: string | Types.ObjectId | Array<Types.ObjectId> | number;
+  },
+) {
+  await ListModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
+    new: true,
   });
-  return list;
 }
-
-export const addListIdToBoard = async (
-  boardId: Types.ObjectId,
-  listId: Types.ObjectId,
-) => {
-  try {
-    const board = await BoardModel.findById({ boardId });
-    if (!board) {
-      throw new CustomError(
-        `Board id: ${boardId} not found`,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-      );
-    }
-    board.lists.push(listId);
-    await board.save();
-  } catch (error) {
-    console.log(error);
-  }
-};
