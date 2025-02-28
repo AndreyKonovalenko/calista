@@ -13,16 +13,17 @@ export const addCard = async (
   next: NextFunction,
 ): Promise<void> => {
   const { user } = req as CustomRequest;
-  const card: ICard = {
+  const data: ICard = {
     createrId: user._id,
     boardId: req.body.board_id,
     listId: req.body.list_id,
     name: req.body.name,
+    checkLists: [],
     pos: req.body.pos ? req.body.pos: 16384,
   };
   try {
-    await createCard(card)
-    res.status(StatusCodes.OK).send(`card ${card.name} successuly created`);
+    await createCard(data)
+    res.status(StatusCodes.OK).send(`card ${data.name} successuly created`);
   } catch (error) {
     next(error);
   }

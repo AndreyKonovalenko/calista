@@ -1,7 +1,7 @@
 import { Types, Schema, model } from 'mongoose';
 
 export interface IBoard {
-  title: string;
+  name: string;
   createrId: Types.ObjectId;
   lists: Array<Types.ObjectId>;
 }
@@ -9,7 +9,7 @@ export interface IBoard {
 const boardSchema = new Schema<IBoard>({
   createrId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   lists: [{ type: Schema.Types.ObjectId, ref: 'List' }],
-  title: { type: String, required: true },
+  name: { type: String, required: true },
 });
 
 export const BoardModel = model<IBoard>('Board', boardSchema);

@@ -39,7 +39,7 @@ beforeAll(async () => {
   }
   // create test board
   const board = await BoardModel.create({
-    title: 'test board',
+    name: 'test board',
     createrId: createrId,
     lists: [],
   });
@@ -60,6 +60,7 @@ beforeAll(async () => {
     listId: list._id,
     name: 'Shoping lists',
     description: 'my favorite food',
+    checkLists: [],
     pos: 16384,
   });
   list.cards.push(card._id);
@@ -71,12 +72,14 @@ beforeAll(async () => {
     checkItems: [],
     name: 'Fruits',
   });
-  card.checkList = checkList._id;
+  card.checkLists.push(checkList._id);
   await card.save();
   const item = await CheckListItemModel.create({
     createrId: createrId,
     checkListId: checkList._id,
     boardId: board._id,
+    listId: list._id,
+    cardId: card._id, 
     name: 'Apple',
     state: 'incomplite',
     pos: 16384,

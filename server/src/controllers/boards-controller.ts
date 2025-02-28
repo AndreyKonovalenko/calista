@@ -11,7 +11,7 @@ import {
   updateBoardById,
 } from '../services/boards-service';
 
-// GET: borads/
+// GET borads/
 export const getBoards = async (
   req: Request,
   res: Response,
@@ -28,27 +28,27 @@ export const getBoards = async (
   }
 };
 
-// POST: boards/
+// POST boards/
 export const addBoard = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
   const { user } = req as CustomRequest;
-  const board: IBoard = {
-    title: req.body.title,
+  const data: IBoard = {
+    name: req.body.title,
     createrId: user._id,
     lists: [],
   };
   try {
-    await cerateBoard(board);
-    res.status(StatusCodes.OK).send(`board ${board.title} successfuly created`);
+    await cerateBoard(data);
+    res.status(StatusCodes.OK).send(`board ${data.name} successfuly created`);
   } catch (error) {
     next(error);
   }
 };
 
-// GET: boards/id
+// GET boards/:id
 export const getBoard = async (
   req: Request,
   res: Response,
@@ -67,7 +67,7 @@ export const getBoard = async (
   }
 };
 
-// PUT: boards/id
+// PUTs boards/:id
 
 export const upatedBoard = async (
   req: Request,

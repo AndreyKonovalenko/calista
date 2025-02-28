@@ -18,7 +18,7 @@ export const addList = async (
   next: NextFunction,
 ): Promise<void> => {
   const { user } = req as CustomRequest;
-  const list: IList = {
+  const data: IList = {
     createrId: user._id,
     boardId: req.body.boardId,
     name: req.body.name,
@@ -26,8 +26,8 @@ export const addList = async (
     pos: req.body.pos ? req.body.pos : 16384,
   };
   try {
-    await createList(list);
-    res.send(StatusCodes.OK).send(`list ${list.name} successfuly created`);
+    await createList(data);
+    res.send(StatusCodes.OK).send(`list ${data.name} successfuly created`);
   } catch (error) {
     next(error);
   }
