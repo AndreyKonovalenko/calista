@@ -16,8 +16,8 @@ const cardSchema = new Schema<ICard>({
   description: { type: String },
   listId: { type: Schema.Types.ObjectId, ref: 'List', required: true },
   checkLists: [{ type: Schema.Types.ObjectId, ref: 'CheckList' }],
-  pos: {type: Number, required: true},
-  name: { type: String, required: true}
+  pos: { type: Number, required: true },
+  name: { type: String, required: true },
 });
 
 export const CardModel = model<ICard>('Card', cardSchema);

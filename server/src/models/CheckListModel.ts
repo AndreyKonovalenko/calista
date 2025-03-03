@@ -23,7 +23,7 @@ export interface ICheckListItem {
 export const CheckListSchema = new Schema<ICheckList>({
   createrId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   boardId: { type: Schema.Types.ObjectId, ref: 'Board', required: true },
-  listId: {types: Schema.Types.ObjectId, ref: 'List', required: true },
+  listId: { types: Schema.Types.ObjectId, ref: 'List', required: true },
   cardId: { type: Schema.Types.ObjectId, ref: 'Card', required: true },
   checkItems: Array<Types.ObjectId>,
   name: { type: String, required: true },
@@ -31,10 +31,14 @@ export const CheckListSchema = new Schema<ICheckList>({
 
 export const CheckListItemSchema = new Schema<ICheckListItem>({
   createrId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  checkListId: { type: Schema.Types.ObjectId, ref: 'CheckList', required: true },
+  checkListId: {
+    type: Schema.Types.ObjectId,
+    ref: 'CheckList',
+    required: true,
+  },
   boardId: { type: Schema.Types.ObjectId, ref: 'Board', required: true },
   cardId: { type: Schema.Types.ObjectId, ref: 'Card', requierd: true },
-  listId: { type: Schema.Types.ObjectId, ref: "List", required: true },
+  listId: { type: Schema.Types.ObjectId, ref: 'List', required: true },
   name: { type: String, required: true },
   state: { type: String, required: true },
   pos: { type: Number, required: true },

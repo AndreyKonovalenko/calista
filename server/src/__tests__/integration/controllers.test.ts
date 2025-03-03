@@ -79,7 +79,7 @@ beforeAll(async () => {
     checkListId: checkList._id,
     boardId: board._id,
     listId: list._id,
-    cardId: card._id, 
+    cardId: card._id,
     name: 'Apple',
     state: 'incomplite',
     pos: 16384,
