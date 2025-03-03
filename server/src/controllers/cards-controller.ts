@@ -38,7 +38,7 @@ next: NextFunction
   try {
     const card = findCardById(req.params.id);
     if(!card) {
-      res.status(StatusCodes.OK).json(card)
+      res.status(StatusCodes.OK).send("Card not found")
     }
     if (card){
       res.status(StatusCodes.OK).json(card)
@@ -57,12 +57,12 @@ export const updateCard = async (
   try {
     const data = {...req.body};
     await updateCardById(req.params.id, data)
-    res.status(StatusCodes.OK).send('card successfuly updated')
+    res.status(StatusCodes.OK).send('Card successfuly updated')
   } catch(error) {
     next(error)
   }
 }
-// DELETE: cards/id @private
+// DELETE: cards/:id @private
 export const deleteCard = async (
   req: Request, 
   res: Response,
@@ -71,9 +71,9 @@ export const deleteCard = async (
   try {
     const result: DeleteResult = await deletedCardById(req.params.id)
       if (result.deletedCount > 0) {
-        res.status(StatusCodes.OK).json(` card id: ${req.params.id} deleted`);
+        res.status(StatusCodes.OK).send(`card id: ${req.params.id} deleted`);
       } else {
-        res.status(StatusCodes.OK).json(` card id: ${req.params.id} not found `);
+        res.status(StatusCodes.OK).send(`card id: ${req.params.id} not found `);
       }
   } catch (error) {
     next(error)
