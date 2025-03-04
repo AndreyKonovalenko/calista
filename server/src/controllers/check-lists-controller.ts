@@ -71,7 +71,7 @@ export const getCheckList = async (
   }
 };
 
-// GET 'checklists/:id/itmes/:checkItemId
+// GET 'checklists/:id/itmes/:itemId
 export const getCheckListItem = async (
   req: Request,
   res: Response,
@@ -99,13 +99,29 @@ export const updateChecklist = async (
   try {
     const data = { ...req.body };
     await updateCheckListById(req.params.id, data);
-    res.status(StatusCodes.OK).send('CheckList successfuly updated');
+    res.status(StatusCodes.OK).send('CheckList successfulfy updated');
   } catch (error) {
     next(error);
   }
 };
 
-// DELETE: checklist/:id @private
+// PUT 'checklists:/:id/items/:itemId
+
+export const updateChecklistItem = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const data = { ...req.body };
+    await updateChecklistItemById(req.params.itemId, data);
+    res.status(StatusCodes.OK).send('check list item succefully updated');
+  } catch (error) {
+    next(error);
+  }
+};
+
+// DELETE: checklists/:id/ @private
 export const deleteCheckList = async (
   req: Request,
   res: Response,
@@ -114,11 +130,33 @@ export const deleteCheckList = async (
   try {
     const result: DeleteResult = await deleteCheckListById(req.params.id);
     if (result.deletedCount > 0) {
-      res.status(StatusCodes.OK).send(`checkList id: ${req.params.id}`);
+      res.status(StatusCodes.OK).send(`checkList id: ${req.params.id} deleted`);
     } else {
       res
         .status(StatusCodes.OK)
         .send(`checkList id: ${req.params.id} not found`);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+// DELETE: checklists/:id/items/:itemId:
+export const deletedCheckListItem = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const result: DeleteResult = await deleteCheckLisItemById(
+      req.params.ietmId,
+    );
+    if (result.deletedCount > 0) {
+      res.status(StatusCodes.OK).send(`item id: ${req.params.itemId} deleted`);
+    } else {
+      res
+        .status(StatusCodes.OK)
+        .send(`item id: ${req.params.ietmId} not found`);
     }
   } catch (error) {
     next(error);
