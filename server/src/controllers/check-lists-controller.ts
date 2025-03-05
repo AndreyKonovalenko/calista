@@ -3,6 +3,16 @@ import { CustomRequest } from '../middleware/protected';
 import { StatusCodes } from 'http-status-codes';
 import { ICheckList, ICheckListItem } from '../models/CheckListModel';
 import { DeleteResult } from 'mongoose';
+import {
+  createCheckList,
+  createCheckListItem,
+  findCheckListById,
+  findCheckListItemById,
+  deleteCheckListById,
+  deleteCheckLisItemById,
+  updateCheckListById,
+  updateChecklistItemById,
+} from '../services/check-lists-service';
 
 // POST 'checklists/' @private
 export const addCheckList = async (
@@ -23,6 +33,7 @@ export const addCheckList = async (
     await createCheckList(data);
     res.status(StatusCodes.OK).send(`board ${data.name} successfuly created`);
   } catch (error) {
+    s;
     next(error);
   }
 };
@@ -30,8 +41,8 @@ export const addCheckList = async (
 // POST 'checklists/:id/items
 export const addCheckListItem = async (
   req: Request,
-  next: NextFunction,
   res: Response,
+  next: NextFunction,
 ) => {
   try {
     const { user } = req as CustomRequest;
@@ -54,8 +65,8 @@ export const addCheckListItem = async (
 
 // GET 'checklists/:id' @private
 export const getCheckList = async (
-  res: Response,
   req: Request,
+  res: Response,
   next: NextFunction,
 ) => {
   try {
@@ -91,7 +102,7 @@ export const getCheckListItem = async (
 };
 
 // PUT 'checklists/:id @private
-export const updateChecklist = async (
+export const updateCheckList = async (
   req: Request,
   res: Response,
   next: NextFunction,

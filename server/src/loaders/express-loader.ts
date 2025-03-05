@@ -11,6 +11,7 @@ import { boardsRouter } from '../routes/boards-routes';
 import { cardsRouter } from '../routes/cards-routes';
 // import { sseRouter } from '../routes/sse-routes';
 import { listsRouter } from '../routes/lists-routes';
+import { checkListsRouter } from '../routes/check-lists-routes';
 
 const expressLoader = async (app: Express) => {
   // status checkpoints
@@ -33,6 +34,7 @@ const expressLoader = async (app: Express) => {
   app.use('/api/boards', boardsRouter);
   app.use('/api/lists', listsRouter);
   app.use('/api/cards', cardsRouter);
+  app.use('/api/checklists', checkListsRouter);
   // app.use('/api/sse', sseRouter);
 
   // error handlers
