@@ -20,16 +20,16 @@ export interface ICheckListItem {
   pos: number;
 }
 
-export const CheckListSchema = new Schema<ICheckList>({
+const checkListSchema = new Schema<ICheckList>({
   createrId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   boardId: { type: Schema.Types.ObjectId, ref: 'Board', required: true },
-  listId: { types: Schema.Types.ObjectId, ref: 'List', required: true },
+  listId: { type: Schema.Types.ObjectId, ref: 'List', required: true },
   cardId: { type: Schema.Types.ObjectId, ref: 'Card', required: true },
-  checkItems: Array<Types.ObjectId>,
+  checkItems: [{ type: Schema.Types.ObjectId, ref: 'CheckListItem' }],
   name: { type: String, required: true },
 });
 
-export const CheckListItemSchema = new Schema<ICheckListItem>({
+const checkListItemSchema = new Schema<ICheckListItem>({
   createrId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   checkListId: {
     type: Schema.Types.ObjectId,
@@ -46,7 +46,7 @@ export const CheckListItemSchema = new Schema<ICheckListItem>({
 
 export const CheckListItemModel = model<ICheckListItem>(
   'CheckListItem',
-  CheckListItemSchema,
+  checkListItemSchema,
 );
 
-export const CheckListModel = model<ICheckList>('CheckList', CheckListSchema);
+export const CheckListModel = model<ICheckList>('CheckList', checkListSchema);

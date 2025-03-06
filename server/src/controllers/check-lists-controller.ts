@@ -33,7 +33,6 @@ export const addCheckList = async (
     await createCheckList(data);
     res.status(StatusCodes.OK).send(`board ${data.name} successfuly created`);
   } catch (error) {
-    s;
     next(error);
   }
 };

@@ -1,7 +1,7 @@
 import express from 'express';
 import request from 'supertest';
 import expressLoader from '../../loaders/express-loader';
-import { dbConnect, dbDisconnect } from './db-handler';
+import { clearCollections, dbConnect, dbDisconnect } from './db-handler';
 import { UserModel } from '../../models/UserModel';
 import { generateToken } from '../../services/auth-service';
 import { Types } from 'mongoose';
@@ -22,6 +22,7 @@ const testUser = {
 const app = express();
 beforeAll(async () => dbConnect());
 beforeAll(async () => await expressLoader(app));
+afterAll(async () => clearCollections());
 afterAll(async () => dbDisconnect());
 
 // create test user and get token for passing protected route
@@ -68,6 +69,7 @@ beforeAll(async () => {
   const checkList = await CheckListModel.create({
     createrId: createrId,
     boardId: board._id,
+    listId: list._id,
     cardId: card._id,
     checkItems: [],
     name: 'Fruits',
@@ -90,7 +92,7 @@ beforeAll(async () => {
 
 describe('ListsController', () => {
   describe('/:id', () => {
-    it('should updeate list pos', async () => {
+    it('should update list pos', async () => {
       const response = await request(app)
         .put(`/api/lists/${listId}`)
         .set('Cookie', [`jwt=${token}`])
@@ -101,7 +103,17 @@ describe('ListsController', () => {
         expect(list.pos).toBe(8192);
       }
       expect(response.status).toBe(200);
-      expect(response.text).toBe('list successfuly upated');
+      expect(response.text).toBe('list successfuly updated');
+    });
+  });
+
+  describe('/:id', () => {
+    it('should retun popultaed list', async () => {
+      const response = await request(app)
+        .get(`/api/lists/${listId}`)
+        .set('Cookie', [`jwt=${token}`]);
+      console.log(response.body);
+      expect(response.status).toBe(200);
     });
   });
 });
@@ -113,7 +125,10 @@ describe('BoardsController', () => {
         .get('/api/boards/')
         .set('Cookie', [`jwt=${token}`]);
       expect(response.status).toBe(200);
-      expect(response.body.length).toEqual(1);
+      console.log('array of boards', response.body);
+      expect(JSON.stringify(response.body)).toEqual(
+        JSON.stringify([{ _id: testBoardId, name: 'test board' }]),
+      );
     });
   });
 

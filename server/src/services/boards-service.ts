@@ -9,7 +9,7 @@ export async function cerateBoard(data: IBoard) {
 }
 
 export async function findBoards(id: Types.ObjectId) {
-  return await BoardModel.find({ _id: id });
+  return await BoardModel.find({ createrId: id }).select(['name']);
 }
 
 export async function deleteBoardById(id: string) {

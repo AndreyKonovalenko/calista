@@ -19,9 +19,7 @@ export const getBoards = async (
 ): Promise<void> => {
   const { user } = req as CustomRequest;
   try {
-    const boards: Array<HydratedDocument<IBoard>> | [] = await findBoards(
-      user._id,
-    );
+    const boards: Array<HydratedDocument<IBoard>> = await findBoards(user._id);
     res.status(StatusCodes.OK).json(boards);
   } catch (error) {
     next(error);
