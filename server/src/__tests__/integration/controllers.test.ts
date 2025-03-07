@@ -95,8 +95,8 @@ describe('ListsController', () => {
     it('should update list pos', async () => {
       const response = await request(app)
         .put(`/api/lists/${listId}`)
+        .send({ pos: 8192 })     
         .set('Cookie', [`jwt=${token}`])
-        .send({ pos: 8192 });
       const list = await ListModel.findById(listId);
       expect(list).not.toBeNull();
       if (list) {
@@ -107,15 +107,30 @@ describe('ListsController', () => {
     });
   });
 
+  describe('/', ()=> {
+    it('should create new list', async ()=> {
+      const data = {
+          boardId: testBoardId,
+          name: "IN PROGRESS",
+          cards:[]
+      }
+      const response = await request(app).post('/api/lists/').send(data).set('Cookie', [`jwt=${token}`]);
+      console.log(response.body)
+      expect(response.status).toBe(200)
+    })
+  })
+
   describe('/:id', () => {
     it('should retun popultaed list', async () => {
       const response = await request(app)
         .get(`/api/lists/${listId}`)
         .set('Cookie', [`jwt=${token}`]);
-      console.log(response.body);
+      const board = await BoardModel.findById(testBoardId)
+      expect(board?.lists.length).toBe(2);
       expect(response.status).toBe(200);
     });
   });
+
 });
 
 describe('BoardsController', () => {
