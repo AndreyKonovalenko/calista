@@ -37,8 +37,8 @@ export async function setUpMockDb() {
     createrId: user._id,
     boardId: board._id,
     listId: list._id,
-    name: 'Shoping lists',
-    description: 'my favorite food',
+    name: 'Shoping list',
+    description: 'buy food in local grocery store accoring list',
     checkLists: [],
     pos: 16384,
   });
