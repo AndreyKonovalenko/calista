@@ -2,8 +2,6 @@ import express from 'express';
 import request from 'supertest';
 import expressLoader from '../../loaders/express-loader';
 import { clearCollections, dbConnect, dbDisconnect } from './db-handler';
-import { UserModel } from '../../models/UserModel';
-import { generateToken } from '../../services/auth-service';
 import { Types } from 'mongoose';
 
 import { BoardModel } from '../../models/BoardModel';
@@ -13,91 +11,37 @@ import {
   CheckListItemModel,
   CheckListModel,
 } from '../../models/CheckListModel';
-
-const testUser = {
-  username: 'Marck.7_cker-berg',
-  password: 'M@rck_Zucker-Ber%$111',
-};
+import { generateToken } from '../../services/auth-service';
+import { setUpMockDb } from './mock-data-db';
+import { UserModel } from '../../models/UserModel';
 
 const app = express();
 beforeAll(async () => dbConnect());
-beforeAll(async () => await expressLoader(app));
+beforeAll(async () => expressLoader(app));
 afterAll(async () => clearCollections());
 afterAll(async () => dbDisconnect());
 
-// create test user and get token for passing protected route
+beforeAll(async () => setUpMockDb());
+
+let testListId: Types.ObjectId;
 let token: string;
-let createrId: Types.ObjectId;
 let testBoardId: Types.ObjectId;
-let listId: Types.ObjectId;
 
 beforeAll(async () => {
-  // create test user
-  const user = await UserModel.create(testUser);
-  if (user) {
-    createrId = user._id;
-    token = generateToken(user._id, '20000');
-  }
-  // create test board
-  const board = await BoardModel.create({
-    name: 'test board',
-    createrId: createrId,
-    lists: [],
-  });
-  const list = await ListModel.create({
-    createrId: createrId,
-    boardId: board._id,
-    name: 'TO DO',
-    cards: [],
-    pos: 16384,
-  });
-  listId = list._id;
-  board.lists.push(list._id);
-  testBoardId = board._id;
-  await board.save();
-  const card = await CardModel.create({
-    createrId: createrId,
-    boardId: board._id,
-    listId: list._id,
-    name: 'Shoping lists',
-    description: 'my favorite food',
-    checkLists: [],
-    pos: 16384,
-  });
-  list.cards.push(card._id);
-  await list.save();
-  const checkList = await CheckListModel.create({
-    createrId: createrId,
-    boardId: board._id,
-    listId: list._id,
-    cardId: card._id,
-    checkItems: [],
-    name: 'Fruits',
-  });
-  card.checkLists.push(checkList._id);
-  await card.save();
-  const item = await CheckListItemModel.create({
-    createrId: createrId,
-    checkListId: checkList._id,
-    boardId: board._id,
-    listId: list._id,
-    cardId: card._id,
-    name: 'Apple',
-    state: 'incomplite',
-    pos: 16384,
-  });
-  checkList.checkItems.push(item._id);
-  await checkList.save();
+  const user = await UserModel.find({});
+  token = generateToken(user[0]._id, '20000');
+  testBoardId = (await BoardModel.find({}))[0]._id;
+  testListId = (await ListModel.find({}))[0]._id;
 });
 
 describe('ListsController', () => {
   describe('/:id', () => {
     it('should update list pos', async () => {
       const response = await request(app)
-        .put(`/api/lists/${listId}`)
-        .send({ pos: 8192 })     
-        .set('Cookie', [`jwt=${token}`])
-      const list = await ListModel.findById(listId);
+        .put(`/api/lists/${testListId}`)
+        .send({ pos: 8192 })
+        .set('Cookie', [`jwt=${token}`]);
+      const list = await ListModel.findById(testListId);
       expect(list).not.toBeNull();
       if (list) {
         expect(list.pos).toBe(8192);
@@ -107,30 +51,37 @@ describe('ListsController', () => {
     });
   });
 
-  describe('/', ()=> {
-    it('should create new list', async ()=> {
+  describe('/', () => {
+    it('should create new list', async () => {
       const data = {
-          boardId: testBoardId,
-          name: "IN PROGRESS",
-          cards:[]
-      }
-      const response = await request(app).post('/api/lists/').send(data).set('Cookie', [`jwt=${token}`]);
-      console.log(response.body)
-      expect(response.status).toBe(200)
-    })
-  })
-
-  describe('/:id', () => {
-    it('should retun popultaed list', async () => {
+        boardId: testBoardId,
+        name: 'IN PROGRESS',
+        cards: [],
+      };
       const response = await request(app)
-        .get(`/api/lists/${listId}`)
+        .post('/api/lists/')
+        .send(data)
         .set('Cookie', [`jwt=${token}`]);
-      const board = await BoardModel.findById(testBoardId)
-      expect(board?.lists.length).toBe(2);
+      console.log(response.body);
       expect(response.status).toBe(200);
     });
   });
 
+  describe('/:id', () => {
+    it('should retun popultaed list', async () => {
+      const response = await request(app)
+        .get(`/api/lists/${testListId}`)
+        .set('Cookie', [`jwt=${token}`]);
+      const board = await BoardModel.findById(testBoardId);
+      expect(board?.lists.length).toBe(2);
+      expect(response.status).toBe(200);
+    });
+  });
+  // describe('/:id', () => {
+  //   it('should delelet list by it id', async () =>  {
+  //     const response = await request(app)
+  //   })
+  // })
 });
 
 describe('BoardsController', () => {
