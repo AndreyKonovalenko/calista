@@ -82,10 +82,11 @@ describe('ListsController', () => {
   describe('/:id', () => {
     it('should delete list by it id', async () => {
       const response = await request(app)
-        .delete(`/api/boards/${testListId}`)
+        .delete(`/api/lists/${testListId}`)
         .set('Cookie', [`jwt=${token}`]);
       expect(response.status).toBe(200);
       expect((await ListModel.find({}))[0].name).toEqual('TO DO');
+      expect(await ListModel.findById(testListId)).toBeNull();
       expect(await CardModel.findById(testListId)).toBeNull();
       expect(await CheckListModel.findById(testListId)).toBeNull();
       expect(await CheckListItemModel.findById(testListId)).toBeNull();

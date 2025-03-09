@@ -48,44 +48,46 @@ describe('CardsController', () => {
   });
 
   describe('/', () => {
-    it('should create new list', async () => {
+    it('should create new card', async () => {
       const data = {
         boardId: testBoardId,
-        name: 'IN PROGRESS',
-        cards: [],
+        listId: testListId,
+        name: 'Oranges',
+        checkLists: [],
+        pos: 32768,
       };
       const response = await request(app)
-        .post('/api/lists/')
+        .post('/api/cards/')
         .send(data)
         .set('Cookie', [`jwt=${token}`]);
       expect(response.status).toBe(200);
-      expect((await ListModel.find({})).length).toBe(2);
+      expect((await CardModel.find({})).length).toBe(2);
     });
   });
 
   describe('/:id', () => {
-    it('should update list pos', async () => {
+    it('should update card pos', async () => {
       const response = await request(app)
-        .put(`/api/lists/${testListId}`)
-        .send({ pos: 8192 })
+        .put(`/api/cards/${testCardId}`)
+        .send({ pos: 49152 })
         .set('Cookie', [`jwt=${token}`]);
-      const list = await ListModel.findById(testListId);
-      expect(list).not.toBeNull();
-      if (list) {
-        expect(list.pos).toBe(8192);
+      const card = await CardModel.findById(testCardId);
+      expect(card).not.toBeNull();
+      if (card) {
+        expect(card.pos).toBe(49152);
       }
       expect(response.status).toBe(200);
-      expect(response.text).toBe('list successfuly updated');
+      expect(response.text).toBe('card successfuly updated');
     });
   });
 
   describe('/:id', () => {
-    it('should delete list by it id', async () => {
+    it('should delete card by it id', async () => {
       const response = await request(app)
-        .delete(`/api/boards/${testListId}`)
+        .delete(`/api/cards/${testCardId}`)
         .set('Cookie', [`jwt=${token}`]);
       expect(response.status).toBe(200);
-      expect((await ListModel.find({}))[0].name).toEqual('TO DO');
+      expect((await CardModel.find({}))[0].name).toEqual('Oranges');
       expect(await CardModel.findById(testListId)).toBeNull();
       expect(await CheckListModel.findById(testListId)).toBeNull();
       expect(await CheckListItemModel.findById(testListId)).toBeNull();

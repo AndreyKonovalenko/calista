@@ -9,7 +9,7 @@ export async function createCard(data: ICard) {
   const list = await ListModel.findById(data.listId);
   if (!list) {
     throw new CustomError(
-      `list id ${data.listId} not foudn`,
+      `list id ${data.listId} not found`,
       StatusCodes.INTERNAL_SERVER_ERROR,
     );
   }
