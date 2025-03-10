@@ -76,7 +76,7 @@ describe('ListsController', () => {
         expect(list.pos).toBe(8192);
       }
       expect(response.status).toBe(200);
-      expect(response.text).toBe('list successfuly updated');
+      expect(response.text).toBe('list successfully updated');
     });
   });
 

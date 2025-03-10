@@ -3,8 +3,6 @@ import request from 'supertest';
 import expressLoader from '../../loaders/express-loader';
 import { clearCollections, dbConnect, dbDisconnect } from './db-handler';
 import { Types } from 'mongoose';
-
-import { BoardModel } from '../../models/BoardModel';
 import { ListModel } from '../../models/ListModel';
 import { generateToken } from '../../services/auth-service';
 import { setUpMockDb } from './mock-data-db';
@@ -13,7 +11,9 @@ import { CardModel } from '../../models/CardModel';
 import {
   CheckListItemModel,
   CheckListModel,
+  ICheckListItem,
 } from '../../models/CheckListModel';
+import { BoardModel } from '../../models/BoardModel';
 
 const app = express();
 beforeAll(async () => dbConnect());
@@ -23,8 +23,8 @@ afterAll(async () => dbDisconnect());
 beforeAll(async () => setUpMockDb());
 
 let testListId: Types.ObjectId;
-let token: string;
 let testBoardId: Types.ObjectId;
+let token: string;
 let testCardId: Types.ObjectId;
 let testCheckListId: Types.ObjectId;
 let testCheckListItemId: Types.ObjectId;
@@ -36,6 +36,7 @@ beforeAll(async () => {
   testListId = (await ListModel.find({}))[0]._id;
   testCardId = (await CardModel.find({}))[0]._id;
   testCheckListId = (await CheckListModel.find({}))[0]._id;
+  testCheckListItemId = (await CheckListItemModel.find({}))[0]._id;
 });
 
 describe('CheckListsController', () => {
@@ -49,51 +50,90 @@ describe('CheckListsController', () => {
     });
   });
 
-  // describe('/', () => {
-  //   it('should create new list', async () => {
-  //     const data = {
-  //       boardId: testBoardId,
-  //       name: 'IN PROGRESS',
-  //       cards: [],
-  //     };
-  //     const response = await request(app)
-  //       .post('/api/lists/')
-  //       .send(data)
-  //       .set('Cookie', [`jwt=${token}`]);
-  //     expect(response.status).toBe(200);
-  //     const board = await BoardModel.findById(testBoardId);
-  //     expect(board?.lists.length).toBe(2);
-  //     expect((await ListModel.find({})).length).toBe(2);
-  //   });
-  // });
+  describe('/', () => {
+    it('should create new checklist', async () => {
+      const data = {
+        boardId: testBoardId,
+        listId: testListId,
+        cardId: testCardId,
+        name: 'Vegetabels',
+      };
+      const response = await request(app)
+        .post('/api/checklists/')
+        .send(data)
+        .set('Cookie', [`jwt=${token}`]);
+      expect(response.status).toBe(200);
+      const card = await CardModel.findById(testCardId);
+      expect(card?.checkLists.length).toBe(2);
+      expect((await CheckListModel.find({})).length).toBe(2);
+    });
+  });
 
-  // describe('/:id', () => {
-  //   it('should update list pos', async () => {
-  //     const response = await request(app)
-  //       .put(`/api/lists/${testListId}`)
-  //       .send({ pos: 8192 })
-  //       .set('Cookie', [`jwt=${token}`]);
-  //     const list = await ListModel.findById(testListId);
-  //     expect(list).not.toBeNull();
-  //     if (list) {
-  //       expect(list.pos).toBe(8192);
-  //     }
-  //     expect(response.status).toBe(200);
-  //     expect(response.text).toBe('list successfuly updated');
-  //   });
-  // });
+  describe('/:id', () => {
+    it('should update checkList name', async () => {
+      const response = await request(app)
+        .put(`/api/checklists/${testCheckListId}`)
+        .send({ name: 'Berries' })
+        .set('Cookie', [`jwt=${token}`]);
+      const checkList = await CheckListModel.findById(testCheckListId);
+      expect(checkList).not.toBeNull();
+      if (checkList) {
+        expect(checkList.name).toBe('Berries');
+      }
+      expect(response.status).toBe(200);
+      expect(response.text).toBe('CheckList successfully updated');
+    });
+  });
 
-  // describe('/:id', () => {
-  //   it('should delete list by it id', async () => {
-  //     const response = await request(app)
-  //       .delete(`/api/lists/${testListId}`)
-  //       .set('Cookie', [`jwt=${token}`]);
-  //     expect(response.status).toBe(200);
-  //     expect((await ListModel.find({}))[0].name).toEqual('IN PROGRESS');
-  //     expect(await ListModel.findById(testListId)).toBeNull();
-  //     expect(await CardModel.findById(testListId)).toBeNull();
-  //     expect(await CheckListModel.findById(testListId)).toBeNull();
-  //     expect(await CheckListItemModel.findById(testListId)).toBeNull();
-  //   });
-  // });
+  describe('/:id', () => {
+    it('should delete checklist by it id', async () => {
+      const checkList = await CheckListModel.findOne({ name: 'Vegetabels' });
+      const response = await request(app)
+        .delete(`/api/checklists/${checkList?._id}`)
+        .set('Cookie', [`jwt=${token}`]);
+      expect(response.status).toBe(200);
+      expect(await CheckListModel.findById(checkList?._id)).toBeNull();
+      expect(
+        await CheckListItemModel.findOne({ checkListId: checkList?._id }),
+      ).toBeNull();
+      expect(await CheckListModel.findById(testCheckListId)).not.toBeNull();
+      expect(
+        (await CardModel.findById(testCardId))?.checkLists[0].equals(
+          testCheckListId,
+        ),
+      ).toBe(true);
+    });
+  });
+
+  describe('/:id/items/:itemId', () => {
+    it('should return checklist item', async () => {
+      const response = await request(app)
+        .get(`/api/checklists/${testCheckListId}/items/${testCheckListItemId}`)
+        .set('Cookie', [`jwt=${token}`]);
+      expect(response.status).toBe(200);
+      console.log(response.body);
+      expect(response.body.name).toBe('Apple');
+    });
+  });
+
+  describe('/:id/items/', () => {
+    it('should create new checklist item', async () => {
+      const data: ICheckListItem = {
+        checkListId: testCheckListId,
+        boardId: testBoardId,
+        listId: testListId,
+        cardId: testCardId,
+        name: 'Cherry',
+        pos: 32768,
+      };
+      const response = await request(app)
+        .post(`/api/checklists/${testCheckListId}/items/`)
+        .send(data)
+        .set('Cookie', [`jwt=${token}`]);
+      expect(response.status).toBe(200);
+      const checkList = await CheckListModel.findById(testCheckListId);
+      expect(checkList?.checkItems.length).toBe(2);
+      expect((await CheckListModel.find({})).length).toBe(2);
+    });
+  });
 });

@@ -51,6 +51,15 @@ export async function findCheckListItemById(id: string) {
 }
 
 export async function deleteCheckListById(id: string) {
+  // clear parent arrey of id references
+  const checkList = await CheckListModel.findById(new Types.ObjectId(id));
+  const card = await CardModel.findById(checkList?.cardId);
+  if (card) {
+    card.checkLists = card.checkLists.filter(element => {
+      return element.equals(new Types.ObjectId(id)) === false;
+    });
+    await card.save();
+  }
   await CheckListItemModel.deleteMany({ checkListId: new Types.ObjectId(id) });
   return await CheckListModel.deleteOne({ _id: new Types.ObjectId(id) });
 }

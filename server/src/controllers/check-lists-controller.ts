@@ -88,7 +88,7 @@ export const getCheckListItem = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const checkListItem = await findCheckListItemById(req.params.checkItemId);
+    const checkListItem = await findCheckListItemById(req.params.itmeId);
     if (!checkListItem) {
       res.status(StatusCodes.OK).send('CheckListItem not found');
     }
@@ -109,7 +109,7 @@ export const updateCheckList = async (
   try {
     const data = { ...req.body };
     await updateCheckListById(req.params.id, data);
-    res.status(StatusCodes.OK).send('CheckList successfulfy updated');
+    res.status(StatusCodes.OK).send('CheckList successfully updated');
   } catch (error) {
     next(error);
   }
@@ -125,7 +125,7 @@ export const updateChecklistItem = async (
   try {
     const data = { ...req.body };
     await updateChecklistItemById(req.params.itemId, data);
-    res.status(StatusCodes.OK).send('check list item succefully updated');
+    res.status(StatusCodes.OK).send('check list item successfully updated');
   } catch (error) {
     next(error);
   }

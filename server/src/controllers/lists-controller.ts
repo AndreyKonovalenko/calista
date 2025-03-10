@@ -61,7 +61,7 @@ export const updateList = async (
   try {
     const data = { ...req.body };
     await updateListById(req.params.id, data);
-    res.status(StatusCodes.OK).send('list successfuly updated');
+    res.status(StatusCodes.OK).send('list successfully updated');
   } catch (error) {
     next(error);
   }
