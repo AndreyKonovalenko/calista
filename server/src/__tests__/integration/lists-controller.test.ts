@@ -40,6 +40,7 @@ describe('ListsController', () => {
         .get(`/api/lists/${testListId}`)
         .set('Cookie', [`jwt=${token}`]);
       const board = await BoardModel.findById(testBoardId);
+      expect(response.body.name).toBe('TO DO');
       expect(board?.lists.length).toBe(1);
       expect(response.status).toBe(200);
     });
@@ -85,7 +86,7 @@ describe('ListsController', () => {
         .delete(`/api/lists/${testListId}`)
         .set('Cookie', [`jwt=${token}`]);
       expect(response.status).toBe(200);
-      expect((await ListModel.find({}))[0].name).toEqual('TO DO');
+      expect((await ListModel.find({}))[0].name).toEqual('IN PROGRESS');
       expect(await ListModel.findById(testListId)).toBeNull();
       expect(await CardModel.findById(testListId)).toBeNull();
       expect(await CheckListModel.findById(testListId)).toBeNull();

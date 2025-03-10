@@ -42,6 +42,7 @@ describe('CardsController', () => {
         .get(`/api/cards/${testCardId}`)
         .set('Cookie', [`jwt=${token}`]);
       const list = await ListModel.findById(testListId);
+      expect(response.body.name).toEqual('Shoping list');
       expect(list?.cards.length).toBe(1);
       expect(response.status).toBe(200);
     });
@@ -77,7 +78,7 @@ describe('CardsController', () => {
         expect(card.pos).toBe(49152);
       }
       expect(response.status).toBe(200);
-      expect(response.text).toBe('card successfuly updated');
+      expect(response.text).toBe('Card successfuly updated');
     });
   });
 

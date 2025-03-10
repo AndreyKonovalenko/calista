@@ -69,12 +69,12 @@ export const getCheckList = async (
   next: NextFunction,
 ) => {
   try {
-    const checList = await findCheckListById(req.params.id);
-    if (!checList) {
+    const checkList = await findCheckListById(req.params.id);
+    if (!checkList) {
       res.status(StatusCodes.OK).send('CheckList not found');
     }
-    if (checList) {
-      res.status(StatusCodes.OK).json(checList);
+    if (checkList) {
+      res.status(StatusCodes.OK).json(checkList);
     }
   } catch (error) {
     next(error);

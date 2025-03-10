@@ -41,7 +41,7 @@ export async function createCheckListItem(data: ICheckListItem) {
 
 export async function findCheckListById(id: string) {
   return await CheckListModel.findById(new Types.ObjectId(id)).populate({
-    path: 'checkListsItems',
+    path: 'checkItems',
     select: ['name', 'state'],
   });
 }

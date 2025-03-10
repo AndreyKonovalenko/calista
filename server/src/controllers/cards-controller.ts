@@ -20,8 +20,8 @@ export const addCard = async (
   const { user } = req as CustomRequest;
   const data: ICard = {
     createrId: user._id,
-    boardId: req.body.board_id,
-    listId: req.body.list_id,
+    boardId: req.body.boardId,
+    listId: req.body.listId,
     name: req.body.name,
     checkLists: [],
     pos: req.body.pos ? req.body.pos : 16384,
@@ -41,7 +41,7 @@ export const getCard = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const card = findCardById(req.params.id);
+    const card = await findCardById(req.params.id);
     if (!card) {
       res.status(StatusCodes.OK).send('Card not found');
     }
