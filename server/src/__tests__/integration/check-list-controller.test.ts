@@ -11,6 +11,7 @@ import { CardModel } from '../../models/CardModel';
 import {
   CheckListItemModel,
   CheckListModel,
+  ICheckList,
   ICheckListItem,
 } from '../../models/CheckListModel';
 import { BoardModel } from '../../models/BoardModel';
@@ -52,7 +53,8 @@ describe('CheckListsController', () => {
 
   describe('/', () => {
     it('should create new checklist', async () => {
-      const data = {
+      type TTestCheckList = Omit<ICheckList, "createrId" | "checkItems">
+      const data: TTestCheckList = {
         boardId: testBoardId,
         listId: testListId,
         cardId: testCardId,
@@ -86,7 +88,7 @@ describe('CheckListsController', () => {
   });
 
   describe('/:id', () => {
-    it('should delete checklist by it id', async () => {
+    it('should delete checklist by id', async () => {
       const checkList = await CheckListModel.findOne({ name: 'Vegetabels' });
       const response = await request(app)
         .delete(`/api/checklists/${checkList?._id}`)
@@ -111,14 +113,14 @@ describe('CheckListsController', () => {
         .get(`/api/checklists/${testCheckListId}/items/${testCheckListItemId}`)
         .set('Cookie', [`jwt=${token}`]);
       expect(response.status).toBe(200);
-      console.log(response.body);
       expect(response.body.name).toBe('Apple');
     });
   });
 
   describe('/:id/items/', () => {
     it('should create new checklist item', async () => {
-      const data: ICheckListItem = {
+      type TTestCheckListItem = Omit<ICheckListItem,"createrId" | "state" >
+      const data: TTestCheckListItem = {
         checkListId: testCheckListId,
         boardId: testBoardId,
         listId: testListId,
@@ -131,9 +133,26 @@ describe('CheckListsController', () => {
         .send(data)
         .set('Cookie', [`jwt=${token}`]);
       expect(response.status).toBe(200);
-      const checkList = await CheckListModel.findById(testCheckListId);
-      expect(checkList?.checkItems.length).toBe(2);
-      expect((await CheckListModel.find({})).length).toBe(2);
+      expect(await CheckListItemModel.findOne({name: "Cherry"})).not.toBeNull()
+      expect((await CheckListItemModel.find({})).length).toBe(2);
+      expect(response.text).toBe(`item ${data.name} succesfuly created`)
     });
   });
+  describe('/:id/temes/:itemId', ()=> {
+    it('should update checklist item', async () => {
+      const response = await request(app)
+        .put(`/api/checklists/${testCheckListId}/items/${testCheckListItemId}`)
+        .send({ name: 'Watermelon', pos: 49152 })
+        .set('Cookie', [`jwt=${token}`]);
+      const checkListItem = await CheckListItemModel.findById(testCheckListItemId);
+      expect(checkListItem).not.toBeNull();
+      if (checkListItem) {
+        expect(checkListItem.name).toBe('Watermelon');
+        expect(checkListItem.pos).toBe(49152)
+      }
+      expect(response.status).toBe(200);
+      expect(response.text).toBe('CheckListItem successfully updated');
+    })
+  })
+
 });

@@ -125,7 +125,7 @@ export const updateChecklistItem = async (
   try {
     const data = { ...req.body };
     await updateChecklistItemById(req.params.itemId, data);
-    res.status(StatusCodes.OK).send('check list item successfully updated');
+    res.status(StatusCodes.OK).send('CheckListItem successfully updated');
   } catch (error) {
     next(error);
   }
