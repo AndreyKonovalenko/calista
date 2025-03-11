@@ -28,6 +28,14 @@ export async function findCardById(id: string) {
 }
 
 export async function deletedCardById(id: string) {
+  const card = await CardModel.findById(new Types.ObjectId(id));
+  const list = await ListModel.findById(card?.listId);
+  if (list) {
+    list.cards = list.cards.filter(element => {
+      return element.equals(new Types.ObjectId(id)) === false;
+    });
+    list.save();
+  }
   await CheckListItemModel.deleteMany({ cardId: new Types.ObjectId(id) });
   await CheckListModel.deleteMany({ cardId: new Types.ObjectId(id) });
   return await CardModel.deleteOne({ _id: new Types.ObjectId(id) });

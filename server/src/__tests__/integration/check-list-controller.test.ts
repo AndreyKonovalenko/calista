@@ -53,7 +53,7 @@ describe('CheckListsController', () => {
 
   describe('/', () => {
     it('should create new checklist', async () => {
-      type TTestCheckList = Omit<ICheckList, "createrId" | "checkItems">
+      type TTestCheckList = Omit<ICheckList, 'createrId' | 'checkItems'>;
       const data: TTestCheckList = {
         boardId: testBoardId,
         listId: testListId,
@@ -119,7 +119,7 @@ describe('CheckListsController', () => {
 
   describe('/:id/items/', () => {
     it('should create new checklist item', async () => {
-      type TTestCheckListItem = Omit<ICheckListItem,"createrId" | "state" >
+      type TTestCheckListItem = Omit<ICheckListItem, 'createrId' | 'state'>;
       const data: TTestCheckListItem = {
         checkListId: testCheckListId,
         boardId: testBoardId,
@@ -133,40 +133,50 @@ describe('CheckListsController', () => {
         .send(data)
         .set('Cookie', [`jwt=${token}`]);
       expect(response.status).toBe(200);
-      expect(await CheckListItemModel.findOne({name: "Cherry"})).not.toBeNull()
+      expect(
+        await CheckListItemModel.findOne({ name: 'Cherry' }),
+      ).not.toBeNull();
       expect((await CheckListItemModel.find({})).length).toBe(2);
-      expect(response.text).toBe(`item ${data.name} succesfuly created`)
+      expect(response.text).toBe(`item ${data.name} succesfuly created`);
     });
   });
-  describe('/:id/items/:itemId', ()=> {
+
+  describe('/:id/items/:itemId', () => {
     it('should update checklist item', async () => {
       const response = await request(app)
         .put(`/api/checklists/${testCheckListId}/items/${testCheckListItemId}`)
         .send({ name: 'Watermelon', pos: 49152 })
         .set('Cookie', [`jwt=${token}`]);
-      const checkListItem = await CheckListItemModel.findById(testCheckListItemId);
+      const checkListItem =
+        await CheckListItemModel.findById(testCheckListItemId);
       expect(checkListItem).not.toBeNull();
       if (checkListItem) {
         expect(checkListItem.name).toBe('Watermelon');
-        expect(checkListItem.pos).toBe(49152)
+        expect(checkListItem.pos).toBe(49152);
       }
       expect(response.status).toBe(200);
       expect(response.text).toBe('CheckListItem successfully updated');
-    })
-  })
+    });
+  });
 
   describe('/:id/items/:itemId', () => {
     it('should delete checklist item', async () => {
-      const checkListItem = await CheckListItemModel.findOne({ name: 'Cherry' });
-      console.log(await CheckListModel.findById(testCheckListId))
+      const checkListItem = await CheckListItemModel.findOne({
+        name: 'Cherry',
+      });
       const response = await request(app)
-        .delete(`/api/checklists/${testCheckListId}/items/${checkListItem?._id}`)
+        .delete(
+          `/api/checklists/${testCheckListId}/items/${checkListItem?._id}`,
+        )
         .set('Cookie', [`jwt=${token}`]);
       expect(response.status).toBe(200);
       expect(await CheckListItemModel.findById(checkListItem?._id)).toBeNull();
-      console.log(await CheckListModel.findById(testCheckListId))
+      expect(
+        (await CheckListItemModel.findById(testCheckListItemId))?.name,
+      ).toBe('Watermelon');
+      expect(
+        (await CheckListModel.findById(testCheckListId))?.checkItems.length,
+      ).toBe(1);
     });
-   
   });
-
 });

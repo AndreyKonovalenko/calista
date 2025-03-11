@@ -27,7 +27,7 @@ export const addList = async (
   };
   try {
     await createList(data);
-    res.status(StatusCodes.OK).send(`list ${data.name} successfuly created`);
+    res.status(StatusCodes.OK).send(`list ${data.name} successfully created`);
   } catch (error) {
     next(error);
   }

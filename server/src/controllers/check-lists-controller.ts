@@ -1,4 +1,4 @@
-import { Response, Request, NextFunction} from 'express';
+import { Response, Request, NextFunction } from 'express';
 import { CustomRequest } from '../middleware/protected';
 import { StatusCodes } from 'http-status-codes';
 import { ICheckList, ICheckListItem } from '../models/CheckListModel';
@@ -159,7 +159,6 @@ export const deletedCheckListItem = async (
 ): Promise<void> => {
   try {
     const result: DeleteResult = await deleteCheckLisItemById(req.params);
-    console.log('req.params:', req.params)
     if (result.deletedCount > 0) {
       res.status(StatusCodes.OK).send(`item id: ${req.params.itemId} deleted`);
     } else {

@@ -28,7 +28,7 @@ export const addCard = async (
   };
   try {
     await createCard(data);
-    res.status(StatusCodes.OK).send(`card ${data.name} successuly created`);
+    res.status(StatusCodes.OK).send(`card ${data.name} successfully created`);
   } catch (error) {
     next(error);
   }
@@ -62,11 +62,12 @@ export const updateCard = async (
   try {
     const data = { ...req.body };
     await updateCardById(req.params.id, data);
-    res.status(StatusCodes.OK).send('Card successfuly updated');
+    res.status(StatusCodes.OK).send('Card successfully updated');
   } catch (error) {
     next(error);
   }
 };
+
 // DELETE: cards/:id @private
 export const deleteCard = async (
   req: Request,

@@ -65,7 +65,7 @@ export const getBoard = async (
   }
 };
 
-// PUTs boards/:id
+// PUT boards/:id
 
 export const upatedBoard = async (
   req: Request,
@@ -75,7 +75,7 @@ export const upatedBoard = async (
   try {
     const data = { ...req.body };
     await updateBoardById(req.params.id, data);
-    res.status(StatusCodes.OK).send('board successfyly updated');
+    res.status(StatusCodes.OK).send('board successfully updated');
   } catch (error) {
     next(error);
   }

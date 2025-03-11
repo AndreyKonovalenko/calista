@@ -9,7 +9,7 @@ import { ListModel } from '../../models/ListModel';
 import { generateToken } from '../../services/auth-service';
 import { setUpMockDb } from './mock-data-db';
 import { UserModel } from '../../models/UserModel';
-import { CardModel } from '../../models/CardModel';
+import { CardModel, ICard } from '../../models/CardModel';
 import {
   CheckListItemModel,
   CheckListModel,
@@ -50,11 +50,11 @@ describe('CardsController', () => {
 
   describe('/', () => {
     it('should create new card', async () => {
-      const data = {
+      type TTestCard = Omit<ICard, 'checkLists' | 'createrId'>;
+      const data: TTestCard = {
         boardId: testBoardId,
         listId: testListId,
-        name: 'Oranges',
-        checkLists: [],
+        name: 'Meetings',
         pos: 32768,
       };
       const response = await request(app)
@@ -78,20 +78,24 @@ describe('CardsController', () => {
         expect(card.pos).toBe(49152);
       }
       expect(response.status).toBe(200);
-      expect(response.text).toBe('Card successfuly updated');
+      expect(response.text).toBe('Card successfully updated');
     });
   });
 
   describe('/:id', () => {
     it('should delete card by it id', async () => {
+      expect((await ListModel.findOne(testListId))?.cards.length).toBe(2);
       const response = await request(app)
         .delete(`/api/cards/${testCardId}`)
         .set('Cookie', [`jwt=${token}`]);
       expect(response.status).toBe(200);
-      expect((await CardModel.find({}))[0].name).toEqual('Oranges');
-      expect(await CardModel.findById(testListId)).toBeNull();
-      expect(await CheckListModel.findById(testListId)).toBeNull();
-      expect(await CheckListItemModel.findById(testListId)).toBeNull();
+      expect((await ListModel.findOne(testListId))?.cards.length).toBe(1);
+      expect((await CardModel.find({}))[0].name).toEqual('Meetings');
+      expect(await CardModel.findById(testCardId)).toBeNull();
+      expect(await CheckListModel.findOne({ cardId: testCardId })).toBeNull();
+      expect(
+        await CheckListItemModel.findOne({ cardId: testCardId }),
+      ).toBeNull();
     });
   });
 });

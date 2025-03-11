@@ -5,7 +5,7 @@ import { clearCollections, dbConnect, dbDisconnect } from './db-handler';
 import { Types } from 'mongoose';
 
 import { BoardModel } from '../../models/BoardModel';
-import { ListModel } from '../../models/ListModel';
+import { IList, ListModel } from '../../models/ListModel';
 import { generateToken } from '../../services/auth-service';
 import { setUpMockDb } from './mock-data-db';
 import { UserModel } from '../../models/UserModel';
@@ -48,10 +48,11 @@ describe('ListsController', () => {
 
   describe('/', () => {
     it('should create new list', async () => {
-      const data = {
+      type TTestList = Omit<IList, 'createrId' | 'cards'>;
+      const data: TTestList = {
         boardId: testBoardId,
         name: 'IN PROGRESS',
-        cards: [],
+        pos: 16384,
       };
       const response = await request(app)
         .post('/api/lists/')
@@ -81,16 +82,20 @@ describe('ListsController', () => {
   });
 
   describe('/:id', () => {
-    it('should delete list by it id', async () => {
+    it('should delete list by id', async () => {
+      expect((await BoardModel.findById(testBoardId))?.lists.length).toBe(2);
       const response = await request(app)
         .delete(`/api/lists/${testListId}`)
         .set('Cookie', [`jwt=${token}`]);
       expect(response.status).toBe(200);
+      expect((await BoardModel.findById(testBoardId))?.lists.length).toBe(1);
       expect((await ListModel.find({}))[0].name).toEqual('IN PROGRESS');
       expect(await ListModel.findById(testListId)).toBeNull();
-      expect(await CardModel.findById(testListId)).toBeNull();
-      expect(await CheckListModel.findById(testListId)).toBeNull();
-      expect(await CheckListItemModel.findById(testListId)).toBeNull();
+      expect(await CardModel.findOne({ listId: testListId })).toBeNull();
+      expect(await CheckListModel.findOne({ listId: testListId })).toBeNull();
+      expect(
+        await CheckListItemModel.findOne({ listId: testListId }),
+      ).toBeNull();
     });
   });
 });

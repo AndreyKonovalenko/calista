@@ -32,6 +32,14 @@ export async function findListById(id: string) {
 }
 
 export async function deleteListById(id: string) {
+  const list = await ListModel.findById(new Types.ObjectId(id));
+  const board = await BoardModel.findById(list?.boardId);
+  if (board) {
+    board.lists = board.lists.filter(element => {
+      return element.equals(new Types.ObjectId(id)) === false;
+    });
+    board.save();
+  }
   await CheckListItemModel.deleteMany({ listId: new Types.ObjectId(id) });
   await CheckListModel.deleteMany({ listId: new Types.ObjectId(id) });
   await CardModel.deleteMany({ listId: new Types.ObjectId(id) });

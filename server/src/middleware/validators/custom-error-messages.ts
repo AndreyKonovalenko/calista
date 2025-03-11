@@ -31,8 +31,13 @@ const password = {
     'password should contain only latin characters',
 };
 
+const boardName = {
+  'string.max': ' board name should not exceed 30 character',
+};
+
 export default {
   username,
   usernameCustomValidator,
   password,
+  boardName,
 };

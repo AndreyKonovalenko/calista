@@ -14,6 +14,7 @@ import {
 import { generateToken } from '../../services/auth-service';
 import { setUpMockDb } from './mock-data-db';
 import { UserModel } from '../../models/UserModel';
+import customErrorMessages from '../../middleware/validators/custom-error-messages';
 
 const app = express();
 beforeAll(async () => dbConnect());
@@ -39,7 +40,6 @@ describe('BoardsController', () => {
         .get('/api/boards/')
         .set('Cookie', [`jwt=${token}`]);
       expect(response.status).toBe(200);
-      console.log('array of boards', response.body);
       expect(JSON.stringify(response.body)).toEqual(
         JSON.stringify([{ _id: testBoardId, name: 'test board' }]),
       );
@@ -61,6 +61,31 @@ describe('BoardsController', () => {
       expect(response.status).toBe(200);
     });
 
+    it('should update board name', async () => {
+      const response = await request(app)
+        .put(`/api/boards/${testBoardId}`)
+        .set('Cookie', [`jwt=${token}`])
+        .send({ name: 'new board name' });
+      expect(response.status).toBe(200);
+      expect(response.text).toBe('board successfully updated');
+      expect((await BoardModel.findById(testBoardId))?.name).toBe(
+        'new board name',
+      );
+    });
+
+    it('should not update board name and should return validation erro', async () => {
+      const response = await request(app)
+        .put(`/api/boards/${testBoardId}`)
+        .set('Cookie', [`jwt=${token}`])
+        .send({
+          name: 'new board name  new board name  new board name  new board name ',
+        });
+      expect(response.status).toBe(422);
+      expect(response.body.message).toEqual(
+        customErrorMessages.boardName['string.max'],
+      );
+    });
+
     it('should delete board ', async () => {
       const response = await request(app)
         .delete(`/api/boards/${testBoardId}`)
@@ -72,15 +97,15 @@ describe('BoardsController', () => {
       expect((await CheckListItemModel.find({})).length).toBe(0);
       expect(response.status).toBe(200);
     });
+  });
 
-    describe('/', () => {
-      it('should return empty array if there are no boards for current user', async () => {
-        const response = await request(app)
-          .get('/api/boards/')
-          .set('Cookie', [`jwt=${token}`]);
-        expect(response.status).toBe(200);
-        expect(response.body).toEqual([]);
-      });
+  describe('/', () => {
+    it('should return empty array if there are no boards for current user', async () => {
+      const response = await request(app)
+        .get('/api/boards/')
+        .set('Cookie', [`jwt=${token}`]);
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual([]);
     });
   });
 });
