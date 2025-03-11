@@ -138,7 +138,7 @@ describe('CheckListsController', () => {
       expect(response.text).toBe(`item ${data.name} succesfuly created`)
     });
   });
-  describe('/:id/temes/:itemId', ()=> {
+  describe('/:id/items/:itemId', ()=> {
     it('should update checklist item', async () => {
       const response = await request(app)
         .put(`/api/checklists/${testCheckListId}/items/${testCheckListItemId}`)
@@ -154,5 +154,19 @@ describe('CheckListsController', () => {
       expect(response.text).toBe('CheckListItem successfully updated');
     })
   })
+
+  describe('/:id/items/:itemId', () => {
+    it('should delete checklist item', async () => {
+      const checkListItem = await CheckListItemModel.findOne({ name: 'Cherry' });
+      console.log(await CheckListModel.findById(testCheckListId))
+      const response = await request(app)
+        .delete(`/api/checklists/${testCheckListId}/items/${checkListItem?._id}`)
+        .set('Cookie', [`jwt=${token}`]);
+      expect(response.status).toBe(200);
+      expect(await CheckListItemModel.findById(checkListItem?._id)).toBeNull();
+      console.log(await CheckListModel.findById(testCheckListId))
+    });
+   
+  });
 
 });

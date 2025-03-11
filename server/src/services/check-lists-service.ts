@@ -9,6 +9,7 @@ import {
 } from '../models/CheckListModel';
 import { CardModel } from '../models/CardModel';
 
+
 export async function createCheckList(data: ICheckList) {
   const card = await CardModel.findById(data.cardId);
   if (!card) {
@@ -35,7 +36,7 @@ export async function createCheckListItem(data: ICheckListItem) {
   if (checkList) {
     const item = await CheckListItemModel.create(data);
     checkList.checkItems.push(item._id);
-    await item.save();
+    await checkList.save();
   }
 }
 
@@ -64,8 +65,16 @@ export async function deleteCheckListById(id: string) {
   return await CheckListModel.deleteOne({ _id: new Types.ObjectId(id) });
 }
 
-export async function deleteCheckLisItemById(id: string) {
-  return await CheckListItemModel.deleteOne({ _id: new Types.ObjectId(id) });
+export async function deleteCheckLisItemById(data:{[key:string]: string}) {
+  const {id, itemId } = data
+  const checkList = await CheckListModel.findById(new Types.ObjectId(id))
+  if (checkList){
+    checkList.checkItems = checkList.checkItems.filter(element => {
+      return element.equals(new Types.ObjectId(itemId)) === false
+    })
+    await checkList.save();
+  }
+  return await CheckListItemModel.deleteOne({ _id: new Types.ObjectId(itemId) });
 }
 
 export async function updateCheckListById(
