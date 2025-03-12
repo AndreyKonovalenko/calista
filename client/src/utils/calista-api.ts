@@ -15,13 +15,27 @@ const AUTH = validEnv(process.env.AUTH);
 const SSE = validEnv(process.env.SSE);
 axios.defaults.baseURL = BASE_URL;
 
+type TCustomErrorResponse = {
+  message: string, 
+  stack?:string,
+  status: number,
+  success: boolean
+}
 axios.interceptors.response.use(
   res => {
     return res;
   },
-  (error: AxiosError) => {
-    const { data } = error.response!;
-    toast.error(data as string);
+  (error: AxiosError<TCustomErrorResponse>) => {
+    if(error.response) {
+      const {data} = error.response!;
+      console.log(data.message)
+      toast.error(data.message)
+    }
+    else if( error.request){
+      toast(error.request.status)
+    } else {
+      toast.error(error.message);
+    } 
     return Promise.reject(error);
   },
 );

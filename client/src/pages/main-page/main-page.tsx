@@ -18,7 +18,7 @@ import { Person } from '@mui/icons-material';
 import BoardCard from '../../components/main-page-components/board-card/board-card';
 import { v4 as uuidv4 } from 'uuid';
 import { TBoard } from '../../services/boards/board-store';
-import useSse from '../../hooks/useSse';
+// import useSse from '../../hooks/useSse';
 import { useEscapeKey } from '../../hooks/use-escape-key';
 
 const useBoards = () => {
@@ -29,7 +29,7 @@ const useBoards = () => {
 };
 
 const MainPage = () => {
-  useSse();
+  // useSse();
 
   const queryClient = useQueryClient();
   const { data } = useBoards();
