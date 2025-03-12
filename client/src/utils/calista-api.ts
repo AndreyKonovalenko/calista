@@ -16,26 +16,25 @@ const SSE = validEnv(process.env.SSE);
 axios.defaults.baseURL = BASE_URL;
 
 type TCustomErrorResponse = {
-  message: string, 
-  stack?:string,
-  status: number,
-  success: boolean
-}
+  message: string;
+  stack?: string;
+  status: number;
+  success: boolean;
+};
 axios.interceptors.response.use(
   res => {
     return res;
   },
   (error: AxiosError<TCustomErrorResponse>) => {
-    if(error.response) {
-      const {data} = error.response!;
-      console.log(data.message)
-      toast.error(data.message)
-    }
-    else if( error.request){
-      toast(error.request.status)
+    if (error.response) {
+      const { data } = error.response!;
+      console.log(data.message);
+      toast.error(data.message);
+    } else if (error.request) {
+      toast(error.request.status);
     } else {
       toast.error(error.message);
-    } 
+    }
     return Promise.reject(error);
   },
 );
@@ -43,9 +42,9 @@ axios.interceptors.response.use(
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 const request = {
-  get: <T>(url: string) => axios.get<T>(url).then(responseBody),
+  get: <T>(url: string) => axios.get(url).then(responseBody<T>),
   post: <T>(url: string, body?: object) =>
-    axios.post<T>(url, body).then(responseBody),
+    axios.post(url, body).then(responseBody<T>),
   delete: (url: string) => axios.delete(url).then(responseBody),
 };
 
@@ -57,8 +56,9 @@ const auth = {
 
 const boards = {
   fetchBoards: () => request.get<Array<TBoard>>(BOARDS),
-  createBoard: (data: { title: FormDataEntryValue | null }) =>
+  createBoard: (data: { name: FormDataEntryValue | null }) =>
     request.post(BOARDS, data),
+  fetchBoardById: (id: string) => request.get(`${id}`),
   deleleBoard: (id: string) => request.delete(`${BOARDS}/${id}`),
   addListToBoard: (boardId: string, data: TForm) =>
     request.post<TList>(`${BOARDS}/${boardId}${LISTS}`, data),

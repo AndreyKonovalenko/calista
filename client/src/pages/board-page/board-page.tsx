@@ -9,19 +9,18 @@ import {
   styled,
   Toolbar,
   List,
-  ListItem,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import MuiPaper, { PaperProps as MuiPaperProps } from '@mui/material/Paper';
 import { useState } from 'react';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useParams } from 'react-router';
-import BoardList from '../../components/boards-page-components/board-list/board-list';
+// import BoardList from '../../components/boards-page-components/board-list/board-list';
 import { HEADER, drawerWidth } from '../../layout/config-layout';
 import BoardDrawer from '../../components/boards-page-components/board-drawer/board-drawer';
 import { useNavigate } from 'react-router';
 import { TO_MAIN } from '../../utils/route-constants';
-import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import api from '../../utils/calista-api';
 import { TitleTextAreaStyled } from '../../components/boards-page-components/boards-page-styled-elements/boards-page-styled-elements';
 
@@ -68,14 +67,26 @@ const ContentPaperBar = styled(MuiPaper, {
   }),
 }));
 
+const useBoardById = (id: string) => {
+  return useQuery({
+    queryKey: ['boardById', id],
+    queryFn: () => api.boards.fetchBoardById(id),
+  });
+};
+
 const BoardPage = (): JSX.Element => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [addListEditMode, setAddListEditMode] = useState(false);
   const [newListTitle, setNewListTitle] = useState('');
   const { id } = useParams();
+  console.log(id);
+  const { data } = useBoardById(id as string);
+  console.log(data);
+
   const { spacing } = useTheme();
   const queryClient = useQueryClient();
+
   const { mutate } = useMutation({
     mutationFn: api.boards.deleleBoard,
     onSuccess: () => {
@@ -177,7 +188,7 @@ const BoardPage = (): JSX.Element => {
             flexDirection: 'row',
           }}
         >
-          <ListItem>
+          {/* <ListItem>
             <BoardList title="to Do" id="test222_id" />
           </ListItem>
           <ListItem>
@@ -203,7 +214,7 @@ const BoardPage = (): JSX.Element => {
           </ListItem>
           <ListItem>
             <BoardList title="in progress last" id="test222_id" />
-          </ListItem>
+          </ListItem> */}
 
           {AddList}
         </List>

@@ -10,7 +10,7 @@ import { Link as RouterLink } from 'react-router';
 import { TO_BOARDS } from '../../../utils/route-constants';
 
 type TBoradCardProps = {
-  title: string;
+  name: string;
   id: string;
 };
 
@@ -28,7 +28,7 @@ const cardActionAreaStyled = {
 };
 
 const BoardCard = (props: TBoradCardProps) => {
-  const { title, id } = props;
+  const { name, id } = props;
   return (
     <Link
       component={RouterLink}
@@ -46,7 +46,7 @@ const BoardCard = (props: TBoradCardProps) => {
                 color: theme.palette.text.primary,
               })}
             >
-              {title}
+              {name}
             </Typography>
           </CardContent>
         </CardActionArea>

@@ -3,8 +3,8 @@
 
 export type TBoard = {
   _id: string;
-  title: string;
-  creater_id: string;
+  name: string;
+  createrId: string;
   lists: Array<string>;
 };
 

@@ -4,7 +4,7 @@ import expressLoader from '../../loaders/express-loader';
 import { clearCollections, dbConnect, dbDisconnect } from './db-handler';
 import { Types } from 'mongoose';
 
-import { BoardModel } from '../../models/BoardModel';
+import { BoardModel, IBoard } from '../../models/BoardModel';
 import { ListModel } from '../../models/ListModel';
 import { CardModel } from '../../models/CardModel';
 import {
@@ -106,6 +106,19 @@ describe('BoardsController', () => {
         .set('Cookie', [`jwt=${token}`]);
       expect(response.status).toBe(200);
       expect(response.body).toEqual([]);
+    });
+
+    it('should create new board', async () => {
+      type TTestBoard = Omit<IBoard, 'createrId' | 'lists'>;
+      const data: TTestBoard = {
+        name: 'Test Board 2',
+      };
+      const response = await request(app)
+        .post('/api/boards/')
+        .set('Cookie', [`jwt=${token}`])
+        .send(data);
+      expect(response.status).toBe(200);
+      expect(await BoardModel.findOne({ name: 'Test Board 2' })).not.toBeNull();
     });
   });
 });

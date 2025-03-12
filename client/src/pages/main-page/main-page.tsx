@@ -49,7 +49,7 @@ const MainPage = () => {
   ) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    mutate({ title: data.get('text') });
+    mutate({ name: data.get('text') });
   };
   const handleAddBoardMenuOpen = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -63,7 +63,7 @@ const MainPage = () => {
   useEscapeKey(handleAddBoardMenuClose);
   const boards = data
     ? data.map((element: TBoard) => (
-        <BoardCard title={element.title} id={element._id} key={uuidv4()} />
+        <BoardCard name={element.name} id={element._id} key={uuidv4()} />
       ))
     : [];
 

@@ -34,7 +34,7 @@ export const addBoard = async (
 ): Promise<void> => {
   const { user } = req as CustomRequest;
   const data: IBoard = {
-    name: req.body.title,
+    name: req.body.name,
     createrId: user._id,
     lists: [],
   };
