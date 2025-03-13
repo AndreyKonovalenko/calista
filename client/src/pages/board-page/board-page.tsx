@@ -81,14 +81,12 @@ const BoardPage = (): JSX.Element => {
   const [newListTitle, setNewListTitle] = useState('');
   const { id } = useParams();
   console.log(id);
-  const { data } = useBoardById(id as string);
-  console.log(data);
-
+  const  { data, isSuccess} = useBoardById(id as string);
   const { spacing } = useTheme();
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
-    mutationFn: api.boards.deleleBoard,
+    mutationFn: api.boards.deleteBoard,
     onSuccess: () => {
       return queryClient.invalidateQueries({
         queryKey: ['boards'],
@@ -159,7 +157,7 @@ const BoardPage = (): JSX.Element => {
       <ContentPaperBar open={open}>
         <Toolbar>
           <Typography variant="h6" component="div" noWrap sx={{ flexGrow: 1 }}>
-            board name placeholder {id}
+           {isSuccess? data.name: ''}
           </Typography>
           <IconButton
             color="inherit"

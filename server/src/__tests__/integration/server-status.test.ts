@@ -12,3 +12,11 @@ describe('get /status', () => {
     expect(response.status).toBe(200);
   });
 });
+
+describe("NOT FOUND", () => {
+  it('should return not found Error if url is wrong', async ()=> {
+    const response = await request(app).get('/boards/api/bords/');
+    expect(response.body.message).toBe('path /boards/api/bords/ not found')
+    expect(response.status).toBe(404)
+  })
+})

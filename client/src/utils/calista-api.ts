@@ -42,9 +42,9 @@ axios.interceptors.response.use(
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 const request = {
-  get: <T>(url: string) => axios.get(url).then(responseBody<T>),
+  get: <T>(url: string) => axios.get<T>(url).then(responseBody),
   post: <T>(url: string, body?: object) =>
-    axios.post(url, body).then(responseBody<T>),
+    axios.post<T>(url, body).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody),
 };
 
@@ -57,9 +57,9 @@ const auth = {
 const boards = {
   fetchBoards: () => request.get<Array<TBoard>>(BOARDS),
   createBoard: (data: { name: FormDataEntryValue | null }) =>
-    request.post(BOARDS, data),
-  fetchBoardById: (id: string) => request.get(`${id}`),
-  deleleBoard: (id: string) => request.delete(`${BOARDS}/${id}`),
+    request.post<void>(BOARDS, data),
+  fetchBoardById: (id: string) => request.get<TBoard>(`${BOARDS}/${id}`),
+  deleteBoard: (id: string) => request.delete(`${BOARDS}/${id}`),
   addListToBoard: (boardId: string, data: TForm) =>
     request.post<TList>(`${BOARDS}/${boardId}${LISTS}`, data),
 };
