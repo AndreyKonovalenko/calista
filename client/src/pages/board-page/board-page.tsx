@@ -6,46 +6,25 @@ import {
   useTheme,
   Button,
   IconButton,
-  styled,
   Toolbar,
   List,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import MuiPaper, { PaperProps as MuiPaperProps } from '@mui/material/Paper';
 import { useState } from 'react';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useParams } from 'react-router';
-// import BoardList from '../../components/boards-page-components/board-list/board-list';
-import { HEADER, drawerWidth } from '../../layout/config-layout';
-import BoardDrawer from '../../components/boards-page-components/board-drawer/board-drawer';
 import { useNavigate } from 'react-router';
+import CloseIcon from '@mui/icons-material/Close';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import api from '../../utils/calista-api';
+import BoardDrawer from '../../components/boards-page-components/board-drawer/board-drawer';
+// import BoardList from '../../components/boards-page-components/board-list/board-list';
+import { HEADER } from '../../layout/config-layout';
 import { TO_MAIN } from '../../utils/route-constants';
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
-import api from '../../utils/calista-api';
-import { TitleTextAreaStyled } from '../../components/boards-page-components/boards-page-styled-elements/boards-page-styled-elements';
-import BoardsPageContent from '../../components/boards-page-components/boards-page-styled-components/boards-page-content';
-
-
-interface PaperProps extends MuiPaperProps {
-  open?: boolean;
-}
-const ContentPaperBar = styled(MuiPaper, {
-  shouldForwardProp: prop => prop !== 'open',
-})<PaperProps>(({ theme, open }) => ({
-  width: '100%',
-  position: 'absolute',
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
+import {
+  TitleTextAreaStyled,
+  BoardsPageContent,
+  BoardsPageContentPaperBar,
+} from '../../components/boards-page-components/boards-page-styled-elements/boards-page-styled-elements';
 
 const useBoardById = (id: string) => {
   return useQuery({
@@ -61,7 +40,7 @@ const BoardPage = (): JSX.Element => {
   const [newListTitle, setNewListTitle] = useState('');
   const { id } = useParams();
   console.log(id);
-  const  { data, isSuccess} = useBoardById(id as string);
+  const { data, isSuccess } = useBoardById(id as string);
   const { spacing } = useTheme();
   const queryClient = useQueryClient();
 
@@ -134,10 +113,10 @@ const BoardPage = (): JSX.Element => {
         flexDirection: 'column',
       }}
     >
-      <ContentPaperBar open={open}>
+      <BoardsPageContentPaperBar open={open}>
         <Toolbar>
           <Typography variant="h6" component="div" noWrap sx={{ flexGrow: 1 }}>
-           {isSuccess? data.name: ''}
+            {isSuccess ? data.name : ''}
           </Typography>
           <IconButton
             color="inherit"
@@ -148,7 +127,7 @@ const BoardPage = (): JSX.Element => {
             <MoreHorizIcon fontSize="medium" />
           </IconButton>
         </Toolbar>
-      </ContentPaperBar>
+      </BoardsPageContentPaperBar>
       <BoardsPageContent
         open={open}
         sx={{ mt: `${HEADER.H_DESKTOP}px`, position: 'relative' }}
