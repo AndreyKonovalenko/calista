@@ -1,4 +1,5 @@
 import { createTheme } from '@mui/material';
+import { Theme } from '@mui/material';
 
 declare module '@mui/material/styles' {
   interface Palette {
@@ -11,7 +12,7 @@ declare module '@mui/material/styles' {
   }
 }
 
-export const theme = createTheme({
+export const theme:Theme = createTheme({
   typography: {
     fontFamily: 'Chakra Petch',
   },

@@ -23,28 +23,8 @@ import { TO_MAIN } from '../../utils/route-constants';
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import api from '../../utils/calista-api';
 import { TitleTextAreaStyled } from '../../components/boards-page-components/boards-page-styled-elements/boards-page-styled-elements';
+import BoardsPageContent from '../../components/boards-page-components/boards-page-styled-components/boards-page-content';
 
-const Content = styled('div', {
-  shouldForwardProp: prop => prop !== 'open',
-})<{
-  open?: boolean;
-}>(({ theme, open }) => ({
-  flexGrow: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  width: '100%',
-  transition: theme.transitions.create(['margin', 'width'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
 
 interface PaperProps extends MuiPaperProps {
   open?: boolean;
@@ -169,7 +149,7 @@ const BoardPage = (): JSX.Element => {
           </IconButton>
         </Toolbar>
       </ContentPaperBar>
-      <Content
+      <BoardsPageContent
         open={open}
         sx={{ mt: `${HEADER.H_DESKTOP}px`, position: 'relative' }}
       >
@@ -216,7 +196,7 @@ const BoardPage = (): JSX.Element => {
 
           {AddList}
         </List>
-      </Content>
+      </BoardsPageContent>
       <BoardDrawer
         open={open}
         handleDrawerClose={handleDrawerClose}

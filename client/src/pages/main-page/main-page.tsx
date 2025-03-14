@@ -8,31 +8,23 @@ import {
   Divider,
   Typography,
   Button,
-  Popper,
-  Fade,
-  Stack,
-  TextField,
-  Paper,
+  Stack
 } from '@mui/material';
 import { Person } from '@mui/icons-material';
 import BoardCard from '../../components/main-page-components/board-card/board-card';
+import AddBoardPopper from '../../components/main-page-components/add-baard-popper/add-board-popper';
 import { v4 as uuidv4 } from 'uuid';
 import { TBoard } from '../../services/boards/board-store';
 // import useSse from '../../hooks/useSse';
 import { useEscapeKey } from '../../hooks/use-escape-key';
 
-const useBoards = () => {
-  return useQuery({
+const MainPage = () => {
+  // useSse();
+  const queryClient = useQueryClient();
+  const { data } = useQuery({
     queryKey: ['boards'],
     queryFn: api.boards.fetchBoards,
   });
-};
-
-const MainPage = () => {
-  // useSse();
-
-  const queryClient = useQueryClient();
-  const { data } = useBoards();
   const { mutate } = useMutation({
     mutationFn: api.boards.createBoard,
     onSuccess: () => {
@@ -44,7 +36,7 @@ const MainPage = () => {
   });
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const handleCreateNewBoardSubmit = (
+    const handleCreateNewBoard = (
     event: React.FocusEvent<HTMLFormElement>,
   ) => {
     event.preventDefault();
@@ -79,52 +71,11 @@ const MainPage = () => {
   //   }
   // },[])
 
-  const AddBoardPopper = (
-    <Popper
-      sx={{ zIndex: 1200 }}
-      open={open}
-      anchorEl={anchorEl}
-      placement={'right'}
-      transition
-    >
-      {({ TransitionProps }) => (
-        <Fade {...TransitionProps} timeout={350}>
-          <Paper sx={{ m: 2 }}>
-            <Typography sx={{ p: 2 }}>Create Board</Typography>
-            <Box
-              component="form"
-              onSubmit={handleCreateNewBoardSubmit}
-              noValidate
-              sx={{ m: 2 }}
-            >
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="text"
-                label="Board title"
-                name="text"
-                autoComplete="text"
-                autoFocus
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Create
-              </Button>
-            </Box>
-          </Paper>
-        </Fade>
-      )}
-    </Popper>
-  );
+ 
 
   const AddBoradCard = (
     <>
-      {AddBoardPopper}
+      <AddBoardPopper open={open} anchorEl={anchorEl} handleCreateNewBoard={handleCreateNewBoard}/>
       <Card sx={{ minWidth: 180, minHeight: 100 }}>
         <Button
           sx={{ minHeight: 'inherit' }}
