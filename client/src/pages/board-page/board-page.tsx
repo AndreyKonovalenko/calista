@@ -14,51 +14,34 @@ import { useParams } from 'react-router';
 import { useNavigate } from 'react-router';
 import CloseIcon from '@mui/icons-material/Close';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import api from '../../utils/calista-api';
 import BoardDrawer from '../../components/boards-page-components/board-drawer/board-drawer';
 // import BoardList from '../../components/boards-page-components/board-list/board-list';
 import { HEADER } from '../../layout/config-layout';
 import { TO_MAIN } from '../../utils/route-constants';
-import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import {
   TitleTextAreaStyled,
   BoardsPageContent,
   BoardsPageContentPaperBar,
 } from '../../components/boards-page-components/boards-page-styled-elements/boards-page-styled-elements';
-
-const useBoardById = (id: string) => {
-  return useQuery({
-    queryKey: ['boardById', id],
-    queryFn: () => api.boards.fetchBoardById(id),
-  });
-};
+import {
+  useFetchBoardById,
+  useDeleteBoard,
+} from '../../api/boards-api-queries';
 
 const BoardPage = (): JSX.Element => {
   const navigate = useNavigate();
+  const { spacing } = useTheme();
+  const { id } = useParams();
+  const { data, isSuccess } = useFetchBoardById(id);
+  const { mutate } = useDeleteBoard();
   const [open, setOpen] = useState(false);
   const [addListEditMode, setAddListEditMode] = useState(false);
   const [newListTitle, setNewListTitle] = useState('');
-  const { id } = useParams();
-  console.log(id);
-  const { data, isSuccess } = useBoardById(id as string);
-  const { spacing } = useTheme();
-  const queryClient = useQueryClient();
-
-  const { mutate } = useMutation({
-    mutationFn: api.boards.deleteBoard,
-    onSuccess: () => {
-      return queryClient.invalidateQueries({
-        queryKey: ['boards'],
-        exact: true,
-      });
-    },
-  });
 
   const handleDeleteBoard = (): void => {
     mutate(id as string);
     navigate(TO_MAIN);
   };
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };

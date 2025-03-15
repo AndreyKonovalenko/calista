@@ -13,7 +13,7 @@ import { useAuthStore } from '../../services/auth/auth-store';
 import { useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
-import api from '../../utils/calista-api';
+import api from '../../api/calista-api';
 import { TO_MAIN } from '../../utils/route-constants';
 
 export default function LoginPage() {

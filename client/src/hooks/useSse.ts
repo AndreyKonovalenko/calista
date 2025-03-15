@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import api from '../utils/calista-api';
+import api from '../api/calista-api';
 
 const useSse = () => {
   useEffect(() => {

@@ -3,8 +3,8 @@ import { toast } from 'react-toastify';
 import { TAuthState } from '../services/auth/auth-store';
 import { TBoard } from '../services/boards/board-store';
 import { TList } from '../services/lists/list-store';
-import { TForm } from './types';
-import validEnv from './utils';
+import { TForm } from '../utils/types';
+import validEnv from '../utils/utils';
 
 const BASE_URL = validEnv(process.env.BASE_URL);
 const LOGIN = validEnv(process.env.LOGIN);
@@ -45,7 +45,7 @@ const request = {
   get: <T>(url: string) => axios.get<T>(url).then(responseBody),
   post: <T>(url: string, body?: object) =>
     axios.post<T>(url, body).then(responseBody),
-  delete: (url: string) => axios.delete(url).then(responseBody),
+  delete: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 };
 
 const auth = {
@@ -58,8 +58,10 @@ const boards = {
   fetchBoards: () => request.get<Array<TBoard>>(BOARDS),
   createBoard: (data: { name: FormDataEntryValue | null }) =>
     request.post<void>(BOARDS, data),
-  fetchBoardById: (id: string) => request.get<TBoard>(`${BOARDS}/${id}`),
-  deleteBoard: (id: string) => request.delete(`${BOARDS}/${id}`),
+  fetchBoardById: (id: string | undefined) =>
+    request.get<TBoard>(`${BOARDS}/${id}`),
+  deleteBoard: (id: string | undefined) =>
+    request.delete<void>(`${BOARDS}/${id}`),
   addListToBoard: (boardId: string, data: TForm) =>
     request.post<TList>(`${BOARDS}/${boardId}${LISTS}`, data),
 };

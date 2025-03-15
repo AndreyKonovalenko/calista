@@ -8,7 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '../../services/auth/auth-store';
 import { Link as RouterLink } from 'react-router';
 import Link from '@mui/material/Link';
-import api from '../../utils/calista-api';
+import api from '../../api/calista-api';
 
 import { TO_LOGIN, TO_MAIN } from '../../utils/route-constants';
 import { Stack, Typography } from '@mui/material';

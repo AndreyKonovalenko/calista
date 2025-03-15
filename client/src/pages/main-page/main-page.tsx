@@ -1,15 +1,8 @@
 import React from 'react';
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import api from '../../utils/calista-api';
-import {
-  Box,
-  Card,
-  Divider,
-  Typography,
-  Button,
-  Stack
-} from '@mui/material';
+import api from '../../api/calista-api';
+import { Box, Card, Divider, Typography, Button, Stack } from '@mui/material';
 import { Person } from '@mui/icons-material';
 import BoardCard from '../../components/main-page-components/board-card/board-card';
 import AddBoardPopper from '../../components/main-page-components/add-baard-popper/add-board-popper';
@@ -36,9 +29,7 @@ const MainPage = () => {
   });
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-    const handleCreateNewBoard = (
-    event: React.FocusEvent<HTMLFormElement>,
-  ) => {
+  const handleCreateNewBoard = (event: React.FocusEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     mutate({ name: data.get('text') });
@@ -71,11 +62,13 @@ const MainPage = () => {
   //   }
   // },[])
 
- 
-
   const AddBoradCard = (
     <>
-      <AddBoardPopper open={open} anchorEl={anchorEl} handleCreateNewBoard={handleCreateNewBoard}/>
+      <AddBoardPopper
+        open={open}
+        anchorEl={anchorEl}
+        handleCreateNewBoard={handleCreateNewBoard}
+      />
       <Card sx={{ minWidth: 180, minHeight: 100 }}>
         <Button
           sx={{ minHeight: 'inherit' }}
