@@ -3,7 +3,6 @@ import { toast } from 'react-toastify';
 import { TAuthState } from '../services/auth/auth-store';
 import { TBoard } from '../services/boards/board-store';
 import { TList } from '../services/lists/list-store';
-import { TForm } from '../utils/types';
 import validEnv from '../utils/utils';
 
 const BASE_URL = validEnv(process.env.BASE_URL);
@@ -15,6 +14,9 @@ const AUTH = validEnv(process.env.AUTH);
 const SSE = validEnv(process.env.SSE);
 axios.defaults.baseURL = BASE_URL;
 
+type TData = {
+  [key: string]: FormDataEntryValue | null | string | undefined;
+};
 type TCustomErrorResponse = {
   message: string;
   stack?: string;
@@ -46,25 +48,41 @@ const request = {
   post: <T>(url: string, body?: object) =>
     axios.post<T>(url, body).then(responseBody),
   delete: <T>(url: string) => axios.delete<T>(url).then(responseBody),
+  put: <T>(url: string, body?: object) =>
+    axios.post<T>(url, body).then(responseBody),
 };
 
 const auth = {
   fetchUser: () => request.get<TAuthState>(AUTH),
-  login: (data: TForm) => request.post<TAuthState>(LOGIN, data),
+  login: (data: TData) => request.post<TAuthState>(LOGIN, data),
   logout: () => request.post<void>(LOGOUT),
 };
 
 const boards = {
   fetchBoards: () => request.get<Array<TBoard>>(BOARDS),
-  createBoard: (data: { name: FormDataEntryValue | null }) =>
-    request.post<void>(BOARDS, data),
+  createBoard: (data: TData) => request.post<void>(BOARDS, data),
   fetchBoardById: (id: string | undefined) =>
     request.get<TBoard>(`${BOARDS}/${id}`),
   deleteBoard: (id: string | undefined) =>
     request.delete<void>(`${BOARDS}/${id}`),
-  addListToBoard: (boardId: string, data: TForm) =>
-    request.post<TList>(`${BOARDS}/${boardId}${LISTS}`, data),
+  updateBoard: (id: string | undefined, data: TData) =>
+    request.put<void>(`${BOARDS}/${id}`, data),
 };
+
+const lists = {
+  cerateList: (data: TData) => request.post<void>(LISTS, data),
+  fetchListById: (id: string | undefined) => {
+    request.get<TList>(`${LISTS}/${id}`);
+  },
+  deletList: (id: string | undefined) => request.delete<void>(`${LISTS}/${id}`),
+  updateList: (id: string | undefined, data: TData) =>
+    request.put<void>(`${LISTS}/${id}`, data),
+};
+
+// listsRouter.post('/', protect, addList);
+// listsRouter.get('/:id', protect, getList);
+// listsRouter.put('/:id', protect, updateList);
+// listsRouter.delete('/:id', protect, deleteList);
 
 const sse = {
   setConnection: () =>
@@ -74,6 +92,7 @@ const sse = {
 const api = {
   auth,
   boards,
+  lists,
   sse,
 };
 

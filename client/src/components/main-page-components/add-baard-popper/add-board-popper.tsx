@@ -40,7 +40,7 @@ const AddBoardPopper = (props: TBoardPopper) => {
                 required
                 fullWidth
                 id="text"
-                label="Board title"
+                label="Board name"
                 name="text"
                 autoComplete="text"
                 autoFocus

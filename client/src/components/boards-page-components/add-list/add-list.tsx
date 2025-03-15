@@ -7,11 +7,14 @@ type TAddList = {
   handleCreateNewList: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 const AddList = (props: TAddList) => {
+  const { handleCreateNewList } = props;
   const { spacing } = useTheme();
   const [newListTitle, setNewListTitle] = useState('');
   const [addListEditMode, setAddListEditMode] = useState(false);
   return addListEditMode ? (
     <Box
+      component="form"
+      onSubmit={handleCreateNewList}
       sx={{
         width: spacing(34),
         height: '100%',
@@ -30,13 +33,18 @@ const AddList = (props: TAddList) => {
         onFocus={(event: React.FocusEvent<HTMLTextAreaElement>) => {
           event.target.select();
         }}
-        onBlur={() => setAddListEditMode(false)}
+        name="listName"
+        id="listName"
       />
       <Box
         sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left' }}
       >
-        <Button>Add List</Button>
-        <IconButton color="inherit" aria-label="list menu" onClick={() => {}}>
+        <Button type="submit">Add List</Button>
+        <IconButton
+          color="inherit"
+          aria-label="list menu"
+          onClick={() => setAddListEditMode(false)}
+        >
           <CloseIcon fontSize="medium" />
         </IconButton>
       </Box>

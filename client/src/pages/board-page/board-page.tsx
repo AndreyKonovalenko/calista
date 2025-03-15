@@ -17,14 +17,15 @@ import {
   useFetchBoardById,
   useDeleteBoard,
 } from '../../api/boards-api-queries';
+import { useCreateList } from '../../api/lists-api-queries';
 
 const BoardPage = (): JSX.Element => {
   const navigate = useNavigate();
-
+  const [open, setOpen] = useState(false);
   const { id } = useParams();
   const { data, isSuccess } = useFetchBoardById(id);
   const deleteBoardQuery = useDeleteBoard();
-  const [open, setOpen] = useState(false);
+  const createList = useCreateList();
 
   const handleDeleteBoard = (): void => {
     deleteBoardQuery.mutate(id);
@@ -40,7 +41,7 @@ const BoardPage = (): JSX.Element => {
   const handleCreateNewList = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    mutate({ name: data.get('text') });
+    createList.mutate({ name: data.get('listName'), boardId: id });
   };
 
   return (
@@ -111,7 +112,7 @@ const BoardPage = (): JSX.Element => {
             <BoardList title="in progress last" id="test222_id" />
           </ListItem> */}
 
-          <AddList />
+          <AddList handleCreateNewList={handleCreateNewList} />
         </List>
       </BoardsPageContent>
       <BoardDrawer

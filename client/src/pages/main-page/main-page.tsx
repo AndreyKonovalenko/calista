@@ -1,7 +1,5 @@
 import React from 'react';
-import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import api from '../../api/calista-api';
 import { Box, Card, Divider, Typography, Button, Stack } from '@mui/material';
 import { Person } from '@mui/icons-material';
 import BoardCard from '../../components/main-page-components/board-card/board-card';
@@ -10,25 +8,15 @@ import { v4 as uuidv4 } from 'uuid';
 import { TBoard } from '../../services/boards/board-store';
 // import useSse from '../../hooks/useSse';
 import { useEscapeKey } from '../../hooks/use-escape-key';
+import { useFetchBoards, useCreateBoard } from '../../api/boards-api-queries';
 
 const MainPage = () => {
   // useSse();
-  const queryClient = useQueryClient();
-  const { data } = useQuery({
-    queryKey: ['boards'],
-    queryFn: api.boards.fetchBoards,
-  });
-  const { mutate } = useMutation({
-    mutationFn: api.boards.createBoard,
-    onSuccess: () => {
-      return queryClient.invalidateQueries({
-        queryKey: ['boards'],
-        exact: true,
-      });
-    },
-  });
-  const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [open, setOpen] = useState(false);
+  const { data } = useFetchBoards();
+  const { mutate } = useCreateBoard();
+
   const handleCreateNewBoard = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);

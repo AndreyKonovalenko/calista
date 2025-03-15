@@ -1,9 +1,29 @@
 import api from './calista-api';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
+export const useFetchBoards = () => {
+  return useQuery({
+    queryKey: ['fetchBoards'],
+    queryFn: api.boards.fetchBoards,
+  });
+};
+
+export const useCreateBoard = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: api.boards.createBoard,
+    onSuccess: () => {
+      return queryClient.invalidateQueries({
+        queryKey: ['createBoard'],
+        exact: true,
+      });
+    },
+  });
+};
+
 export const useFetchBoardById = (boardId: string | undefined) => {
   return useQuery({
-    queryKey: ['boardById', boardId],
+    queryKey: ['fetchBoardById', boardId],
     queryFn: () => api.boards.fetchBoardById(boardId),
     enabled: !!boardId,
   });
@@ -15,7 +35,7 @@ export const useDeleteBoard = () => {
     mutationFn: api.boards.deleteBoard,
     onSuccess: () => {
       return queryClient.invalidateQueries({
-        queryKey: ['boards'],
+        queryKey: ['deleteBoard'],
         exact: true,
       });
     },
