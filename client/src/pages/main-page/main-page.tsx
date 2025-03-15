@@ -29,7 +29,7 @@ const MainPage = () => {
   });
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const handleCreateNewBoard = (event: React.FocusEvent<HTMLFormElement>) => {
+  const handleCreateNewBoard = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     mutate({ name: data.get('text') });

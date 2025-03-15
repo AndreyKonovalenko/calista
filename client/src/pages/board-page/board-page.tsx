@@ -1,25 +1,15 @@
 import React from 'react';
-import {
-  Box,
-  Paper,
-  Typography,
-  useTheme,
-  Button,
-  IconButton,
-  Toolbar,
-  List,
-} from '@mui/material';
+import { Box, Typography, IconButton, Toolbar, List } from '@mui/material';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router';
-import CloseIcon from '@mui/icons-material/Close';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import BoardDrawer from '../../components/boards-page-components/board-drawer/board-drawer';
+import AddList from '../../components/boards-page-components/add-list/add-list';
 // import BoardList from '../../components/boards-page-components/board-list/board-list';
 import { HEADER } from '../../layout/config-layout';
 import { TO_MAIN } from '../../utils/route-constants';
 import {
-  TitleTextAreaStyled,
   BoardsPageContent,
   BoardsPageContentPaperBar,
 } from '../../components/boards-page-components/boards-page-styled-elements/boards-page-styled-elements';
@@ -30,16 +20,14 @@ import {
 
 const BoardPage = (): JSX.Element => {
   const navigate = useNavigate();
-  const { spacing } = useTheme();
+
   const { id } = useParams();
   const { data, isSuccess } = useFetchBoardById(id);
-  const { mutate } = useDeleteBoard();
+  const deleteBoardQuery = useDeleteBoard();
   const [open, setOpen] = useState(false);
-  const [addListEditMode, setAddListEditMode] = useState(false);
-  const [newListTitle, setNewListTitle] = useState('');
 
   const handleDeleteBoard = (): void => {
-    mutate(id as string);
+    deleteBoardQuery.mutate(id);
     navigate(TO_MAIN);
   };
   const handleDrawerOpen = () => {
@@ -49,44 +37,11 @@ const BoardPage = (): JSX.Element => {
     setOpen(false);
   };
 
-  const AddList = addListEditMode ? (
-    <Box
-      sx={{
-        width: spacing(34),
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: spacing(1),
-      }}
-    >
-      <TitleTextAreaStyled
-        autoFocus
-        rows={1}
-        value={newListTitle}
-        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-          setNewListTitle(event.target.value);
-        }}
-        onFocus={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-          event.target.select();
-        }}
-        onBlur={() => setAddListEditMode(false)}
-      />
-      <Box
-        sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left' }}
-      >
-        <Button>Add List</Button>
-        <IconButton color="inherit" aria-label="list menu" onClick={() => {}}>
-          <CloseIcon fontSize="medium" />
-        </IconButton>
-      </Box>
-    </Box>
-  ) : (
-    <Paper sx={{ width: spacing(34), flexShrink: 0, height: spacing(4) }}>
-      <Button fullWidth={true} onClick={() => setAddListEditMode(true)}>
-        Add new list
-      </Button>
-    </Paper>
-  );
+  const handleCreateNewList = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    mutate({ name: data.get('text') });
+  };
 
   return (
     <Box
@@ -156,7 +111,7 @@ const BoardPage = (): JSX.Element => {
             <BoardList title="in progress last" id="test222_id" />
           </ListItem> */}
 
-          {AddList}
+          <AddList />
         </List>
       </BoardsPageContent>
       <BoardDrawer
