@@ -17,6 +17,11 @@ axios.defaults.baseURL = BASE_URL;
 type TData = {
   [key: string]: FormDataEntryValue | null | string | undefined;
 };
+
+type TPopulatedBoard = Omit<TBoard, 'lists'> & {
+  lists: Array<{ _id: string; name: string }>;
+};
+
 type TCustomErrorResponse = {
   message: string;
   stack?: string;
@@ -62,7 +67,7 @@ const boards = {
   fetchBoards: () => request.get<Array<TBoard>>(BOARDS),
   createBoard: (data: TData) => request.post<void>(BOARDS, data),
   fetchBoardById: (id: string | undefined) =>
-    request.get<TBoard>(`${BOARDS}/${id}`),
+    request.get<TPopulatedBoard>(`${BOARDS}/${id}`),
   deleteBoard: (id: string | undefined) =>
     request.delete<void>(`${BOARDS}/${id}`),
   updateBoard: (id: string | undefined, data: TData) =>

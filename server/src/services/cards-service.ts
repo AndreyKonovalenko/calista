@@ -21,7 +21,7 @@ export async function createCard(data: ICard) {
 }
 
 export async function findCardById(id: string) {
-  return CardModel.findById(new Types.ObjectId(id)).populate({
+  return await CardModel.findById(new Types.ObjectId(id)).populate({
     path: 'checkLists',
     select: 'name',
   });

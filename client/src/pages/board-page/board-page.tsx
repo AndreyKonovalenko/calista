@@ -1,12 +1,18 @@
-import React from 'react';
-import { Box, Typography, IconButton, Toolbar, List } from '@mui/material';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import {
+  Box,
+  Typography,
+  IconButton,
+  Toolbar,
+  List,
+  ListItem,
+} from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import BoardDrawer from '../../components/boards-page-components/board-drawer/board-drawer';
 import AddList from '../../components/boards-page-components/add-list/add-list';
-// import BoardList from '../../components/boards-page-components/board-list/board-list';
 import { HEADER } from '../../layout/config-layout';
 import { TO_MAIN } from '../../utils/route-constants';
 import {
@@ -18,8 +24,9 @@ import {
   useDeleteBoard,
 } from '../../api/boards-api-queries';
 import { useCreateList } from '../../api/lists-api-queries';
+import BoardList from '../../components/boards-page-components/board-list/board-list';
 
-const BoardPage = (): JSX.Element => {
+const BoardPage = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const { id } = useParams();
@@ -43,6 +50,16 @@ const BoardPage = (): JSX.Element => {
     const data = new FormData(event.currentTarget);
     createList.mutate({ name: data.get('listName'), boardId: id });
   };
+
+  const lists = data
+    ? data.lists.map(element => {
+        return (
+          <ListItem key={uuidv4()}>
+            <BoardList name={element.name} id={element._id} />
+          </ListItem>
+        );
+      })
+    : [];
 
   return (
     <Box
@@ -84,34 +101,7 @@ const BoardPage = (): JSX.Element => {
             flexDirection: 'row',
           }}
         >
-          {/* <ListItem>
-            <BoardList title="to Do" id="test222_id" />
-          </ListItem>
-          <ListItem>
-            <BoardList title="in progress" id="test222_id" />
-          </ListItem>
-          <ListItem>
-            <BoardList title="to Do" id="test222_id" />
-          </ListItem>
-          <ListItem>
-            <BoardList title="in progress" id="test222_id" />
-          </ListItem>
-          <ListItem>
-            <BoardList title="to Do" id="test222_id" />
-          </ListItem>
-          <ListItem>
-            <BoardList title="in progress" id="test222_id" />
-          </ListItem>
-          <ListItem>
-            <BoardList title="in progress" id="test222_id" />
-          </ListItem>
-          <ListItem>
-            <BoardList title="to Do" id="test222_id" />
-          </ListItem>
-          <ListItem>
-            <BoardList title="in progress last" id="test222_id" />
-          </ListItem> */}
-
+          {lists}
           <AddList handleCreateNewList={handleCreateNewList} />
         </List>
       </BoardsPageContent>

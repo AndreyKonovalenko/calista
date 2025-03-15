@@ -16,9 +16,9 @@ import CardComponent from '../card-component/card-component';
 import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-menu';
 import { useState } from 'react';
 
-const BoardList = (props: { title: string; id: string }) => {
-  const { title } = props;
-  const [listTitle, setListTitle] = useState(title);
+const BoardList = (props: { name: string; id: string }) => {
+  const { name } = props;
+  const [listTitle, setListTitle] = useState(name);
   const [editing, setEditing] = useState(false);
   const { spacing, palette } = useTheme();
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];

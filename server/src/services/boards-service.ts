@@ -24,13 +24,7 @@ export async function findBoardById(id: string) {
   return await BoardModel.findById(new Types.ObjectId(id))
     .populate({
       path: 'lists',
-      populate: {
-        path: 'cards',
-        populate: {
-          path: 'checkLists',
-          select: 'name',
-        },
-      },
+      select: ['name', 'pos'],
     })
     .exec();
 }
