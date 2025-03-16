@@ -15,11 +15,11 @@ const SSE = validEnv(process.env.SSE);
 axios.defaults.baseURL = BASE_URL;
 
 type TData = {
-  [key: string]: FormDataEntryValue | null | string | undefined;
+  [key: string]: FormDataEntryValue | null | string | undefined | number;
 };
 
 type TPopulatedBoard = Omit<TBoard, 'lists'> & {
-  lists: Array<{ _id: string; name: string }>;
+  lists: Array<{ _id: string; name: string; pos: number }>;
 };
 
 type TCustomErrorResponse = {

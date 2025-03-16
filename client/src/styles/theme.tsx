@@ -12,7 +12,14 @@ declare module '@mui/material/styles' {
   }
 }
 
-export const theme:Theme = createTheme({
+export const theme: Theme = createTheme({
+  components: {
+    MuiStack: {
+      defaultProps: {
+        useFlexGap: true,
+      },
+    },
+  },
   typography: {
     fontFamily: 'Chakra Petch',
   },

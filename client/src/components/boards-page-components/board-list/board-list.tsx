@@ -74,10 +74,26 @@ const BoardList = (props: {
                   event.target.select();
                 }}
                 onBlur={() => setEditing(false)}
+                onKeyDown={(
+                  event: React.KeyboardEvent<HTMLTextAreaElement>,
+                ) => {
+                  if (event.key === 'Enter') {
+                    event.preventDefault();
+                  }
+                }}
               />
             ) : (
               <Box onClick={() => setEditing(true)} sx={{ cursor: 'pointer' }}>
-                <Typography variant="h6">{listTitle}</Typography>
+                <Typography
+                  sx={{
+                    overflow: 'hidden',
+                    overflowWrap: 'anywhere',
+                    resize: 'none',
+                  }}
+                  variant="h6"
+                >
+                  {listTitle}
+                </Typography>
               </Box>
             )}
             <BoardListActionMenu id={id} handleDeleteList={handleDeleteList} />

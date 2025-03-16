@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Typography,
-  IconButton,
-  Toolbar,
-  List,
-  ListItem,
-} from '@mui/material';
+import { Box, Typography, IconButton, Toolbar, Stack } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router';
@@ -48,8 +41,19 @@ const BoardPage = () => {
 
   const handleCreateNewList = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    createListQuery.mutate({ name: data.get('listName'), boardId: id });
+    let pos = 16384;
+    if (data && data?.lists.length > 0) {
+      // when add element in the end of array
+      console.log(data.lists);
+      const last = data.lists[data.lists.length - 1].pos;
+      pos = pos + last;
+    }
+    const formData = new FormData(event.currentTarget);
+    createListQuery.mutate({
+      name: formData.get('listName'),
+      boardId: id,
+      pos: pos,
+    });
   };
 
   const handleDeleteList = (listId: string | undefined) => {
@@ -59,13 +63,12 @@ const BoardPage = () => {
   const lists = data
     ? data.lists.map(element => {
         return (
-          <ListItem key={uuidv4()}>
-            <BoardList
-              name={element.name}
-              id={element._id}
-              handleDeleteList={handleDeleteList}
-            />
-          </ListItem>
+          <BoardList
+            key={uuidv4()}
+            name={element.name}
+            id={element._id}
+            handleDeleteList={handleDeleteList}
+          />
         );
       })
     : [];
@@ -97,7 +100,9 @@ const BoardPage = () => {
         open={open}
         sx={{ mt: `${HEADER.H_DESKTOP}px`, position: 'relative' }}
       >
-        <List
+        <Stack
+          direction="row"
+          spacing={2}
           sx={{
             left: 0,
             right: 0,
@@ -107,13 +112,13 @@ const BoardPage = () => {
             display: 'flex',
             overflowX: 'auto',
             position: 'absolute',
-            flexDirection: 'row',
             justifyContent: 'flex-start',
+            alignItems: 'stretch',
           }}
         >
           {lists}
           <AddList handleCreateNewList={handleCreateNewList} />
-        </List>
+        </Stack>
       </BoardsPageContent>
       <BoardDrawer
         open={open}
@@ -125,3 +130,19 @@ const BoardPage = () => {
 };
 
 export default BoardPage;
+
+{
+  /* <List
+sx={{
+  left: 0,
+  right: 0,
+  bottom: 0,
+  top: 0,
+  p: 2,
+  display: 'flex',
+  overflowX: 'auto',
+  position: 'absolute',
+  flexDirection: 'row',
+  justifyContent: 'flex-start',
+}} */
+}

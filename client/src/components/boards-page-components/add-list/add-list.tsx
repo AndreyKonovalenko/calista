@@ -9,12 +9,14 @@ type TAddList = {
 const AddList = (props: TAddList) => {
   const { handleCreateNewList } = props;
   const { spacing } = useTheme();
-  const [newListTitle, setNewListTitle] = useState('');
+  const [newListName, setNewListName] = useState('');
   const [addListEditMode, setAddListEditMode] = useState(false);
   return addListEditMode ? (
     <Box
       component="form"
-      onSubmit={handleCreateNewList}
+      onSubmit={() => {
+        handleCreateNewList();
+      }}
       sx={{
         width: spacing(34),
         height: '100%',
@@ -26,9 +28,9 @@ const AddList = (props: TAddList) => {
       <TitleTextAreaStyled
         autoFocus
         rows={1}
-        value={newListTitle}
+        value={newListName}
         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-          setNewListTitle(event.target.value);
+          setNewListName(event.target.value);
         }}
         onFocus={(event: React.FocusEvent<HTMLTextAreaElement>) => {
           event.target.select();
