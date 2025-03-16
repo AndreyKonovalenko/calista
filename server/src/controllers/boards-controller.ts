@@ -1,4 +1,3 @@
-import { Types } from 'mongoose';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { HydratedDocument, DeleteResult } from 'mongoose';
@@ -11,11 +10,6 @@ import {
   findBoardById,
   updateBoardById,
 } from '../services/boards-service';
-
-type TPopulatedBoard = Omit<IBoard, 'lists'> & {
-  _id: Types.ObjectId;
-  list: Array<{ _id: Types.ObjectId; name: string; pos: number }>;
-};
 
 // GET borads/
 export const getBoards = async (
@@ -72,7 +66,6 @@ export const getBoard = async (
 };
 
 // PUT boards/:id
-
 export const upatedBoard = async (
   req: Request,
   res: Response,

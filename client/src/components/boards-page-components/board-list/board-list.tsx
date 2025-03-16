@@ -16,12 +16,17 @@ import CardComponent from '../card-component/card-component';
 import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-menu';
 import { useState } from 'react';
 
-const BoardList = (props: { name: string; id: string }) => {
-  const { name } = props;
+const BoardList = (props: {
+  name: string;
+  id: string;
+  handleDeleteList: (id: string | undefined) => void;
+}) => {
+  const { name, id, handleDeleteList } = props;
   const [listTitle, setListTitle] = useState(name);
   const [editing, setEditing] = useState(false);
   const { spacing, palette } = useTheme();
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
+
   const cardsList =
     cardsMoch.length > 0 ? (
       <List
@@ -75,7 +80,7 @@ const BoardList = (props: { name: string; id: string }) => {
                 <Typography variant="h6">{listTitle}</Typography>
               </Box>
             )}
-            <BoardListActionMenu />
+            <BoardListActionMenu id={id} handleDeleteList={handleDeleteList} />
           </Stack>
         </Box>
         {cardsList}

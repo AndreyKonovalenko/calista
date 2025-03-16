@@ -23,7 +23,7 @@ import {
   useFetchBoardById,
   useDeleteBoard,
 } from '../../api/boards-api-queries';
-import { useCreateList } from '../../api/lists-api-queries';
+import { useCreateList, useDeleteList } from '../../api/lists-api-queries';
 import BoardList from '../../components/boards-page-components/board-list/board-list';
 
 const BoardPage = () => {
@@ -32,7 +32,8 @@ const BoardPage = () => {
   const { id } = useParams();
   const { data, isSuccess } = useFetchBoardById(id);
   const deleteBoardQuery = useDeleteBoard();
-  const createList = useCreateList();
+  const createListQuery = useCreateList(id);
+  const deleteListQuery = useDeleteList(id);
 
   const handleDeleteBoard = (): void => {
     deleteBoardQuery.mutate(id);
@@ -48,14 +49,22 @@ const BoardPage = () => {
   const handleCreateNewList = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    createList.mutate({ name: data.get('listName'), boardId: id });
+    createListQuery.mutate({ name: data.get('listName'), boardId: id });
+  };
+
+  const handleDeleteList = (listId: string | undefined) => {
+    deleteListQuery.mutate(listId);
   };
 
   const lists = data
     ? data.lists.map(element => {
         return (
           <ListItem key={uuidv4()}>
-            <BoardList name={element.name} id={element._id} />
+            <BoardList
+              name={element.name}
+              id={element._id}
+              handleDeleteList={handleDeleteList}
+            />
           </ListItem>
         );
       })
@@ -99,6 +108,7 @@ const BoardPage = () => {
             overflowX: 'auto',
             position: 'absolute',
             flexDirection: 'row',
+            justifyContent: 'flex-start',
           }}
         >
           {lists}

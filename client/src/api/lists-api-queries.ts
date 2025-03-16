@@ -1,13 +1,13 @@
 import api from './calista-api';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
-export const useCreateList = () => {
+export const useCreateList = (boardId: string | undefined) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: api.lists.cerateList,
     onSuccess: () => {
       return queryClient.invalidateQueries({
-        queryKey: ['createList'],
+        queryKey: ['fetchBoardById', boardId],
         exact: true,
       });
     },
@@ -22,13 +22,13 @@ export const useFetchListById = (listId: string | undefined) => {
   });
 };
 
-export const useDeleteLest = () => {
+export const useDeleteList = (boardId: string | undefined) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: api.lists.deletList,
     onSuccess: () => {
       return queryClient.invalidateQueries({
-        queryKey: ['deleteList'],
+        queryKey: ['fetchBoardById', boardId],
         exact: true,
       });
     },

@@ -14,7 +14,7 @@ export const useCreateBoard = () => {
     mutationFn: api.boards.createBoard,
     onSuccess: () => {
       return queryClient.invalidateQueries({
-        queryKey: ['createBoard'],
+        queryKey: ['fetchBoards'],
         exact: true,
       });
     },
@@ -35,7 +35,7 @@ export const useDeleteBoard = () => {
     mutationFn: api.boards.deleteBoard,
     onSuccess: () => {
       return queryClient.invalidateQueries({
-        queryKey: ['deleteBoard'],
+        queryKey: ['fetchBoards'],
         exact: true,
       });
     },
