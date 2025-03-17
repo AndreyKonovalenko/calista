@@ -22,7 +22,7 @@ const BoardList = (props: {
   handleDeleteList: (id: string | undefined) => void;
 }) => {
   const { name, id, handleDeleteList } = props;
-  const [listTitle, setListTitle] = useState(name);
+  const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
   const { spacing, palette } = useTheme();
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
@@ -60,15 +60,20 @@ const BoardList = (props: {
           flexShrink: 0,
         }}
       >
-        <Box sx={{ pl: spacing(2), pt: spacing(2), pr: spacing(2) }}>
+        <Box sx={{ pl: spacing(2), pt: spacing(2), pr: spacing(2) }} 
+          component="form"
+          // onSubmit={}
+        >
           <Stack direction="row" justifyContent="space-between" spacing={2}>
             {editing ? (
               <TitleTextAreaStyled
+                name="listName"
+                id="listName"
                 autoFocus
                 rows={1}
-                value={listTitle}
+                value={listName}
                 onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                  setListTitle(event.target.value);
+                  setListName(event.target.value);
                 }}
                 onFocus={(event: React.FocusEvent<HTMLTextAreaElement>) => {
                   event.target.select();
@@ -92,7 +97,7 @@ const BoardList = (props: {
                   }}
                   variant="h6"
                 >
-                  {listTitle}
+                  {listName}
                 </Typography>
               </Box>
             )}

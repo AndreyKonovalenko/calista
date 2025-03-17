@@ -27,6 +27,7 @@ const BoardPage = () => {
   const deleteBoardQuery = useDeleteBoard();
   const createListQuery = useCreateList(id);
   const deleteListQuery = useDeleteList(id);
+  const updateListQuery;
 
   const handleDeleteBoard = (): void => {
     deleteBoardQuery.mutate(id);
@@ -55,6 +56,12 @@ const BoardPage = () => {
       pos: pos,
     });
   };
+
+  const handleUpadateListName = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const formData = new FormData(event.currentTarget);
+    
+  }
 
   const handleDeleteList = (listId: string | undefined) => {
     deleteListQuery.mutate(listId);
