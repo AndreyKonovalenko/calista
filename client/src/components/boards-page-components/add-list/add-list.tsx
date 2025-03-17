@@ -6,16 +6,19 @@ import CloseIcon from '@mui/icons-material/Close';
 type TAddList = {
   handleCreateNewList: (event: React.FormEvent<HTMLFormElement>) => void;
 };
+
 const AddList = (props: TAddList) => {
   const { handleCreateNewList } = props;
   const { spacing } = useTheme();
   const [newListName, setNewListName] = useState('');
   const [addListEditMode, setAddListEditMode] = useState(false);
+
   return addListEditMode ? (
     <Box
       component="form"
-      onSubmit={() => {
-        handleCreateNewList();
+      onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
+        handleCreateNewList(event);
+        setNewListName('');
       }}
       sx={{
         width: spacing(34),
@@ -35,8 +38,21 @@ const AddList = (props: TAddList) => {
         onFocus={(event: React.FocusEvent<HTMLTextAreaElement>) => {
           event.target.select();
         }}
+        onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
+          event.target.focus();
+        }}
         name="listName"
         id="listName"
+        onKeyDown={(event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            const formEvent = new Event('submit', {
+              bubbles: true,
+              cancelable: true,
+            });
+            event.currentTarget.form?.dispatchEvent(formEvent);
+          }
+        }}
       />
       <Box
         sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left' }}

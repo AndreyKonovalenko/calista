@@ -13,10 +13,10 @@ describe('get /status', () => {
   });
 });
 
-describe("NOT FOUND", () => {
-  it('should return not found Error if url is wrong', async ()=> {
+describe('NOT FOUND', () => {
+  it('should return not found Error if url is wrong', async () => {
     const response = await request(app).get('/boards/api/bords/');
-    expect(response.body.message).toBe('path /boards/api/bords/ not found')
-    expect(response.status).toBe(404)
-  })
-})
+    expect(response.body.message).toBe('path /boards/api/bords/ not found');
+    expect(response.status).toBe(404);
+  });
+});
