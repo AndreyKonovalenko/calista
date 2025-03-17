@@ -87,7 +87,6 @@ const BoardList = (props: {
                 }}
                 onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
                   setListName(event.target.value);
-                  console.log(event.target.value);
                   setEditing(false);
                   const formEvent = new Event('submit', {
                     bubbles: true,
