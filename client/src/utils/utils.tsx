@@ -4,3 +4,10 @@ export default function validEnv(name: string | undefined): string {
   }
   return name;
 }
+
+export function invariantId(value: string | undefined): asserts value {
+  if (value) {
+    return;
+  }
+  throw new Error('Invariant violation');
+}

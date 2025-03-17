@@ -19,9 +19,13 @@ import { useState } from 'react';
 const BoardList = (props: {
   name: string;
   id: string;
-  handleDeleteList: (id: string | undefined) => void;
+  handleDeleteList: (id: string) => void;
+  handleUpdateListName: (
+    event: React.FormEvent<HTMLFormElement>,
+    id: string,
+  ) => void;
 }) => {
-  const { name, id, handleDeleteList } = props;
+  const { name, id, handleDeleteList, handleUpdateListName } = props;
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
   const { spacing, palette } = useTheme();
@@ -60,9 +64,12 @@ const BoardList = (props: {
           flexShrink: 0,
         }}
       >
-        <Box sx={{ pl: spacing(2), pt: spacing(2), pr: spacing(2) }} 
+        <Box
+          sx={{ pl: spacing(2), pt: spacing(2), pr: spacing(2) }}
           component="form"
-          // onSubmit={}
+          onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
+            handleUpdateListName(event, id);
+          }}
         >
           <Stack direction="row" justifyContent="space-between" spacing={2}>
             {editing ? (
@@ -78,12 +85,26 @@ const BoardList = (props: {
                 onFocus={(event: React.FocusEvent<HTMLTextAreaElement>) => {
                   event.target.select();
                 }}
-                onBlur={() => setEditing(false)}
+                onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
+                  setListName(event.target.value);
+                  console.log(event.target.value);
+                  setEditing(false);
+                  const formEvent = new Event('submit', {
+                    bubbles: true,
+                    cancelable: true,
+                  });
+                  event.currentTarget.form?.dispatchEvent(formEvent);
+                }}
                 onKeyDown={(
                   event: React.KeyboardEvent<HTMLTextAreaElement>,
                 ) => {
                   if (event.key === 'Enter') {
                     event.preventDefault();
+                    const formEvent = new Event('submit', {
+                      bubbles: true,
+                      cancelable: true,
+                    });
+                    event.currentTarget.form?.dispatchEvent(formEvent);
                   }
                 }}
               />

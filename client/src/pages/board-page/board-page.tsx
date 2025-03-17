@@ -16,18 +16,24 @@ import {
   useFetchBoardById,
   useDeleteBoard,
 } from '../../api/boards-api-queries';
-import { useCreateList, useDeleteList } from '../../api/lists-api-queries';
+import {
+  useCreateList,
+  useDeleteList,
+  useUpdateList,
+} from '../../api/lists-api-queries';
 import BoardList from '../../components/boards-page-components/board-list/board-list';
+import { invariantId } from '../../utils/utils';
 
 const BoardPage = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const { id } = useParams();
+  invariantId(id);
   const { data, isSuccess } = useFetchBoardById(id);
   const deleteBoardQuery = useDeleteBoard();
   const createListQuery = useCreateList(id);
   const deleteListQuery = useDeleteList(id);
-  const updateListQuery;
+  const updateListQuery = useUpdateList(id);
 
   const handleDeleteBoard = (): void => {
     deleteBoardQuery.mutate(id);
@@ -57,13 +63,19 @@ const BoardPage = () => {
     });
   };
 
-  const handleUpadateListName = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const handleUpdateListName = (
+    event: React.FormEvent<HTMLFormElement>,
+    listId: string,
+  ) => {
+    event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    
-  }
+    updateListQuery.mutate({
+      id: listId,
+      data: { name: formData.get('listName') },
+    });
+  };
 
-  const handleDeleteList = (listId: string | undefined) => {
+  const handleDeleteList = (listId: string) => {
     deleteListQuery.mutate(listId);
   };
 
@@ -75,6 +87,7 @@ const BoardPage = () => {
             name={element.name}
             id={element._id}
             handleDeleteList={handleDeleteList}
+            handleUpdateListName={handleUpdateListName}
           />
         );
       })

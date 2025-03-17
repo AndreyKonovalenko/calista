@@ -15,12 +15,14 @@ const SSE = validEnv(process.env.SSE);
 axios.defaults.baseURL = BASE_URL;
 
 type TData = {
-  [key: string]: FormDataEntryValue | null | string | undefined | number;
+  [key: string]: FormDataEntryValue | string | number | null;
 };
 
 type TPopulatedBoard = Omit<TBoard, 'lists'> & {
   lists: Array<{ _id: string; name: string; pos: number }>;
 };
+
+type TPutData = { id: string; data: TData };
 
 type TCustomErrorResponse = {
   message: string;
@@ -54,7 +56,7 @@ const request = {
     axios.post<T>(url, body).then(responseBody),
   delete: <T>(url: string) => axios.delete<T>(url).then(responseBody),
   put: <T>(url: string, body?: object) =>
-    axios.post<T>(url, body).then(responseBody),
+    axios.put<T>(url, body).then(responseBody),
 };
 
 const auth = {
@@ -66,21 +68,20 @@ const auth = {
 const boards = {
   fetchBoards: () => request.get<Array<TBoard>>(BOARDS),
   createBoard: (data: TData) => request.post<void>(BOARDS, data),
-  fetchBoardById: (id: string | undefined) =>
+  fetchBoardById: (id: string) =>
     request.get<TPopulatedBoard>(`${BOARDS}/${id}`),
-  deleteBoard: (id: string | undefined) =>
-    request.delete<void>(`${BOARDS}/${id}`),
-  updateBoard: (id: string | undefined, data: TData) =>
+  deleteBoard: (id: string) => request.delete<void>(`${BOARDS}/${id}`),
+  updateBoard: ({ id, data }: TPutData) =>
     request.put<void>(`${BOARDS}/${id}`, data),
 };
 
 const lists = {
   cerateList: (data: TData) => request.post<void>(LISTS, data),
-  fetchListById: (id: string | undefined) => {
+  fetchListById: (id: string) => {
     request.get<TList>(`${LISTS}/${id}`);
   },
-  deletList: (id: string | undefined) => request.delete<void>(`${LISTS}/${id}`),
-  updateList: (id: string | undefined, data: TData) =>
+  deleteList: (id: string) => request.delete<void>(`${LISTS}/${id}`),
+  updateList: ({ id, data }: TPutData) =>
     request.put<void>(`${LISTS}/${id}`, data),
 };
 

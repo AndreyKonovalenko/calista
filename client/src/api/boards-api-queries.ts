@@ -21,7 +21,7 @@ export const useCreateBoard = () => {
   });
 };
 
-export const useFetchBoardById = (boardId: string | undefined) => {
+export const useFetchBoardById = (boardId: string) => {
   return useQuery({
     queryKey: ['fetchBoardById', boardId],
     queryFn: () => api.boards.fetchBoardById(boardId),

@@ -1,7 +1,7 @@
 import api from './calista-api';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
-export const useCreateList = (boardId: string | undefined) => {
+export const useCreateList = (boardId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: api.lists.cerateList,
@@ -14,7 +14,7 @@ export const useCreateList = (boardId: string | undefined) => {
   });
 };
 
-export const useFetchListById = (listId: string | undefined) => {
+export const useFetchListById = (listId: string) => {
   return useQuery({
     queryKey: ['fetchListById', listId],
     queryFn: () => api.lists.fetchListById(listId),
@@ -22,10 +22,10 @@ export const useFetchListById = (listId: string | undefined) => {
   });
 };
 
-export const useDeleteList = (boardId: string | undefined) => {
+export const useDeleteList = (boardId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: api.lists.deletList,
+    mutationFn: api.lists.deleteList,
     onSuccess: () => {
       return queryClient.invalidateQueries({
         queryKey: ['fetchBoardById', boardId],
@@ -35,3 +35,15 @@ export const useDeleteList = (boardId: string | undefined) => {
   });
 };
 
+export const useUpdateList = (boardId: string) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: api.lists.updateList,
+    onSuccess: () => {
+      return queryClient.invalidateQueries({
+        queryKey: ['fetchBoardById', boardId],
+        exact: true,
+      });
+    },
+  });
+};
