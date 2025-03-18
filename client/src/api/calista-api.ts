@@ -18,7 +18,7 @@ type TData = {
   [key: string]: FormDataEntryValue | string | number | null;
 };
 
-type TPopulatedBoard = Omit<TBoard, 'lists'> & {
+export type TPopulatedBoard = Omit<TBoard, 'lists'> & {
   lists: Array<{ _id: string; name: string; pos: number }>;
 };
 
@@ -71,7 +71,7 @@ const boards = {
   fetchBoardById: (id: string) =>
     request.get<TPopulatedBoard>(`${BOARDS}/${id}`),
   deleteBoard: (id: string) => request.delete<void>(`${BOARDS}/${id}`),
-  updateBoard: ({ id, data }: TPutData) =>
+  updateBoard: (id: string | undefined, data: TData) =>
     request.put<void>(`${BOARDS}/${id}`, data),
 };
 

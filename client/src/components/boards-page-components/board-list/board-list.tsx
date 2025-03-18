@@ -86,8 +86,6 @@ const BoardList = (props: {
                   event.target.select();
                 }}
                 onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-                  setListName(event.target.value);
-                  setEditing(false);
                   const formEvent = new Event('submit', {
                     bubbles: true,
                     cancelable: true,
@@ -98,7 +96,6 @@ const BoardList = (props: {
                   event: React.KeyboardEvent<HTMLTextAreaElement>,
                 ) => {
                   if (event.key === 'Enter') {
-                    event.preventDefault();
                     const formEvent = new Event('submit', {
                       bubbles: true,
                       cancelable: true,

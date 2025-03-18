@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, IconButton, Toolbar, Stack } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router';
@@ -23,9 +23,11 @@ import {
 } from '../../api/lists-api-queries';
 import BoardList from '../../components/boards-page-components/board-list/board-list';
 import { invariantId } from '../../utils/utils';
+import { useBoardStore } from '../../services/boards/board-store';
 
 const BoardPage = () => {
   const navigate = useNavigate();
+  const { name, lists, setBoardState } = useBoardStore(state => state);
   const [open, setOpen] = useState(false);
   const { id } = useParams();
   invariantId(id);
@@ -49,10 +51,9 @@ const BoardPage = () => {
   const handleCreateNewList = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let pos = 16384;
-    if (data && data?.lists.length > 0) {
+    if (lists.length > 0) {
       // when add element in the end of array
-      console.log(data.lists);
-      const last = data.lists[data.lists.length - 1].pos;
+      const last = lists[lists.length - 1].pos;
       pos = pos + last;
     }
     const formData = new FormData(event.currentTarget);
@@ -79,19 +80,21 @@ const BoardPage = () => {
     deleteListQuery.mutate(listId);
   };
 
-  const lists = data
-    ? data.lists.map(element => {
-        return (
-          <BoardList
-            key={uuidv4()}
-            name={element.name}
-            id={element._id}
-            handleDeleteList={handleDeleteList}
-            handleUpdateListName={handleUpdateListName}
-          />
-        );
-      })
-    : [];
+  const boardLists = lists.map(element => {
+    return (
+      <BoardList
+        key={uuidv4()}
+        name={element.name}
+        id={element._id}
+        handleDeleteList={handleDeleteList}
+        handleUpdateListName={handleUpdateListName}
+      />
+    );
+  });
+
+  useEffect(() => {
+    if (isSuccess) setBoardState(data);
+  }, [data, isSuccess]);
 
   return (
     <Box
@@ -104,7 +107,7 @@ const BoardPage = () => {
       <BoardsPageContentPaperBar open={open}>
         <Toolbar>
           <Typography variant="h6" component="div" noWrap sx={{ flexGrow: 1 }}>
-            {isSuccess ? data.name : ''}
+            {name}
           </Typography>
           <IconButton
             color="inherit"
@@ -136,7 +139,7 @@ const BoardPage = () => {
             alignItems: 'stretch',
           }}
         >
-          {lists}
+          {boardLists}
           <AddList handleCreateNewList={handleCreateNewList} />
         </Stack>
       </BoardsPageContent>

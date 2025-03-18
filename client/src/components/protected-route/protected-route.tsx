@@ -20,7 +20,7 @@ const useUser = (isAuth: boolean) => {
 };
 
 const ProtectedRoute = ({ element }: TProps): JSX.Element => {
-  const { setAuthStatus, isAuth } = useAuthStore(state => state);
+  const { isAuth, setAuthStatus } = useAuthStore(state => state);
   const { data, isPending, isSuccess } = useUser(isAuth);
   const navigate = useNavigate();
 
