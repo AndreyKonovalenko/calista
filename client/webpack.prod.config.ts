@@ -1,9 +1,18 @@
 import path from 'path';
-import { Configuration } from 'webpack';
+import {
+  Configuration as WebpackConfiguration,
+  HotModuleReplacementPlugin,
+} from 'webpack';
+import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import Dotenv from 'dotenv-webpack';
+import {CleanWebpackPlugin} from 'clean-webpack-plugin'
+
+interface Configuration extends WebpackConfiguration {
+  devServer?: WebpackDevServerConfiguration;
+}
 
 const config: Configuration = {
   mode: 'production',
@@ -30,7 +39,7 @@ const config: Configuration = {
         },
       },
       {
-        test: /\.s[ac]ss$/i,
+        test: /\.(sa|sc|c)ss$/i,
         use: [
           // Creates `style` nodes from JS strings
           'style-loader',
@@ -47,16 +56,20 @@ const config: Configuration = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'public/index.html',
+      template: './public/index.html',
     }),
+    new HotModuleReplacementPlugin(),
     new ForkTsCheckerWebpackPlugin({
       async: false,
+    }),
+    new Dotenv({
+      path: './../.env',
     }),
     new ESLintPlugin({
       extensions: ['js', 'jsx', 'ts', 'tsx'],
       configType: 'flat',
     }),
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin()
   ],
 };
 

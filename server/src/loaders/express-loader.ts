@@ -12,6 +12,8 @@ import { cardsRouter } from '../routes/cards-routes';
 // import { sseRouter } from '../routes/sse-routes';
 import { listsRouter } from '../routes/lists-routes';
 import { checkListsRouter } from '../routes/check-lists-routes';
+import config from '../config';
+import path from 'path';
 
 const expressLoader = async (app: Express) => {
   // status checkpoints
@@ -36,6 +38,15 @@ const expressLoader = async (app: Express) => {
   app.use('/api/cards', cardsRouter);
   app.use('/api/checklists', checkListsRouter);
   // app.use('/api/sse', sseRouter);
+
+  if(config.nodeEnv === "production"){
+    app.use(express.static(path.join(__dirname,  "../../../client/build")));
+    app.get("/",(_req, res) => {
+      res.sendFile(
+        path.resolve(__dirname, "../../../", "client", "build", "index.html")
+      )
+    })
+  };
 
   // error handlers
   app.use(notFoundHandler);

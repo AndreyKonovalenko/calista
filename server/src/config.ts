@@ -1,12 +1,13 @@
 import dotenv from 'dotenv';
 import { Secret } from 'jsonwebtoken';
 
-process.env.NODE_ENV = process.env.ENV || 'development';
 const envFound = dotenv.config({ path: '../.env' });
 
 if (envFound.error) {
   throw new Error('no .env file found');
 }
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 export default {
   nodeEnv: process.env.NODE_ENV,
