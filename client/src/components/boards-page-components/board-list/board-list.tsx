@@ -15,6 +15,7 @@ import { TitleTextAreaStyled } from '../boards-page-styled-elements/boards-page-
 import CardComponent from '../card-component/card-component';
 import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-menu';
 import { useState } from 'react';
+import { useBoardStore } from '../../../services/boards/board-store';
 
 const BoardList = (props: {
   name: string;
@@ -27,6 +28,7 @@ const BoardList = (props: {
 }) => {
   
   const {name, id, handleDeleteList, handleUpdateListName } = props;
+  const {updateListNameBylistId} = useBoardStore(state => state)
   const listNameRef = useRef<HTMLTextAreaElement>(null)
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
@@ -109,6 +111,7 @@ const BoardList = (props: {
                       cancelable: true,
                     });
                     event.currentTarget.form?.dispatchEvent(formEvent);
+                    updateListNameBylistId(id, listName )
                   }
                 }}
               />

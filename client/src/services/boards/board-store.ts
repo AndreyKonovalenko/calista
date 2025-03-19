@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { TPopulatedBoard } from '../../api/calista-api';
 
 export type TBoard = {
   _id: string;
@@ -9,26 +8,48 @@ export type TBoard = {
   lists: Array<string>;
 };
 
-type TBoardState = TPopulatedBoard;
 
-type Actions = {
-  setBoardState: (data: TPopulatedBoard) => void;
-  // updateListNameBylistId: (id: string, name: string) => void;
+interface IBoardList {
+  _id: string;
+  name: string;
+  pos: number;
+}
+
+
+interface IBoardState  {
+  _id:string;
+  createrId: string;
+  name: string;
+  lists: Array<IBoardList>
+
+}
+
+interface IActions {
+  setBoardState: (data: IBoardState) => void;
+  updateListNameBylistId: (id: string, name: string) => void;
   reset: () => void;
 };
 
-const initialState: TPopulatedBoard = {
+const initialState: IBoardState  = {
   _id: '',
   name: '',
   createrId: '',
   lists: [],
 };
 
-export const useBoardStore = create<TBoardState & Actions>()(
+
+const updateName = (arr: Array<IBoardList>, name: string, id:string) => {
+  const index: number =  arr.findIndex(element => element._id === id);
+  arr[index].name = name;
+  return arr
+}
+
+type TState = IBoardState & IActions
+export const useBoardStore = create<TState>()(
   devtools(
     set => ({
       ...initialState,
-      setBoardState: (data: TPopulatedBoard) =>
+      setBoardState: (data) =>
         set({
           _id: data._id,
           name: data.name,
@@ -36,10 +57,8 @@ export const useBoardStore = create<TBoardState & Actions>()(
           lists: data.lists,
         }),
       reset: () => set(initialState),
-      // updateListNameBylistId: (id, name) =>
-      //   set(state => {
-      //     state.lists.find(elemne => elemne._id === id);
-      //   }),
+      updateListNameBylistId: (id:string, name:string) =>
+        set((state: TState ) => ({lists: updateName(state.lists, name, id)})),
     }),
     { name: 'boardStore' },
   ),
