@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useEffect} from 'react';
 import {
   Box,
   Button,
@@ -25,7 +25,9 @@ const BoardList = (props: {
     id: string,
   ) => void;
 }) => {
-  const { name, id, handleDeleteList, handleUpdateListName } = props;
+  
+  const {name, id, handleDeleteList, handleUpdateListName } = props;
+  const listNameRef = useRef<HTMLTextAreaElement>(null)
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
   const { spacing, palette } = useTheme();
@@ -51,6 +53,10 @@ const BoardList = (props: {
       </List>
     ) : null;
 
+  useEffect(()=> {
+    console.log('rendering', id)
+  },[id])
+
   return (
     <Box sx={{ width: spacing(34), height: '100%' }}>
       <Stack
@@ -75,11 +81,13 @@ const BoardList = (props: {
             {editing ? (
               <TitleTextAreaStyled
                 name="listName"
+                ref={listNameRef}
                 id="listName"
                 autoFocus
                 rows={1}
                 value={listName}
                 onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+                  console.log(listNameRef.current?.value)
                   setListName(event.target.value);
                 }}
                 onFocus={(event: React.FocusEvent<HTMLTextAreaElement>) => {

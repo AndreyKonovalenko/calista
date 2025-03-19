@@ -23,27 +23,40 @@ export const useFetchListById = (listId: string) => {
 };
 
 export const useDeleteList = (boardId: string) => {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
+  // return useMutation({
+  //   mutationFn: api.lists.deleteList,
+  //   onSuccess: () => {
+  //     return queryClient.invalidateQueries({
+  //       queryKey: ['fetchBoardById', boardId],
+  //       exact: true,
+  //     });
+  //   },
+  // });
+  console.log(boardId)
   return useMutation({
     mutationFn: api.lists.deleteList,
-    onSuccess: () => {
-      return queryClient.invalidateQueries({
-        queryKey: ['fetchBoardById', boardId],
-        exact: true,
-      });
-    },
   });
+
+
+
 };
 
 export const useUpdateList = (boardId: string) => {
-  const queryClient = useQueryClient();
+  console.log(boardId)
   return useMutation({
-    mutationFn: api.lists.updateList,
-    onSuccess: () => {
-      return queryClient.invalidateQueries({
-        queryKey: ['fetchBoardById', boardId],
-        exact: true,
-      });
-    },
-  });
+    mutationFn: api.lists.updateList
+  })
+
+
+  // const queryClient = useQueryClient();
+  // return useMutation({
+  //   mutationFn: api.lists.updateList,
+  //   onSuccess: () => {
+  //     return queryClient.invalidateQueries({
+  //       queryKey: ['fetchBoardById', boardId],
+  //       exact: true,
+  //     });
+  //   },
+  // });
 };
