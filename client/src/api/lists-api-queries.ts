@@ -23,23 +23,16 @@ export const useFetchListById = (listId: string) => {
 };
 
 export const useDeleteList = (boardId: string) => {
-  // const queryClient = useQueryClient();
-  // return useMutation({
-  //   mutationFn: api.lists.deleteList,
-  //   onSuccess: () => {
-  //     return queryClient.invalidateQueries({
-  //       queryKey: ['fetchBoardById', boardId],
-  //       exact: true,
-  //     });
-  //   },
-  // });
-  console.log(boardId)
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: api.lists.deleteList,
+    onSuccess: () => {
+      return queryClient.invalidateQueries({
+        queryKey: ['fetchBoardById', boardId],
+        exact: true,
+      });
+    },
   });
-
-
-
 };
 
 export const useUpdateList = (boardId: string) => {
@@ -47,8 +40,6 @@ export const useUpdateList = (boardId: string) => {
   return useMutation({
     mutationFn: api.lists.updateList
   })
-
-
   // const queryClient = useQueryClient();
   // return useMutation({
   //   mutationFn: api.lists.updateList,

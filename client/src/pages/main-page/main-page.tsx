@@ -5,7 +5,6 @@ import { Person } from '@mui/icons-material';
 import BoardCard from '../../components/main-page-components/board-card/board-card';
 import AddBoardPopper from '../../components/main-page-components/add-baard-popper/add-board-popper';
 import { v4 as uuidv4 } from 'uuid';
-import { TBoard } from '../../services/boards/board-store';
 // import useSse from '../../hooks/useSse';
 import { useEscapeKey } from '../../hooks/use-escape-key';
 import { useFetchBoards, useCreateBoard } from '../../api/boards-api-queries';
@@ -33,7 +32,7 @@ const MainPage = () => {
   };
   useEscapeKey(handleAddBoardMenuClose);
   const boards = data
-    ? data.map((element: TBoard) => (
+    ? data.map((element) => (
         <BoardCard name={element.name} id={element._id} key={uuidv4()} />
       ))
     : [];

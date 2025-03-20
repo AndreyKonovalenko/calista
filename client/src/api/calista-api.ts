@@ -1,8 +1,8 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import { TAuthState } from '../services/auth/auth-store';
-import { TBoard } from '../services/boards/board-store';
-import { TList } from '../services/lists/list-store';
+import { IBoard } from '../services/boards/board-store';
+import { IList } from '../services/lists/list-store';
 import validEnv from '../utils/utils';
 
 const BASE_URL = validEnv(process.env.BASE_URL);
@@ -18,9 +18,6 @@ type TData = {
   [key: string]: FormDataEntryValue | string | number | null;
 };
 
-export type TPopulatedBoard = Omit<TBoard, 'lists'> & {
-  lists: Array<{ _id: string; name: string; pos: number }>;
-};
 
 type TPutData = { id: string; data: TData };
 
@@ -66,10 +63,10 @@ const auth = {
 };
 
 const boards = {
-  fetchBoards: () => request.get<Array<TBoard>>(BOARDS),
+  fetchBoards: () => request.get<Array<{_id: string, name: string}>>(BOARDS),
   createBoard: (data: TData) => request.post<void>(BOARDS, data),
   fetchBoardById: (id: string) =>
-    request.get<TPopulatedBoard>(`${BOARDS}/${id}`),
+    request.get<IBoard>(`${BOARDS}/${id}`),
   deleteBoard: (id: string) => request.delete<void>(`${BOARDS}/${id}`),
   updateBoard: (id: string | undefined, data: TData) =>
     request.put<void>(`${BOARDS}/${id}`, data),
@@ -78,7 +75,7 @@ const boards = {
 const lists = {
   cerateList: (data: TData) => request.post<void>(LISTS, data),
   fetchListById: (id: string) => {
-    request.get<TList>(`${LISTS}/${id}`);
+    request.get<IList>(`${LISTS}/${id}`);
   },
   deleteList: (id: string) => request.delete<void>(`${LISTS}/${id}`),
   updateList: ({ id, data }: TPutData) =>

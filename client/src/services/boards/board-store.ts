@@ -1,50 +1,36 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
+import { IList } from '../lists/list-store';
 
-export type TBoard = {
-  _id: string;
-  createrId: string;
-  name: string;
-  lists: Array<string>;
-};
-
-
-interface IBoardList {
-  _id: string;
-  name: string;
-  pos: number;
-}
-
-
-interface IBoardState  {
+export interface IBoard  {
   _id:string;
   createrId: string;
   name: string;
-  lists: Array<IBoardList>
+  lists: Array<IList>
 
 }
 
 interface IActions {
-  setBoardState: (data: IBoardState) => void;
+  setBoardState: (data: IBoard) => void;
   updateListNameBylistId: (id: string, name: string) => void;
   reset: () => void;
 };
 
-const initialState: IBoardState  = {
+const initialState: IBoard  = {
   _id: '',
   name: '',
   createrId: '',
   lists: [],
 };
 
-
-const updateName = (arr: Array<IBoardList>, name: string, id:string) => {
+const updateName = (arr: Array<IList>, name: string, id:string) => {
   const index: number =  arr.findIndex(element => element._id === id);
   arr[index].name = name;
   return arr
 }
 
-type TState = IBoardState & IActions
+type TState = IBoard & IActions
+
 export const useBoardStore = create<TState>()(
   devtools(
     set => ({
@@ -58,7 +44,7 @@ export const useBoardStore = create<TState>()(
         }),
       reset: () => set(initialState),
       updateListNameBylistId: (id:string, name:string) =>
-        set((state: TState ) => ({lists: updateName(state.lists, name, id)})),
+        set((state: TState) => ({lists: updateName(state.lists, name, id)})),
     }),
     { name: 'boardStore' },
   ),

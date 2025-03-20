@@ -17,6 +17,15 @@ import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-men
 import { useState } from 'react';
 import { useBoardStore } from '../../../services/boards/board-store';
 
+
+const handleFormSubmitEvent = (event: React.KeyboardEvent<HTMLTextAreaElement> | React.FocusEvent<HTMLTextAreaElement>) => {
+  const formEvent = new Event('submit', {
+    bubbles: true,
+    cancelable: true,
+  });
+  event.currentTarget.form?.dispatchEvent(formEvent);
+}
+
 const BoardList = (props: {
   name: string;
   id: string;
@@ -96,21 +105,14 @@ const BoardList = (props: {
                   event.target.select();
                 }}
                 onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-                  const formEvent = new Event('submit', {
-                    bubbles: true,
-                    cancelable: true,
-                  });
-                  event.currentTarget.form?.dispatchEvent(formEvent);
+                  handleFormSubmitEvent(event)
+                  updateListNameBylistId(id, listName )
                 }}
                 onKeyDown={(
                   event: React.KeyboardEvent<HTMLTextAreaElement>,
                 ) => {
                   if (event.key === 'Enter') {
-                    const formEvent = new Event('submit', {
-                      bubbles: true,
-                      cancelable: true,
-                    });
-                    event.currentTarget.form?.dispatchEvent(formEvent);
+                    handleFormSubmitEvent(event)
                     updateListNameBylistId(id, listName )
                   }
                 }}
