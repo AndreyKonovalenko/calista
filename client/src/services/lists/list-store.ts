@@ -7,7 +7,7 @@ export interface IList {
   createrId: string;
   cards: Array<string>;
   pos: number;
-};
+}
 
 // const initialState: TList = {
 //   _id: '',

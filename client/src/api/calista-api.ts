@@ -18,7 +18,6 @@ type TData = {
   [key: string]: FormDataEntryValue | string | number | null;
 };
 
-
 type TPutData = { id: string; data: TData };
 
 type TCustomErrorResponse = {
@@ -63,10 +62,9 @@ const auth = {
 };
 
 const boards = {
-  fetchBoards: () => request.get<Array<{_id: string, name: string}>>(BOARDS),
+  fetchBoards: () => request.get<Array<{ _id: string; name: string }>>(BOARDS),
   createBoard: (data: TData) => request.post<void>(BOARDS, data),
-  fetchBoardById: (id: string) =>
-    request.get<IBoard>(`${BOARDS}/${id}`),
+  fetchBoardById: (id: string) => request.get<IBoard>(`${BOARDS}/${id}`),
   deleteBoard: (id: string) => request.delete<void>(`${BOARDS}/${id}`),
   updateBoard: (id: string | undefined, data: TData) =>
     request.put<void>(`${BOARDS}/${id}`, data),

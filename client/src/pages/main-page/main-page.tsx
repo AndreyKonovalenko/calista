@@ -32,7 +32,7 @@ const MainPage = () => {
   };
   useEscapeKey(handleAddBoardMenuClose);
   const boards = data
-    ? data.map((element) => (
+    ? data.map(element => (
         <BoardCard name={element.name} id={element._id} key={uuidv4()} />
       ))
     : [];

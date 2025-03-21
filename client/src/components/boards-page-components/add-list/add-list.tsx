@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Box, Button, Paper, IconButton, useTheme } from '@mui/material';
 import { TitleTextAreaStyled } from '../boards-page-styled-elements/boards-page-styled-elements';
 import CloseIcon from '@mui/icons-material/Close';
+import { useOutsideEClickEvent } from '../../../hooks/useOutsideClickEvent';
 
 type TAddList = {
   handleCreateNewList: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -12,9 +13,18 @@ const AddList = (props: TAddList) => {
   const { spacing } = useTheme();
   const [newListName, setNewListName] = useState('');
   const [addListEditMode, setAddListEditMode] = useState(false);
+  const ref = useRef(null)
+ 
+  const handleClickOutside = () => {
+    console.log('click outside')
+    setAddListEditMode(false)
+  }
+
+  useOutsideEClickEvent(ref, handleClickOutside)
 
   return addListEditMode ? (
-    <Box
+    <Box sx={{height: '100%'}} onClick={handleClickOutside}>
+     <Box
       component="form"
       onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
         handleCreateNewList(event);
@@ -22,7 +32,7 @@ const AddList = (props: TAddList) => {
       }}
       sx={{
         width: spacing(34),
-        height: '100%',
+        height: 'fit-content',
         display: 'flex',
         flexDirection: 'column',
         gap: spacing(1),
@@ -57,7 +67,7 @@ const AddList = (props: TAddList) => {
       <Box
         sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'left' }}
       >
-        <Button type="submit">Add List</Button>
+        <Button type="submit" ref={ref}>Add List</Button>
         <IconButton
           color="inherit"
           aria-label="list menu"
@@ -67,6 +77,8 @@ const AddList = (props: TAddList) => {
         </IconButton>
       </Box>
     </Box>
+  </Box>
+
   ) : (
     <Paper sx={{ width: spacing(34), flexShrink: 0, height: spacing(4) }}>
       <Button fullWidth={true} onClick={() => setAddListEditMode(true)}>

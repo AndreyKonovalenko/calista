@@ -8,7 +8,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import Dotenv from 'dotenv-webpack';
-import {CleanWebpackPlugin} from 'clean-webpack-plugin'
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
 interface Configuration extends WebpackConfiguration {
   devServer?: WebpackDevServerConfiguration;
@@ -69,7 +69,7 @@ const config: Configuration = {
       extensions: ['js', 'jsx', 'ts', 'tsx'],
       configType: 'flat',
     }),
-    new CleanWebpackPlugin()
+    new CleanWebpackPlugin(),
   ],
 };
 

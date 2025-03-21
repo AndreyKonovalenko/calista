@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -17,14 +17,17 @@ import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-men
 import { useState } from 'react';
 import { useBoardStore } from '../../../services/boards/board-store';
 
-
-const handleFormSubmitEvent = (event: React.KeyboardEvent<HTMLTextAreaElement> | React.FocusEvent<HTMLTextAreaElement>) => {
+const handleFormSubmitEvent = (
+  event:
+    | React.KeyboardEvent<HTMLTextAreaElement>
+    | React.FocusEvent<HTMLTextAreaElement>,
+) => {
   const formEvent = new Event('submit', {
     bubbles: true,
     cancelable: true,
   });
   event.currentTarget.form?.dispatchEvent(formEvent);
-}
+};
 
 const BoardList = (props: {
   name: string;
@@ -35,10 +38,9 @@ const BoardList = (props: {
     id: string,
   ) => void;
 }) => {
-  
-  const {name, id, handleDeleteList, handleUpdateListName } = props;
-  const {updateListNameBylistId} = useBoardStore(state => state)
-  const listNameRef = useRef<HTMLTextAreaElement>(null)
+  const { name, id, handleDeleteList, handleUpdateListName } = props;
+  const { updateListNameBylistId } = useBoardStore(state => state);
+  const listNameRef = useRef<HTMLTextAreaElement>(null);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
   const { spacing, palette } = useTheme();
@@ -64,9 +66,9 @@ const BoardList = (props: {
       </List>
     ) : null;
 
-  useEffect(()=> {
-    console.log('rendering', id)
-  },[id])
+  useEffect(() => {
+    console.log('rendering', id);
+  }, [id]);
 
   return (
     <Box sx={{ width: spacing(34), height: '100%' }}>
@@ -98,22 +100,22 @@ const BoardList = (props: {
                 rows={1}
                 value={listName}
                 onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                  console.log(listNameRef.current?.value)
+                  console.log(listNameRef.current?.value);
                   setListName(event.target.value);
                 }}
                 onFocus={(event: React.FocusEvent<HTMLTextAreaElement>) => {
                   event.target.select();
                 }}
                 onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-                  handleFormSubmitEvent(event)
-                  updateListNameBylistId(id, listName )
+                  handleFormSubmitEvent(event);
+                  updateListNameBylistId(id, listName);
                 }}
                 onKeyDown={(
                   event: React.KeyboardEvent<HTMLTextAreaElement>,
                 ) => {
                   if (event.key === 'Enter') {
-                    handleFormSubmitEvent(event)
-                    updateListNameBylistId(id, listName )
+                    handleFormSubmitEvent(event);
+                    updateListNameBylistId(id, listName);
                   }
                 }}
               />
