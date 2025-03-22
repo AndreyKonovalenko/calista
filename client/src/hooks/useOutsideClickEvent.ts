@@ -1,13 +1,11 @@
-import { RefObject, useEffect } from 'react';
+import { RefObject, useEffect, useCallback } from 'react';
 
 export const useOutsideEClickEvent = <T extends HTMLElement = HTMLElement>(
   ref: RefObject<T> | RefObject<T>[],
   handler: () => void,
 ) => {
-  useEffect(() => {
-    const handleClickOutside = (
-      event: MouseEvent | TouchEvent | FocusEvent,
-    ) => {
+  const handleClickOutside = useCallback(
+    (event: MouseEvent | TouchEvent | FocusEvent) => {
       const target = event?.target as Node;
       if (!target || !target.isConnected) {
         return;
@@ -21,13 +19,13 @@ export const useOutsideEClickEvent = <T extends HTMLElement = HTMLElement>(
       if (isOutSide) {
         handler();
       }
-
-      console.log(isOutSide);
-    };
-    // Bind the event listener
+    },
+    [handler],
+  );
+  useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [ref, handler]);
+  }, [handler]);
 };

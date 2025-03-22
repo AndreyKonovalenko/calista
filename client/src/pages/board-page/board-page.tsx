@@ -70,6 +70,9 @@ const BoardPage = () => {
   ) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+    // check if data changed
+    // if true mutate
+    // else return undefined
     updateListQuery.mutate({
       id: listId,
       data: { name: formData.get('listName') },
