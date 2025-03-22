@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import {
   Box,
   Button,
@@ -65,10 +65,6 @@ const BoardList = (props: {
         ))}
       </List>
     ) : null;
-
-  useEffect(() => {
-    console.log('rendering', id);
-  }, [id]);
 
   return (
     <Box sx={{ width: spacing(34), height: '100%' }}>
