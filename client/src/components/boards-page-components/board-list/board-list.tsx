@@ -95,7 +95,6 @@ const BoardList = (props: {
               <TitleTextAreaStyled
                 name="listName"
                 ref={listNameRef}
-                id="listName"
                 autoFocus
                 rows={1}
                 value={listName}

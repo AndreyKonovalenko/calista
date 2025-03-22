@@ -51,8 +51,7 @@ const AddList = (props: TAddList) => {
         onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
           event.target.focus();
         }}
-        name="listName"
-        id="listName"
+        name="newListName"
         onKeyDown={(event: React.KeyboardEvent<HTMLTextAreaElement>) => {
           if (event.key === 'Enter') {
             event.preventDefault();

@@ -58,7 +58,7 @@ const BoardPage = () => {
     }
     const formData = new FormData(event.currentTarget);
     createListQuery.mutate({
-      name: formData.get('listName'),
+      name: formData.get('newListName'),
       boardId: id,
       pos: pos,
     });
