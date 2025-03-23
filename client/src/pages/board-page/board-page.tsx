@@ -23,7 +23,10 @@ import {
 } from '../../api/lists-api-queries';
 import BoardList from '../../components/boards-page-components/board-list/board-list';
 import { invariantId } from '../../utils/utils';
-import { useBoardStore } from '../../services/boards/board-store';
+import {
+  useBoardStore,
+  getListNameFromState,
+} from '../../services/boards/board-store';
 
 const BoardPage = () => {
   const navigate = useNavigate();
@@ -70,13 +73,14 @@ const BoardPage = () => {
   ) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    // check if data changed
-    // if true mutate
-    // else return undefined
-    updateListQuery.mutate({
-      id: listId,
-      data: { name: formData.get('listName') },
-    });
+    const listName = formData.get('listName');
+    const stateListName = getListNameFromState(lists, listId);
+    if (listName !== stateListName) {
+      updateListQuery.mutate({
+        id: listId,
+        data: { name: listName },
+      });
+    }
   };
 
   const handleDeleteList = (listId: string) => {

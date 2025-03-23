@@ -28,6 +28,11 @@ const updateName = (arr: Array<IList>, name: string, id: string) => {
   return arr;
 };
 
+export function getListNameFromState(arr: Array<IList>, id: string) {
+  const list: IList | undefined = arr.find(element => element._id === id);
+  return list?.name;
+}
+
 type TState = IBoard & IActions;
 
 export const useBoardStore = create<TState>()(
