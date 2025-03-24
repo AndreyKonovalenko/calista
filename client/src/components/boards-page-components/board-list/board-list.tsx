@@ -8,14 +8,13 @@ import {
   List,
   ListItem,
 } from '@mui/material';
-
 import { v4 as uuidv4 } from 'uuid';
 import { TitleTextAreaStyled } from '../boards-page-styled-elements/boards-page-styled-elements';
-
 import CardComponent from '../card-component/card-component';
 import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-menu';
 import { useState } from 'react';
 import { useBoardStore } from '../../../services/boards/board-store';
+import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 
 const handleFormSubmitEvent = (
   event:
@@ -32,20 +31,73 @@ const handleFormSubmitEvent = (
 const BoardList = (props: {
   name: string;
   id: string;
+  pos: number;
   handleDeleteList: (id: string) => void;
   handleUpdateListName: (
     event: React.FormEvent<HTMLFormElement>,
     id: string,
   ) => void;
 }) => {
-  const { name, id, handleDeleteList, handleUpdateListName } = props;
+  const { name, id, handleDeleteList, handleUpdateListName, pos } = props;
   const { updateListNameBylistId } = useBoardStore(state => state);
-  const listNameRef = useRef<HTMLTextAreaElement>(null);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
   const { spacing, palette } = useTheme();
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
+  const ref = useRef<HTMLDivElement>(null)
 
+
+  type TMovableEelement = {
+    pos: number
+}
+  
+  const [{isDragging}, drag] = useDrag({
+    type: 'list',
+    item: {pos},
+    collect: (monitor)=> ({
+      isDragging: monitor.isDragging()
+    })
+  })
+
+
+  const [, drop] = useDrop<TMovableEelement, unknown>({
+    accept: 'list',
+    collect(monitor){
+      return{
+        handlerId: monitor.getHandlerId()
+      }
+    },
+    hover(item:TMovableEelement, monitor: DropTargetMonitor){
+      if(! ref.current){
+        return;
+      }
+      const dragPos = item.pos;
+      const hoverPos = pos;
+      if (dragPos === hoverPos){
+        return;
+      }
+      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+      const hoverMiddleX = (hoverBoundingRect.left - hoverBoundingRect.right)/2;
+      const clientOffset = monitor.getClientOffset();
+      if(clientOffset){
+        const hoverClientX = clientOffset.x - hoverBoundingRect.left;
+        if(dragPos< hoverPos && hoverClientX < hoverMiddleX) {
+          return;
+        } 
+        if (dragPos> hoverPos  && hoverClientX > hoverMiddleX){
+          return
+        }
+
+      }      
+      console.log(dragPos, hoverPos)
+    }
+  })
+
+
+
+
+  const opacity = isDragging? 0 : 1
+  drag(drop(ref))
   const cardsList =
     cardsMoch.length > 0 ? (
       <List
@@ -67,7 +119,7 @@ const BoardList = (props: {
     ) : null;
 
   return (
-    <Box sx={{ width: spacing(34), height: '100%' }}>
+    <Box sx={{ width: spacing(34), height: '100%', opacity: opacity }} ref={ref}>
       <Stack
         spacing={2}
         sx={{
@@ -90,12 +142,10 @@ const BoardList = (props: {
             {editing ? (
               <TitleTextAreaStyled
                 name="listName"
-                ref={listNameRef}
                 autoFocus
                 rows={1}
                 value={listName}
                 onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                  console.log(listNameRef.current?.value);
                   setListName(event.target.value);
                 }}
                 onFocus={(event: React.FocusEvent<HTMLTextAreaElement>) => {

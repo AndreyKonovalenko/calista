@@ -3,6 +3,8 @@ import { Box, Typography, IconButton, Toolbar, Stack } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import BoardDrawer from '../../components/boards-page-components/board-drawer/board-drawer';
 import AddList from '../../components/boards-page-components/add-list/add-list';
@@ -93,6 +95,7 @@ const BoardPage = () => {
         key={uuidv4()}
         name={element.name}
         id={element._id}
+        pos={element.pos}
         handleDeleteList={handleDeleteList}
         handleUpdateListName={handleUpdateListName}
       />
@@ -104,6 +107,7 @@ const BoardPage = () => {
   }, [data, isSuccess]);
 
   return (
+    <DndProvider backend={HTML5Backend}>
     <Box
       sx={{
         display: 'flex',
@@ -156,6 +160,7 @@ const BoardPage = () => {
         handleDeleteBoard={handleDeleteBoard}
       />
     </Box>
+  </DndProvider>
   );
 };
 
