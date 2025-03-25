@@ -14,7 +14,7 @@ import CardComponent from '../card-component/card-component';
 import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-menu';
 import { useState } from 'react';
 import { useBoardStore } from '../../../services/boards/board-store';
-import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
+import {DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 
 const handleFormSubmitEvent = (
   event:
@@ -46,49 +46,47 @@ const BoardList = (props: {
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
   const ref = useRef<HTMLDivElement>(null)
 
-
   type TMovableEelement = {
     pos: number
-}
+  }
   
   const [{isDragging}, drag] = useDrag({
     type: 'list',
     item: {pos},
-    collect: (monitor)=> ({
+    collect: (monitor) => ({
       isDragging: monitor.isDragging()
     })
   })
 
-
   const [, drop] = useDrop<TMovableEelement, unknown>({
     accept: 'list',
-    collect(monitor){
-      return{
+    collect(monitor) {
+      return {
         handlerId: monitor.getHandlerId()
       }
     },
     hover(item:TMovableEelement, monitor: DropTargetMonitor){
-      if(! ref.current){
+      if(!ref.current){
         return;
       }
       const dragPos = item.pos;
       const hoverPos = pos;
-      if (dragPos === hoverPos){
+      if (dragPos === hoverPos) {
         return;
       }
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
-      const hoverMiddleX = (hoverBoundingRect.left - hoverBoundingRect.right)/2;
+      const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left)/2;
       const clientOffset = monitor.getClientOffset();
-      if(clientOffset){
+      if (clientOffset) {
         const hoverClientX = clientOffset.x - hoverBoundingRect.left;
-        if(dragPos< hoverPos && hoverClientX < hoverMiddleX) {
+        if(dragPos < hoverPos && hoverClientX < hoverMiddleX) {
           return;
         } 
-        if (dragPos> hoverPos  && hoverClientX > hoverMiddleX){
+        if (dragPos> hoverPos  && hoverClientX > hoverMiddleX) {
           return
         }
-
-      }      
+      }     
+      // call reoreder action with dragPos and hoverPos args
       console.log(dragPos, hoverPos)
     }
   })

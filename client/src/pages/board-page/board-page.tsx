@@ -30,6 +30,7 @@ import {
   getListNameFromState,
 } from '../../services/boards/board-store';
 
+
 const BoardPage = () => {
   const navigate = useNavigate();
   const { name, lists, setBoardState } = useBoardStore(state => state);
