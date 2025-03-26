@@ -35,7 +35,6 @@ export function getListNameFromState(arr: Array<IList>, id: string) {
 
 type TState = IBoard & IActions;
 
-
 export function ascendingComparator (a:IList, b: IList): number {
   if (a.pos < b.pos) return -1;
   if (a.pos > b.pos) return 1;
@@ -52,7 +51,7 @@ export const useBoardStore = create<TState>()(
           _id: data._id,
           name: data.name,
           createrId: data.createrId,
-          lists: data.lists.sort(ascendingComparator),
+          lists: data.lists,
         }),
       reset: () => set(initialState),
       updateListNameBylistId: (id: string, name: string) =>

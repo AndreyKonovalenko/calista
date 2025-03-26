@@ -15,7 +15,7 @@ import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-men
 import { useState } from 'react';
 import { useBoardStore } from '../../../services/boards/board-store';
 import {DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
-
+import { calculateNewPosition } from '../../../utils/utils';
 const handleFormSubmitEvent = (
   event:
     | React.KeyboardEvent<HTMLTextAreaElement>
@@ -39,7 +39,7 @@ const BoardList = (props: {
   ) => void;
 }) => {
   const { name, id, handleDeleteList, handleUpdateListName, pos } = props;
-  const { updateListNameBylistId } = useBoardStore(state => state);
+  const { updateListNameBylistId, lists } = useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
   const { spacing, palette } = useTheme();
@@ -87,14 +87,12 @@ const BoardList = (props: {
         }
       }     
       // call reoreder action with dragPos and hoverPos args
-      console.log(dragPos, hoverPos)
+      const newPos = calculateNewPosition(lists, hoverPos)
+      console.log(dragPos, hoverPos, newPos)
     }
   })
 
-
-
-
-  const opacity = isDragging? 0 : 1
+const opacity = isDragging? 0 : 1
   drag(drop(ref))
   const cardsList =
     cardsMoch.length > 0 ? (

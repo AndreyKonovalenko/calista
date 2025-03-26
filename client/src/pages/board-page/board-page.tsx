@@ -29,6 +29,7 @@ import {
   useBoardStore,
   getListNameFromState,
 } from '../../services/boards/board-store';
+import { ascendingComparator } from '../../services/boards/board-store';
 
 
 const BoardPage = () => {
@@ -90,7 +91,7 @@ const BoardPage = () => {
     deleteListQuery.mutate(listId);
   };
 
-  const boardLists = lists.map(element => {
+  const boardLists = lists.sort(ascendingComparator).map(element => {
     return (
       <BoardList
         key={uuidv4()}
