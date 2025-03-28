@@ -42,7 +42,7 @@ const BoardPage = () => {
   const deleteBoardQuery = useDeleteBoard();
   const createListQuery = useCreateList(id);
   const deleteListQuery = useDeleteList(id);
-  const updateListQuery = useUpdateList(id);
+  const updateListQuery = useUpdateList();
 
   const handleDeleteBoard = (): void => {
     deleteBoardQuery.mutate(id);

@@ -16,6 +16,8 @@ import { useState } from 'react';
 import { useBoardStore } from '../../../services/boards/board-store';
 import {DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
 import { calculateNewPosition } from '../../../utils/utils';
+// import { useUpdateList } from '../../../api/lists-api-queries';
+
 const handleFormSubmitEvent = (
   event:
     | React.KeyboardEvent<HTMLTextAreaElement>
@@ -28,6 +30,8 @@ const handleFormSubmitEvent = (
   event.currentTarget.form?.dispatchEvent(formEvent);
 };
 
+
+
 const BoardList = (props: {
   name: string;
   id: string;
@@ -39,20 +43,49 @@ const BoardList = (props: {
   ) => void;
 }) => {
   const { name, id, handleDeleteList, handleUpdateListName, pos } = props;
-  const { updateListNameBylistId, lists } = useBoardStore(state => state);
+  const { updateListNameBylistId, lists, updateListPosByListId } = useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
   const { spacing, palette } = useTheme();
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
   const ref = useRef<HTMLDivElement>(null)
+  // const updateListQuery = useUpdateList()
 
   type TMovableEelement = {
+    id: string,
     pos: number
   }
   
+//   const handleUpdateListPos = (listId: string, newPos: number) => {
+//   updateListQuery.mutate({
+//     id: listId, 
+//     data:{pos: newPos}
+//   })
+// }
+
+
+
+// const handleUpdateListName = (
+//     event: React.FormEvent<HTMLFormElement>,
+//     listId: string,
+//   ) => {
+//     event.preventDefault();
+//     const formData = new FormData(event.currentTarget);
+//     const listName = formData.get('listName');
+//     const stateListName = getListNameFromState(lists, listId);
+//     if (listName !== stateListName) {
+//       updateListQuery.mutate({
+//         id: listId,
+//         data: { name: listName },
+//       });
+//     }
+//   };
+
+
+
   const [{isDragging}, drag] = useDrag({
     type: 'list',
-    item: {pos},
+    item: {id, pos},
     collect: (monitor) => ({
       isDragging: monitor.isDragging()
     })
@@ -88,6 +121,8 @@ const BoardList = (props: {
       }     
       // call reoreder action with dragPos and hoverPos args
       const newPos = calculateNewPosition(lists, hoverPos)
+      updateListPosByListId(item.id, newPos)
+      // handleUpdateListPos(item.id, newPos)
       console.log(dragPos, hoverPos, newPos)
     }
   })

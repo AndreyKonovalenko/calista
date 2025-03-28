@@ -35,8 +35,7 @@ export const useDeleteList = (boardId: string) => {
   });
 };
 
-export const useUpdateList = (boardId: string) => {
-  console.log(boardId);
+export const useUpdateList = () => {
   return useMutation({
     mutationFn: api.lists.updateList,
   });
