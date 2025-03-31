@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, memo } from 'react';
 import {
   Box,
   Button,
@@ -14,8 +14,8 @@ import CardComponent from '../card-component/card-component';
 import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-menu';
 import { useState } from 'react';
 import { useBoardStore } from '../../../services/boards/board-store';
-import {DropTargetMonitor, useDrag, useDrop } from 'react-dnd';
-import { calculateNewPosition } from '../../../utils/utils';
+import { useDrag, useDrop } from 'react-dnd';
+// import { calculateNewPosition } from '../../../utils/utils';
 // import { useUpdateList } from '../../../api/lists-api-queries';
 
 const handleFormSubmitEvent = (
@@ -32,7 +32,7 @@ const handleFormSubmitEvent = (
 
 
 
-const BoardList = (props: {
+const BoardList = memo(function BaoardList (props: {
   name: string;
   id: string;
   pos: number;
@@ -41,9 +41,9 @@ const BoardList = (props: {
     event: React.FormEvent<HTMLFormElement>,
     id: string,
   ) => void;
-}) => {
+}) {
   const { name, id, handleDeleteList, handleUpdateListName, pos } = props;
-  const { updateListNameBylistId, lists, updateListPosByListId } = useBoardStore(state => state);
+  const { updateListNameBylistId } = useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
   const { spacing, palette } = useTheme();
@@ -83,7 +83,7 @@ const BoardList = (props: {
 
 
 
-  const [{isDragging}, drag] = useDrag({
+  const [{isDragging}, connectDrag] = useDrag({
     type: 'list',
     item: {id, pos},
     collect: (monitor) => ({
@@ -91,44 +91,23 @@ const BoardList = (props: {
     })
   })
 
-  const [, drop] = useDrop<TMovableEelement, unknown>({
+  const [, connectDrop] = useDrop<TMovableEelement, unknown>({
     accept: 'list',
-    collect(monitor) {
-      return {
-        handlerId: monitor.getHandlerId()
+    hover({id: draggedId}){
+      
+      // // call reoreder action with dragPos and hoverPos args
+      // const newPos = calculateNewPosition(lists, hoverPos)
+      // updateListPosByListId(item.id, newPos)
+      // // handleUpdateListPos(item.id, newPos)
+      if(draggedId !== id){
+        console.log(draggedId, id)
       }
-    },
-    hover(item:TMovableEelement, monitor: DropTargetMonitor){
-      if(!ref.current){
-        return;
-      }
-      const dragPos = item.pos;
-      const hoverPos = pos;
-      if (dragPos === hoverPos) {
-        return;
-      }
-      const hoverBoundingRect = ref.current?.getBoundingClientRect();
-      const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left)/2;
-      const clientOffset = monitor.getClientOffset();
-      if (clientOffset) {
-        const hoverClientX = clientOffset.x - hoverBoundingRect.left;
-        if(dragPos < hoverPos && hoverClientX < hoverMiddleX) {
-          return;
-        } 
-        if (dragPos> hoverPos  && hoverClientX > hoverMiddleX) {
-          return
-        }
-      }     
-      // call reoreder action with dragPos and hoverPos args
-      const newPos = calculateNewPosition(lists, hoverPos)
-      updateListPosByListId(item.id, newPos)
-      // handleUpdateListPos(item.id, newPos)
-      console.log(dragPos, hoverPos, newPos)
     }
   })
 
 const opacity = isDragging? 0 : 1
-  drag(drop(ref))
+  connectDrag(ref);
+  connectDrop(ref)
   const cardsList =
     cardsMoch.length > 0 ? (
       <List
@@ -219,6 +198,6 @@ const opacity = isDragging? 0 : 1
       </Stack>
     </Box>
   );
-};
+});
 
 export default BoardList;
