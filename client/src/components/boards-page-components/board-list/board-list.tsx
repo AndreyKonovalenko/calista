@@ -13,8 +13,9 @@ import { TitleTextAreaStyled } from '../boards-page-styled-elements/boards-page-
 import CardComponent from '../card-component/card-component';
 import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-menu';
 import { useState } from 'react';
-import { useBoardStore } from '../../../services/boards/board-store';
+import { useBoardStore} from '../../../services/boards/board-store';
 import { useDrag, useDrop } from 'react-dnd';
+import { calculateNewPosition } from '../../../utils/utils';
 // import { calculateNewPosition } from '../../../utils/utils';
 // import { useUpdateList } from '../../../api/lists-api-queries';
 
@@ -43,7 +44,7 @@ const BoardList = memo(function BaoardList (props: {
   ) => void;
 }) {
   const { name, id, handleDeleteList, handleUpdateListName, pos } = props;
-  const { updateListNameBylistId } = useBoardStore(state => state);
+  const { updateListNameBylistId, lists, updateListPosByListId } = useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
   const { spacing, palette } = useTheme();
@@ -93,21 +94,28 @@ const BoardList = memo(function BaoardList (props: {
 
   const [, connectDrop] = useDrop<TMovableEelement, unknown>({
     accept: 'list',
-    hover({id: draggedId}){
-      
-      // // call reoreder action with dragPos and hoverPos args
-      // const newPos = calculateNewPosition(lists, hoverPos)
-      // updateListPosByListId(item.id, newPos)
-      // // handleUpdateListPos(item.id, newPos)
-      if(draggedId !== id){
-        console.log(draggedId, id)
+    drop(item){
+      if(item.id !== id){
+       const newPos =  calculateNewPosition(lists, item.pos);
+       updateListPosByListId(id, newPos)
       }
-    }
+
+    },
+    // hover(item){
+    //   // // call reoreder action with dragPos and hoverPos args
+    //   // const newPos = calculateNewPosition(lists, hoverPos)
+    //   // updateListPosByListId(item.id, newPos)
+    //   // // handleUpdateListPos(item.id, newPos)
+    //   if(item.id !== id){
+    //     console.log(item.id, id)
+    //   }
+    // }
   })
 
-const opacity = isDragging? 0 : 1
+  const opacity = isDragging? 0 : 1
   connectDrag(ref);
   connectDrop(ref)
+
   const cardsList =
     cardsMoch.length > 0 ? (
       <List
@@ -126,7 +134,7 @@ const opacity = isDragging? 0 : 1
           </ListItem>
         ))}
       </List>
-    ) : null;
+  ) : null;
 
   return (
     <Box sx={{ width: spacing(34), height: '100%', opacity: opacity }} ref={ref}>
