@@ -16,7 +16,6 @@ import { useState } from 'react';
 import { useBoardStore} from '../../../services/boards/board-store';
 import { useDrag, useDrop } from 'react-dnd';
 import { calculateNewPosition } from '../../../utils/utils';
-// import { calculateNewPosition } from '../../../utils/utils';
 // import { useUpdateList } from '../../../api/lists-api-queries';
 
 const handleFormSubmitEvent = (
@@ -44,7 +43,7 @@ const BoardList = memo(function BaoardList (props: {
   ) => void;
 }) {
   const { name, id, handleDeleteList, handleUpdateListName, pos } = props;
-  const { updateListNameBylistId, lists, updateListPosByListId } = useBoardStore(state => state);
+  const { updateListNameBylistId, updateListPosByListId, lists } = useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
   const { spacing, palette } = useTheme();
@@ -94,22 +93,24 @@ const BoardList = memo(function BaoardList (props: {
 
   const [, connectDrop] = useDrop<TMovableEelement, unknown>({
     accept: 'list',
-    drop(item){
-      if(item.id !== id){
-       const newPos =  calculateNewPosition(lists, item.pos);
-       updateListPosByListId(id, newPos)
-      }
-
-    },
-    // hover(item){
-    //   // // call reoreder action with dragPos and hoverPos args
-    //   // const newPos = calculateNewPosition(lists, hoverPos)
-    //   // updateListPosByListId(item.id, newPos)
-    //   // // handleUpdateListPos(item.id, newPos)
+    // drop(item){
     //   if(item.id !== id){
-    //     console.log(item.id, id)
+    //    const newPos =  calculateNewPosition(lists, item.pos);
+    //    updateListPosByListId(id, newPos)
     //   }
-    // }
+
+    // },
+    hover(item){
+      // // call reoreder action with dragPos and hoverPos args
+      // const newPos = calculateNewPosition(lists, hoverPos)
+      // updateListPosByListId(item.id, newPos)
+      // // handleUpdateListPos(item.id, newPos)
+      if(item.id !== id){
+        const newPos = calculateNewPosition(lists, item.pos)
+        updateListPosByListId(id, newPos)
+      }
+      console.log(item.id, id)
+    }
   })
 
   const opacity = isDragging? 0 : 1

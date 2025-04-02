@@ -48,7 +48,6 @@ export function ascendingComparator (a:IList, b: IList): number {
   return 0
 }
 
-
 export const useBoardStore = create<TState>()(
   devtools(
     set => ({
