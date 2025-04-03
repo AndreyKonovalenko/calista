@@ -16,7 +16,7 @@ import { useState } from 'react';
 import { useBoardStore} from '../../../services/boards/board-store';
 import { useDrag, useDrop } from 'react-dnd';
 import { calculateNewPosition } from '../../../utils/utils';
-// import { useUpdateList } from '../../../api/lists-api-queries';
+import { useUpdateList } from '../../../api/lists-api-queries';
 
 const handleFormSubmitEvent = (
   event:
@@ -30,8 +30,6 @@ const handleFormSubmitEvent = (
   event.currentTarget.form?.dispatchEvent(formEvent);
 };
 
-
-
 const BoardList = memo(function BaoardList (props: {
   name: string;
   id: string;
@@ -43,13 +41,13 @@ const BoardList = memo(function BaoardList (props: {
   ) => void;
 }) {
   const { name, id, handleDeleteList, handleUpdateListName, pos } = props;
-  const { updateListNameBylistId, updateListPosByListId, lists } = useBoardStore(state => state);
+  const { updateListNameBylistId, lists, updateListPosByListId } = useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
   const { spacing, palette } = useTheme();
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
   const ref = useRef<HTMLDivElement>(null)
-  // const updateListQuery = useUpdateList()
+  const updateListQuery = useUpdateList()
 
   type TMovableEelement = {
     id: string,
@@ -57,31 +55,12 @@ const BoardList = memo(function BaoardList (props: {
     name: string
   }
   
-//   const handleUpdateListPos = (listId: string, newPos: number) => {
-//   updateListQuery.mutate({
-//     id: listId, 
-//     data:{pos: newPos}
-//   })
-// }
-
-
-
-// const handleUpdateListName = (
-//     event: React.FormEvent<HTMLFormElement>,
-//     listId: string,
-//   ) => {
-//     event.preventDefault();
-//     const formData = new FormData(event.currentTarget);
-//     const listName = formData.get('listName');
-//     const stateListName = getListNameFromState(lists, listId);
-//     if (listName !== stateListName) {
-//       updateListQuery.mutate({
-//         id: listId,
-//         data: { name: listName },
-//       });
-//     }
-//   };
-
+  const handleUpdateListPos = (listId: string, newPos: number) => {
+  updateListQuery.mutate({
+    id: listId, 
+    data:{pos: newPos}
+  })
+}
 
 
   const [{isDragging}, connectDrag] = useDrag({
@@ -94,22 +73,12 @@ const BoardList = memo(function BaoardList (props: {
 
   const [, connectDrop] = useDrop<TMovableEelement, unknown>({
     accept: 'list',
-    // drop(item){
-    //   if(item.id !== id){
-    //    const newPos =  calculateNewPosition(lists, item.pos);
-    //    updateListPosByListId(id, newPos)
-    //   }
-
-    // },
-    hover({id: draggedId}){
-      // // call reoreder action with dragPos and hoverPos args
-      // const newPos = calculateNewPosition(lists, hoverPos)
-      // updateListPosByListId(item.id, newPos)
-      // // handleUpdateListPos(item.id, newPos)
+    hover({id: draggedId}){     
       if(draggedId !== id) {
-        const newPos = calculateNewPosition(lists, id)
-        if(newPos) {
+        const newPos = calculateNewPosition(lists, id, draggedId)
+        if(newPos) {   
           updateListPosByListId(draggedId, newPos)
+          handleUpdateListPos(draggedId, newPos)
         }
       }
     }

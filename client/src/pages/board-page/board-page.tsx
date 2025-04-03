@@ -92,6 +92,7 @@ const BoardPage = () => {
   };
 
   const boardLists = lists.sort(ascendingComparator).map(element => {
+    console.log("sort list array due to change positon of list")
     return (
       <BoardList
         key={uuidv4()}

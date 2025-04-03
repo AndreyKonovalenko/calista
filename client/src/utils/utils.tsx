@@ -15,17 +15,17 @@ export function invariantId(value: string | undefined): asserts value {
 }
 
 
-export function calculateNewPosition(arr:Array<IList>, dropId:string ): number | undefined  {
+export function calculateNewPosition(arr:Array<IList>, dropId:string, dragId: string ): number | undefined  {
   const dropElement = arr.find(element => element._id === dropId); 
+  const dragElement = arr.find(element => element._id === dragId)
 
-  if (!dropElement) {
+  if (!dropElement || ! dragElement) {
     return
   }
 
   const dropIndex = arr.indexOf(dropElement)
-  console.log(dropIndex)
+  const dragIndex = arr.indexOf(dragElement)
   const { pos } = dropElement;
-  console.log(pos)
   const start = Boolean(dropIndex === 0)
   const end = Boolean(dropIndex === arr.length -1)
 
@@ -37,13 +37,13 @@ export function calculateNewPosition(arr:Array<IList>, dropId:string ): number |
     console.log('end case')
     return (arr[arr.length - 1].pos + 16384)
   }
-
-  if ((dropIndex < arr.length - 1) && (dropIndex > 0) ){
-    console.log('midleCase')
-    const previus = arr[dropIndex -1];
-    console.log(dropIndex, dropIndex - 1 )
-    console.log((pos +  previus.pos) / 2)
-    console.log(pos, previus.pos)
-    return Math.trunc((pos +  previus.pos) / 2)
+  // drag from right to left 
+  if (dragIndex < dropIndex) {
+    return Math.trunc((pos +  arr[dropIndex + 1].pos) / 2)
   }
+  // drag from left to right
+  if (dragIndex > dropIndex) {
+    return Math.trunc((pos +  arr[dropIndex - 1].pos) / 2)
+  }
+   
 }
