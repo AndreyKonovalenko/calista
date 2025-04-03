@@ -30,9 +30,10 @@ const updateName = (arr: Array<IList>, name: string, id: string) => {
 };
 
 const updatePos = (arr: Array<IList>, pos: number, id:string) => {
+  const arrCopy = arr.slice()
   const index: number = arr.findIndex(element => element._id === id)
-  arr[index].pos = pos;
-  return arr;
+  arrCopy[index].pos = pos;
+  return arrCopy;
 }
 
 export function getListNameFromState(arr: Array<IList>, id: string) {

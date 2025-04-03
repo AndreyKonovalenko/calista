@@ -15,7 +15,7 @@ import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-men
 import { useState } from 'react';
 import { useBoardStore} from '../../../services/boards/board-store';
 import { useDrag, useDrop } from 'react-dnd';
-import { calculateNewPosition } from '../../../utils/utils';
+// import { calculateNewPosition } from '../../../utils/utils';
 // import { useUpdateList } from '../../../api/lists-api-queries';
 
 const handleFormSubmitEvent = (
@@ -43,7 +43,8 @@ const BoardList = memo(function BaoardList (props: {
   ) => void;
 }) {
   const { name, id, handleDeleteList, handleUpdateListName, pos } = props;
-  const { updateListNameBylistId, updateListPosByListId, lists } = useBoardStore(state => state);
+  // const { updateListNameBylistId, updateListPosByListId, lists } = useBoardStore(state => state);
+  const { updateListNameBylistId } = useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
   const { spacing, palette } = useTheme();
@@ -53,7 +54,8 @@ const BoardList = memo(function BaoardList (props: {
 
   type TMovableEelement = {
     id: string,
-    pos: number
+    pos: number,
+    name: string
   }
   
 //   const handleUpdateListPos = (listId: string, newPos: number) => {
@@ -85,7 +87,7 @@ const BoardList = memo(function BaoardList (props: {
 
   const [{isDragging}, connectDrag] = useDrag({
     type: 'list',
-    item: {id, pos},
+    item: {id, pos, name},
     collect: (monitor) => ({
       isDragging: monitor.isDragging()
     })
@@ -100,18 +102,25 @@ const BoardList = memo(function BaoardList (props: {
     //   }
 
     // },
-    hover(item){
+    hover({id: draggedId, name: draggedName}){
       // // call reoreder action with dragPos and hoverPos args
       // const newPos = calculateNewPosition(lists, hoverPos)
       // updateListPosByListId(item.id, newPos)
       // // handleUpdateListPos(item.id, newPos)
-      if(item.id !== id){
-        const newPos = calculateNewPosition(lists, item.pos)
-        updateListPosByListId(id, newPos)
+      if(draggedId !== id){
+        console.log("dragName", draggedName, 'dropName', name)
+        // const newPos = calculateNewPosition(lists, item.id, id)
+        //  if(newPos){
+        //   updateListPosByListId(id, newPos)
+        // }
       }
-      console.log(item.id, id)
     }
   })
+
+  const neObj= {great: 'hello', age: 20}
+
+  const {great: newgreat, age} = neObj;
+  console.log(newgreat, age)
 
   const opacity = isDragging? 0 : 1
   connectDrag(ref);
