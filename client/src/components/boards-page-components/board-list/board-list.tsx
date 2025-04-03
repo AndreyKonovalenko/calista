@@ -15,7 +15,7 @@ import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-men
 import { useState } from 'react';
 import { useBoardStore} from '../../../services/boards/board-store';
 import { useDrag, useDrop } from 'react-dnd';
-// import { calculateNewPosition } from '../../../utils/utils';
+import { calculateNewPosition } from '../../../utils/utils';
 // import { useUpdateList } from '../../../api/lists-api-queries';
 
 const handleFormSubmitEvent = (
@@ -43,8 +43,7 @@ const BoardList = memo(function BaoardList (props: {
   ) => void;
 }) {
   const { name, id, handleDeleteList, handleUpdateListName, pos } = props;
-  // const { updateListNameBylistId, updateListPosByListId, lists } = useBoardStore(state => state);
-  const { updateListNameBylistId } = useBoardStore(state => state);
+  const { updateListNameBylistId, updateListPosByListId, lists } = useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
   const { spacing, palette } = useTheme();
@@ -102,25 +101,19 @@ const BoardList = memo(function BaoardList (props: {
     //   }
 
     // },
-    hover({id: draggedId, name: draggedName}){
+    hover({id: draggedId}){
       // // call reoreder action with dragPos and hoverPos args
       // const newPos = calculateNewPosition(lists, hoverPos)
       // updateListPosByListId(item.id, newPos)
       // // handleUpdateListPos(item.id, newPos)
-      if(draggedId !== id){
-        console.log("dragName", draggedName, 'dropName', name)
-        // const newPos = calculateNewPosition(lists, item.id, id)
-        //  if(newPos){
-        //   updateListPosByListId(id, newPos)
-        // }
+      if(draggedId !== id) {
+        const newPos = calculateNewPosition(lists, id)
+        if(newPos) {
+          updateListPosByListId(draggedId, newPos)
+        }
       }
     }
   })
-
-  const neObj= {great: 'hello', age: 20}
-
-  const {great: newgreat, age} = neObj;
-  console.log(newgreat, age)
 
   const opacity = isDragging? 0 : 1
   connectDrag(ref);
