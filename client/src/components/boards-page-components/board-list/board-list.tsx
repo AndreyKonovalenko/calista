@@ -1,4 +1,4 @@
-import React, { useRef, memo } from 'react';
+import React, { useRef, memo} from 'react';
 import {
   Box,
   Button,
@@ -40,7 +40,7 @@ const BoardList = memo(function BaoardList (props: {
     id: string,
   ) => void;
 }) {
-  const { name, id, handleDeleteList, handleUpdateListName, pos } = props;
+  const { name, id, handleDeleteList, handleUpdateListName,} = props;
   const { updateListNameBylistId, lists, updateListPosByListId } = useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
@@ -51,27 +51,24 @@ const BoardList = memo(function BaoardList (props: {
 
   type TMovableEelement = {
     id: string,
-    pos: number,
-    name: string
   }
   
   const handleUpdateListPos = (listId: string, newPos: number) => {
-  updateListQuery.mutate({
-    id: listId, 
-    data:{pos: newPos}
-  })
-}
+    updateListQuery.mutate({
+      id: listId, 
+      data:{pos: newPos}
+    })
+  }
 
-
-  const [{isDragging}, connectDrag] = useDrag({
+  const [{ isDragging }, connectDrag] = useDrag<TMovableEelement, unknown, {isDragging:boolean}>({
     type: 'list',
-    item: {id, pos, name},
+    item: {id},
     collect: (monitor) => ({
       isDragging: monitor.isDragging()
     })
   })
 
-  const [, connectDrop] = useDrop<TMovableEelement, unknown>({
+  const [{ isOver }, connectDrop] = useDrop<TMovableEelement, unknown, {isOver: boolean}>({
     accept: 'list',
     hover({id: draggedId}){     
       if(draggedId !== id) {
@@ -81,12 +78,17 @@ const BoardList = memo(function BaoardList (props: {
           handleUpdateListPos(draggedId, newPos)
         }
       }
-    }
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver()
+    })
   })
 
-  const opacity = isDragging? 0 : 1
+  const opacity = isDragging ? 0.2 : 1
+
   connectDrag(ref);
   connectDrop(ref)
+  console.log(isOver)
 
   const cardsList =
     cardsMoch.length > 0 ? (
@@ -109,12 +111,12 @@ const BoardList = memo(function BaoardList (props: {
   ) : null;
 
   return (
-    <Box sx={{ width: spacing(34), height: '100%', opacity: opacity }} ref={ref}>
+    <Box sx={{ width: spacing(34), height: '100%', opacity: opacity}} ref={ref}>
       <Stack
         spacing={2}
         sx={{
           width: spacing(34),
-          backgroundColor: palette.listBackground.main,
+          backgroundColor: isOver ? 'black' : palette.listBackground.main,
           borderRadius: spacing(2),
           maxHeight: '100%',
           position: 'relative',
@@ -122,7 +124,7 @@ const BoardList = memo(function BaoardList (props: {
         }}
       >
         <Box
-          sx={{ pl: spacing(2), pt: spacing(2), pr: spacing(2) }}
+          sx={{ pl: spacing(2), pt: spacing(2), pr: spacing(2)}}
           component="form"
           onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
             handleUpdateListName(event, id);
