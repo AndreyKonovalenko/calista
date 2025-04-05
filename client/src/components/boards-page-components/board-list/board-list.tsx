@@ -1,4 +1,4 @@
-import React, { useRef, memo} from 'react';
+import React, { useRef, memo } from 'react';
 import {
   Box,
   Button,
@@ -13,7 +13,7 @@ import { TitleTextAreaStyled } from '../boards-page-styled-elements/boards-page-
 import CardComponent from '../card-component/card-component';
 import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-menu';
 import { useState } from 'react';
-import { useBoardStore} from '../../../services/boards/board-store';
+import { useBoardStore } from '../../../services/boards/board-store';
 import { useDrag, useDrop } from 'react-dnd';
 import { calculateNewPosition } from '../../../utils/utils';
 import { useUpdateList } from '../../../api/lists-api-queries';
@@ -30,7 +30,7 @@ const handleFormSubmitEvent = (
   event.currentTarget.form?.dispatchEvent(formEvent);
 };
 
-const BoardList = memo(function BaoardList (props: {
+const BoardList = memo(function BaoardList(props: {
   name: string;
   id: string;
   pos: number;
@@ -40,56 +40,64 @@ const BoardList = memo(function BaoardList (props: {
     id: string,
   ) => void;
 }) {
-  const { name, id, handleDeleteList, handleUpdateListName,} = props;
-  const { updateListNameBylistId, lists, updateListPosByListId } = useBoardStore(state => state);
+  const { name, id, handleDeleteList, handleUpdateListName } = props;
+  const { updateListNameBylistId, lists, updateListPosByListId } =
+    useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
   const { spacing, palette } = useTheme();
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
-  const ref = useRef<HTMLDivElement>(null)
-  const updateListQuery = useUpdateList()
+  const ref = useRef<HTMLDivElement>(null);
+  const updateListQuery = useUpdateList();
 
   type TMovableEelement = {
-    id: string,
-  }
-  
+    id: string;
+  };
+
   const handleUpdateListPos = (listId: string, newPos: number) => {
     updateListQuery.mutate({
-      id: listId, 
-      data:{pos: newPos}
-    })
-  }
+      id: listId,
+      data: { pos: newPos },
+    });
+  };
 
-  const [{ isDragging }, connectDrag] = useDrag<TMovableEelement, unknown, {isDragging:boolean}>({
+  const [{ isDragging }, connectDrag] = useDrag<
+    TMovableEelement,
+    unknown,
+    { isDragging: boolean }
+  >({
     type: 'list',
-    item: {id},
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging()
-    })
-  })
+    item: { id },
+    collect: monitor => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
 
-  const [{ isOver }, connectDrop] = useDrop<TMovableEelement, unknown, {isOver: boolean}>({
+  const [{ isOver }, connectDrop] = useDrop<
+    TMovableEelement,
+    unknown,
+    { isOver: boolean }
+  >({
     accept: 'list',
-    hover({id: draggedId}){     
-      if(draggedId !== id) {
-        const newPos = calculateNewPosition(lists, id, draggedId)
-        if(newPos) {   
-          updateListPosByListId(draggedId, newPos)
-          handleUpdateListPos(draggedId, newPos)
+    hover({ id: draggedId }) {
+      if (draggedId !== id) {
+        const newPos = calculateNewPosition(lists, id, draggedId);
+        if (newPos) {
+          updateListPosByListId(draggedId, newPos);
+          handleUpdateListPos(draggedId, newPos);
         }
       }
     },
-    collect: (monitor) => ({
-      isOver: monitor.isOver()
-    })
-  })
+    collect: monitor => ({
+      isOver: monitor.isOver(),
+    }),
+  });
 
-  const opacity = isDragging ? 0.2 : 1
+  const opacity = isDragging ? 0.2 : 1;
 
   connectDrag(ref);
-  connectDrop(ref)
-  console.log(isOver)
-
+  connectDrop(ref);
+  console.log(isOver);
   const cardsList =
     cardsMoch.length > 0 ? (
       <List
@@ -108,76 +116,106 @@ const BoardList = memo(function BaoardList (props: {
           </ListItem>
         ))}
       </List>
-  ) : null;
+    ) : null;
 
+  const dropGuide = (
+    <Box
+      sx={{
+        width: spacing(34),
+        height: '100%',
+        opacity: opacity,
+        borderRadius: spacing(2),
+        backgroundColor: palette.dropGuideColor.main,
+      }}
+    />
+  );
   return (
-    <Box sx={{ width: spacing(34), height: '100%', opacity: opacity}} ref={ref}>
-      <Stack
-        spacing={2}
-        sx={{
-          width: spacing(34),
-          backgroundColor: isOver ? 'black' : palette.listBackground.main,
-          borderRadius: spacing(2),
-          maxHeight: '100%',
-          position: 'relative',
-          flexShrink: 0,
-        }}
-      >
-        <Box
-          sx={{ pl: spacing(2), pt: spacing(2), pr: spacing(2)}}
-          component="form"
-          onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-            handleUpdateListName(event, id);
+    <Box
+      sx={{
+        width: spacing(34),
+        height: '100%',
+        opacity: opacity,
+        borderRadius: spacing(2),
+      }}
+      ref={ref}
+    >
+      {isOver ? (
+        dropGuide
+      ) : (
+        <Stack
+          spacing={2}
+          sx={{
+            width: spacing(34),
+            backgroundColor: palette.listBackground.main,
+            borderRadius: spacing(2),
+            maxHeight: '100%',
+            position: 'relative',
+            flexShrink: 0,
+            transform: isDragging ? 'rotate(6deg)' : '',
           }}
         >
-          <Stack direction="row" justifyContent="space-between" spacing={2}>
-            {editing ? (
-              <TitleTextAreaStyled
-                name="listName"
-                autoFocus
-                rows={1}
-                value={listName}
-                onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                  setListName(event.target.value);
-                }}
-                onFocus={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-                  event.target.select();
-                }}
-                onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-                  handleFormSubmitEvent(event);
-                  updateListNameBylistId(id, listName);
-                }}
-                onKeyDown={(
-                  event: React.KeyboardEvent<HTMLTextAreaElement>,
-                ) => {
-                  if (event.key === 'Enter') {
+          <Box
+            sx={{ pl: spacing(2), pt: spacing(2), pr: spacing(2) }}
+            component="form"
+            onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
+              handleUpdateListName(event, id);
+            }}
+          >
+            <Stack direction="row" justifyContent="space-between" spacing={2}>
+              {editing ? (
+                <TitleTextAreaStyled
+                  name="listName"
+                  autoFocus
+                  rows={1}
+                  value={listName}
+                  onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+                    setListName(event.target.value);
+                  }}
+                  onFocus={(event: React.FocusEvent<HTMLTextAreaElement>) => {
+                    event.target.select();
+                  }}
+                  onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
                     handleFormSubmitEvent(event);
                     updateListNameBylistId(id, listName);
-                  }
-                }}
-              />
-            ) : (
-              <Box onClick={() => setEditing(true)} sx={{ cursor: 'pointer' }}>
-                <Typography
-                  sx={{
-                    overflow: 'hidden',
-                    overflowWrap: 'anywhere',
-                    resize: 'none',
                   }}
-                  variant="h6"
+                  onKeyDown={(
+                    event: React.KeyboardEvent<HTMLTextAreaElement>,
+                  ) => {
+                    if (event.key === 'Enter') {
+                      handleFormSubmitEvent(event);
+                      updateListNameBylistId(id, listName);
+                    }
+                  }}
+                />
+              ) : (
+                <Box
+                  onClick={() => setEditing(true)}
+                  sx={{ cursor: 'pointer' }}
                 >
-                  {listName}
-                </Typography>
-              </Box>
-            )}
-            <BoardListActionMenu id={id} handleDeleteList={handleDeleteList} />
-          </Stack>
-        </Box>
-        {cardsList}
-        <Box>
-          <Button>+ Add a card</Button>
-        </Box>
-      </Stack>
+                  <Typography
+                    sx={{
+                      overflow: 'hidden',
+                      overflowWrap: 'anywhere',
+                      resize: 'none',
+                    }}
+                    variant="h6"
+                  >
+                    {listName}
+                  </Typography>
+                </Box>
+              )}
+              <BoardListActionMenu
+                id={id}
+                handleDeleteList={handleDeleteList}
+              />
+            </Stack>
+          </Box>
+          {cardsList}
+          <Box>
+            <Button>+ Add a card</Button>
+          </Box>
+        </Stack>
+      )}
     </Box>
   );
 });
