@@ -45,6 +45,7 @@ const BoardList = memo(function BaoardList(props: {
     useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
+  const [isActive, setIsActive] = useState(false)
   const { spacing, palette } = useTheme();
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
   const ref = useRef<HTMLDivElement>(null);
@@ -53,6 +54,10 @@ const BoardList = memo(function BaoardList(props: {
   type TMovableEelement = {
     id: string;
   };
+
+  const handleSetActive = ()  => {
+    setIsActive(true)
+  }
 
   const handleUpdateListPos = (listId: string, newPos: number) => {
     updateListQuery.mutate({
@@ -131,11 +136,13 @@ const BoardList = memo(function BaoardList(props: {
   );
   return (
     <Box
+      onMouseDown={handleSetActive}
       sx={{
         width: spacing(34),
         height: '100%',
         opacity: opacity,
         borderRadius: spacing(2),
+        rotate: isActive? '7deg': ''
       }}
       ref={ref}
     >
