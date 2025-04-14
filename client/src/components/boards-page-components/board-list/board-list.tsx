@@ -1,4 +1,4 @@
-import React, { useRef, memo } from 'react';
+import React, { useRef, memo, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -17,6 +17,7 @@ import { useBoardStore } from '../../../services/boards/board-store';
 import { useDrag, useDrop } from 'react-dnd';
 import { calculateNewPosition } from '../../../utils/utils';
 import { useUpdateList } from '../../../api/lists-api-queries';
+import { getEmptyImage } from 'react-dnd-html5-backend';
 
 const handleFormSubmitEvent = (
   event:
@@ -45,7 +46,6 @@ const BoardList = memo(function BaoardList(props: {
     useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
-  const [isActive, setIsActive] = useState(false)
   const { spacing, palette } = useTheme();
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
   const ref = useRef<HTMLDivElement>(null);
@@ -53,11 +53,8 @@ const BoardList = memo(function BaoardList(props: {
 
   type TMovableEelement = {
     id: string;
+    name: string;
   };
-
-  const handleSetActive = ()  => {
-    setIsActive(true)
-  }
 
   const handleUpdateListPos = (listId: string, newPos: number) => {
     updateListQuery.mutate({
@@ -66,13 +63,13 @@ const BoardList = memo(function BaoardList(props: {
     });
   };
 
-  const [{ isDragging }, connectDrag] = useDrag<
+  const [{ isDragging }, connectDrag, preview] = useDrag<
     TMovableEelement,
     unknown,
     { isDragging: boolean }
   >({
     type: 'list',
-    item: { id },
+    item: { id, name },
     collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),
@@ -98,11 +95,10 @@ const BoardList = memo(function BaoardList(props: {
     }),
   });
 
-  const opacity = isDragging ? 0.2 : 1;
+  const opacity = isDragging ? 0.3 : 1;
 
   connectDrag(ref);
   connectDrop(ref);
-  console.log(isOver);
   const cardsList =
     cardsMoch.length > 0 ? (
       <List
@@ -134,15 +130,18 @@ const BoardList = memo(function BaoardList(props: {
       }}
     />
   );
+
+  useEffect(() => {
+    preview(getEmptyImage(), { captureDraggingState: true });
+  }, []);
+
   return (
     <Box
-      onMouseDown={handleSetActive}
       sx={{
         width: spacing(34),
         height: '100%',
         opacity: opacity,
         borderRadius: spacing(2),
-        rotate: isActive? '7deg': ''
       }}
       ref={ref}
     >
@@ -158,7 +157,6 @@ const BoardList = memo(function BaoardList(props: {
             maxHeight: '100%',
             position: 'relative',
             flexShrink: 0,
-            transform: isDragging ? 'rotate(6deg)' : '',
           }}
         >
           <Box

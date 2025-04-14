@@ -30,7 +30,7 @@ import {
   getListNameFromState,
 } from '../../services/boards/board-store';
 import { ascendingComparator } from '../../services/boards/board-store';
-
+import BoardListCustomDragLayer from '../../components/boards-page-components/board-list/board-list-custom-drag-layer';
 
 const BoardPage = () => {
   const navigate = useNavigate();
@@ -92,16 +92,19 @@ const BoardPage = () => {
   };
 
   const boardLists = lists.sort(ascendingComparator).map(element => {
-    console.log("sort list array due to change positon of list")
+    console.log('sort list array due to change positon of list');
     return (
-      <BoardList
-        key={uuidv4()}
-        name={element.name}
-        id={element._id}
-        pos={element.pos}
-        handleDeleteList={handleDeleteList}
-        handleUpdateListName={handleUpdateListName}
-      />
+      <>
+        <BoardList
+          key={uuidv4()}
+          name={element.name}
+          id={element._id}
+          pos={element.pos}
+          handleDeleteList={handleDeleteList}
+          handleUpdateListName={handleUpdateListName}
+        />
+        <BoardListCustomDragLayer id={element._id} />
+      </>
     );
   });
 
@@ -111,59 +114,64 @@ const BoardPage = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-    <Box
-      sx={{
-        display: 'flex',
-        height: '100%',
-        flexDirection: 'column',
-      }}
-    >
-      <BoardsPageContentPaperBar open={open}>
-        <Toolbar>
-          <Typography variant="h6" component="div" noWrap sx={{ flexGrow: 1 }}>
-            {name}
-          </Typography>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            sx={{ ...(open && { display: 'none' }) }}
-          >
-            <MoreHorizIcon fontSize="medium" />
-          </IconButton>
-        </Toolbar>
-      </BoardsPageContentPaperBar>
-      <BoardsPageContent
-        open={open}
-        sx={{ mt: `${HEADER.H_DESKTOP}px`, position: 'relative' }}
+      <Box
+        sx={{
+          display: 'flex',
+          height: '100%',
+          flexDirection: 'column',
+        }}
       >
-        <Stack
-          direction="row"
-          spacing={2}
-          sx={{
-            left: 0,
-            right: 0,
-            bottom: 0,
-            top: 0,
-            p: 2,
-            display: 'flex',
-            overflowX: 'auto',
-            position: 'absolute',
-            justifyContent: 'flex-start',
-            alignItems: 'stretch',
-          }}
+        <BoardsPageContentPaperBar open={open}>
+          <Toolbar>
+            <Typography
+              variant="h6"
+              component="div"
+              noWrap
+              sx={{ flexGrow: 1 }}
+            >
+              {name}
+            </Typography>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              sx={{ ...(open && { display: 'none' }) }}
+            >
+              <MoreHorizIcon fontSize="medium" />
+            </IconButton>
+          </Toolbar>
+        </BoardsPageContentPaperBar>
+        <BoardsPageContent
+          open={open}
+          sx={{ mt: `${HEADER.H_DESKTOP}px`, position: 'relative' }}
         >
-          {boardLists}
-          <AddList handleCreateNewList={handleCreateNewList} />
-        </Stack>
-      </BoardsPageContent>
-      <BoardDrawer
-        open={open}
-        handleDrawerClose={handleDrawerClose}
-        handleDeleteBoard={handleDeleteBoard}
-      />
-    </Box>
-  </DndProvider>
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{
+              left: 0,
+              right: 0,
+              bottom: 0,
+              top: 0,
+              p: 2,
+              display: 'flex',
+              overflowX: 'auto',
+              position: 'absolute',
+              justifyContent: 'flex-start',
+              alignItems: 'stretch',
+            }}
+          >
+            {boardLists}
+            <AddList handleCreateNewList={handleCreateNewList} />
+          </Stack>
+        </BoardsPageContent>
+        <BoardDrawer
+          open={open}
+          handleDrawerClose={handleDrawerClose}
+          handleDeleteBoard={handleDeleteBoard}
+        />
+      </Box>
+    </DndProvider>
   );
 };
 
