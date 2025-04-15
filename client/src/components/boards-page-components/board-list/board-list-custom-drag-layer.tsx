@@ -19,11 +19,12 @@ const BoardListCustomDragLayer = memo(function BaoardList(props: {
   const { id } = props;
   const { spacing, palette } = useTheme();
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
-  const { isDragging, item } = useDragLayer(monitor => ({
+  const { isDragging, item, currentOffset } = useDragLayer(monitor => ({
     isDragging: monitor.isDragging(),
     item: monitor.getItem(),
+    currentOffset: monitor.getClientOffset(),
+    initialOffest: monitor.getInitialSourceClientOffset(),
   }));
-  console.log(item);
 
   const cardsList =
     cardsMoch.length > 0 ? (
@@ -45,13 +46,16 @@ const BoardListCustomDragLayer = memo(function BaoardList(props: {
       </List>
     ) : null;
 
-  return isDragging && id == item.id ? (
+  return isDragging && id == item.id && currentOffset ? (
     <Box
       sx={{
         width: spacing(34),
         height: '100%',
-        transform: 'rotate(7deg)',
         borderRadius: spacing(2),
+        positon: 'fiexed',
+        top: '0',
+        left: '0',
+        pointerEvents: 'none',
       }}
     >
       <Stack
@@ -59,6 +63,7 @@ const BoardListCustomDragLayer = memo(function BaoardList(props: {
         sx={{
           width: spacing(34),
           backgroundColor: palette.listBackground.main,
+          transform: `rotate(7deg) translate(${currentOffset.x}px, ${currentOffset.y}px)`,
           borderRadius: spacing(2),
           maxHeight: '100%',
           position: 'relative',

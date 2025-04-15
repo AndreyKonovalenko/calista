@@ -1,4 +1,4 @@
-import React, { useRef, memo, useEffect } from 'react';
+import React, { useRef, memo } from 'react';
 import {
   Box,
   Button,
@@ -15,21 +15,13 @@ import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-men
 import { useState } from 'react';
 import { useBoardStore } from '../../../services/boards/board-store';
 import { useDrag, useDrop } from 'react-dnd';
-import { calculateNewPosition } from '../../../utils/utils';
+import {
+  calculateNewPosition,
+  handleFormSubmitEvent,
+} from '../../../utils/utils';
 import { useUpdateList } from '../../../api/lists-api-queries';
-import { getEmptyImage } from 'react-dnd-html5-backend';
 
-const handleFormSubmitEvent = (
-  event:
-    | React.KeyboardEvent<HTMLTextAreaElement>
-    | React.FocusEvent<HTMLTextAreaElement>,
-) => {
-  const formEvent = new Event('submit', {
-    bubbles: true,
-    cancelable: true,
-  });
-  event.currentTarget.form?.dispatchEvent(formEvent);
-};
+// import { getEmptyImage } from 'react-dnd-html5-backend';
 
 const BoardList = memo(function BaoardList(props: {
   name: string;
@@ -63,7 +55,7 @@ const BoardList = memo(function BaoardList(props: {
     });
   };
 
-  const [{ isDragging }, connectDrag, preview] = useDrag<
+  const [{ isDragging }, connectDrag] = useDrag<
     TMovableEelement,
     unknown,
     { isDragging: boolean }
@@ -78,7 +70,9 @@ const BoardList = memo(function BaoardList(props: {
   const [{ isOver }, connectDrop] = useDrop<
     TMovableEelement,
     unknown,
-    { isOver: boolean }
+    {
+      isOver: boolean;
+    }
   >({
     accept: 'list',
     hover({ id: draggedId }) {
@@ -94,8 +88,7 @@ const BoardList = memo(function BaoardList(props: {
       isOver: monitor.isOver(),
     }),
   });
-
-  const opacity = isDragging ? 0.3 : 1;
+  const opacity = isDragging ? 0.5 : 1;
 
   connectDrag(ref);
   connectDrop(ref);
@@ -124,16 +117,15 @@ const BoardList = memo(function BaoardList(props: {
       sx={{
         width: spacing(34),
         height: '100%',
-        opacity: opacity,
         borderRadius: spacing(2),
         backgroundColor: palette.dropGuideColor.main,
       }}
     />
   );
 
-  useEffect(() => {
-    preview(getEmptyImage(), { captureDraggingState: true });
-  }, []);
+  // useEffect(() => {
+  //   preview(getEmptyImage(), { captureDraggingState: true });
+  // }, []);
 
   return (
     <Box
