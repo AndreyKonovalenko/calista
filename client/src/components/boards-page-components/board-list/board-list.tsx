@@ -65,8 +65,12 @@ const BoardList = memo(function BaoardList(props: {
   });
 
   connectDrop(ref);
-  const re = /\d+/;
-  const found: RegExpMatchArray | null = spacing(34).match(re);
+  // dynamic threshold calculation:
+  // const re = /\d+/;
+  // const found: RegExpMatchArray | null = spacing(34).match(re);
+  // or:
+  // mui spacing = 8; list width = spacin(34) = 272
+  const threshold: number = 272 * 0.5;
 
   const cardsList =
     cardsMoch.length > 0 ? (
@@ -94,11 +98,13 @@ const BoardList = memo(function BaoardList(props: {
         width: spacing(34),
         height: '100%',
         borderRadius: spacing(2),
+        opacity: '0.8',
         backgroundColor: palette.dropGuideColor.main,
       }}
     />
   );
 
+  console.log(differenceOffset?.x, threshold, isOver);
   return (
     <Box
       sx={{
@@ -109,8 +115,7 @@ const BoardList = memo(function BaoardList(props: {
       ref={ref}
     >
       {differenceOffset &&
-      found &&
-      differenceOffset.x >= Number(found) / 2 &&
+      Math.abs(differenceOffset.x) >= threshold &&
       isOver ? (
         dropGuide
       ) : (
