@@ -1,67 +1,35 @@
 import React, { useRef, memo } from 'react';
-import {
-  Box,
-  Button,
-  Typography,
-  useTheme,
-  Stack,
-  List,
-  ListItem,
-} from '@mui/material';
-import { v4 as uuidv4 } from 'uuid';
+import { Box, Button, Typography, useTheme, Stack } from '@mui/material';
 import { TitleTextAreaStyled } from '../boards-page-styled-elements/boards-page-styled-elements';
-import CardComponent from '../card-component/card-component';
 import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-menu';
 import { useState } from 'react';
+import { useDrag } from 'react-dnd';
 import { useBoardStore } from '../../../services/boards/board-store';
-import { useDrag, useDrop } from 'react-dnd';
-import { calculateNewPosition } from '../../../utils/utils';
-import { useUpdateList } from '../../../api/lists-api-queries';
-import { useBoardStore } from '../../../services/boards/board-store';
+import { handleFormSubmitEvent } from '../../../utils/utils';
+
 // import { getEmptyImage } from 'react-dnd-html5-backend';
 
-const handleFormSubmitEvent = (
-  event:
-    | React.KeyboardEvent<HTMLTextAreaElement>
-    | React.FocusEvent<HTMLTextAreaElement>,
-) => {
-  const formEvent = new Event('submit', {
-    bubbles: true,
-    cancelable: true,
-  });
-  event.currentTarget.form?.dispatchEvent(formEvent);
-};
-
-const BoardList = memo(function BaoardList(props: {
+const BoardListContent = memo(function BaoardListContent(props: {
   name: string;
   id: string;
   pos: number;
+  children: React.ReactNode;
   handleDeleteList: (id: string) => void;
   handleUpdateListName: (
     event: React.FormEvent<HTMLFormElement>,
     id: string,
   ) => void;
 }) {
-  const { name, id, handleDeleteList, handleUpdateListName } = props;
-  const { updateListNameBylistId, lists, updateListPosByListId } =
-    useBoardStore(state => state);
+  const { spacing, palette } = useTheme();
+  const { name, id, children, handleDeleteList, handleUpdateListName } = props;
+  const { updateListNameBylistId } = useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
-  const { spacing, palette } = useTheme();
-  const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
   const ref = useRef<HTMLDivElement>(null);
-  const updateListQuery = useUpdateList();
 
   type TMovableEelement = {
     id: string;
     name: string;
-  };
-
-  const handleUpdateListPos = (listId: string, newPos: number) => {
-    updateListQuery.mutate({
-      id: listId,
-      data: { pos: newPos },
-    });
   };
 
   const [{ isDragging }, connectDrag] = useDrag<
@@ -76,8 +44,7 @@ const BoardList = memo(function BaoardList(props: {
     }),
   });
 
-  const opacity = isDragging ? 0.5 : 1;
-
+  const opacity = isDragging ? 0.3 : 1;
   connectDrag(ref);
 
   // useEffect(() => {
@@ -86,9 +53,10 @@ const BoardList = memo(function BaoardList(props: {
 
   return (
     <Stack
-      // ref={ref
+      ref={ref}
       spacing={2}
       sx={{
+        opacity: opacity,
         width: spacing(34),
         backgroundColor: palette.listBackground.main,
         borderRadius: spacing(2),
@@ -145,7 +113,7 @@ const BoardList = memo(function BaoardList(props: {
           <BoardListActionMenu id={id} handleDeleteList={handleDeleteList} />
         </Stack>
       </Box>
-      {cardsList}
+      {children}
       <Box>
         <Button>+ Add a card</Button>
       </Box>
@@ -153,4 +121,4 @@ const BoardList = memo(function BaoardList(props: {
   );
 });
 
-export default BoardList;
+export default BoardListContent;
