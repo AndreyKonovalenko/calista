@@ -50,7 +50,11 @@ const BoardList = memo(function BaoardList(props: {
     accept: 'list',
     hover({ id: draggedId }) {
       if (draggedId !== id) {
+        // const dropPos
+        // const dragPos
+
         const newPos = calculateNewPosition(lists, id, draggedId);
+
         if (newPos) {
           updateListPosByListId(draggedId, newPos);
           handleUpdateListPos(draggedId, newPos);

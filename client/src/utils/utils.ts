@@ -42,11 +42,23 @@ export function calculateNewPosition(
   }
   // drag from right to left
   if (dragIndex < dropIndex) {
-    return Math.trunc((pos + arr[dropIndex + 1].pos) / 2);
+    const neighbourPos = arr[dropIndex + 1].pos;
+    const newPos = Math.trunc((pos + neighbourPos) / 2);
+    if (Math.abs(newPos - pos) <= 5 || Math.abs(newPos - neighbourPos) <= 5) {
+      // re-numbering
+    } else {
+      return newPos;
+    }
   }
   // drag from left to right
   if (dragIndex > dropIndex) {
-    return Math.trunc((pos + arr[dropIndex - 1].pos) / 2);
+    const neighbourPos = arr[dropIndex - 1].pos;
+    const newPos = Math.trunc((pos + neighbourPos) / 2);
+    if (Math.abs(newPos - pos) <= 5 || Math.abs(newPos - neighbourPos) <= 5) {
+      // re-numbering
+    } else {
+      return newPos;
+    }
   }
 }
 
