@@ -35,7 +35,14 @@ export async function updateBoardById(
     [key: string]: string | Types.ObjectId | Array<Types.ObjectId> | number;
   },
 ) {
-  await BoardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
-    new: true,
-  });
+  if ('action' in data) {
+    if (data.action === 'renumbering') {
+      // list renumbering logic
+      const board = BoardModel.findById(new Types.ObjectId(id));
+    }
+  } else {
+    await BoardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
+      new: true,
+    });
+  }
 }

@@ -73,7 +73,7 @@ describe('BoardsController', () => {
       );
     });
 
-    it('should not update board name and should return validation erro', async () => {
+    it('should not update board name and should return validation error', async () => {
       const response = await request(app)
         .put(`/api/boards/${testBoardId}`)
         .set('Cookie', [`jwt=${token}`])
