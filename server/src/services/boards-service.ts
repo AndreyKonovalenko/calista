@@ -33,19 +33,28 @@ export async function findBoardById(id: string) {
 export async function updateBoardById(
   id: string,
   data: {
-    [key: string]: string | Types.ObjectId | Array<Types.ObjectId> | number ;
+    [key: string]: string | Types.ObjectId | Array<Types.ObjectId> | number;
   },
 ) {
   if ('action' in data) {
     if (data.action === 'renumbering') {
-      const board = await BoardModel.findById(new Types.ObjectId(id)).populate<{lists: {_id:Types.ObjectId; pos: number}[]}>({path: 'lists', select: ['pos']}).exec();
+      const board = await BoardModel.findById(new Types.ObjectId(id))
+        .populate<{ lists: { _id: Types.ObjectId; pos: number }[] }>({
+          path: 'lists',
+          select: ['pos'],
+        })
+        .exec();
       if (board && board.lists.length > 0) {
-        const sorableList = board.lists
-        sorableList.sort(ascendingComparator)
+        const sorableList = board.lists;
+        sorableList.sort(ascendingComparator);
         let position = 16384;
-        for (const element of sorableList)  {
-          await ListModel.findByIdAndUpdate(new Types.ObjectId(element._id), {pos: position}, {new: true})
-          position = position + 16348
+        for (const element of sorableList) {
+          await ListModel.findByIdAndUpdate(
+            new Types.ObjectId(element._id),
+            { pos: position },
+            { new: true },
+          );
+          position = position + 16348;
         }
       }
     }

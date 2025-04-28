@@ -1,12 +1,12 @@
-import { Types } from "mongoose";
+import { Types } from 'mongoose';
 
 type TSortable = {
-  _id: Types.ObjectId,
-  pos: number
-}
+  _id: Types.ObjectId;
+  pos: number;
+};
 
-export function ascendingComparator (a:TSortable, b: TSortable): number {
+export function ascendingComparator(a: TSortable, b: TSortable): number {
   if (a.pos < b.pos) return -1;
   if (a.pos > b.pos) return 1;
-  return 0
+  return 0;
 }
