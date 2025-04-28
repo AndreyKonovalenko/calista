@@ -61,6 +61,31 @@ describe('BoardsController', () => {
       expect(response.status).toBe(200);
     });
 
+    it('should run renumbering of lists postion', async ()=> {
+      const response = await request(app)
+        .put(`/api/boards/${testBoardId}`)
+        .set('Cookie', [`jwt=${token}`])
+        .send({ action: 'renumbering' });
+      expect(response.status).toBe(200);
+      expect(response.text).toBe('board successfully updated');
+      
+      const board = await request(app)
+      .get(`/api/boards/${testBoardId}`)
+      .set('Cookie', [`jwt=${token}`]);
+      expect(board.status).toBe(200);
+      for(const element of board.body.lists) {
+        if(element.name === "TO DO") {
+          expect(element.pos).toEqual(16384)
+        }
+        if(element.name === "IN PROGRESS") {
+          expect(element.pos).toEqual(32732)
+        }
+        if(element.name === "DONE") {
+          expect(element.pos).toEqual(49080)
+        }
+      }
+    })
+
     it('should update board name', async () => {
       const response = await request(app)
         .put(`/api/boards/${testBoardId}`)

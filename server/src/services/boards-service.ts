@@ -38,14 +38,16 @@ export async function updateBoardById(
 ) {
   if ('action' in data) {
     if (data.action === 'renumbering') {
-      // list renumbering logic
-    
       const board = await BoardModel.findById(new Types.ObjectId(id)).populate<{lists: {_id:Types.ObjectId; pos: number}[]}>({path: 'lists', select: ['pos']}).exec();
       if (board && board.lists.length > 0) {
         const sorableList = board.lists
         sorableList.sort(ascendingComparator)
+        let position = 16384;
+        for (const element of sorableList)  {
+          await ListModel.findByIdAndUpdate(new Types.ObjectId(element._id), {pos: position}, {new: true})
+          position = position + 16348
+        }
       }
-
     }
   } else {
     await BoardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {

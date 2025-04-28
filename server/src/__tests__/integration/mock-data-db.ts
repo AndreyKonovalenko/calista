@@ -22,6 +22,30 @@ export async function setUpMockDb() {
     lists: [],
   });
 
+  
+  
+  const firstList = await ListModel.create({
+    createrId: user._id,
+    boardId: board._id,
+    name: 'IN PROGRESS',
+    cards: [],
+    pos: 77824,
+  })
+
+  board.lists.push(firstList._id);
+  await board.save();
+  
+  const secondList = await ListModel.create({
+    createrId: user._id,
+    boardId: board._id,
+    name: 'DONE',
+    cards: [],
+    pos: 86016,
+  })
+
+  board.lists.push(secondList._id);
+  await board.save()
+
   const list = await ListModel.create({
     createrId: user._id,
     boardId: board._id,
@@ -29,10 +53,10 @@ export async function setUpMockDb() {
     cards: [],
     pos: 16384,
   });
-
   board.lists.push(list._id);
-
   await board.save();
+
+
   const card = await CardModel.create({
     createrId: user._id,
     boardId: board._id,
@@ -44,6 +68,7 @@ export async function setUpMockDb() {
   });
   list.cards.push(card._id);
   await list.save();
+
   const checkList = await CheckListModel.create({
     createrId: user._id,
     boardId: board._id,
