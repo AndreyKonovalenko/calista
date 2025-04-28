@@ -3,6 +3,7 @@ import { BoardModel, IBoard } from '../models/BoardModel';
 import { CheckListItemModel, CheckListModel } from '../models/CheckListModel';
 import { CardModel } from '../models/CardModel';
 import { ListModel } from '../models/ListModel';
+import { ascendingComparator } from '../utils/utils';
 
 export async function cerateBoard(data: IBoard) {
   await BoardModel.create(data);
@@ -32,13 +33,19 @@ export async function findBoardById(id: string) {
 export async function updateBoardById(
   id: string,
   data: {
-    [key: string]: string | Types.ObjectId | Array<Types.ObjectId> | number;
+    [key: string]: string | Types.ObjectId | Array<Types.ObjectId> | number ;
   },
 ) {
   if ('action' in data) {
     if (data.action === 'renumbering') {
       // list renumbering logic
-      const board = BoardModel.findById(new Types.ObjectId(id));
+    
+      const board = await BoardModel.findById(new Types.ObjectId(id)).populate<{lists: {_id:Types.ObjectId; pos: number}[]}>({path: 'lists', select: ['pos']}).exec();
+      if (board && board.lists.length > 0) {
+        const sorableList = board.lists
+        sorableList.sort(ascendingComparator)
+      }
+
     }
   } else {
     await BoardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
