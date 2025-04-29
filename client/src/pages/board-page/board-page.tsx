@@ -38,7 +38,7 @@ const BoardPage = () => {
   const [open, setOpen] = useState(false);
   const { id } = useParams();
   invariantId(id);
-  const { data, isSuccess } = useFetchBoardById(id);
+  const { data, isSuccess, isLoading } = useFetchBoardById(id);
   const deleteBoardQuery = useDeleteBoard();
   const createListQuery = useCreateList(id);
   const deleteListQuery = useDeleteList(id);
@@ -130,6 +130,7 @@ const BoardPage = () => {
               sx={{ flexGrow: 1 }}
             >
               {name}
+              {isLoading? "LOADING": null}
             </Typography>
             <IconButton
               color="inherit"

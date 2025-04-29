@@ -66,7 +66,7 @@ const boards = {
   createBoard: (data: TData) => request.post<void>(BOARDS, data),
   fetchBoardById: (id: string) => request.get<IBoard>(`${BOARDS}/${id}`),
   deleteBoard: (id: string) => request.delete<void>(`${BOARDS}/${id}`),
-  updateBoard: (id: string | undefined, data: TData) =>
+  updateBoard: ({id, data}: TPutData) =>
     request.put<void>(`${BOARDS}/${id}`, data),
 };
 

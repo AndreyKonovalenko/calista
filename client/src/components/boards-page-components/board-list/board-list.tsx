@@ -5,9 +5,10 @@ import { v4 as uuidv4 } from 'uuid';
 import CardComponent from '../card-component/card-component';
 import { useBoardStore } from '../../../services/boards/board-store';
 import { useDrop, XYCoord } from 'react-dnd';
-import { calculateNewPosition } from '../../../utils/utils';
 import { useUpdateList } from '../../../api/lists-api-queries';
+import { useUpdateBoard } from '../../../api/boards-api-queries';
 import BoardListContent from './board-list-content';
+import { calculateNewPosition } from '../../../utils/utils';
 // import { getEmptyImage } from 'react-dnd-html5-backend';
 
 const BoardList = memo(function BaoardList(props: {
@@ -21,11 +22,12 @@ const BoardList = memo(function BaoardList(props: {
   ) => void;
 }) {
   const { name, id, pos, handleDeleteList, handleUpdateListName } = props;
-  const { lists, updateListPosByListId } = useBoardStore(state => state);
+  const {_id, lists, updateListPosByListId } = useBoardStore(state => state);
   const { spacing, palette } = useTheme();
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
   const ref = useRef<HTMLDivElement>(null);
   const updateListQuery = useUpdateList();
+  const updateBoardById = useUpdateBoard(_id)
 
   type TMovableEelement = {
     id: string;
@@ -54,8 +56,11 @@ const BoardList = memo(function BaoardList(props: {
         // const dragPos
 
         const newPos = calculateNewPosition(lists, id, draggedId);
+        if (newPos === -1) {
+          updateBoardById.mutate({id: _id, data: {action: 'renumbering'}})
+        }
 
-        if (newPos) {
+        if (newPos && newPos !== -1) {
           updateListPosByListId(draggedId, newPos);
           handleUpdateListPos(draggedId, newPos);
         }

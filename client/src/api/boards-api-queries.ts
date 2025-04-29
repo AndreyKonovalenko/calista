@@ -41,3 +41,17 @@ export const useDeleteBoard = () => {
     },
   });
 };
+
+
+export const useUpdateBoard = (boardId: string) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: api.boards.updateBoard,
+    onSuccess: () => {
+      return queryClient.invalidateQueries({
+        queryKey: ['fetchBoardById', boardId],
+        exact: true,
+      });
+    },
+  });
+};
