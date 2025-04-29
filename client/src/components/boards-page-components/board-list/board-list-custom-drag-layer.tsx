@@ -48,6 +48,7 @@ const BoardListCustomDragLayer = memo(function BaoardList(props: {
    
   console.log('offsets', currentOffset, initialOffset)
 
+  if (initialOffset)
   return isDragging && id == item.id && currentOffset ? (
     <Box
       sx={{
@@ -64,7 +65,7 @@ const BoardListCustomDragLayer = memo(function BaoardList(props: {
         sx={{
           width: spacing(34),
           backgroundColor: palette.listBackground.main,
-          transform: `rotate(7deg) translate(${currentOffset.x}px, ${currentOffset.y}px)`,
+          transform: `rotate(7deg) translate(${currentOffset.x - initialOffset?.x}px, ${currentOffset.y}px)`,
           borderRadius: spacing(2),
           maxHeight: '100%',
           position: 'relative',
