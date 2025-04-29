@@ -43,7 +43,7 @@ export const useDeleteBoard = () => {
 };
 
 
-export const useUpdateBoard = (boardId: string) => {
+export const useReNumListsPosInBoard = (boardId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: api.boards.updateBoard,
@@ -53,5 +53,11 @@ export const useUpdateBoard = (boardId: string) => {
         exact: true,
       });
     },
+  });
+};
+
+export const useUpdateBoard = () => {
+  return useMutation({
+    mutationFn: api.boards.updateBoard,
   });
 };

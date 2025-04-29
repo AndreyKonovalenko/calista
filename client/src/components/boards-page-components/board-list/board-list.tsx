@@ -1,4 +1,4 @@
-import React, { useRef, memo } from 'react';
+import React, { useRef, memo} from 'react';
 import { Box, useTheme, List, ListItem } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -6,10 +6,10 @@ import CardComponent from '../card-component/card-component';
 import { useBoardStore } from '../../../services/boards/board-store';
 import { useDrop, XYCoord } from 'react-dnd';
 import { useUpdateList } from '../../../api/lists-api-queries';
-import { useUpdateBoard } from '../../../api/boards-api-queries';
+import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
 import BoardListContent from './board-list-content';
 import { calculateNewPosition } from '../../../utils/utils';
-// import { getEmptyImage } from 'react-dnd-html5-backend';
+
 
 const BoardList = memo(function BaoardList(props: {
   name: string;
@@ -27,7 +27,7 @@ const BoardList = memo(function BaoardList(props: {
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
   const ref = useRef<HTMLDivElement>(null);
   const updateListQuery = useUpdateList();
-  const updateBoardById = useUpdateBoard(_id)
+  const updateBoardById = useReNumListsPosInBoard(_id)
 
   type TMovableEelement = {
     id: string;

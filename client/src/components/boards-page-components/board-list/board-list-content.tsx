@@ -1,4 +1,4 @@
-import React, { useRef, memo } from 'react';
+import React, { useRef, memo, useEffect } from 'react';
 import { Box, Button, Typography, useTheme, Stack } from '@mui/material';
 import { TitleTextAreaStyled } from '../boards-page-styled-elements/boards-page-styled-elements';
 import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-menu';
@@ -7,7 +7,7 @@ import { useDrag } from 'react-dnd';
 import { useBoardStore } from '../../../services/boards/board-store';
 import { handleFormSubmitEvent } from '../../../utils/utils';
 
-// import { getEmptyImage } from 'react-dnd-html5-backend';
+import { getEmptyImage } from 'react-dnd-html5-backend';
 
 const BoardListContent = memo(function BaoardListContent(props: {
   name: string;
@@ -32,7 +32,7 @@ const BoardListContent = memo(function BaoardListContent(props: {
     name: string;
   };
 
-  const [{ isDragging }, connectDrag] = useDrag<
+  const [{ isDragging }, connectDrag, preview] = useDrag<
     TMovableEelement,
     unknown,
     { isDragging: boolean }
@@ -47,9 +47,9 @@ const BoardListContent = memo(function BaoardListContent(props: {
   const opacity = isDragging ? 0.3 : 1;
   connectDrag(ref);
 
-  // useEffect(() => {
-  //   preview(getEmptyImage(), { captureDraggingState: true });
-  // }, []);
+  useEffect(() => {
+    preview(getEmptyImage(), { captureDraggingState: true });
+  }, []);
 
   return (
     <Stack
