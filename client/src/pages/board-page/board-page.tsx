@@ -93,17 +93,16 @@ const BoardPage = () => {
 
   const boardLists = lists.sort(ascendingComparator).map(element => {
     return (
-      <>
-        <BoardList
-          key={uuidv4()}
-          name={element.name}
-          id={element._id}
-          pos={element.pos}
-          handleDeleteList={handleDeleteList}
-          handleUpdateListName={handleUpdateListName}
-        />
-        <BoardListCustomDragLayer key={uuidv4()} id={element._id} /> 
-      </>
+      <Box key={uuidv4()}>
+          <BoardList
+            name={element.name}
+            id={element._id}
+            pos={element.pos}
+            handleDeleteList={handleDeleteList}
+            handleUpdateListName={handleUpdateListName}
+          />
+          <BoardListCustomDragLayer id={element._id} /> 
+      </Box>
     );
   });
 
