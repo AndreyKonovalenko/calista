@@ -10,7 +10,6 @@ import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
 import BoardListContent from './board-list-content';
 import { calculateNewPosition } from '../../../utils/utils';
 
-
 const BoardList = memo(function BaoardList(props: {
   name: string;
   id: string;
@@ -29,7 +28,7 @@ const BoardList = memo(function BaoardList(props: {
   const updateListQuery = useUpdateList();
   const updateBoardById = useReNumListsPosInBoard(_id)
 
-  type TMovableEelement = {
+  type TMovableElement = {
     id: string;
     name: string;
   };
@@ -42,7 +41,7 @@ const BoardList = memo(function BaoardList(props: {
   };
 
   const [{ isOver, differenceOffset }, connectDrop] = useDrop<
-    TMovableEelement,
+    TMovableElement,
     unknown,
     {
       isOver: boolean;
@@ -52,14 +51,10 @@ const BoardList = memo(function BaoardList(props: {
     accept: 'list',
     hover({ id: draggedId }) {
       if (draggedId !== id) {
-        // const dropPos
-        // const dragPos
-
         const newPos = calculateNewPosition(lists, id, draggedId);
         if (newPos === -1) {
           updateBoardById.mutate({id: _id, data: {action: 'renumbering'}})
         }
-
         if (newPos && newPos !== -1) {
           updateListPosByListId(draggedId, newPos);
           handleUpdateListPos(draggedId, newPos);
@@ -74,10 +69,6 @@ const BoardList = memo(function BaoardList(props: {
   });
 
   connectDrop(ref);
-  // dynamic threshold calculation:
-  // const re = /\d+/;
-  // const found: RegExpMatchArray | null = spacing(34).match(re);
-  // or:
   // mui spacing = 8; list width = spacin(34) = 272
   const threshold: number = 272 * 0.5;
 
@@ -113,7 +104,6 @@ const BoardList = memo(function BaoardList(props: {
     />
   );
 
-  console.log(differenceOffset?.x, threshold, isOver);
   return (
     <Box
       sx={{
@@ -128,15 +118,17 @@ const BoardList = memo(function BaoardList(props: {
       isOver ? (
         dropGuide
       ) : (
-        <BoardListContent
-          pos={pos}
-          name={name}
-          id={id}
-          handleDeleteList={handleDeleteList}
-          handleUpdateListName={handleUpdateListName}
-        >
-          {cardsList}
-        </BoardListContent>
+        <>
+          <BoardListContent
+            pos={pos}
+            name={name}
+            id={id}
+            handleDeleteList={handleDeleteList}
+            handleUpdateListName={handleUpdateListName}
+          >
+            {cardsList}
+          </BoardListContent>
+        </>
       )}
     </Box>
   );

@@ -92,7 +92,6 @@ const BoardPage = () => {
   };
 
   const boardLists = lists.sort(ascendingComparator).map(element => {
-    console.log('sort list array due to change positon of list');
     return (
       <>
         <BoardList
@@ -103,7 +102,7 @@ const BoardPage = () => {
           handleDeleteList={handleDeleteList}
           handleUpdateListName={handleUpdateListName}
         />
-        <BoardListCustomDragLayer id={element._id} /> 
+        <BoardListCustomDragLayer key={uuidv4()} id={element._id} /> 
       </>
     );
   });
@@ -177,19 +176,3 @@ const BoardPage = () => {
 };
 
 export default BoardPage;
-
-{
-  /* <List
-sx={{
-  left: 0,
-  right: 0,
-  bottom: 0,
-  top: 0,
-  p: 2,
-  display: 'flex',
-  overflowX: 'auto',
-  position: 'absolute',
-  flexDirection: 'row',
-  justifyContent: 'flex-start',
-}} */
-}
