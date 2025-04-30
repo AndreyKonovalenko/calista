@@ -38,7 +38,6 @@ const BoardListContent = memo(function BaoardListContent(props: {
     { isDragging: boolean }
   >({
     type: 'list',
-    item: { id, name },
     collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),
@@ -49,7 +48,7 @@ const BoardListContent = memo(function BaoardListContent(props: {
 
   useEffect(() => {
     preview(getEmptyImage(), { captureDraggingState: true });
-  }, []);
+  }, [preview]);
 
   return (
     <Stack

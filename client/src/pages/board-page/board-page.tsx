@@ -30,7 +30,6 @@ import {
   getListNameFromState,
 } from '../../services/boards/board-store';
 import { ascendingComparator } from '../../services/boards/board-store';
-import BoardListCustomDragLayer from '../../components/boards-page-components/board-list/board-list-custom-drag-layer';
 
 const BoardPage = () => {
   const navigate = useNavigate();
@@ -94,14 +93,13 @@ const BoardPage = () => {
   const boardLists = lists.sort(ascendingComparator).map(element => {
     return (
       <Box key={uuidv4()}>
-          <BoardList
-            name={element.name}
-            id={element._id}
-            pos={element.pos}
-            handleDeleteList={handleDeleteList}
-            handleUpdateListName={handleUpdateListName}
-          />
-          <BoardListCustomDragLayer id={element._id} /> 
+        <BoardList
+          name={element.name}
+          id={element._id}
+          pos={element.pos}
+          handleDeleteList={handleDeleteList}
+          handleUpdateListName={handleUpdateListName}
+        />
       </Box>
     );
   });

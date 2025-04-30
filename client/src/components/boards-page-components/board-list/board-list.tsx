@@ -9,7 +9,7 @@ import { useUpdateList } from '../../../api/lists-api-queries';
 import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
 import BoardListContent from './board-list-content';
 import { calculateNewPosition } from '../../../utils/utils';
-
+import BoardListCustomDragLayer from './board-list-custom-drag-layer';
 const BoardList = memo(function BaoardList(props: {
   name: string;
   id: string;
@@ -130,6 +130,7 @@ const BoardList = memo(function BaoardList(props: {
           </BoardListContent>
         </>
       )}
+      <BoardListCustomDragLayer id={id} /> 
     </Box>
   );
 });
