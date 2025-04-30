@@ -38,6 +38,7 @@ const BoardListContent = memo(function BaoardListContent(props: {
     { isDragging: boolean }
   >({
     type: 'list',
+    item: {id, name},
     collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),
