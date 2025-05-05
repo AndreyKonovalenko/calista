@@ -42,7 +42,6 @@ export const useDeleteBoard = () => {
   });
 };
 
-
 export const useReNumListsPosInBoard = (boardId: string) => {
   const queryClient = useQueryClient();
   return useMutation({

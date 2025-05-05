@@ -1,9 +1,11 @@
 import api from './calista-api';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router';
+import { invariantId } from '../utils/utils';
 
 export const useCreateList = () => {
-  const {id} = useParams()
+  const { id } = useParams();
+  invariantId(id);
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: api.lists.cerateList,
@@ -25,7 +27,8 @@ export const useFetchListById = (listId: string) => {
 };
 
 export const useDeleteList = () => {
-  const {id} = useParams()
+  const { id } = useParams();
+  invariantId(id);
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: api.lists.deleteList,

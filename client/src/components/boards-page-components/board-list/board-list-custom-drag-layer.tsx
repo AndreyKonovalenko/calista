@@ -49,7 +49,7 @@ const BoardListCustomDragLayer = memo(function BaoardList(props: {
   // if(!isDragging){
   //   return null;
   // }
-  console.log(isDragging)
+  console.log(isDragging);
   return isDragging && id === item.id && currentOffset ? (
     <Box
       sx={{

@@ -3,27 +3,40 @@ import { Box, Button, Typography, useTheme, Stack } from '@mui/material';
 import { TitleTextAreaStyled } from '../boards-page-styled-elements/boards-page-styled-elements';
 import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-menu';
 import { useState } from 'react';
-import { useBoardStore } from '../../../services/boards/board-store';
+import {
+  useBoardStore,
+  getListNameFromState,
+} from '../../../services/boards/board-store';
 import { handleFormSubmitEvent } from '../../../utils/utils';
-
+import { useUpdateList } from '../../../api/lists-api-queries';
 
 const BoardListContent = (props: {
   name: string;
   id: string;
   children: React.ReactNode;
-  handleUpdateListName: (
-    event: React.FormEvent<HTMLFormElement>,
-    id: string,
-  ) => void;
 }) => {
   const { spacing, palette } = useTheme();
-  const { name, id, children, handleUpdateListName } = props;
-  const { updateListNameBylistId } = useBoardStore(state => state);
+  const { name, id, children } = props;
+  const { updateListNameBylistId, lists } = useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
 
-  // const deleteListQuery = useDeleteList();
-  // const updateListQuery = useUpdateList();
+  const updateListQuery = useUpdateList();
+  const handleUpdateListName = (
+    event: React.FormEvent<HTMLFormElement>,
+    listId: string,
+  ) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const listName = formData.get('listName');
+    const stateListName = getListNameFromState(lists, listId);
+    if (listName !== stateListName) {
+      updateListQuery.mutate({
+        id: listId,
+        data: { name: listName },
+      });
+    }
+  };
 
   return (
     <Stack

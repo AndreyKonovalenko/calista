@@ -18,14 +18,10 @@ import {
   useFetchBoardById,
   useDeleteBoard,
 } from '../../api/boards-api-queries';
-import {
-  useCreateList,
-} from '../../api/lists-api-queries';
+import { useCreateList } from '../../api/lists-api-queries';
 import BoardList from '../../components/boards-page-components/board-list/board-list';
 import { invariantId } from '../../utils/utils';
-import {
-  useBoardStore,
-} from '../../services/boards/board-store';
+import { useBoardStore } from '../../services/boards/board-store';
 import { ascendingComparator } from '../../services/boards/board-store';
 
 const BoardPage = () => {
@@ -37,7 +33,6 @@ const BoardPage = () => {
   const { data, isSuccess, isLoading } = useFetchBoardById(id);
   const deleteBoardQuery = useDeleteBoard();
   const createListQuery = useCreateList();
-
 
   const handleDeleteBoard = (): void => {
     deleteBoardQuery.mutate(id);
@@ -66,15 +61,10 @@ const BoardPage = () => {
     });
   };
 
-
   const boardLists = lists.sort(ascendingComparator).map(element => {
     return (
       <Box key={uuidv4()}>
-        <BoardList
-          name={element.name}
-          id={element._id}
-          pos={element.pos}
-        />
+        <BoardList name={element.name} id={element._id} />
       </Box>
     );
   });
@@ -101,7 +91,7 @@ const BoardPage = () => {
               sx={{ flexGrow: 1 }}
             >
               {name}
-              {isLoading? "Loading": null}
+              {isLoading ? 'Loading' : null}
             </Typography>
             <IconButton
               color="inherit"
