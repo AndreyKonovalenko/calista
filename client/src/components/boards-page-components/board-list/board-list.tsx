@@ -10,17 +10,17 @@ import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
 import BoardListContent from './board-list-content';
 import { calculateNewPosition } from '../../../utils/utils';
 import BoardListCustomDragLayer from './board-list-custom-drag-layer';
+
 const BoardList = memo(function BaoardList(props: {
   name: string;
   id: string;
   pos: number;
-  handleDeleteList: (id: string) => void;
   handleUpdateListName: (
     event: React.FormEvent<HTMLFormElement>,
     id: string,
   ) => void;
 }) {
-  const { name, id, pos, handleDeleteList, handleUpdateListName } = props;
+  const { name, id, pos, handleUpdateListName } = props;
   const {_id, lists, updateListPosByListId } = useBoardStore(state => state);
   const { spacing, palette } = useTheme();
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
@@ -123,7 +123,6 @@ const BoardList = memo(function BaoardList(props: {
             pos={pos}
             name={name}
             id={id}
-            handleDeleteList={handleDeleteList}
             handleUpdateListName={handleUpdateListName}
           >
             {cardsList}

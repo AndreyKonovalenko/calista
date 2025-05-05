@@ -20,7 +20,6 @@ import {
 } from '../../api/boards-api-queries';
 import {
   useCreateList,
-  useDeleteList,
   useUpdateList,
 } from '../../api/lists-api-queries';
 import BoardList from '../../components/boards-page-components/board-list/board-list';
@@ -39,8 +38,7 @@ const BoardPage = () => {
   invariantId(id);
   const { data, isSuccess, isLoading } = useFetchBoardById(id);
   const deleteBoardQuery = useDeleteBoard();
-  const createListQuery = useCreateList(id);
-  const deleteListQuery = useDeleteList(id);
+  const createListQuery = useCreateList();
   const updateListQuery = useUpdateList();
 
   const handleDeleteBoard = (): void => {
@@ -86,9 +84,6 @@ const BoardPage = () => {
     }
   };
 
-  const handleDeleteList = (listId: string) => {
-    deleteListQuery.mutate(listId);
-  };
 
   const boardLists = lists.sort(ascendingComparator).map(element => {
     return (
@@ -97,7 +92,6 @@ const BoardPage = () => {
           name={element.name}
           id={element._id}
           pos={element.pos}
-          handleDeleteList={handleDeleteList}
           handleUpdateListName={handleUpdateListName}
         />
       </Box>

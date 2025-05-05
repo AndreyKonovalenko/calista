@@ -2,19 +2,25 @@ import React from 'react';
 import { Menu, IconButton } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { useDeleteList } from '../../../api/lists-api-queries';
 
 const BoardListActionMenu = (props: {
-  id: string;
-  handleDeleteList: (id: string) => void;
+  id: string
 }): JSX.Element => {
-  const { id, handleDeleteList } = props;
+  const { id  } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+  const deleteListQuery = useDeleteList();
+
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleDeleteList = (listId: string) => {
+    deleteListQuery.mutate(listId);
   };
 
   return (

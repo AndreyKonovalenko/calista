@@ -14,18 +14,23 @@ const BoardListContent = memo(function BaoardListContent(props: {
   id: string;
   pos: number;
   children: React.ReactNode;
-  handleDeleteList: (id: string) => void;
   handleUpdateListName: (
     event: React.FormEvent<HTMLFormElement>,
     id: string,
   ) => void;
 }) {
   const { spacing, palette } = useTheme();
-  const { name, id, children, handleDeleteList, handleUpdateListName } = props;
+  const { name, id, children, handleUpdateListName } = props;
   const { updateListNameBylistId } = useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  // const deleteListQuery = useDeleteList();
+  // const updateListQuery = useUpdateList();
+
+
+
 
   type TMovableEelement = {
     id: string;
@@ -110,7 +115,7 @@ const BoardListContent = memo(function BaoardListContent(props: {
               </Typography>
             </Box>
           )}
-          <BoardListActionMenu id={id} handleDeleteList={handleDeleteList} />
+          <BoardListActionMenu id={id} />
         </Stack>
       </Box>
       {children}
