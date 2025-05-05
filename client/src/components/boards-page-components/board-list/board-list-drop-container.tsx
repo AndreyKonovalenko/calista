@@ -5,6 +5,7 @@ import { useDrop, XYCoord } from 'react-dnd';
 import { useUpdateList } from '../../../api/lists-api-queries';
 import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
 import { calculateNewPosition } from '../../../utils/utils';
+import { TDraggableElement } from './board-list-draggable';
 // import BoardListCustomDragLayer from './board-list-custom-drag-layer';
 
 const BoardListDropContainer = (props: {
@@ -17,12 +18,6 @@ const BoardListDropContainer = (props: {
   const ref = useRef<HTMLDivElement>(null);
   const updateListQuery = useUpdateList();
   const updateBoardById = useReNumListsPosInBoard(_id);
-
-  type TMovableElement = {
-    id: string;
-    name: string;
-  };
-
   const handleUpdateListPos = (listId: string, newPos: number) => {
     updateListQuery.mutate({
       id: listId,
@@ -31,7 +26,7 @@ const BoardListDropContainer = (props: {
   };
 
   const [{ isOver, differenceOffset }, connectDrop] = useDrop<
-    TMovableElement,
+    TDraggableElement,
     unknown,
     {
       isOver: boolean;

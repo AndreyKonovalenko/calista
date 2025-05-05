@@ -5,7 +5,7 @@ import CardComponent from '../card-component/card-component';
 import BoardListContent from './board-list-content';
 import BoardListDraggable from './board-list-draggable';
 import BoardListDropContainer from './board-list-drop-container';
-// import BoardListCustomDragLayer from './board-list-custom-drag-layer';
+import BoardListCustomDragLayer from './board-list-custom-drag-layer';
 
 const BoardList = (props: { name: string; id: string }) => {
   const { name, id } = props;
@@ -46,7 +46,7 @@ const BoardList = (props: { name: string; id: string }) => {
             {cardsList}
           </BoardListContent>
         </BoardListDraggable>
-        {/* <BoardListCustomDragLayer id={id} />  */}
+        <BoardListCustomDragLayer id={id} />
       </BoardListDropContainer>
     </Box>
   );
