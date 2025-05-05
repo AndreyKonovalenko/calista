@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Outlet } from 'react-router';
 import { Box } from '@mui/material';
 import HeaderBar from '../components/header-bar/header-bar';
 import { HEADER } from './config-layout';
+import { TDraggableElement } from '../components/boards-page-components/board-list/board-list-draggable';
+import { useDrop } from 'react-dnd';
 
 const MainLayout = (): JSX.Element => {
+  const [, connectDrop] = useDrop<TDraggableElement, unknown>({
+    accept: 'list',
+  });
+  const ref = useRef<HTMLDivElement>(null);
+  connectDrop(ref);
   return (
     <Box
       sx={{
@@ -13,6 +20,7 @@ const MainLayout = (): JSX.Element => {
         overflow: 'hidden',
         outline: 'none',
       }}
+      ref={ref}
     >
       <HeaderBar />
       <Box

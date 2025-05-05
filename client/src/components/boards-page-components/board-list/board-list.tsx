@@ -46,7 +46,7 @@ const BoardList = (props: { name: string; id: string }) => {
             {cardsList}
           </BoardListContent>
         </BoardListDraggable>
-        <BoardListCustomDragLayer id={id} />
+        <BoardListCustomDragLayer />
       </BoardListDropContainer>
     </Box>
   );

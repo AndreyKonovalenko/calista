@@ -3,8 +3,6 @@ import { Box, Typography, IconButton, Toolbar, Stack } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DndProvider } from 'react-dnd';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import BoardDrawer from '../../components/boards-page-components/board-drawer/board-drawer';
 import AddList from '../../components/boards-page-components/add-list/add-list';
@@ -74,66 +72,59 @@ const BoardPage = () => {
   }, [data, isSuccess]);
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <Box
-        sx={{
-          display: 'flex',
-          height: '100%',
-          flexDirection: 'column',
-        }}
-      >
-        <BoardsPageContentPaperBar open={open}>
-          <Toolbar>
-            <Typography
-              variant="h6"
-              component="div"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              {name}
-              {isLoading ? 'Loading' : null}
-            </Typography>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              sx={{ ...(open && { display: 'none' }) }}
-            >
-              <MoreHorizIcon fontSize="medium" />
-            </IconButton>
-          </Toolbar>
-        </BoardsPageContentPaperBar>
-        <BoardsPageContent
-          open={open}
-          sx={{ mt: `${HEADER.H_DESKTOP}px`, position: 'relative' }}
-        >
-          <Stack
-            direction="row"
-            spacing={2}
-            sx={{
-              left: 0,
-              right: 0,
-              bottom: 0,
-              top: 0,
-              p: 2,
-              display: 'flex',
-              overflowX: 'auto',
-              position: 'absolute',
-              justifyContent: 'flex-start',
-              alignItems: 'stretch',
-            }}
+    <Box
+      sx={{
+        display: 'flex',
+        height: '100%',
+        flexDirection: 'column',
+      }}
+    >
+      <BoardsPageContentPaperBar open={open}>
+        <Toolbar>
+          <Typography variant="h6" component="div" noWrap sx={{ flexGrow: 1 }}>
+            {name}
+            {isLoading ? 'Loading' : null}
+          </Typography>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            sx={{ ...(open && { display: 'none' }) }}
           >
-            {boardLists}
-            <AddList handleCreateNewList={handleCreateNewList} />
-          </Stack>
-        </BoardsPageContent>
-        <BoardDrawer
-          open={open}
-          handleDrawerClose={handleDrawerClose}
-          handleDeleteBoard={handleDeleteBoard}
-        />
-      </Box>
-    </DndProvider>
+            <MoreHorizIcon fontSize="medium" />
+          </IconButton>
+        </Toolbar>
+      </BoardsPageContentPaperBar>
+      <BoardsPageContent
+        open={open}
+        sx={{ mt: `${HEADER.H_DESKTOP}px`, position: 'relative' }}
+      >
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{
+            left: 0,
+            right: 0,
+            bottom: 0,
+            top: 0,
+            p: 2,
+            display: 'flex',
+            overflowX: 'auto',
+            position: 'absolute',
+            justifyContent: 'flex-start',
+            alignItems: 'stretch',
+          }}
+        >
+          {boardLists}
+          <AddList handleCreateNewList={handleCreateNewList} />
+        </Stack>
+      </BoardsPageContent>
+      <BoardDrawer
+        open={open}
+        handleDrawerClose={handleDrawerClose}
+        handleDeleteBoard={handleDeleteBoard}
+      />
+    </Box>
   );
 };
 

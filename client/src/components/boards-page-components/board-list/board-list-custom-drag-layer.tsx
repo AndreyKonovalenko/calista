@@ -3,31 +3,26 @@ import { Box } from '@mui/material';
 import { useDragLayer, XYCoord } from 'react-dnd';
 import BoardListPreview from './board-list-preview';
 
-const getItemStyles = (currentOffset: XYCoord | null) => {
-  if (!currentOffset) {
+const getItemStyles = (clientOffset: XYCoord | null) => {
+  if (!clientOffset) {
     return {
       display: 'none',
     };
   }
   return {
-    transform: `translate(${currentOffset.x}px, ${currentOffset.y}px)`,
-    WebkitTransform: `translate(${currentOffset.x}px, ${currentOffset.y}px)`,
+    transform: `translate(${clientOffset.x}px, ${clientOffset.y}px)`,
+    WebkitTransform: `translate(${clientOffset.x}px, ${clientOffset.y}px)`,
   };
 };
 
-const BoardListCustomDragLayer = memo(function BaoardList(props: {
-  id: string;
-}) {
-  const { id } = props;
-
-  const { isDragging, item, currentOffset } = useDragLayer(monitor => ({
+const BoardListCustomDragLayer = memo(function BaoardList() {
+  const { isDragging, item, clientOffset } = useDragLayer(monitor => ({
     isDragging: monitor.isDragging(),
     item: monitor.getItem(),
-    currentOffset: monitor.getSourceClientOffset(),
-    initialOffest: monitor.getInitialSourceClientOffset(),
+    clientOffset: monitor.getClientOffset(),
   }));
 
-  if (!isDragging || id !== item.id) {
+  if (!isDragging) {
     return null;
   }
 
@@ -41,7 +36,7 @@ const BoardListCustomDragLayer = memo(function BaoardList(props: {
         zIndex: 100,
       }}
     >
-      <Box sx={getItemStyles(currentOffset)}>
+      <Box sx={getItemStyles(clientOffset)}>
         <BoardListPreview item={item} />
       </Box>
     </Box>
