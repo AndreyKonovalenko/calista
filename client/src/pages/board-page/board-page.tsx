@@ -20,13 +20,11 @@ import {
 } from '../../api/boards-api-queries';
 import {
   useCreateList,
-  useUpdateList,
 } from '../../api/lists-api-queries';
 import BoardList from '../../components/boards-page-components/board-list/board-list';
 import { invariantId } from '../../utils/utils';
 import {
   useBoardStore,
-  getListNameFromState,
 } from '../../services/boards/board-store';
 import { ascendingComparator } from '../../services/boards/board-store';
 
@@ -39,7 +37,7 @@ const BoardPage = () => {
   const { data, isSuccess, isLoading } = useFetchBoardById(id);
   const deleteBoardQuery = useDeleteBoard();
   const createListQuery = useCreateList();
-  const updateListQuery = useUpdateList();
+
 
   const handleDeleteBoard = (): void => {
     deleteBoardQuery.mutate(id);
@@ -68,22 +66,6 @@ const BoardPage = () => {
     });
   };
 
-  const handleUpdateListName = (
-    event: React.FormEvent<HTMLFormElement>,
-    listId: string,
-  ) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const listName = formData.get('listName');
-    const stateListName = getListNameFromState(lists, listId);
-    if (listName !== stateListName) {
-      updateListQuery.mutate({
-        id: listId,
-        data: { name: listName },
-      });
-    }
-  };
-
 
   const boardLists = lists.sort(ascendingComparator).map(element => {
     return (
@@ -92,7 +74,6 @@ const BoardPage = () => {
           name={element.name}
           id={element._id}
           pos={element.pos}
-          handleUpdateListName={handleUpdateListName}
         />
       </Box>
     );

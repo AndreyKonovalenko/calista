@@ -1,27 +1,24 @@
 import React, { useRef, memo} from 'react';
 import { Box, useTheme, List, ListItem } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
-
 import CardComponent from '../card-component/card-component';
-import { useBoardStore } from '../../../services/boards/board-store';
+import { useBoardStore, getListNameFromState } from '../../../services/boards/board-store';
 import { useDrop, XYCoord } from 'react-dnd';
 import { useUpdateList } from '../../../api/lists-api-queries';
 import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
 import BoardListContent from './board-list-content';
 import { calculateNewPosition } from '../../../utils/utils';
-import BoardListCustomDragLayer from './board-list-custom-drag-layer';
+import BoardListDraggable from './board-list-draggable';
+
+// import BoardListCustomDragLayer from './board-list-custom-drag-layer';
 
 const BoardList = memo(function BaoardList(props: {
   name: string;
   id: string;
   pos: number;
-  handleUpdateListName: (
-    event: React.FormEvent<HTMLFormElement>,
-    id: string,
-  ) => void;
 }) {
-  const { name, id, pos, handleUpdateListName } = props;
-  const {_id, lists, updateListPosByListId } = useBoardStore(state => state);
+  const { name, id } = props;
+  const {_id, lists, updateListPosByListId} = useBoardStore(state => state);
   const { spacing, palette } = useTheme();
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
   const ref = useRef<HTMLDivElement>(null);
@@ -30,7 +27,6 @@ const BoardList = memo(function BaoardList(props: {
 
   type TMovableElement = {
     id: string;
-    name: string;
   };
 
   const handleUpdateListPos = (listId: string, newPos: number) => {
@@ -38,6 +34,22 @@ const BoardList = memo(function BaoardList(props: {
       id: listId,
       data: { pos: newPos },
     });
+  };
+
+  const handleUpdateListName = (
+    event: React.FormEvent<HTMLFormElement>,
+    listId: string,
+    ) => {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+      const listName = formData.get('listName');
+      const stateListName = getListNameFromState(lists, listId);
+      if (listName !== stateListName) {
+        updateListQuery.mutate({
+          id: listId,
+          data: { name: listName },
+        });
+      }
   };
 
   const [{ isOver, differenceOffset }, connectDrop] = useDrop<
@@ -118,18 +130,17 @@ const BoardList = memo(function BaoardList(props: {
       isOver ? (
         dropGuide
       ) : (
-        <>
+        <BoardListDraggable id={id}>
           <BoardListContent
-            pos={pos}
             name={name}
             id={id}
             handleUpdateListName={handleUpdateListName}
           >
             {cardsList}
           </BoardListContent>
-        </>
+        </BoardListDraggable>
       )}
-      <BoardListCustomDragLayer id={id} /> 
+      {/* <BoardListCustomDragLayer id={id} />  */}
     </Box>
   );
 });
