@@ -34,6 +34,11 @@ const BoardListDropContainer = (props: {
     }
   >({
     accept: 'list',
+    drop(item) {
+      console.log(item)
+      // need to add backend request logic
+      return undefined;
+    },
     hover({ id: draggedId }) {
       if (draggedId !== id) {
         const newPos = calculateNewPosition(lists, id, draggedId);

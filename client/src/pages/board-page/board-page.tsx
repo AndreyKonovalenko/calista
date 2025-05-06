@@ -21,6 +21,7 @@ import BoardList from '../../components/boards-page-components/board-list/board-
 import { invariantId } from '../../utils/utils';
 import { useBoardStore } from '../../services/boards/board-store';
 import { ascendingComparator } from '../../services/boards/board-store';
+import BoardListCustomDragLayer from '../../components/boards-page-components/board-list/board-list-custom-drag-layer';
 
 const BoardPage = () => {
   const navigate = useNavigate();
@@ -116,6 +117,7 @@ const BoardPage = () => {
           }}
         >
           {boardLists}
+          <BoardListCustomDragLayer />
           <AddList handleCreateNewList={handleCreateNewList} />
         </Stack>
       </BoardsPageContent>

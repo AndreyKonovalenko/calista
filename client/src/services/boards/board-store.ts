@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+// import { devtools } from 'zustand/middleware';
 import { IList } from '../lists/list-store';
 
 export interface IBoard {
@@ -49,8 +49,29 @@ export function ascendingComparator(a: IList, b: IList): number {
   return 0;
 }
 
+// export const useBoardStore = create<TState>()(
+//   devtools(
+//     set => ({
+//       ...initialState,
+//       setBoardState: data =>
+//         set({
+//           _id: data._id,
+//           name: data.name,
+//           createrId: data.createrId,
+//           lists: data.lists,
+//         }),
+//       reset: () => set(initialState),
+//       updateListNameBylistId: (id: string, name: string) =>
+//         set((state: TState) => ({ lists: updateName(state.lists, name, id) })),
+//       updateListPosByListId: (id: string, pos: number) =>
+//         set((state: TState) => ({ lists: updatePos(state.lists, pos, id) })),
+//     }),
+//     { name: 'boardStore' },
+//   ),
+// );
+
+// disable devtools for be able to debug react-dnd
 export const useBoardStore = create<TState>()(
-  devtools(
     set => ({
       ...initialState,
       setBoardState: data =>
@@ -65,7 +86,5 @@ export const useBoardStore = create<TState>()(
         set((state: TState) => ({ lists: updateName(state.lists, name, id) })),
       updateListPosByListId: (id: string, pos: number) =>
         set((state: TState) => ({ lists: updatePos(state.lists, pos, id) })),
-    }),
-    { name: 'boardStore' },
-  ),
+    }), 
 );

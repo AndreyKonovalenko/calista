@@ -20,7 +20,7 @@ const queryClient = new QueryClient();
 
 const App = (): JSX.Element => {
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider backend={HTML5Backend} debugMode={true}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
