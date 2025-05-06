@@ -23,6 +23,8 @@ const BoardListCustomDragLayer = () =>  {
     clientOffset: monitor.getClientOffset(),
   }));
   
+  console.log('custom lyair is Draggign', isDragging)
+
   function renderItem() {
     switch(itemType) {
       case "list": 
@@ -44,6 +46,8 @@ const BoardListCustomDragLayer = () =>  {
         left: '0',
         pointerEvents: 'none',
         zIndex: 100,
+        width:'100%',
+        height: '100%'
       }}
     >
       <Box sx={getItemStyles(clientOffset)}>

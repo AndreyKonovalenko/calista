@@ -26,13 +26,16 @@ const BoardListDraggable = memo(function BoardListDraggable(props: {
     collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),
+    end: (item, monitor) => {
+      console.log(item)
+      console.log(monitor.didDrop())
+    }
   });
 
   const opacity = isDragging ? 0.3 : 1;
   connectDrag(ref);
-
   useEffect(() => {
-    preview(getEmptyImage(), { captureDraggingState: true });
+     preview(getEmptyImage(), { captureDraggingState: true });
   }, [preview]);
 
   return (
