@@ -34,9 +34,8 @@ const BoardListDropContainer = (props: {
     }
   >({
     accept: 'list',
-    drop(item, monitor) {
-      console.log(item)
-      console.log(monitor.getDropResult())
+    drop() {
+      // const dropResult = monitor.getDropResult()
       // need to add backend request logic
       return undefined;
     },

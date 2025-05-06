@@ -19,7 +19,7 @@ const BoardListDraggable = memo(function BoardListDraggable(props: {
   const [{ isDragging }, connectDrag, preview] = useDrag<
     TDraggableElement,
     unknown,
-    { isDragging: boolean }
+    { isDragging: boolean}
   >({
     type: 'list',
     item: { id, name },
@@ -28,8 +28,9 @@ const BoardListDraggable = memo(function BoardListDraggable(props: {
     }),
     end: (item, monitor) => {
       console.log(item)
-      console.log(monitor.didDrop())
-    }
+      console.log('drop inside drop zone', monitor.didDrop(), monitor.getDropResult())
+    },
+ 
   });
 
   const opacity = isDragging ? 0.3 : 1;
