@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { useBoardStore } from '../../../services/boards/board-store';
 import { useDrop, XYCoord } from 'react-dnd';
-import { useUpdateList } from '../../../api/lists-api-queries';
+// import { useUpdateList } from '../../../api/lists-api-queries';
 import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
 import { calculateNewPosition } from '../../../utils/utils';
 import { TDraggableElement } from './board-list-draggable';
@@ -16,14 +16,14 @@ const BoardListDropContainer = (props: {
   const { spacing, palette } = useTheme();
   const { _id, lists, updateListPosByListId } = useBoardStore(state => state);
   const ref = useRef<HTMLDivElement>(null);
-  const updateListQuery = useUpdateList();
+  // const updateListQuery = useUpdateList();
   const updateBoardById = useReNumListsPosInBoard(_id);
-  const handleUpdateListPos = (listId: string, newPos: number) => {
-    updateListQuery.mutate({
-      id: listId,
-      data: { pos: newPos },
-    });
-  };
+  // const handleUpdateListPos = (listId: string, newPos: number) => {
+  //   updateListQuery.mutate({
+  //     id: listId,
+  //     data: { pos: newPos },
+  //   });
+  // };
 
   const [{ isOver, differenceOffset }, connectDrop] = useDrop<
     TDraggableElement,
@@ -34,12 +34,13 @@ const BoardListDropContainer = (props: {
     }
   >({
     accept: 'list',
-    drop(item) {
+    drop(item, monitor) {
       console.log(item)
+      console.log(monitor.getDropResult())
       // need to add backend request logic
       return undefined;
     },
-    hover({ id: draggedId }) {
+    hover({ id: draggedId },monitor) {
       if (draggedId !== id) {
         const newPos = calculateNewPosition(lists, id, draggedId);
         if (newPos === -1) {
@@ -47,8 +48,11 @@ const BoardListDropContainer = (props: {
         }
         if (newPos && newPos !== -1) {
           updateListPosByListId(draggedId, newPos);
-          handleUpdateListPos(draggedId, newPos);
+          // handleUpdateListPos(draggedId, newPos);
         }
+        console.log(draggedId)
+        console.log(monitor.canDrop())
+
       }
     },
     collect: monitor => ({

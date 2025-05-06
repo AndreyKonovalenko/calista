@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { Box } from '@mui/material';
 import { useDragLayer, XYCoord } from 'react-dnd';
 import BoardListPreview from './board-list-preview';
@@ -15,14 +15,13 @@ const getItemStyles = (clientOffset: XYCoord | null) => {
   };
 };
 
-const BoardListCustomDragLayer = memo(function BaoardList() {
+const BoardListCustomDragLayer = () =>  {
   const { itemType, isDragging, item, clientOffset } = useDragLayer(monitor => ({
     isDragging: monitor.isDragging(),
     item: monitor.getItem(),
     itemType: monitor.getItemType(),
     clientOffset: monitor.getClientOffset(),
   }));
-
   
   function renderItem() {
     switch(itemType) {
@@ -52,6 +51,6 @@ const BoardListCustomDragLayer = memo(function BaoardList() {
       </Box>
     </Box>
   );
-});
+};
 
 export default BoardListCustomDragLayer;
