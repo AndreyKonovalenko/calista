@@ -16,11 +16,22 @@ const getItemStyles = (clientOffset: XYCoord | null) => {
 };
 
 const BoardListCustomDragLayer = memo(function BaoardList() {
-  const { isDragging, item, clientOffset } = useDragLayer(monitor => ({
+  const { itemType, isDragging, item, clientOffset } = useDragLayer(monitor => ({
     isDragging: monitor.isDragging(),
     item: monitor.getItem(),
+    itemType: monitor.getItemType(),
     clientOffset: monitor.getClientOffset(),
   }));
+
+  
+  function renderItem() {
+    switch(itemType) {
+      case "list": 
+        return  <BoardListPreview item={item} />
+      default: 
+      return null
+    }
+  }
 
   if (!isDragging) {
     return null;
@@ -37,7 +48,7 @@ const BoardListCustomDragLayer = memo(function BaoardList() {
       }}
     >
       <Box sx={getItemStyles(clientOffset)}>
-        <BoardListPreview item={item} />
+        {renderItem()}
       </Box>
     </Box>
   );
