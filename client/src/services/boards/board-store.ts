@@ -71,20 +71,18 @@ export function ascendingComparator(a: IList, b: IList): number {
 // );
 
 // disable devtools for be able to debug react-dnd
-export const useBoardStore = create<TState>()(
-    set => ({
-      ...initialState,
-      setBoardState: data =>
-        set({
-          _id: data._id,
-          name: data.name,
-          createrId: data.createrId,
-          lists: data.lists,
-        }),
-      reset: () => set(initialState),
-      updateListNameBylistId: (id: string, name: string) =>
-        set((state: TState) => ({ lists: updateName(state.lists, name, id) })),
-      updateListPosByListId: (id: string, pos: number) =>
-        set((state: TState) => ({ lists: updatePos(state.lists, pos, id) })),
-    }), 
-);
+export const useBoardStore = create<TState>()(set => ({
+  ...initialState,
+  setBoardState: data =>
+    set({
+      _id: data._id,
+      name: data.name,
+      createrId: data.createrId,
+      lists: data.lists,
+    }),
+  reset: () => set(initialState),
+  updateListNameBylistId: (id: string, name: string) =>
+    set((state: TState) => ({ lists: updateName(state.lists, name, id) })),
+  updateListPosByListId: (id: string, pos: number) =>
+    set((state: TState) => ({ lists: updatePos(state.lists, pos, id) })),
+}));

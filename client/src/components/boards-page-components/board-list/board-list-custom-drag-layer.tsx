@@ -15,22 +15,24 @@ const getItemStyles = (clientOffset: XYCoord | null) => {
   };
 };
 
-const BoardListCustomDragLayer = () =>  {
-  const { itemType, isDragging, item, clientOffset } = useDragLayer(monitor => ({
-    isDragging: monitor.isDragging(),
-    item: monitor.getItem(),
-    itemType: monitor.getItemType(),
-    clientOffset: monitor.getClientOffset(),
-  }));
-  
-  console.log('custom lyair is Draggign', isDragging)
+const BoardListCustomDragLayer = () => {
+  const { itemType, isDragging, item, clientOffset } = useDragLayer(
+    monitor => ({
+      isDragging: monitor.isDragging(),
+      item: monitor.getItem(),
+      itemType: monitor.getItemType(),
+      clientOffset: monitor.getClientOffset(),
+    }),
+  );
+
+  console.log('custom lyair is Draggign', isDragging);
 
   function renderItem() {
-    switch(itemType) {
-      case "list": 
-        return  <BoardListPreview item={item} />
-      default: 
-      return null
+    switch (itemType) {
+      case 'list':
+        return <BoardListPreview item={item} />;
+      default:
+        return null;
     }
   }
 
@@ -46,13 +48,11 @@ const BoardListCustomDragLayer = () =>  {
         left: '0',
         pointerEvents: 'none',
         zIndex: 100,
-        width:'100%',
-        height: '100%'
+        width: '100%',
+        height: '100%',
       }}
     >
-      <Box sx={getItemStyles(clientOffset)}>
-        {renderItem()}
-      </Box>
+      <Box sx={getItemStyles(clientOffset)}>{renderItem()}</Box>
     </Box>
   );
 };

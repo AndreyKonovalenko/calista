@@ -42,10 +42,10 @@ const BoardListContent = (props: {
     <Stack
       spacing={2}
       sx={{
-        width: spacing(34),
+        width: 'inherit',
         backgroundColor: palette.listBackground.main,
-        borderRadius: spacing(2),
-        maxHeight: '100%',
+        borderRadius: 'inherit',
+        maxHeight: 'inherit',
         position: 'relative',
         flexShrink: 0,
       }}

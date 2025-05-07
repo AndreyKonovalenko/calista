@@ -3,8 +3,7 @@ import { Box, useTheme, List, ListItem } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import CardComponent from '../card-component/card-component';
 import BoardListContent from './board-list-content';
-import BoardListDraggable from './board-list-draggable';
-import BoardListDropContainer from './board-list-drop-container';
+import BoardListDndContainer from './board-list-dnd-container';
 
 const BoardList = (props: { name: string; id: string }) => {
   const { name, id } = props;
@@ -39,13 +38,11 @@ const BoardList = (props: { name: string; id: string }) => {
         borderRadius: spacing(2),
       }}
     >
-      <BoardListDropContainer id={id}>
-        <BoardListDraggable id={id} name={name}>
-          <BoardListContent name={name} id={id}>
-            {cardsList}
-          </BoardListContent>
-        </BoardListDraggable>
-      </BoardListDropContainer>
+      <BoardListDndContainer id={id} name={name}>
+        <BoardListContent name={name} id={id}>
+          {cardsList}
+        </BoardListContent>
+      </BoardListDndContainer>
     </Box>
   );
 };

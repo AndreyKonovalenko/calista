@@ -22,9 +22,11 @@ import { invariantId } from '../../utils/utils';
 import { useBoardStore } from '../../services/boards/board-store';
 import { ascendingComparator } from '../../services/boards/board-store';
 import BoardListCustomDragLayer from '../../components/boards-page-components/board-list/board-list-custom-drag-layer';
+import { useGlobalDrop } from '../../hooks/use-global-drop';
 
 const BoardPage = () => {
   const navigate = useNavigate();
+  useGlobalDrop();
   const { name, lists, setBoardState } = useBoardStore(state => state);
   const [open, setOpen] = useState(false);
   const { id } = useParams();

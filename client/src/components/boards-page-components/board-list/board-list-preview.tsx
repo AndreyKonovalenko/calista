@@ -8,7 +8,7 @@ import {
   ListItem,
   List,
 } from '@mui/material';
-import { TDraggableElement } from './board-list-draggable';
+import { TDraggableElement } from './board-list-dnd-container';
 import CardComponent from '../card-component/card-component';
 import { v4 as uuidv4 } from 'uuid';
 

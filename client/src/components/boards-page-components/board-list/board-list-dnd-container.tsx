@@ -1,21 +1,28 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { useBoardStore } from '../../../services/boards/board-store';
-import { useDrop, XYCoord } from 'react-dnd';
+import { useDrop, useDrag, XYCoord } from 'react-dnd';
 // import { useUpdateList } from '../../../api/lists-api-queries';
 import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
 import { calculateNewPosition } from '../../../utils/utils';
-import { TDraggableElement } from './board-list-draggable';
 // import BoardListCustomDragLayer from './board-list-custom-drag-layer';
+import { getEmptyImage } from 'react-dnd-html5-backend';
 
-const BoardListDropContainer = (props: {
+export type TDraggableElement = {
+  id: string;
+  name: string;
+};
+
+const BoardListDndContainer = (props: {
   children: React.ReactNode;
+  name: string;
   id: string;
 }) => {
-  const { id, children } = props;
-  const { spacing, palette } = useTheme();
+  const { id, children, name } = props;
+  const { palette } = useTheme();
   const { _id, lists, updateListPosByListId } = useBoardStore(state => state);
   const ref = useRef<HTMLDivElement>(null);
+
   // const updateListQuery = useUpdateList();
   const updateBoardById = useReNumListsPosInBoard(_id);
   // const handleUpdateListPos = (listId: string, newPos: number) => {
@@ -39,7 +46,7 @@ const BoardListDropContainer = (props: {
       // need to add backend request logic
       return undefined;
     },
-    hover({ id: draggedId },monitor) {
+    hover({ id: draggedId }, monitor) {
       if (draggedId !== id) {
         const newPos = calculateNewPosition(lists, id, draggedId);
         if (newPos === -1) {
@@ -49,9 +56,8 @@ const BoardListDropContainer = (props: {
           updateListPosByListId(draggedId, newPos);
           // handleUpdateListPos(draggedId, newPos);
         }
-        console.log(draggedId)
-        console.log(monitor.canDrop())
-
+        console.log(draggedId);
+        console.log(monitor.canDrop());
       }
     },
     collect: monitor => ({
@@ -61,27 +67,54 @@ const BoardListDropContainer = (props: {
     }),
   });
 
+  const [{ isDragging }, connectDrag, preview] = useDrag<
+    TDraggableElement,
+    unknown,
+    { isDragging: boolean }
+  >({
+    type: 'list',
+    item: { id, name },
+    collect: monitor => ({
+      isDragging: monitor.isDragging(),
+    }),
+    end: (item, monitor) => {
+      console.log(item);
+      console.log(
+        'drop inside drop zone',
+        monitor.didDrop(),
+        monitor.getDropResult(),
+      );
+    },
+  });
+
   // mui spacing = 8; list width = spacin(34) = 272
   const threshold: number = 272 * 0.5;
 
-  connectDrop(ref);
   const dropGuide = (
     <Box
       sx={{
-        width: spacing(34),
-        height: '100%',
-        borderRadius: spacing(2),
+        width: 'inherit',
+        height: 'inherit',
+        borderRadius: 'inherit',
         opacity: '0.8',
         backgroundColor: palette.dropGuideColor.main,
       }}
     />
   );
 
+  connectDrag(ref);
+  connectDrop(ref);
+
+  useEffect(() => {
+    preview(getEmptyImage(), { captureDraggingState: true });
+  }, [preview]);
+
   return (
     <Box
       sx={{
         height: 'inherit',
         width: 'inherit',
+        opacity: isDragging ? 0.3 : 1,
       }}
       ref={ref}
     >
@@ -92,4 +125,4 @@ const BoardListDropContainer = (props: {
   );
 };
 
-export default BoardListDropContainer;
+export default BoardListDndContainer;
