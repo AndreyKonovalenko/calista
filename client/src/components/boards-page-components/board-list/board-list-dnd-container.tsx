@@ -41,12 +41,7 @@ const BoardListDndContainer = (props: {
     }
   >({
     accept: 'list',
-    drop() {
-      // const dropResult = monitor.getDropResult()
-      // need to add backend request logic
-      return undefined;
-    },
-    hover({ id: draggedId }, monitor) {
+    hover({ id: draggedId }) {
       if (draggedId !== id) {
         const newPos = calculateNewPosition(lists, id, draggedId);
         if (newPos === -1) {
@@ -56,8 +51,6 @@ const BoardListDndContainer = (props: {
           updateListPosByListId(draggedId, newPos);
           // handleUpdateListPos(draggedId, newPos);
         }
-        console.log(draggedId);
-        console.log(monitor.canDrop());
       }
     },
     collect: monitor => ({
@@ -77,14 +70,6 @@ const BoardListDndContainer = (props: {
     collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),
-    end: (item, monitor) => {
-      console.log(item);
-      console.log(
-        'drop inside drop zone',
-        monitor.didDrop(),
-        monitor.getDropResult(),
-      );
-    },
   });
 
   // mui spacing = 8; list width = spacin(34) = 272
@@ -114,6 +99,7 @@ const BoardListDndContainer = (props: {
       sx={{
         height: 'inherit',
         width: 'inherit',
+        borderRadius: 'inherit',
         opacity: isDragging ? 0.3 : 1,
       }}
       ref={ref}

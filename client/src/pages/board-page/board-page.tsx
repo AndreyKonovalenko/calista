@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import BoardDrawer from '../../components/boards-page-components/board-drawer/board-drawer';
 import AddList from '../../components/boards-page-components/add-list/add-list';
-import { HEADER } from '../../layout/config-layout';
-import { TO_MAIN } from '../../utils/route-constants';
+import BoardList from '../../components/boards-page-components/board-list/board-list';
+import BoardCustomDragLayer from '../../components/boards-page-components/board-custom-drag-layer/board-custom-drag-layer';
 import {
   BoardsPageContent,
   BoardsPageContentPaperBar,
@@ -17,23 +17,23 @@ import {
   useDeleteBoard,
 } from '../../api/boards-api-queries';
 import { useCreateList } from '../../api/lists-api-queries';
-import BoardList from '../../components/boards-page-components/board-list/board-list';
 import { invariantId } from '../../utils/utils';
 import { useBoardStore } from '../../services/boards/board-store';
 import { ascendingComparator } from '../../services/boards/board-store';
-import BoardListCustomDragLayer from '../../components/boards-page-components/board-list/board-list-custom-drag-layer';
 import { useGlobalDrop } from '../../hooks/use-global-drop';
+import { HEADER } from '../../layout/config-layout';
+import { TO_MAIN } from '../../utils/route-constants';
 
 const BoardPage = () => {
-  const navigate = useNavigate();
   useGlobalDrop();
+  const navigate = useNavigate();
   const { name, lists, setBoardState } = useBoardStore(state => state);
+  const deleteBoardQuery = useDeleteBoard();
+  const createListQuery = useCreateList();
   const [open, setOpen] = useState(false);
   const { id } = useParams();
   invariantId(id);
   const { data, isSuccess, isLoading } = useFetchBoardById(id);
-  const deleteBoardQuery = useDeleteBoard();
-  const createListQuery = useCreateList();
 
   const handleDeleteBoard = (): void => {
     deleteBoardQuery.mutate(id);
@@ -119,7 +119,7 @@ const BoardPage = () => {
           }}
         >
           {boardLists}
-          <BoardListCustomDragLayer />
+          <BoardCustomDragLayer />
           <AddList handleCreateNewList={handleCreateNewList} />
         </Stack>
       </BoardsPageContent>

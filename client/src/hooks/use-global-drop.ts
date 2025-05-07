@@ -11,6 +11,10 @@ export const useGlobalDrop = () => {
     accept: 'list',
     drop: (item, monitor) => {
       if (monitor.isOver({ shallow: true })) handleDropOutside(item);
+      const didDrop = monitor.didDrop();
+      if (didDrop) {
+        console.log('doped on child');
+      }
     },
   });
 
