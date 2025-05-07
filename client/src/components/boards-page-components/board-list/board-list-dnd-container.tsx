@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { useBoardStore } from '../../../services/boards/board-store';
-import { useDrop, useDrag, XYCoord } from 'react-dnd';
+import { useDrop, useDrag } from 'react-dnd';
 // import { useUpdateList } from '../../../api/lists-api-queries';
 import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
 import { calculateNewPosition } from '../../../utils/utils';
@@ -32,12 +32,11 @@ const BoardListDndContainer = (props: {
   //   });
   // };
 
-  const [{ isOver, differenceOffset }, connectDrop] = useDrop<
+  const [{ isOver, }, connectDrop] = useDrop<
     TDraggableElement,
     unknown,
     {
       isOver: boolean;
-      differenceOffset: XYCoord | null;
     }
   >({
     accept: 'list',
@@ -55,7 +54,6 @@ const BoardListDndContainer = (props: {
     },
     collect: monitor => ({
       isOver: monitor.isOver(),
-      item: monitor.getItem(),
       differenceOffset: monitor.getDifferenceFromInitialOffset(),
     }),
   });
@@ -63,17 +61,18 @@ const BoardListDndContainer = (props: {
   const [{ isDragging }, connectDrag, preview] = useDrag<
     TDraggableElement,
     unknown,
-    { isDragging: boolean }
+    { isDragging: boolean, item: TDraggableElement}
   >({
     type: 'list',
     item: { id, name },
     collect: monitor => ({
       isDragging: monitor.isDragging(),
+      item: monitor.getItem()
     }),
   });
 
-  // mui spacing = 8; list width = spacin(34) = 272
-  const threshold: number = 272 * 0.5;
+  // mui spacing = 8; list width = spacing(34) = 272
+  // const threshold: number = 272 * 0.5;
 
   const dropGuide = (
     <Box
@@ -86,10 +85,10 @@ const BoardListDndContainer = (props: {
       }}
     />
   );
-
+ 
   connectDrag(ref);
   connectDrop(ref);
-
+  
   useEffect(() => {
     preview(getEmptyImage(), { captureDraggingState: true });
   }, [preview]);
@@ -104,9 +103,7 @@ const BoardListDndContainer = (props: {
       }}
       ref={ref}
     >
-      {differenceOffset && Math.abs(differenceOffset.x) >= threshold && isOver
-        ? dropGuide
-        : children}
+      {isOver&&!isDragging? dropGuide: children}
     </Box>
   );
 };
