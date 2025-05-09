@@ -13,6 +13,7 @@ interface IActions {
   setBoardState: (data: IBoard) => void;
   updateListNameBylistId: (id: string, name: string) => void;
   updateListPosByListId: (id: string, pos: number) => void;
+  updateListsOrder: (hoveredId: string, draggedId: string) => void;
   reset: () => void;
 }
 
@@ -34,6 +35,26 @@ const updatePos = (arr: Array<IList>, pos: number, id: string) => {
   const index: number = arr.findIndex(element => element._id === id);
   arrCopy[index].pos = pos;
   return arrCopy;
+};
+
+const upadteOrder = (
+  arr: Array<IList>,
+  hoveredId: string,
+  draggedId: string,
+): Array<IList> => {
+  const listsCopy = arr.slice();
+  const hoveredIndex: number = arr.findIndex(
+    element => element._id === hoveredId,
+  );
+  const draggedIndex: number = arr.findIndex(
+    element => element._id === draggedId,
+  );
+  listsCopy[draggedIndex] = listsCopy.splice(
+    hoveredIndex,
+    1,
+    listsCopy[draggedIndex],
+  )[0];
+  return listsCopy;
 };
 
 export function getListNameFromState(arr: Array<IList>, id: string) {
@@ -85,4 +106,8 @@ export const useBoardStore = create<TState>()(set => ({
     set((state: TState) => ({ lists: updateName(state.lists, name, id) })),
   updateListPosByListId: (id: string, pos: number) =>
     set((state: TState) => ({ lists: updatePos(state.lists, pos, id) })),
+  updateListsOrder: (hoveredId: string, draggedId: string) =>
+    set((state: TState) => ({
+      lists: upadteOrder(state.lists, hoveredId, draggedId),
+    })),
 }));

@@ -7,7 +7,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import BoardDrawer from '../../components/boards-page-components/board-drawer/board-drawer';
 import AddList from '../../components/boards-page-components/add-list/add-list';
 import BoardList from '../../components/boards-page-components/board-list/board-list';
-import BoardCustomDragLayer from '../../components/boards-page-components/board-custom-drag-layer/board-custom-drag-layer';
+// import BoardCustomDragLayer from '../../components/boards-page-components/board-custom-drag-layer/board-custom-drag-layer';
 import {
   BoardsPageContent,
   BoardsPageContentPaperBar,
@@ -118,7 +118,7 @@ const BoardPage = () => {
           }}
         >
           {boardLists}
-          <BoardCustomDragLayer />
+          {/* <BoardCustomDragLayer /> */}
           <AddList handleCreateNewList={handleCreateNewList} />
         </Stack>
       </BoardsPageContent>

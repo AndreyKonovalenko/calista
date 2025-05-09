@@ -1,12 +1,10 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { useBoardStore } from '../../../services/boards/board-store';
 import { useDrop, useDrag } from 'react-dnd';
 // import { useUpdateList } from '../../../api/lists-api-queries';
-import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
-import { calculateNewPosition } from '../../../utils/utils';
 // import BoardListCustomDragLayer from './board-list-custom-drag-layer';
-import { getEmptyImage } from 'react-dnd-html5-backend';
+// import { getEmptyImage } from 'react-dnd-html5-backend';
 
 export type TDraggableElement = {
   id: string;
@@ -20,11 +18,11 @@ const BoardListDndContainer = (props: {
 }) => {
   const { id, children, name } = props;
   const { palette } = useTheme();
-  const { _id, lists, updateListPosByListId } = useBoardStore(state => state);
+  const { updateListsOrder } = useBoardStore(state => state);
   const ref = useRef<HTMLDivElement>(null);
 
   // const updateListQuery = useUpdateList();
-  const updateBoardById = useReNumListsPosInBoard(_id);
+  // const updateBoardById = useReNumListsPosInBoard(_id);
   // const handleUpdateListPos = (listId: string, newPos: number) => {
   //   updateListQuery.mutate({
   //     id: listId,
@@ -32,7 +30,7 @@ const BoardListDndContainer = (props: {
   //   });
   // };
 
-  const [{ isOver, }, connectDrop] = useDrop<
+  const [{ isOver }, connectDrop] = useDrop<
     TDraggableElement,
     unknown,
     {
@@ -42,14 +40,15 @@ const BoardListDndContainer = (props: {
     accept: 'list',
     hover({ id: draggedId }) {
       if (draggedId !== id) {
-        const newPos = calculateNewPosition(lists, id, draggedId);
-        if (newPos === -1) {
-          updateBoardById.mutate({ id: _id, data: { action: 'renumbering' } });
-        }
-        if (newPos && newPos !== -1) {
-          updateListPosByListId(draggedId, newPos);
-          // handleUpdateListPos(draggedId, newPos);
-        }
+        // const newPos = calculateNewPosition(lists, id, draggedId);
+        // if (newPos === -1) {
+        //   updateBoardById.mutate({ id: _id, data: { action: 'renumbering' } });
+        // }
+        // if (newPos && newPos !== -1) {
+        //   updateListPosByListId(draggedId, newPos);
+        //   // handleUpdateListPos(draggedId, newPos);
+        // }
+        updateListsOrder(id, draggedId);
       }
     },
     collect: monitor => ({
@@ -58,16 +57,16 @@ const BoardListDndContainer = (props: {
     }),
   });
 
-  const [{ isDragging }, connectDrag, preview] = useDrag<
+  const [{ isDragging }, connectDrag] = useDrag<
     TDraggableElement,
     unknown,
-    { isDragging: boolean, item: TDraggableElement}
+    { isDragging: boolean; item: TDraggableElement }
   >({
     type: 'list',
     item: { id, name },
     collect: monitor => ({
       isDragging: monitor.isDragging(),
-      item: monitor.getItem()
+      item: monitor.getItem(),
     }),
   });
 
@@ -85,13 +84,13 @@ const BoardListDndContainer = (props: {
       }}
     />
   );
- 
+
   connectDrag(ref);
   connectDrop(ref);
-  
-  useEffect(() => {
-    preview(getEmptyImage(), { captureDraggingState: true });
-  }, [preview]);
+
+  // useEffect(() => {
+  //   preview(getEmptyImage(), { captureDraggingState: true });
+  // }, [preview]);
 
   return (
     <Box
@@ -103,7 +102,7 @@ const BoardListDndContainer = (props: {
       }}
       ref={ref}
     >
-      {isOver&&!isDragging? dropGuide: children}
+      {isOver && !isDragging ? dropGuide : children}
     </Box>
   );
 };
