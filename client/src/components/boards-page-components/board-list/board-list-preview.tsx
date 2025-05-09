@@ -1,20 +1,10 @@
-import React, { memo } from 'react';
-import {
-  Box,
-  Stack,
-  useTheme,
-  Typography,
-  Button,
-  ListItem,
-  List,
-} from '@mui/material';
+import React from 'react';
+import { Box, Stack, useTheme, Typography, Button, List } from '@mui/material';
 import { TDraggableElement } from './board-list-dnd-container';
 import CardComponent from '../card-component/card-component';
 import { v4 as uuidv4 } from 'uuid';
 
-const BoardListPreview = memo(function BoardListPreview(props: {
-  item: TDraggableElement;
-}) {
+const BoardListPreview = (props: { item: TDraggableElement }) => {
   const { spacing, palette } = useTheme();
   const { item } = props;
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
@@ -30,10 +20,8 @@ const BoardListPreview = memo(function BoardListPreview(props: {
           scrollbarWidth: 'thin',
         }}
       >
-        {cardsMoch.map((element, index) => (
-          <ListItem key={uuidv4()} id={index.toString()}>
-            <CardComponent text={element} />
-          </ListItem>
+        {cardsMoch.map(element => (
+          <CardComponent key={uuidv4()} text={element} />
         ))}
       </List>
     ) : null;
@@ -74,5 +62,5 @@ const BoardListPreview = memo(function BoardListPreview(props: {
       </Box>
     </Stack>
   );
-});
+};
 export default BoardListPreview;
