@@ -18,7 +18,7 @@ const BoardListDndContainer = (props: {
 }) => {
   const { id, children, name } = props;
   const { palette } = useTheme();
-  const { updateListsOrder } = useBoardStore(state => state);
+  const { updateListsOrder, updateListPosByListId } = useBoardStore(state => state);
   const ref = useRef<HTMLDivElement>(null);
 
   // const updateListQuery = useUpdateList();
@@ -40,6 +40,7 @@ const BoardListDndContainer = (props: {
     accept: 'list',
     hover({ id: draggedId }) {
       if (draggedId !== id) {
+
         // const newPos = calculateNewPosition(lists, id, draggedId);
         // if (newPos === -1) {
         //   updateBoardById.mutate({ id: _id, data: { action: 'renumbering' } });
@@ -60,16 +61,21 @@ const BoardListDndContainer = (props: {
   const [{ isDragging }, connectDrag] = useDrag<
     TDraggableElement,
     unknown,
-    { isDragging: boolean; item: TDraggableElement }
+    { isDragging: boolean}
   >({
     type: 'list',
-    item: { id, name },
+    item: { id, name},
+    end(_, monitor) {
+      console.log(monitor.didDrop(), id, )
+      if (monitor.didDrop()){
+        updateListPosByListId(id)
+      }
+    },
     collect: monitor => ({
       isDragging: monitor.isDragging(),
       item: monitor.getItem(),
     }),
   });
-
   // mui spacing = 8; list width = spacing(34) = 272
   // const threshold: number = 272 * 0.5;
 

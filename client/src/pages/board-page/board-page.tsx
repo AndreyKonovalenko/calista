@@ -19,12 +19,12 @@ import {
 import { useCreateList } from '../../api/lists-api-queries';
 import { invariantId } from '../../utils/utils';
 import { useBoardStore } from '../../services/boards/board-store';
-import { useGlobalDrop } from '../../hooks/use-global-drop';
+// import { useGlobalDrop } from '../../hooks/use-global-drop';
 import { HEADER } from '../../layout/config-layout';
 import { TO_MAIN } from '../../utils/route-constants';
 
 const BoardPage = () => {
-  useGlobalDrop();
+  // useGlobalDrop();
   const navigate = useNavigate();
   const { name, lists, setBoardState } = useBoardStore(state => state);
   const deleteBoardQuery = useDeleteBoard();

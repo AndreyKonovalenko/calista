@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-// import { devtools } from 'zustand/middleware';
+import { devtools } from 'zustand/middleware';
 import { IList } from '../lists/list-store';
+
 
 export interface IBoard {
   _id: string;
@@ -12,7 +13,7 @@ export interface IBoard {
 interface IActions {
   setBoardState: (data: IBoard) => void;
   updateListNameBylistId: (id: string, name: string) => void;
-  updateListPosByListId: (id: string, pos: number) => void;
+  updateListPosByListId: (id: string) => void;
   updateListsOrder: (hoveredId: string, draggedId: string) => void;
   reset: () => void;
 }
@@ -30,14 +31,7 @@ const updateName = (arr: Array<IList>, name: string, id: string) => {
   return arr;
 };
 
-const updatePos = (arr: Array<IList>, pos: number, id: string) => {
-  const arrCopy = arr.slice();
-  const index: number = arr.findIndex(element => element._id === id);
-  arrCopy[index].pos = pos;
-  return arrCopy;
-};
-
-const upadteOrder = (
+const updateOrder = (
   arr: Array<IList>,
   hoveredId: string,
   draggedId: string,
@@ -57,6 +51,27 @@ const upadteOrder = (
   return listsCopy;
 };
 
+ const updatePos = (arr: Array<IList>, draggedId:string): Array<IList> => {
+  const arrCopy = arr.slice()
+  const elementIndex = arrCopy.findIndex(element => element._id === draggedId);
+  const length = arr.length
+  if( length > 1) {
+    if (elementIndex == 0) {
+      arrCopy[elementIndex].pos =  Math.trunc(arr[1].pos / 2)
+    }
+    if (elementIndex == length - 1) {
+      arrCopy[elementIndex].pos =  arr[length - 1].pos + 16834
+    }
+    if ( (elementIndex  >  0) && (elementIndex <  length - 1)) {
+      console.log(arrCopy[elementIndex])
+      arrCopy[elementIndex].pos =  Math.trunc((arr[elementIndex -1].pos + arr[elementIndex+1].pos)/2 )
+    }
+  }
+  return arrCopy;
+}
+
+
+
 export function getListNameFromState(arr: Array<IList>, id: string) {
   const list: IList | undefined = arr.find(element => element._id === id);
   return list?.name;
@@ -70,44 +85,48 @@ export function ascendingComparator(a: IList, b: IList): number {
   return 0;
 }
 
-// export const useBoardStore = create<TState>()(
-//   devtools(
-//     set => ({
-//       ...initialState,
-//       setBoardState: data =>
-//         set({
-//           _id: data._id,
-//           name: data.name,
-//           createrId: data.createrId,
-//           lists: data.lists,
-//         }),
-//       reset: () => set(initialState),
-//       updateListNameBylistId: (id: string, name: string) =>
-//         set((state: TState) => ({ lists: updateName(state.lists, name, id) })),
-//       updateListPosByListId: (id: string, pos: number) =>
-//         set((state: TState) => ({ lists: updatePos(state.lists, pos, id) })),
-//     }),
-//     { name: 'boardStore' },
-//   ),
-// );
+export const useBoardStore = create<TState>()(
+  devtools(
+    set => ({
+      ...initialState,
+      setBoardState: data =>
+        set({
+          _id: data._id,
+          name: data.name,
+          createrId: data.createrId,
+          lists: data.lists,
+        }),
+      reset: () => set(initialState),
+      updateListNameBylistId: (id: string, name: string) =>
+        set((state: TState) => ({ lists: updateName(state.lists, name, id) })),
+      updateListPosByListId: (id: string) =>
+        set((state: TState) => ({ lists: updatePos(state.lists, id) })),
+      updateListsOrder: (hoveredId: string, draggedId: string) =>
+        set((state: TState) => ({
+          lists: updateOrder(state.lists, hoveredId, draggedId),
+        })),
+    }),
+    { name: 'boardStore' },
+  ),
+);
 
 // disable devtools for be able to debug react-dnd
-export const useBoardStore = create<TState>()(set => ({
-  ...initialState,
-  setBoardState: data =>
-    set({
-      _id: data._id,
-      name: data.name,
-      createrId: data.createrId,
-      lists: data.lists.sort(ascendingComparator),
-    }),
-  reset: () => set(initialState),
-  updateListNameBylistId: (id: string, name: string) =>
-    set((state: TState) => ({ lists: updateName(state.lists, name, id) })),
-  updateListPosByListId: (id: string, pos: number) =>
-    set((state: TState) => ({ lists: updatePos(state.lists, pos, id) })),
-  updateListsOrder: (hoveredId: string, draggedId: string) =>
-    set((state: TState) => ({
-      lists: upadteOrder(state.lists, hoveredId, draggedId),
-    })),
-}));
+// export const useBoardStore = create<TState>()(set => ({
+//   ...initialState,
+//   setBoardState: data =>
+//     set({
+//       _id: data._id,
+//       name: data.name,
+//       createrId: data.createrId,
+//       lists: data.lists.sort(ascendingComparator),
+//     }),
+//   reset: () => set(initialState),
+//   updateListNameBylistId: (id: string, name: string) =>
+//     set((state: TState) => ({ lists: updateName(state.lists, name, id) })),
+//   updateListPosByListId: (id: string, pos: number) =>
+//     set((state: TState) => ({ lists: updatePos(state.lists, pos, id) })),
+//   updateListsOrder: (hoveredId: string, draggedId: string) =>
+//     set((state: TState) => ({
+//       lists: upadteOrder(state.lists, hoveredId, draggedId),
+//     })),
+// }));
