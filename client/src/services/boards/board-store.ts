@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { IList } from '../lists/list-store';
 
-
 export interface IBoard {
   _id: string;
   createrId: string;
@@ -13,7 +12,7 @@ export interface IBoard {
 interface IActions {
   setBoardState: (data: IBoard) => void;
   updateListNameBylistId: (id: string, name: string) => void;
-  updateListPosByListId: (id: string) => void;
+  updateListPosByListId: (draggedId: string, pos: number) => void;
   updateListsOrder: (hoveredId: string, draggedId: string) => void;
   reset: () => void;
 }
@@ -51,26 +50,11 @@ const updateOrder = (
   return listsCopy;
 };
 
- const updatePos = (arr: Array<IList>, draggedId:string): Array<IList> => {
-  const arrCopy = arr.slice()
-  const elementIndex = arrCopy.findIndex(element => element._id === draggedId);
-  const length = arr.length
-  if( length > 1) {
-    if (elementIndex == 0) {
-      arrCopy[elementIndex].pos =  Math.trunc(arr[1].pos / 2)
-    }
-    if (elementIndex == length - 1) {
-      arrCopy[elementIndex].pos =  arr[length - 1].pos + 16834
-    }
-    if ( (elementIndex  >  0) && (elementIndex <  length - 1)) {
-      console.log(arrCopy[elementIndex])
-      arrCopy[elementIndex].pos =  Math.trunc((arr[elementIndex -1].pos + arr[elementIndex+1].pos)/2 )
-    }
-  }
-  return arrCopy;
+ const updatePos = (arr: Array<IList>, pos: number,  draggedId: string): Array<IList> => {
+  const index: number = arr.findIndex(element => element._id === draggedId);
+  arr[index].pos = pos;
+  return arr;
 }
-
-
 
 export function getListNameFromState(arr: Array<IList>, id: string) {
   const list: IList | undefined = arr.find(element => element._id === id);
@@ -99,8 +83,8 @@ export const useBoardStore = create<TState>()(
       reset: () => set(initialState),
       updateListNameBylistId: (id: string, name: string) =>
         set((state: TState) => ({ lists: updateName(state.lists, name, id) })),
-      updateListPosByListId: (id: string) =>
-        set((state: TState) => ({ lists: updatePos(state.lists, id) })),
+      updateListPosByListId: (draggedId: string, pos: number) =>
+        set((state: TState) => ({ lists: updatePos(state.lists, pos, draggedId) })),
       updateListsOrder: (hoveredId: string, draggedId: string) =>
         set((state: TState) => ({
           lists: updateOrder(state.lists, hoveredId, draggedId),

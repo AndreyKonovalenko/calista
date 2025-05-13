@@ -5,6 +5,7 @@ import { useDrop, useDrag } from 'react-dnd';
 // import { useUpdateList } from '../../../api/lists-api-queries';
 // import BoardListCustomDragLayer from './board-list-custom-drag-layer';
 // import { getEmptyImage } from 'react-dnd-html5-backend';
+import { calcNewPos } from '../../../utils/utils';
 
 export type TDraggableElement = {
   id: string;
@@ -18,7 +19,7 @@ const BoardListDndContainer = (props: {
 }) => {
   const { id, children, name } = props;
   const { palette } = useTheme();
-  const { updateListsOrder, updateListPosByListId } = useBoardStore(state => state);
+  const { updateListsOrder, updateListPosByListId, lists } = useBoardStore(state => state);
   const ref = useRef<HTMLDivElement>(null);
 
   // const updateListQuery = useUpdateList();
@@ -68,7 +69,11 @@ const BoardListDndContainer = (props: {
     end(_, monitor) {
       console.log(monitor.didDrop(), id, )
       if (monitor.didDrop()){
-        updateListPosByListId(id)
+        const newPos = calcNewPos(lists, id)
+        if(newPos){
+          updateListPosByListId(id, newPos)
+        }
+        
       }
     },
     collect: monitor => ({

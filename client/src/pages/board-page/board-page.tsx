@@ -18,7 +18,7 @@ import {
 } from '../../api/boards-api-queries';
 import { useCreateList } from '../../api/lists-api-queries';
 import { invariantId } from '../../utils/utils';
-import { useBoardStore } from '../../services/boards/board-store';
+import { ascendingComparator, useBoardStore } from '../../services/boards/board-store';
 // import { useGlobalDrop } from '../../hooks/use-global-drop';
 import { HEADER } from '../../layout/config-layout';
 import { TO_MAIN } from '../../utils/route-constants';
@@ -61,11 +61,9 @@ const BoardPage = () => {
     });
   };
 
-  const boardLists = lists.map(element => {
+  const boardLists = lists.sort(ascendingComparator).map(element => {
     return (
-      <Box key={uuidv4()}>
-        <BoardList name={element.name} id={element._id} />
-      </Box>
+        <BoardList name={element.name} id={element._id} key={uuidv4()} />
     );
   });
 
