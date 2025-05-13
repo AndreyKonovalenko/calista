@@ -13,7 +13,6 @@ interface IActions {
   setBoardState: (data: IBoard) => void;
   updateListNameBylistId: (id: string, name: string) => void;
   updateListPosByListId: (draggedId: string, pos: number) => void;
-  updateListsOrder: (hoveredId: string, draggedId: string) => void;
   reset: () => void;
 }
 
@@ -30,25 +29,25 @@ const updateName = (arr: Array<IList>, name: string, id: string) => {
   return arr;
 };
 
-const updateOrder = (
-  arr: Array<IList>,
-  hoveredId: string,
-  draggedId: string,
-): Array<IList> => {
-  const listsCopy = arr.slice();
-  const hoveredIndex: number = arr.findIndex(
-    element => element._id === hoveredId,
-  );
-  const draggedIndex: number = arr.findIndex(
-    element => element._id === draggedId,
-  );
-  listsCopy[draggedIndex] = listsCopy.splice(
-    hoveredIndex,
-    1,
-    listsCopy[draggedIndex],
-  )[0];
-  return listsCopy;
-};
+// const updateOrder = (
+//   arr: Array<IList>,
+//   hoveredId: string,
+//   draggedId: string,
+// ): Array<IList> => {
+//   const listsCopy = arr.slice();
+//   const hoveredIndex: number = arr.findIndex(
+//     element => element._id === hoveredId,
+//   );
+//   const draggedIndex: number = arr.findIndex(
+//     element => element._id === draggedId,
+//   );
+//   listsCopy[draggedIndex] = listsCopy.splice(
+//     hoveredIndex,
+//     1,
+//     listsCopy[draggedIndex],
+//   )[0];
+//   return listsCopy;
+// };
 
  const updatePos = (arr: Array<IList>, pos: number,  draggedId: string): Array<IList> => {
   const index: number = arr.findIndex(element => element._id === draggedId);
@@ -78,17 +77,13 @@ export const useBoardStore = create<TState>()(
           _id: data._id,
           name: data.name,
           createrId: data.createrId,
-          lists: data.lists,
+          lists: data.lists.sort(ascendingComparator),
         }),
       reset: () => set(initialState),
       updateListNameBylistId: (id: string, name: string) =>
         set((state: TState) => ({ lists: updateName(state.lists, name, id) })),
       updateListPosByListId: (draggedId: string, pos: number) =>
         set((state: TState) => ({ lists: updatePos(state.lists, pos, draggedId) })),
-      updateListsOrder: (hoveredId: string, draggedId: string) =>
-        set((state: TState) => ({
-          lists: updateOrder(state.lists, hoveredId, draggedId),
-        })),
     }),
     { name: 'boardStore' },
   ),

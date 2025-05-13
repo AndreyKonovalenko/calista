@@ -63,7 +63,7 @@ const BoardPage = () => {
 
   const boardLists = lists.sort(ascendingComparator).map(element => {
     return (
-        <BoardList name={element.name} id={element._id} key={uuidv4()} />
+        <BoardList name={element.name} id={element._id} key={uuidv4()} pos={element.pos}/>
     );
   });
 
