@@ -73,15 +73,16 @@ describe('BoardsController', () => {
         .get(`/api/boards/${testBoardId}`)
         .set('Cookie', [`jwt=${token}`]);
       expect(board.status).toBe(200);
+      console.log(board.body);
       for (const element of board.body.lists) {
         if (element.name === 'TO DO') {
           expect(element.pos).toEqual(16384);
         }
         if (element.name === 'IN PROGRESS') {
-          expect(element.pos).toEqual(32732);
+          expect(element.pos).toEqual(49080);
         }
         if (element.name === 'DONE') {
-          expect(element.pos).toEqual(49080);
+          expect(element.pos).toEqual(32732);
         }
       }
     });

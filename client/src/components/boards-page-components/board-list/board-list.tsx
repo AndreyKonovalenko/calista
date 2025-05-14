@@ -5,7 +5,7 @@ import CardComponent from '../card-component/card-component';
 import BoardListContent from './board-list-content';
 import BoardListDndContainer from './board-list-dnd-container';
 
-const BoardList = (props: { name: string; id: string, pos: number }) => {
+const BoardList = (props: { name: string; id: string; pos: number }) => {
   const { name, id, pos } = props;
   const { spacing } = useTheme();
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];

@@ -31,7 +31,7 @@ beforeAll(async () => {
   const user = await UserModel.find({});
   token = generateToken(user[0]._id, '20000');
   testBoardId = (await BoardModel.find({}))[0]._id;
-  testListId = (await ListModel.find({}))[0]._id;
+  testListId = (await ListModel.find({}))[2]._id;
   testCardId = (await CardModel.find({}))[0]._id;
 });
 
@@ -43,6 +43,7 @@ describe('CardsController', () => {
         .set('Cookie', [`jwt=${token}`]);
       const list = await ListModel.findById(testListId);
       expect(response.body.name).toEqual('Shoping list');
+      console.log(list);
       expect(list?.cards.length).toBe(1);
       expect(response.status).toBe(200);
     });

@@ -7,14 +7,14 @@ export interface IBoard {
   createrId: string;
   name: string;
   lists: Array<IList>;
-  calculatedListPos: number | undefined
+  calculatedListPos: number | undefined;
 }
 
 interface IActions {
   setBoardState: (data: IBoard) => void;
   updateListNameBylistId: (id: string, name: string) => void;
   updateListPosByListId: (draggedId: string, pos: number) => void;
-  setCalculatedListPos: (pos:number | undefined ) => void
+  setCalculatedListPos: (pos: number | undefined) => void;
   reset: () => void;
 }
 
@@ -23,7 +23,7 @@ const initialState: IBoard = {
   name: '',
   createrId: '',
   lists: [],
-  calculatedListPos: undefined
+  calculatedListPos: undefined,
 };
 
 const updateName = (arr: Array<IList>, name: string, id: string) => {
@@ -52,11 +52,15 @@ const updateName = (arr: Array<IList>, name: string, id: string) => {
 //   return listsCopy;
 // };
 
- const updatePos = (arr: Array<IList>, pos: number,  draggedId: string): Array<IList> => {
+const updatePos = (
+  arr: Array<IList>,
+  pos: number,
+  draggedId: string,
+): Array<IList> => {
   const index: number = arr.findIndex(element => element._id === draggedId);
   arr[index].pos = pos;
   return arr;
-}
+};
 
 export function getListNameFromState(arr: Array<IList>, id: string) {
   const list: IList | undefined = arr.find(element => element._id === id);
@@ -86,8 +90,11 @@ export const useBoardStore = create<TState>()(
       updateListNameBylistId: (id: string, name: string) =>
         set((state: TState) => ({ lists: updateName(state.lists, name, id) })),
       updateListPosByListId: (draggedId: string, pos: number) =>
-        set((state: TState) => ({ lists: updatePos(state.lists, pos, draggedId) })),
-      setCalculatedListPos: (pos: number| undefined) => set(() => ({calculatedListPos: pos}))
+        set((state: TState) => ({
+          lists: updatePos(state.lists, pos, draggedId),
+        })),
+      setCalculatedListPos: (pos: number | undefined) =>
+        set(() => ({ calculatedListPos: pos })),
     }),
     { name: 'boardStore' },
   ),

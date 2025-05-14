@@ -39,9 +39,11 @@ describe('ListsController', () => {
       const response = await request(app)
         .get(`/api/lists/${testListId}`)
         .set('Cookie', [`jwt=${token}`]);
+      console.log(response.body);
       const board = await BoardModel.findById(testBoardId);
-      expect(response.body.name).toBe('TO DO');
-      expect(board?.lists.length).toBe(1);
+      console.log(board);
+      expect(response.body.name).toBe('DONE');
+      expect(board?.lists.length).toBe(3);
       expect(response.status).toBe(200);
     });
   });
@@ -51,8 +53,8 @@ describe('ListsController', () => {
       type TTestList = Omit<IList, 'createrId' | 'cards'>;
       const data: TTestList = {
         boardId: testBoardId,
-        name: 'IN PROGRESS',
-        pos: 16384,
+        name: 'IN PROGRESS2',
+        pos: 94208,
       };
       const response = await request(app)
         .post('/api/lists/')
@@ -60,8 +62,8 @@ describe('ListsController', () => {
         .set('Cookie', [`jwt=${token}`]);
       expect(response.status).toBe(200);
       const board = await BoardModel.findById(testBoardId);
-      expect(board?.lists.length).toBe(2);
-      expect((await ListModel.find({})).length).toBe(2);
+      expect(board?.lists.length).toBe(4);
+      expect((await ListModel.find({})).length).toBe(4);
     });
   });
 
@@ -83,12 +85,12 @@ describe('ListsController', () => {
 
   describe('/:id', () => {
     it('should delete list by id', async () => {
-      expect((await BoardModel.findById(testBoardId))?.lists.length).toBe(2);
+      expect((await BoardModel.findById(testBoardId))?.lists.length).toBe(4);
       const response = await request(app)
         .delete(`/api/lists/${testListId}`)
         .set('Cookie', [`jwt=${token}`]);
       expect(response.status).toBe(200);
-      expect((await BoardModel.findById(testBoardId))?.lists.length).toBe(1);
+      expect((await BoardModel.findById(testBoardId))?.lists.length).toBe(3);
       expect((await ListModel.find({}))[0].name).toEqual('IN PROGRESS');
       expect(await ListModel.findById(testListId)).toBeNull();
       expect(await CardModel.findOne({ listId: testListId })).toBeNull();

@@ -25,7 +25,7 @@ export async function setUpMockDb() {
   const firstList = await ListModel.create({
     createrId: user._id,
     boardId: board._id,
-    name: 'IN PROGRESS',
+    name: 'DONE',
     cards: [],
     pos: 77824,
   });
@@ -36,7 +36,7 @@ export async function setUpMockDb() {
   const secondList = await ListModel.create({
     createrId: user._id,
     boardId: board._id,
-    name: 'DONE',
+    name: 'IN PROGRESS',
     cards: [],
     pos: 86016,
   });

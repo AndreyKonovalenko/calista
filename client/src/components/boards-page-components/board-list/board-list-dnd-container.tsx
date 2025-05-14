@@ -1,4 +1,4 @@
-import React, { useRef} from 'react';
+import React, { useRef } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { useBoardStore } from '../../../services/boards/board-store';
 import { useDrop, useDrag } from 'react-dnd';
@@ -20,12 +20,18 @@ const BoardListDndContainer = (props: {
   id: string;
   pos: number;
 }) => {
-  const { id, children, name, pos} = props;
+  const { id, children, name, pos } = props;
   const { palette } = useTheme();
-  const { updateListPosByListId, lists, _id, setCalculatedListPos ,calculatedListPos } = useBoardStore(state => state);
+  const {
+    updateListPosByListId,
+    lists,
+    _id,
+    setCalculatedListPos,
+    calculatedListPos,
+  } = useBoardStore(state => state);
   const ref = useRef<HTMLDivElement>(null);
   const updateListQuery = useUpdateList();
-   const updateBoardById = useReNumListsPosInBoard(_id);
+  const updateBoardById = useReNumListsPosInBoard(_id);
   const handleUpdateListPos = (listId: string, newPos: number) => {
     updateListQuery.mutate({
       id: listId,
@@ -44,22 +50,21 @@ const BoardListDndContainer = (props: {
     hover({ id: draggedId }) {
       if (draggedId !== id) {
         const newPos = calculateNewPosition(lists, id, draggedId);
-        setCalculatedListPos(newPos)
+        setCalculatedListPos(newPos);
         if (newPos && newPos !== -1) {
           updateListPosByListId(draggedId, newPos);
-
         }
       }
     },
-    drop({id: draggedId}) {
-      console.log("did drop", calculatedListPos)
+    drop({ id: draggedId }) {
+      console.log('did drop', calculatedListPos);
       if (calculatedListPos === -1) {
         updateBoardById.mutate({ id: _id, data: { action: 'renumbering' } });
       }
       if (calculatedListPos != undefined && calculatedListPos > 0) {
-          handleUpdateListPos(draggedId, calculatedListPos);
+        handleUpdateListPos(draggedId, calculatedListPos);
       }
-      setCalculatedListPos(undefined)
+      setCalculatedListPos(undefined);
     },
     collect: monitor => ({
       isOver: monitor.isOver(),
@@ -70,7 +75,7 @@ const BoardListDndContainer = (props: {
   const [{ isDragging }, connectDrag] = useDrag<
     TDraggableElement,
     unknown,
-    { isDragging: boolean}
+    { isDragging: boolean }
   >({
     type: 'list',
     item: { id, name, pos },
@@ -98,7 +103,6 @@ const BoardListDndContainer = (props: {
   //   preview(getEmptyImage(), { captureDraggingState: true });
   // }, [preview]);
 
-  
   return (
     <Box
       sx={{
