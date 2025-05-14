@@ -7,12 +7,14 @@ export interface IBoard {
   createrId: string;
   name: string;
   lists: Array<IList>;
+  calculatedListPos: number | undefined
 }
 
 interface IActions {
   setBoardState: (data: IBoard) => void;
   updateListNameBylistId: (id: string, name: string) => void;
   updateListPosByListId: (draggedId: string, pos: number) => void;
+  setCalculatedListPos: (pos:number | undefined ) => void
   reset: () => void;
 }
 
@@ -21,6 +23,7 @@ const initialState: IBoard = {
   name: '',
   createrId: '',
   lists: [],
+  calculatedListPos: undefined
 };
 
 const updateName = (arr: Array<IList>, name: string, id: string) => {
@@ -84,6 +87,7 @@ export const useBoardStore = create<TState>()(
         set((state: TState) => ({ lists: updateName(state.lists, name, id) })),
       updateListPosByListId: (draggedId: string, pos: number) =>
         set((state: TState) => ({ lists: updatePos(state.lists, pos, draggedId) })),
+      setCalculatedListPos: (pos: number| undefined) => set(() => ({calculatedListPos: pos}))
     }),
     { name: 'boardStore' },
   ),

@@ -9,7 +9,6 @@ const BoardList = (props: { name: string; id: string, pos: number }) => {
   const { name, id, pos } = props;
   const { spacing } = useTheme();
   const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
-  console.log(uuidv4());
 
   const cardsList =
     cardsMoch.length > 0 ? (
