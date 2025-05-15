@@ -8,8 +8,8 @@ import {
   ListItem,
 } from '@mui/material';
 
-const CardComponent = (props: { text: string | number }) => {
-  const { text } = props;
+const CardComponent = (props: {name: string, id: string }) => {
+  const { name } = props;
   return (
     <ListItem>
       <Card sx={{ minWidth: '100%' }}>
@@ -18,7 +18,7 @@ const CardComponent = (props: { text: string | number }) => {
             Word of the Day
           </Typography>
           <Typography variant="h5" component="div">
-            {text}
+            {name}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             adjective

@@ -5,13 +5,12 @@ import CardComponent from '../card-component/card-component';
 import BoardListContent from './board-list-content';
 import BoardListDndContainer from './board-list-dnd-container';
 
-const BoardList = (props: { name: string; id: string; pos: number }) => {
-  const { name, id, pos } = props;
+const BoardList = (props: { name: string; id: string; pos: number, cards: Array<{_id:string, name: string}> }) => {
+  const { name, id, pos, cards } = props;
   const { spacing } = useTheme();
-  const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
 
   const cardsList =
-    cardsMoch.length > 0 ? (
+    cards.length > 0 ? (
       <List
         sx={{
           display: 'flex',
@@ -22,8 +21,8 @@ const BoardList = (props: { name: string; id: string; pos: number }) => {
           scrollbarWidth: 'thin',
         }}
       >
-        {cardsMoch.map(element => (
-          <CardComponent key={uuidv4()} text={element} />
+        {cards.map(element => (
+          <CardComponent key={uuidv4()} name={element.name} id={element._id} />
         ))}
       </List>
     ) : null;
@@ -32,7 +31,6 @@ const BoardList = (props: { name: string; id: string; pos: number }) => {
     <Box
       sx={{
         width: spacing(34),
-        height: '100%',
         borderRadius: spacing(2),
       }}
     >

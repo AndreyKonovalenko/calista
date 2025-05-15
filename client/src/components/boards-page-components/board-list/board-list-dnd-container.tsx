@@ -21,7 +21,7 @@ const BoardListDndContainer = (props: {
   pos: number;
 }) => {
   const { id, children, name, pos } = props;
-  const { palette } = useTheme();
+  const { palette, spacing} = useTheme();
   const {
     updateListPosByListId,
     lists,
@@ -88,7 +88,7 @@ const BoardListDndContainer = (props: {
     <Box
       sx={{
         width: 'inherit',
-        height: 'inherit',
+        minHeight: spacing(14),
         borderRadius: 'inherit',
         opacity: '0.8',
         backgroundColor: palette.dropGuideColor.main,
@@ -106,9 +106,9 @@ const BoardListDndContainer = (props: {
   return (
     <Box
       sx={{
-        height: 'inherit',
-        width: 'inherit',
         borderRadius: 'inherit',
+        height: '100%',
+        width: spacing(34),
         opacity: isDragging ? 0.3 : 1,
       }}
       ref={ref}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Typography, useTheme, Stack } from '@mui/material';
+import { Box, Typography, useTheme, Stack } from '@mui/material';
 import { TitleTextAreaStyled } from '../boards-page-styled-elements/boards-page-styled-elements';
 import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-menu';
 import { useState } from 'react';
@@ -9,6 +9,7 @@ import {
 } from '../../../services/boards/board-store';
 import { handleFormSubmitEvent } from '../../../utils/utils';
 import { useUpdateList } from '../../../api/lists-api-queries';
+import AddItem from '../add-item/add-item';
 
 const BoardListContent = (props: {
   name: string;
@@ -42,10 +43,9 @@ const BoardListContent = (props: {
     <Stack
       spacing={2}
       sx={{
-        width: 'inherit',
         backgroundColor: palette.listBackground.main,
         borderRadius: 'inherit',
-        maxHeight: 'inherit',
+        width: '100%',
         position: 'relative',
         flexShrink: 0,
       }}
@@ -99,9 +99,7 @@ const BoardListContent = (props: {
         </Stack>
       </Box>
       {children}
-      <Box>
-        <Button>+ Add a card</Button>
-      </Box>
+        <AddItem handleCreateItem={()=>console.log('test')} name="+ ADD A CARD" itemType='CARD' labelPosition='flex-start'/>
     </Stack>
   );
 };

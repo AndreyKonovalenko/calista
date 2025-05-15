@@ -1,30 +1,31 @@
 import React from 'react';
-import { Box, Stack, useTheme, Typography, Button, List } from '@mui/material';
+import { Box, Stack, useTheme, Typography, Button, } from '@mui/material';
 import { TDraggableElement } from './board-list-dnd-container';
-import CardComponent from '../card-component/card-component';
-import { v4 as uuidv4 } from 'uuid';
+// import CardComponent from '../card-component/card-component';
+// import { v4 as uuidv4 } from 'uuid';
 
 const BoardListPreview = (props: { item: TDraggableElement }) => {
   const { spacing, palette } = useTheme();
   const { item } = props;
-  const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
-  const cardsList =
-    cardsMoch.length > 0 ? (
-      <List
-        sx={{
-          display: 'flex',
-          overflowX: 'auto',
-          height: '100%',
-          flexDirection: 'column',
-          flex: '1 1 auto',
-          scrollbarWidth: 'thin',
-        }}
-      >
-        {cardsMoch.map(element => (
-          <CardComponent key={uuidv4()} text={element} />
-        ))}
-      </List>
-    ) : null;
+
+  // const cardsMoch: number[] = [1, 3, 4, 4, 4, 4, 4];
+  // const cardsList =
+  //   cardsMoch.length > 0 ? (
+  //     <List
+  //       sx={{
+  //         display: 'flex',
+  //         overflowX: 'auto',
+  //         height: '100%',
+  //         flexDirection: 'column',
+  //         flex: '1 1 auto',
+  //         scrollbarWidth: 'thin',
+  //       }}
+  //     >
+  //       {cardsMoch.map(element => (
+  //         <CardComponent key={uuidv4()} text={element} />
+  //       ))}
+  //     </List>
+  //   ) : null;
 
   return (
     <Stack
@@ -56,7 +57,7 @@ const BoardListPreview = (props: { item: TDraggableElement }) => {
           </Box>
         </Stack>
       </Box>
-      {cardsList}
+      {/* {cardsList} */}
       <Box>
         <Button>+ Add a card</Button>
       </Box>

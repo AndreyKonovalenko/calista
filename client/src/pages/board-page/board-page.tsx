@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, IconButton, Toolbar, Stack } from '@mui/material';
+import { Box, Typography, IconButton, Toolbar, Stack, useTheme, Paper } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import BoardDrawer from '../../components/boards-page-components/board-drawer/board-drawer';
-import AddList from '../../components/boards-page-components/add-list/add-list';
+import AddItem from '../../components/boards-page-components/add-item/add-item';
 import BoardList from '../../components/boards-page-components/board-list/board-list';
 // import BoardCustomDragLayer from '../../components/boards-page-components/board-custom-drag-layer/board-custom-drag-layer';
 import {
@@ -29,6 +29,7 @@ import { TO_MAIN } from '../../utils/route-constants';
 const BoardPage = () => {
   // useGlobalDrop();
   const navigate = useNavigate();
+  const {spacing} = useTheme()
   const { name, lists, setBoardState } = useBoardStore(state => state);
   const deleteBoardQuery = useDeleteBoard();
   const createListQuery = useCreateList();
@@ -71,6 +72,7 @@ const BoardPage = () => {
         id={element._id}
         key={uuidv4()}
         pos={element.pos}
+        cards={element.cards}
       />
     );
   });
@@ -125,7 +127,9 @@ const BoardPage = () => {
         >
           {boardLists}
           {/* <BoardCustomDragLayer /> */}
-          <AddList handleCreateNewList={handleCreateNewList} />
+          <Paper  sx={{ width: spacing(34), flexShrink: 0, height: spacing(4)}}>
+            <AddItem handleCreateItem={handleCreateNewList} name='ADD  NEW LIST' itemType='LIST' labelPosition='center' />
+          </Paper>
         </Stack>
       </BoardsPageContent>
       <BoardDrawer

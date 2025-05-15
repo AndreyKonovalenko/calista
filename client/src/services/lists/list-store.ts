@@ -5,7 +5,7 @@ export interface IList {
   name: string;
   boardId: string;
   createrId: string;
-  cards: Array<string>;
+  cards: Array<{_id:string, name: string}>;
   pos: number;
 }
 
