@@ -1,20 +1,20 @@
 import React, { useState, useRef } from 'react';
-import { Box, Button, IconButton, useTheme } from '@mui/material';
+import { Box, Button, IconButton, useTheme, Paper } from '@mui/material';
 import { TitleTextAreaStyled } from '../boards-page-styled-elements/boards-page-styled-elements';
 import CloseIcon from '@mui/icons-material/Close';
 import { useOutsideEClickEvent } from '../../../hooks/useOutsideClickEvent';
 
 type TAddItem = {
-  name: string,
+  name: string;
   handleCreateItem: (event: React.FormEvent<HTMLFormElement>) => void;
-  itemType: string,
-  labelPosition: 'center' | 'flex-start'
+  itemType: 'LIST' | 'CARD';
+  labelPosition: 'center' | 'flex-start';
 };
 
 const AddItem = (props: TAddItem) => {
-  const { handleCreateItem, name, itemType, labelPosition} = props;
+  const { handleCreateItem, name, itemType, labelPosition } = props;
   const { spacing } = useTheme();
-  const [newListName, setNewListName] = useState('');
+  const [newItemName, setNewItemName] = useState('');
   const [addListEditMode, setAddListEditMode] = useState(false);
   const ref = useRef(null);
 
@@ -26,12 +26,19 @@ const AddItem = (props: TAddItem) => {
   useOutsideEClickEvent(ref, clickOutside);
 
   return addListEditMode ? (
-    <Box sx={{ height: '100%', width: spacing(34), paddingLeft: spacing(1), paddingRight: spacing(1)}}>
+    <Box
+      sx={{
+        height: '100%',
+        width: spacing(34),
+        paddingLeft: itemType === 'LIST' ? '0' : spacing(1),
+        paddingRight: itemType === 'LIST' ? '0' : spacing(1),
+      }}
+    >
       <Box
         component="form"
         onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
           handleCreateItem(event);
-          setNewListName('');
+          setNewItemName('');
         }}
         sx={{
           width: '100%',
@@ -44,9 +51,9 @@ const AddItem = (props: TAddItem) => {
         <TitleTextAreaStyled
           autoFocus
           rows={1}
-          value={newListName}
+          value={newItemName}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-            setNewListName(event.target.value);
+            setNewItemName(event.target.value);
           }}
           onFocus={(event: React.FocusEvent<HTMLTextAreaElement>) => {
             event.target.select();
@@ -54,7 +61,7 @@ const AddItem = (props: TAddItem) => {
           onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
             event.target.focus();
           }}
-          name="newListName"
+          name="newItemName"
           onKeyDown={(event: React.KeyboardEvent<HTMLTextAreaElement>) => {
             if (event.key === 'Enter') {
               event.preventDefault();
@@ -67,7 +74,11 @@ const AddItem = (props: TAddItem) => {
           }}
         />
         <Box
-          sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+          }}
         >
           <Button type="submit" ref={ref}>
             Add {itemType}
@@ -82,10 +93,24 @@ const AddItem = (props: TAddItem) => {
         </Box>
       </Box>
     </Box>
-  ) : (
-      <Button fullWidth={true} onClick={() => setAddListEditMode(true)} sx={{justifyContent: labelPosition}}>
+  ) : itemType === 'LIST' ? (
+    <Paper sx={{ width: spacing(34), flexShrink: 0, height: spacing(4) }}>
+      <Button
+        fullWidth={true}
+        onClick={() => setAddListEditMode(true)}
+        sx={{ justifyContent: labelPosition }}
+      >
         {name}
       </Button>
+    </Paper>
+  ) : (
+    <Button
+      fullWidth={true}
+      onClick={() => setAddListEditMode(true)}
+      sx={{ justifyContent: labelPosition }}
+    >
+      {name}
+    </Button>
   );
 };
 

@@ -8,7 +8,7 @@ import {
   ListItem,
 } from '@mui/material';
 
-const CardComponent = (props: {name: string, id: string }) => {
+const CardComponent = (props: { name: string; id: string }) => {
   const { name } = props;
   return (
     <ListItem>

@@ -11,18 +11,22 @@ import { handleFormSubmitEvent } from '../../../utils/utils';
 import { useUpdateList } from '../../../api/lists-api-queries';
 import AddItem from '../add-item/add-item';
 
+import { useCreateCard } from '../../../api/cards-api-queries';
+
 const BoardListContent = (props: {
   name: string;
   id: string;
   children: React.ReactNode;
+  cards: Array<{ _id: string; name: string; pos: number }>;
 }) => {
   const { spacing, palette } = useTheme();
-  const { name, id, children } = props;
-  const { updateListNameBylistId, lists } = useBoardStore(state => state);
+  const { name, id, children, cards } = props;
+  const { updateListNameBylistId, lists, _id } = useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
 
   const updateListQuery = useUpdateList();
+  const createCardQuery = useCreateCard();
   const handleUpdateListName = (
     event: React.FormEvent<HTMLFormElement>,
     listId: string,
@@ -37,6 +41,23 @@ const BoardListContent = (props: {
         data: { name: listName },
       });
     }
+  };
+
+  const handleCreateNewCard = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    let pos = 16384;
+    if (cards.length > 0) {
+      // when add element in the end of array
+      const last = cards[cards.length - 1].pos;
+      pos = pos + last;
+    }
+    const formData = new FormData(event.currentTarget);
+    createCardQuery.mutate({
+      name: formData.get('newItemName'),
+      boardId: _id,
+      listId: id,
+      pos: pos,
+    });
   };
 
   return (
@@ -99,7 +120,12 @@ const BoardListContent = (props: {
         </Stack>
       </Box>
       {children}
-        <AddItem handleCreateItem={()=>console.log('test')} name="+ ADD A CARD" itemType='CARD' labelPosition='flex-start'/>
+      <AddItem
+        handleCreateItem={handleCreateNewCard}
+        name="+ ADD A CARD"
+        itemType="CARD"
+        labelPosition="flex-start"
+      />
     </Stack>
   );
 };

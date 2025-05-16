@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, IconButton, Toolbar, Stack, useTheme, Paper } from '@mui/material';
+import { Box, Typography, IconButton, Toolbar, Stack } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router';
@@ -29,7 +29,6 @@ import { TO_MAIN } from '../../utils/route-constants';
 const BoardPage = () => {
   // useGlobalDrop();
   const navigate = useNavigate();
-  const {spacing} = useTheme()
   const { name, lists, setBoardState } = useBoardStore(state => state);
   const deleteBoardQuery = useDeleteBoard();
   const createListQuery = useCreateList();
@@ -59,7 +58,7 @@ const BoardPage = () => {
     }
     const formData = new FormData(event.currentTarget);
     createListQuery.mutate({
-      name: formData.get('newListName'),
+      name: formData.get('newItemName'),
       boardId: id,
       pos: pos,
     });
@@ -127,9 +126,12 @@ const BoardPage = () => {
         >
           {boardLists}
           {/* <BoardCustomDragLayer /> */}
-          <Paper  sx={{ width: spacing(34), flexShrink: 0, height: spacing(4)}}>
-            <AddItem handleCreateItem={handleCreateNewList} name='ADD  NEW LIST' itemType='LIST' labelPosition='center' />
-          </Paper>
+          <AddItem
+            handleCreateItem={handleCreateNewList}
+            name="ADD NEW LIST"
+            itemType="LIST"
+            labelPosition="center"
+          />
         </Stack>
       </BoardsPageContent>
       <BoardDrawer

@@ -10,6 +10,7 @@ const LOGIN = validEnv(process.env.LOGIN);
 const LOGOUT = validEnv(process.env.LOGOUT);
 const LISTS = validEnv(process.env.LISTS);
 const BOARDS = validEnv(process.env.BOARDS);
+const CARDS = validEnv(process.env.CARDS);
 const AUTH = validEnv(process.env.AUTH);
 const SSE = validEnv(process.env.SSE);
 axios.defaults.baseURL = BASE_URL;
@@ -80,6 +81,10 @@ const lists = {
     request.put<void>(`${LISTS}/${id}`, data),
 };
 
+const cards = {
+  cerateCard: (data: TData) => request.post<void>(CARDS, data),
+};
+
 // listsRouter.post('/', protect, addList);
 // listsRouter.get('/:id', protect, getList);
 // listsRouter.put('/:id', protect, updateList);
@@ -94,6 +99,7 @@ const api = {
   auth,
   boards,
   lists,
+  cards,
   sse,
 };
 

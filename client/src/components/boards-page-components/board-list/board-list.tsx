@@ -5,7 +5,12 @@ import CardComponent from '../card-component/card-component';
 import BoardListContent from './board-list-content';
 import BoardListDndContainer from './board-list-dnd-container';
 
-const BoardList = (props: { name: string; id: string; pos: number, cards: Array<{_id:string, name: string}> }) => {
+const BoardList = (props: {
+  name: string;
+  id: string;
+  pos: number;
+  cards: Array<{ _id: string; name: string; pos: number }>;
+}) => {
   const { name, id, pos, cards } = props;
   const { spacing } = useTheme();
 
@@ -35,7 +40,7 @@ const BoardList = (props: { name: string; id: string; pos: number, cards: Array<
       }}
     >
       <BoardListDndContainer id={id} name={name} pos={pos}>
-        <BoardListContent name={name} id={id}>
+        <BoardListContent name={name} cards={cards} id={id}>
           {cardsList}
         </BoardListContent>
       </BoardListDndContainer>

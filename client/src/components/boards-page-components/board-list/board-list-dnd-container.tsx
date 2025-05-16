@@ -21,7 +21,7 @@ const BoardListDndContainer = (props: {
   pos: number;
 }) => {
   const { id, children, name, pos } = props;
-  const { palette, spacing} = useTheme();
+  const { palette, spacing } = useTheme();
   const {
     updateListPosByListId,
     lists,
