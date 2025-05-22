@@ -14,45 +14,41 @@ import CardPage from './pages/card-page/card-page';
 import ModalPortal from './components/modal-portal/modal-portal';
 
 const App = (): JSX.Element => {
-  const location = useLocation()
-  const background = location.state&&location.state.background;
+  const location = useLocation();
+  const background = location.state && location.state.background;
   return (
-          <React.Fragment>
-            <Routes location={background || location}>
-              <Route element={<MainLayout />}>
-                <Route
-                  index
-                  element={<ProtectedRoute element={<MainPage />} />}
-                />
-                <Route
-                  path="boards/:id"
-                  element={<ProtectedRoute element={<BoardPage />} />}
-                />
-              </Route>
-              <Route element={<AuthLayout />}>
-                <Route path="login" element={<LoginPage />} />
-                <Route path="register" element={<RegisterPage />} />
-              </Route>
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-            {background && (
-              <Routes>
-                <Route
-                  path="boards/:id/cards/:id"
-                  element={
-                    <ProtectedRoute
-                      element={
-                        <ModalPortal>
-                          <CardPage/>
-                        </ModalPortal>
-                      }
-                    />
-                  }
-                
-                />
-              </Routes>
-            )}
-  </React.Fragment>
+    <React.Fragment>
+      <Routes location={background || location}>
+        <Route element={<MainLayout />}>
+          <Route index element={<ProtectedRoute element={<MainPage />} />} />
+          <Route
+            path="boards/:id"
+            element={<ProtectedRoute element={<BoardPage />} />}
+          />
+        </Route>
+        <Route element={<AuthLayout />}>
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
+        </Route>
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+      {background && (
+        <Routes>
+          <Route
+            path="boards/:id/cards/:id"
+            element={
+              <ProtectedRoute
+                element={
+                  <ModalPortal>
+                    <CardPage />
+                  </ModalPortal>
+                }
+              />
+            }
+          />
+        </Routes>
+      )}
+    </React.Fragment>
   );
 };
 

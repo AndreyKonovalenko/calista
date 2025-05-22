@@ -24,7 +24,7 @@ root.render(
           <BrowserRouter>
             <App />
           </BrowserRouter>
-          </ThemeProvider>
+        </ThemeProvider>
       </QueryClientProvider>
     </DndProvider>
   </React.StrictMode>,

@@ -13,14 +13,15 @@ const CardComponent = (props: { name: string; id: string }) => {
   const { name, id } = props;
   const location = useLocation();
   return (
-    <Link
-      to={`cards/:${id}`}
-      state={{background: location}}
-    >
+    <Link to={`cards/:${id}`} state={{ background: location }}>
       <ListItem>
         <Card sx={{ minWidth: '100%' }}>
           <CardContent>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
               Word of the Day
             </Typography>
             <Typography variant="h5" component="div">
