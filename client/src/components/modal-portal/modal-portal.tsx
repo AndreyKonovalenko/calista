@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, Paper } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
-const ModalPortal = (props: { children: React.ReactNode }) => {
-  const { children } = props;
+const ModalPortal = (props: { children: React.ReactNode, onModalClose: () => void }) => {
+  const { children, onModalClose } = props;
   const overlay = {
     width: '100%',
     background: '#131316',
@@ -23,14 +24,23 @@ const ModalPortal = (props: { children: React.ReactNode }) => {
     left: '50%',
     margin: 'auto',
     transform: 'translate(-50%, -50%)',
+    opacity: 1,
     zIndex: 9999,
   };
 
   return (
-    <Box sx={overlay}>
-      <Box sx={container}>{children}</Box>
-    </Box>
-  );
-};
+    <React.Fragment>
+      <Box sx={container}>
+        <Paper>     
+          <Box onClick={onModalClose} sx={{display: 'flex', flexDirection: 'row', justifyContent:'flex-end', cursor: "pointer"}}>
+            <CloseIcon fontSize="large"/>
+          </Box>
+        {children}
+          </Paper>
+      </Box>
+     <Box sx={overlay}/>
+  </React.Fragment>
+  )
+}
 
 export default ModalPortal;
