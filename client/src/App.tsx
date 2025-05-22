@@ -1,9 +1,6 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router';
-import { CssBaseline, ThemeProvider } from '@mui/material';
-import { theme } from './styles/theme';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ToastContainer } from 'react-toastify';
+import { Routes, Route, useLocation } from 'react-router';
+
 import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from './components/protected-route/protected-route';
 import MainPage from './pages/main-page/main-page';
@@ -13,20 +10,15 @@ import AuthLayout from './layout/AuthLayout';
 import LoginPage from './pages/login-page/login-page';
 import RegisterPage from './pages/register-page/register-page';
 import NotFoundPage from './pages/page-not-found/page-not-found';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-
-const queryClient = new QueryClient();
+import CardPage from './pages/card-page/card-page';
+import ModalPortal from './components/modal-portal/modal-portal';
 
 const App = (): JSX.Element => {
+  const location = useLocation()
+  const background = location.state&&location.state.background;
   return (
-    <DndProvider backend={HTML5Backend}>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <ToastContainer />
-          <BrowserRouter>
-            <Routes>
+          <React.Fragment>
+            <Routes location={background || location}>
               <Route element={<MainLayout />}>
                 <Route
                   index
@@ -43,10 +35,24 @@ const App = (): JSX.Element => {
               </Route>
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
-          </BrowserRouter>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </DndProvider>
+            {background && (
+              <Routes>
+                <Route
+                  path="boards/:id/cards/:id"
+                  element={
+                    <ProtectedRoute
+                      element={
+                        <ModalPortal>
+                          <CardPage/>
+                        </ModalPortal>
+                      }
+                    />
+                  }
+                
+                />
+              </Routes>
+            )}
+  </React.Fragment>
   );
 };
 
