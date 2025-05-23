@@ -1,12 +1,12 @@
 import React from 'react';
-import { Box, Paper } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import { Box, useTheme} from '@mui/material';
+
 
 const ModalPortal = (props: {
   children: React.ReactNode;
-  onModalClose: () => void;
 }) => {
-  const { children, onModalClose } = props;
+  const { children } = props;
+  const {spacing} = useTheme()
   const overlay = {
     width: '100%',
     background: '#131316',
@@ -17,15 +17,15 @@ const ModalPortal = (props: {
     opacity: 0.45,
     zIndex: 9998,
   };
+
   const container = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     position: 'fixed',
-    top: '50%',
+    top: spacing(14),
     left: '50%',
-    margin: 'auto',
     transform: 'translate(-50%, -50%)',
     opacity: 1,
     zIndex: 9999,
@@ -34,20 +34,7 @@ const ModalPortal = (props: {
   return (
     <React.Fragment>
       <Box sx={container}>
-        <Paper>
-          <Box
-            onClick={onModalClose}
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              cursor: 'pointer',
-            }}
-          >
-            <CloseIcon fontSize="large" />
-          </Box>
-          {children}
-        </Paper>
+        {children}
       </Box>
       <Box sx={overlay} />
     </React.Fragment>
