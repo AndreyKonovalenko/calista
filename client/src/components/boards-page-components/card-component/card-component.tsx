@@ -13,7 +13,7 @@ const CardComponent = (props: { name: string; id: string }) => {
   const { name, id } = props;
   const location = useLocation();
   return (
-    <Link to={`cards/:${id}`} state={{ background: location }}>
+    <Link to={`cards/${id}`} state={{ background: location }}>
       <ListItem>
         <Card sx={{ minWidth: '100%' }}>
           <CardContent>

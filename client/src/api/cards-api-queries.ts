@@ -1,7 +1,7 @@
 import { useParams } from 'react-router';
 import api from './calista-api';
 import { invariantId } from '../utils/utils';
-import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 
 export const useCreateCard = () => {
   const { id } = useParams();
@@ -15,5 +15,13 @@ export const useCreateCard = () => {
         exact: true,
       });
     },
+  });
+};
+
+export const useFetchCardById = (cardId: string) => {
+  return useQuery({
+    queryKey: ['fetchCardById', cardId],
+    queryFn: () => api.cards.fetchCardById(cardId),
+    enabled: !!cardId,
   });
 };

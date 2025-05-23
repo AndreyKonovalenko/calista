@@ -15,7 +15,7 @@ import ModalPortal from './components/modal-portal/modal-portal';
 
 const App = (): JSX.Element => {
   const location = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const background = location.state && location.state.background;
   return (
     <React.Fragment>
@@ -40,7 +40,7 @@ const App = (): JSX.Element => {
             element={
               <ProtectedRoute
                 element={
-                  <ModalPortal onModalClose={()=> navigate(-1)}>
+                  <ModalPortal onModalClose={() => navigate(-1)}>
                     <CardPage />
                   </ModalPortal>
                 }

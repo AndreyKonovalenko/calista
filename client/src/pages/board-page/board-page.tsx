@@ -7,6 +7,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import BoardDrawer from '../../components/boards-page-components/board-drawer/board-drawer';
 import AddItem from '../../components/boards-page-components/add-item/add-item';
 import BoardList from '../../components/boards-page-components/board-list/board-list';
+import LoadingBage from '../../components/loading-bage/loading-bage';
 // import BoardCustomDragLayer from '../../components/boards-page-components/board-custom-drag-layer/board-custom-drag-layer';
 import {
   BoardsPageContent,
@@ -92,7 +93,6 @@ const BoardPage = () => {
         <Toolbar>
           <Typography variant="h6" component="div" noWrap sx={{ flexGrow: 1 }}>
             {name}
-            {isLoading ? 'Loading' : null}
           </Typography>
           <IconButton
             color="inherit"
@@ -104,7 +104,8 @@ const BoardPage = () => {
           </IconButton>
         </Toolbar>
       </BoardsPageContentPaperBar>
-      <BoardsPageContent
+      {isLoading ? <LoadingBage/> :
+      (<BoardsPageContent
         open={open}
         sx={{ mt: `${HEADER.H_DESKTOP}px`, position: 'relative' }}
       >
@@ -133,7 +134,7 @@ const BoardPage = () => {
             labelPosition="center"
           />
         </Stack>
-      </BoardsPageContent>
+      </BoardsPageContent>)}
       <BoardDrawer
         open={open}
         handleDrawerClose={handleDrawerClose}

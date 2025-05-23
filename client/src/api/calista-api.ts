@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { TAuthState } from '../services/auth/auth-store';
 import { IBoard } from '../services/boards/board-store';
 import { IList } from '../services/lists/list-store';
+import { ICard } from '../services/cards/card-store';
 import validEnv from '../utils/utils';
 
 const BASE_URL = validEnv(process.env.BASE_URL);
@@ -83,6 +84,7 @@ const lists = {
 
 const cards = {
   cerateCard: (data: TData) => request.post<void>(CARDS, data),
+  fetchCardById: (id: string) => request.get<ICard>(`${CARDS}/${id}`),
 };
 
 // listsRouter.post('/', protect, addList);
