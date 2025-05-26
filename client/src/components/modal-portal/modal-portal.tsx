@@ -1,12 +1,9 @@
 import React from 'react';
-import { Box, useTheme} from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
-
-const ModalPortal = (props: {
-  children: React.ReactNode;
-}) => {
+const ModalPortal = (props: { children: React.ReactNode }) => {
   const { children } = props;
-  const {spacing} = useTheme()
+  const { spacing } = useTheme();
   const overlay = {
     width: '100%',
     background: '#131316',
@@ -33,9 +30,7 @@ const ModalPortal = (props: {
 
   return (
     <React.Fragment>
-      <Box sx={container}>
-        {children}
-      </Box>
+      <Box sx={container}>{children}</Box>
       <Box sx={overlay} />
     </React.Fragment>
   );

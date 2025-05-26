@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, useLocation} from 'react-router';
+import { Routes, Route, useLocation } from 'react-router';
 
 import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from './components/protected-route/protected-route';
@@ -14,7 +14,7 @@ import CardPage from './pages/card-page/card-page';
 import ModalPortal from './components/modal-portal/modal-portal';
 
 const App = (): JSX.Element => {
-  const location = useLocation();;
+  const location = useLocation();
   const background = location.state && location.state.background;
   return (
     <React.Fragment>

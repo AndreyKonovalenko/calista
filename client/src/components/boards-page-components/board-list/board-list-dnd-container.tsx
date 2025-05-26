@@ -18,9 +18,10 @@ const BoardListDndContainer = (props: {
   children: React.ReactNode;
   name: string;
   id: string;
+  cards: Array<{ _id: string; name: string; pos: number }>;
   pos: number;
 }) => {
-  const { id, children, name, pos } = props;
+  const { id, children, name, pos, cards } = props;
   const { spacing } = useTheme();
   const {
     updateListPosByListId,
@@ -46,14 +47,22 @@ const BoardListDndContainer = (props: {
       isOver: boolean;
     }
   >({
-    accept: 'list',
-    hover({ id: draggedId }) {
-      if (draggedId !== id) {
-        const newPos = calculateNewPosition(lists, id, draggedId);
-        setCalculatedListPos(newPos);
-        if (newPos && newPos !== -1) {
-          updateListPosByListId(draggedId, newPos);
+    accept: ['list', 'cards'],
+    hover({ id: draggedId }, monitor) {
+      const itemType = monitor.getItemType();
+      console.log(itemType);
+      if (itemType === 'list') {
+        if (draggedId !== id) {
+          const newPos = calculateNewPosition(lists, id, draggedId);
+          setCalculatedListPos(newPos);
+          if (newPos && newPos !== -1) {
+            updateListPosByListId(draggedId, newPos);
+          }
         }
+      }
+
+      if (cards.length === 0 && itemType === 'card') {
+        //add card to epty card array
       }
     },
     drop({ id: draggedId }) {
@@ -101,15 +110,19 @@ const BoardListDndContainer = (props: {
       }}
       ref={ref}
     >
-      {isOver && !isDragging ? 
-        <Box sx={{
-          filter: 'brightness(0)',
-          opacity: 0.2, 
-          borderRadius: 'inherit'
-        }}>
+      {isOver && !isDragging ? (
+        <Box
+          sx={{
+            filter: 'brightness(0)',
+            opacity: 0.2,
+            borderRadius: 'inherit',
+          }}
+        >
           {children}
         </Box>
-         : children}
+      ) : (
+        children
+      )}
     </Box>
   );
 };

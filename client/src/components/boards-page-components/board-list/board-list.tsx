@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, useTheme, List } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
-import CardComponent from '../card-component/card-component';
+import BoardCard from '../board-card/bard-card';
 import BoardListContent from './board-list-content';
 import BoardListDndContainer from './board-list-dnd-container';
 
@@ -27,7 +27,12 @@ const BoardList = (props: {
         }}
       >
         {cards.map(element => (
-          <CardComponent key={uuidv4()} name={element.name} id={element._id} />
+          <BoardCard
+            key={uuidv4()}
+            name={element.name}
+            id={element._id}
+            pos={element.pos}
+          />
         ))}
       </List>
     ) : null;
@@ -39,7 +44,7 @@ const BoardList = (props: {
         borderRadius: spacing(2),
       }}
     >
-      <BoardListDndContainer id={id} name={name} pos={pos}>
+      <BoardListDndContainer id={id} name={name} pos={pos} cards={cards}>
         <BoardListContent name={name} cards={cards} id={id}>
           {cardsList}
         </BoardListContent>

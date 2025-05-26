@@ -104,37 +104,40 @@ const BoardPage = () => {
           </IconButton>
         </Toolbar>
       </BoardsPageContentPaperBar>
-      {isLoading ? <LoadingBage/> :
-      (<BoardsPageContent
-        open={open}
-        sx={{ mt: `${HEADER.H_DESKTOP}px`, position: 'relative' }}
-      >
-        <Stack
-          direction="row"
-          spacing={2}
-          sx={{
-            left: 0,
-            right: 0,
-            bottom: 0,
-            top: 0,
-            p: 2,
-            display: 'flex',
-            overflowX: 'auto',
-            position: 'absolute',
-            justifyContent: 'flex-start',
-            alignItems: 'stretch',
-          }}
+      {isLoading ? (
+        <LoadingBage />
+      ) : (
+        <BoardsPageContent
+          open={open}
+          sx={{ mt: `${HEADER.H_DESKTOP}px`, position: 'relative' }}
         >
-          {boardLists}
-          {/* <BoardCustomDragLayer /> */}
-          <AddItem
-            handleCreateItem={handleCreateNewList}
-            name="ADD NEW LIST"
-            itemType="LIST"
-            labelPosition="center"
-          />
-        </Stack>
-      </BoardsPageContent>)}
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{
+              left: 0,
+              right: 0,
+              bottom: 0,
+              top: 0,
+              p: 2,
+              display: 'flex',
+              overflowX: 'auto',
+              position: 'absolute',
+              justifyContent: 'flex-start',
+              alignItems: 'stretch',
+            }}
+          >
+            {boardLists}
+            {/* <BoardCustomDragLayer /> */}
+            <AddItem
+              handleCreateItem={handleCreateNewList}
+              name="ADD NEW LIST"
+              itemType="LIST"
+              labelPosition="center"
+            />
+          </Stack>
+        </BoardsPageContent>
+      )}
       <BoardDrawer
         open={open}
         handleDrawerClose={handleDrawerClose}

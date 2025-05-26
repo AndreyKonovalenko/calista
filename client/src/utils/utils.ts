@@ -70,28 +70,6 @@ export function calculateNewPosition(
   }
 }
 
-export const calcNewPos = (
-  arr: Array<IList>,
-  draggedId: string,
-): number | undefined => {
-  const elementIndex = arr.findIndex(element => element._id === draggedId);
-  const length = arr.length;
-  if (length <= 1) {
-    return;
-  }
-  if (elementIndex == 0) {
-    return Math.trunc(arr[1].pos / 2);
-  }
-  if (elementIndex == length - 1) {
-    return arr[length - 1].pos + 16834;
-  }
-  if (elementIndex > 0 && elementIndex < length - 1) {
-    return Math.trunc(
-      (arr[elementIndex - 1].pos + arr[elementIndex + 1].pos) / 2,
-    );
-  }
-};
-
 export const handleFormSubmitEvent = (
   event:
     | React.KeyboardEvent<HTMLTextAreaElement>
