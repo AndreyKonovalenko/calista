@@ -21,7 +21,7 @@ const BoardListDndContainer = (props: {
   pos: number;
 }) => {
   const { id, children, name, pos } = props;
-  const { palette, spacing } = useTheme();
+  const { spacing } = useTheme();
   const {
     updateListPosByListId,
     lists,
@@ -84,18 +84,6 @@ const BoardListDndContainer = (props: {
     }),
   });
 
-  const dropGuide = (
-    <Box
-      sx={{
-        width: 'inherit',
-        minHeight: spacing(14),
-        borderRadius: 'inherit',
-        opacity: '0.8',
-        backgroundColor: palette.dropGuideColor.main,
-      }}
-    />
-  );
-
   connectDrag(ref);
   connectDrop(ref);
 
@@ -113,7 +101,15 @@ const BoardListDndContainer = (props: {
       }}
       ref={ref}
     >
-      {isOver && !isDragging ? dropGuide : children}
+      {isOver && !isDragging ? 
+        <Box sx={{
+          filter: 'brightness(0)',
+          opacity: 0.2, 
+          borderRadius: 'inherit'
+        }}>
+          {children}
+        </Box>
+         : children}
     </Box>
   );
 };
