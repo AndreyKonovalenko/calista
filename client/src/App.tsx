@@ -35,7 +35,7 @@ const App = (): JSX.Element => {
       {background && (
         <Routes>
           <Route
-            path="boards/:id/cards/:id"
+            path="boards/:boardId/cards/:id"
             element={
               <ProtectedRoute
                 element={

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography, useTheme, Stack } from '@mui/material';
 import { TitleTextAreaStyled } from '../boards-page-styled-elements/boards-page-styled-elements';
-import BoardListActionMenu from '../bpard-list-action-menu/board-list-action-menu';
+import BoardListActionMenu from '../board-list-action-menu/board-list-action-menu';
 import { useState } from 'react';
 import {
   useBoardStore,

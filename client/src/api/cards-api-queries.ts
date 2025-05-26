@@ -1,4 +1,4 @@
-import { useParams } from 'react-router';
+import { useParams} from 'react-router';
 import api from './calista-api';
 import { invariantId } from '../utils/utils';
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
@@ -23,5 +23,22 @@ export const useFetchCardById = (cardId: string) => {
     queryKey: ['fetchCardById', cardId],
     queryFn: () => api.cards.fetchCardById(cardId),
     enabled: !!cardId,
+  });
+};
+
+
+export const useDeleteCard = () => {
+  const { boardId } = useParams();
+
+  invariantId(boardId);
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: api.cards.deleteCard,
+    onSuccess: () => {
+      return queryClient.invalidateQueries({
+        queryKey: ['fetchBoardById', boardId],
+        exact: true,
+      });
+    },
   });
 };

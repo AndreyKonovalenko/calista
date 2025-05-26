@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import { Typography, Paper, Stack, Box, useTheme, Button} from '@mui/material';
 import { invariantId } from '../../utils/utils';
 import LoadingBage from '../../components/loading-bage/loading-bage';
-import { useFetchCardById } from '../../api/cards-api-queries';
-import { useNavigate } from 'react-router';
+import { useFetchCardById, useDeleteCard } from '../../api/cards-api-queries';
 import { useCardStore } from '../../services/cards/card-store';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -14,7 +13,13 @@ const CardPage = () => {
   const navigate = useNavigate()
   invariantId(id);
   const { setCardState, name } = useCardStore(state => state);
-  const { data, isSuccess, isLoading } = useFetchCardById(id);
+  const { data, isSuccess, isLoading} = useFetchCardById(id);
+  const deleteCardQuery = useDeleteCard()
+
+  const handleDeleteCard = (cardId:string) => {
+    deleteCardQuery.mutate(cardId);
+    navigate(-1)
+  }
 
   useEffect(() => {
     if (isSuccess) setCardState(data);
@@ -53,7 +58,7 @@ const CardPage = () => {
           </Typography>
           <Button
             fullWidth={true}
-            onClick={() => {}}
+            onClick={()=> handleDeleteCard(id)}
           >
             DELETE CARD  
           </Button>
