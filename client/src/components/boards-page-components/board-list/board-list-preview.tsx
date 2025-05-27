@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Stack, useTheme, Typography, Button } from '@mui/material';
-import { TDraggableElement } from './board-list-dnd-container';
+import { TDraggableElement } from '../../../utils/types';
 // import CardComponent from '../card-component/card-component';
 // import { v4 as uuidv4 } from 'uuid';
 

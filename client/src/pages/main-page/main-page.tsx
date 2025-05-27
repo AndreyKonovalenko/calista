@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { Box, Card, Divider, Typography, Button, Stack } from '@mui/material';
 import { Person } from '@mui/icons-material';
-import BoardCard from '../../components/main-page-components/board-card/board-card';
+import Board from '../../components/main-page-components/board/board';
 import AddBoardPopper from '../../components/main-page-components/add-baard-popper/add-board-popper';
 import { v4 as uuidv4 } from 'uuid';
 // import useSse from '../../hooks/useSse';
@@ -33,7 +33,7 @@ const MainPage = () => {
   useEscapeKey(handleAddBoardMenuClose);
   const boards = data
     ? data.map(element => (
-        <BoardCard name={element.name} id={element._id} key={uuidv4()} />
+        <Board name={element.name} id={element._id} key={uuidv4()} />
       ))
     : [];
 

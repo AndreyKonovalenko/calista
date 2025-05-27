@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDrop } from 'react-dnd';
-import { TDraggableElement } from '../components/boards-page-components/board-list/board-list-dnd-container';
+import { TDraggableElement } from '../utils/types';
 
 const handleDropOutside = (item: TDraggableElement) => {
   console.log('Droped outside', item);

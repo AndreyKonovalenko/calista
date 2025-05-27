@@ -4,12 +4,13 @@ import { v4 as uuidv4 } from 'uuid';
 import BoardCard from '../board-card/bard-card';
 import BoardListContent from './board-list-content';
 import BoardListDndContainer from './board-list-dnd-container';
+import { ICard } from '../../../utils/types';
 
 const BoardList = (props: {
   name: string;
   id: string;
   pos: number;
-  cards: Array<{ _id: string; name: string; pos: number }>;
+  cards: Array<ICard>;
 }) => {
   const { name, id, pos, cards } = props;
   const { spacing } = useTheme();
@@ -30,6 +31,7 @@ const BoardList = (props: {
           <BoardCard
             key={uuidv4()}
             name={element.name}
+            listId={id}
             id={element._id}
             pos={element.pos}
           />

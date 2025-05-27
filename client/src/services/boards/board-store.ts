@@ -1,13 +1,9 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { IList } from '../lists/list-store';
+import { IBoard, IList } from '../../utils/types';
 
-export interface IBoard {
-  _id: string;
-  createrId: string;
-  name: string;
-  lists: Array<IList>;
-  calculatedListPos: number | undefined;
+interface IState extends IBoard {
+  calculatedListPos: undefined | number;
 }
 
 interface IActions {
@@ -18,7 +14,7 @@ interface IActions {
   reset: () => void;
 }
 
-const initialState: IBoard = {
+const initialState: IState = {
   _id: '',
   name: '',
   createrId: '',
@@ -31,26 +27,6 @@ const updateName = (arr: Array<IList>, name: string, id: string) => {
   arr[index].name = name;
   return arr;
 };
-
-// const updateOrder = (
-//   arr: Array<IList>,
-//   hoveredId: string,
-//   draggedId: string,
-// ): Array<IList> => {
-//   const listsCopy = arr.slice();
-//   const hoveredIndex: number = arr.findIndex(
-//     element => element._id === hoveredId,
-//   );
-//   const draggedIndex: number = arr.findIndex(
-//     element => element._id === draggedId,
-//   );
-//   listsCopy[draggedIndex] = listsCopy.splice(
-//     hoveredIndex,
-//     1,
-//     listsCopy[draggedIndex],
-//   )[0];
-//   return listsCopy;
-// };
 
 const updatePos = (
   arr: Array<IList>,
@@ -67,15 +43,13 @@ export function getListNameFromState(arr: Array<IList>, id: string) {
   return list?.name;
 }
 
-type TState = IBoard & IActions;
-
 export function ascendingComparator(a: IList, b: IList): number {
   if (a.pos < b.pos) return -1;
   if (a.pos > b.pos) return 1;
   return 0;
 }
 
-export const useBoardStore = create<TState>()(
+export const useBoardStore = create<IState & IActions>()(
   devtools(
     set => ({
       ...initialState,
@@ -88,9 +62,9 @@ export const useBoardStore = create<TState>()(
         }),
       reset: () => set(initialState),
       updateListNameBylistId: (id: string, name: string) =>
-        set((state: TState) => ({ lists: updateName(state.lists, name, id) })),
+        set((state: IState) => ({ lists: updateName(state.lists, name, id) })),
       updateListPosByListId: (draggedId: string, pos: number) =>
-        set((state: TState) => ({
+        set((state: IState) => ({
           lists: updatePos(state.lists, pos, draggedId),
         })),
       setCalculatedListPos: (pos: number | undefined) =>
@@ -101,6 +75,7 @@ export const useBoardStore = create<TState>()(
 );
 
 // disable devtools for be able to debug react-dnd
+
 // export const useBoardStore = create<TState>()(set => ({
 //   ...initialState,
 //   setBoardState: data =>

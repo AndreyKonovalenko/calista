@@ -7,12 +7,7 @@ import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
 // import BoardListCustomDragLayer from './board-list-custom-drag-layer';
 // import { getEmptyImage } from 'react-dnd-html5-backend';
 import { calculateNewPosition } from '../../../utils/utils';
-
-export type TDraggableElement = {
-  id: string;
-  name: string;
-  pos: number;
-};
+import { TDraggableElement } from '../../../utils/types';
 
 const BoardListDndContainer = (props: {
   children: React.ReactNode;

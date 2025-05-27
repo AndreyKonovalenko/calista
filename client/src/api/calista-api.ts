@@ -1,9 +1,7 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import { TAuthState } from '../services/auth/auth-store';
-import { IBoard } from '../services/boards/board-store';
-import { IList } from '../services/lists/list-store';
-import { ICard } from '../services/cards/card-store';
+import { IBoard, IList, ICard, IBoardTrimmed } from '../utils/types';
 import validEnv from '../utils/utils';
 
 const BASE_URL = validEnv(process.env.BASE_URL);
@@ -64,7 +62,7 @@ const auth = {
 };
 
 const boards = {
-  fetchBoards: () => request.get<Array<{ _id: string; name: string }>>(BOARDS),
+  fetchBoards: () => request.get<Array<IBoardTrimmed>>(BOARDS),
   createBoard: (data: TData) => request.post<void>(BOARDS, data),
   fetchBoardById: (id: string) => request.get<IBoard>(`${BOARDS}/${id}`),
   deleteBoard: (id: string) => request.delete<void>(`${BOARDS}/${id}`),
@@ -74,9 +72,9 @@ const boards = {
 
 const lists = {
   cerateList: (data: TData) => request.post<void>(LISTS, data),
-  fetchListById: (id: string) => {
-    request.get<IList>(`${LISTS}/${id}`);
-  },
+  // fetchListById: (id: string) => {
+  //   request.get<IList>(`${LISTS}/${id}`);
+  // },
   deleteList: (id: string) => request.delete<void>(`${LISTS}/${id}`),
   updateList: ({ id, data }: TPutData) =>
     request.put<void>(`${LISTS}/${id}`, data),

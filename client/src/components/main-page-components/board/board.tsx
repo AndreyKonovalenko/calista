@@ -27,7 +27,7 @@ const cardActionAreaStyled = {
   alignItems: 'flex-start',
 };
 
-const BoardCard = (props: TBoradCardProps) => {
+const Board = (props: TBoradCardProps) => {
   const { name, id } = props;
   return (
     <Link
@@ -55,4 +55,4 @@ const BoardCard = (props: TBoradCardProps) => {
   );
 };
 
-export default BoardCard;
+export default Board;
