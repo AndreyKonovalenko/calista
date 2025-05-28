@@ -8,11 +8,7 @@ import {
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router';
 import { TO_BOARDS } from '../../../utils/route-constants';
-
-type TBoradCardProps = {
-  name: string;
-  id: string;
-};
+import { IBoardTrimmed } from '../../../utils/types';
 
 const BoardCardStyled = {
   minHeight: 100,
@@ -27,14 +23,14 @@ const cardActionAreaStyled = {
   alignItems: 'flex-start',
 };
 
-const Board = (props: TBoradCardProps) => {
-  const { name, id } = props;
+const Board = (props: IBoardTrimmed) => {
+  const { name, _id } = props;
   return (
     <Link
       component={RouterLink}
       variant="h6"
       underline="none"
-      to={`${TO_BOARDS}/${id}`}
+      to={`${TO_BOARDS}/${_id}`}
       color="inherit"
     >
       <Card sx={BoardCardStyled}>

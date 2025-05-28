@@ -1,45 +1,30 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
+import { ICard } from '../../utils/types';
 
-export interface ICard {
-  _id: string;
-  createrId: string;
-  boardId: string;
-  listId: string;
-  name: string;
-  checkLists: Array<string>;
-  pos: number | undefined;
-}
+type TState = Omit<ICard, 'pos'>;
 
 interface IActions {
   setCardState: (data: ICard) => void;
 }
 
-const initialState: ICard = {
+const initialState: TState = {
   _id: '',
-  createrId: '',
-  boardId: '',
-  listId: '',
   name: '',
+  description: '',
   checkLists: [],
-  pos: undefined,
 };
 
-type TState = ICard & IActions;
-
-export const useCardStore = create<TState>()(
+export const useCardStore = create<TState & IActions>()(
   devtools(
     set => ({
       ...initialState,
       setCardState: data =>
         set({
           _id: data._id,
-          createrId: data.createrId,
-          boardId: data.boardId,
-          listId: data.listId,
           name: data.name,
+          description: data.description,
           checkLists: data.checkLists,
-          pos: data.pos,
         }),
       reset: () => set(initialState),
     }),

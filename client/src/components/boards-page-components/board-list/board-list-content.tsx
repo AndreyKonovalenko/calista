@@ -12,16 +12,21 @@ import { useUpdateList } from '../../../api/lists-api-queries';
 import AddItem from '../add-item/add-item';
 
 import { useCreateCard } from '../../../api/cards-api-queries';
+import { ICardTrimmed } from '../../../utils/types';
 
 const BoardListContent = (props: {
+  _id: string;
   name: string;
-  id: string;
+  cards: Array<ICardTrimmed>;
   children: React.ReactNode;
-  cards: Array<{ _id: string; name: string; pos: number }>;
 }) => {
   const { spacing, palette } = useTheme();
-  const { name, id, children, cards } = props;
-  const { updateListNameBylistId, lists, _id } = useBoardStore(state => state);
+  const { name, _id, children, cards } = props;
+  const {
+    updateListNameBylistId,
+    lists,
+    _id: boardId,
+  } = useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
 
@@ -54,8 +59,8 @@ const BoardListContent = (props: {
     const formData = new FormData(event.currentTarget);
     createCardQuery.mutate({
       name: formData.get('newItemName'),
-      boardId: _id,
-      listId: id,
+      boardId: boardId,
+      listId: _id,
       pos: pos,
     });
   };
@@ -75,7 +80,7 @@ const BoardListContent = (props: {
         sx={{ pl: spacing(2), pt: spacing(2), pr: spacing(2) }}
         component="form"
         onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-          handleUpdateListName(event, id);
+          handleUpdateListName(event, _id);
         }}
       >
         <Stack direction="row" justifyContent="space-between" spacing={2}>
@@ -93,12 +98,12 @@ const BoardListContent = (props: {
               }}
               onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
                 handleFormSubmitEvent(event);
-                updateListNameBylistId(id, listName);
+                updateListNameBylistId(_id, listName);
               }}
               onKeyDown={(event: React.KeyboardEvent<HTMLTextAreaElement>) => {
                 if (event.key === 'Enter') {
                   handleFormSubmitEvent(event);
-                  updateListNameBylistId(id, listName);
+                  updateListNameBylistId(_id, listName);
                 }
               }}
             />
@@ -116,7 +121,7 @@ const BoardListContent = (props: {
               </Typography>
             </Box>
           )}
-          <BoardListActionMenu id={id} />
+          <BoardListActionMenu _id={_id} />
         </Stack>
       </Box>
       {children}

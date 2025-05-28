@@ -69,7 +69,7 @@ const BoardPage = () => {
     return (
       <BoardList
         name={element.name}
-        id={element._id}
+        _id={element._id}
         key={uuidv4()}
         pos={element.pos}
         cards={element.cards}

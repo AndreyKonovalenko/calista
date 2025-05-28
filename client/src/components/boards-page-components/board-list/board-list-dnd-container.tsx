@@ -7,27 +7,23 @@ import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
 // import BoardListCustomDragLayer from './board-list-custom-drag-layer';
 // import { getEmptyImage } from 'react-dnd-html5-backend';
 import { calculateNewPosition } from '../../../utils/utils';
-import { TDraggableElement } from '../../../utils/types';
+import { IList, TDraggableElement } from '../../../utils/types';
 
-const BoardListDndContainer = (props: {
-  children: React.ReactNode;
-  name: string;
-  id: string;
-  cards: Array<{ _id: string; name: string; pos: number }>;
-  pos: number;
-}) => {
-  const { id, children, name, pos, cards } = props;
+const BoardListDndContainer = (
+  props: IList & { children: React.ReactNode },
+) => {
+  const { _id, children, name, pos, cards } = props;
   const { spacing } = useTheme();
   const {
     updateListPosByListId,
     lists,
-    _id,
+    _id: boardId,
     setCalculatedListPos,
     calculatedListPos,
   } = useBoardStore(state => state);
   const ref = useRef<HTMLDivElement>(null);
   const updateListQuery = useUpdateList();
-  const updateBoardById = useReNumListsPosInBoard(_id);
+  const updateBoardById = useReNumListsPosInBoard(boardId);
   const handleUpdateListPos = (listId: string, newPos: number) => {
     updateListQuery.mutate({
       id: listId,
@@ -43,12 +39,12 @@ const BoardListDndContainer = (props: {
     }
   >({
     accept: ['list', 'cards'],
-    hover({ id: draggedId }, monitor) {
+    hover({ _id: draggedId }, monitor) {
       const itemType = monitor.getItemType();
       console.log(itemType);
       if (itemType === 'list') {
-        if (draggedId !== id) {
-          const newPos = calculateNewPosition(lists, id, draggedId);
+        if (draggedId !== _id) {
+          const newPos = calculateNewPosition(lists, _id, draggedId);
           setCalculatedListPos(newPos);
           if (newPos && newPos !== -1) {
             updateListPosByListId(draggedId, newPos);
@@ -60,7 +56,7 @@ const BoardListDndContainer = (props: {
         //add card to epty card array
       }
     },
-    drop({ id: draggedId }) {
+    drop({ _id: draggedId }) {
       console.log('did drop', calculatedListPos);
       if (calculatedListPos === -1) {
         updateBoardById.mutate({ id: _id, data: { action: 'renumbering' } });
@@ -82,7 +78,7 @@ const BoardListDndContainer = (props: {
     { isDragging: boolean }
   >({
     type: 'list',
-    item: { id, name, pos },
+    item: { _id, name, pos },
     collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),

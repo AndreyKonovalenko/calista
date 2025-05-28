@@ -5,13 +5,12 @@ import { useLocation, Link } from 'react-router';
 // import { calculateNewPosition } from '../../../utils/utils';
 
 const BoardCardDndContainer = (props: {
+  _id: string;
   children: React.ReactNode;
-  id: string;
   pos: number;
-  listId: string;
 }) => {
   const ref = useRef<HTMLAnchorElement>(null);
-  const { id, children } = props;
+  const { _id, children } = props;
   const location = useLocation();
 
   // const [{ isOver }, connectDrop] = useDrop<
@@ -68,7 +67,7 @@ const BoardCardDndContainer = (props: {
   // connectDrop(ref);
 
   return (
-    <Link to={`cards/${id}`} ref={ref} state={{ background: location }}>
+    <Link to={`cards/${_id}`} ref={ref} state={{ background: location }}>
       {children}
     </Link>
   );

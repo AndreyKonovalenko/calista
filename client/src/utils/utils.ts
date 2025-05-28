@@ -1,4 +1,4 @@
-import { IList } from '../services/lists/list-store';
+import { IList } from './types';
 
 export default function validEnv(name: string | undefined): string {
   if (!name) {

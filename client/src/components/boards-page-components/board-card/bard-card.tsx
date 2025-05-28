@@ -2,13 +2,13 @@ import React from 'react';
 
 import BoardCardDndContainer from './bord-card-dnd-container';
 import BoardCardContent from './bord-card-content';
-import { ICard } from '../../../utils/types';
+import { ICardTrimmed } from '../../../utils/types';
 
-const BoardCard = (props: ICard) => {
-  const { name, id, pos } = props;
+const BoardCard = (props: ICardTrimmed) => {
+  const { name, _id, pos } = props;
 
   return (
-    <BoardCardDndContainer id={id} pos={pos}>
+    <BoardCardDndContainer _id={_id} pos={pos}>
       <BoardCardContent name={name} />
     </BoardCardDndContainer>
   );

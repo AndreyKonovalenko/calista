@@ -3,7 +3,7 @@ export type TForm = {
 };
 
 export type TDraggableElement = {
-  id: string;
+  _id: string;
   name?: string;
   pos: number;
 };

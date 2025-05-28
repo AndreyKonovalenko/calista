@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import { TAuthState } from '../services/auth/auth-store';
-import { IBoard, IList, ICard, IBoardTrimmed } from '../utils/types';
+import { IBoard, ICard, IBoardTrimmed } from '../utils/types';
 import validEnv from '../utils/utils';
 
 const BASE_URL = validEnv(process.env.BASE_URL);
