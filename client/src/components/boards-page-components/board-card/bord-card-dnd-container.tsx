@@ -1,8 +1,10 @@
 import React, { useRef } from 'react';
 import { useLocation, Link } from 'react-router';
-// import {useDrop, useDrag} from 'react-dnd';
-// import { TDraggableElement } from '../../../utils/types';
+import { Box } from '@mui/material';
+import { useDrop, useDrag } from 'react-dnd';
+import { TDraggableElement } from '../../../utils/types';
 // import { calculateNewPosition } from '../../../utils/utils';
+import { useBoardStore } from '../../../services/boards/board-store';
 
 const BoardCardDndContainer = (props: {
   _id: string;
@@ -10,65 +12,79 @@ const BoardCardDndContainer = (props: {
   pos: number;
 }) => {
   const ref = useRef<HTMLAnchorElement>(null);
-  const { _id, children } = props;
+  const { _id, children, pos } = props;
   const location = useLocation();
+  const { calculatedListPos, setCalculatedListPos } = useBoardStore(
+    state => state,
+  );
 
-  // const [{ isOver }, connectDrop] = useDrop<
-  //   TDraggableElement,
-  //   unknown,
-  //   {
-  //     isOver: boolean;
-  //   }
-  // >({
-  //   accept: ['cards'],
-  //   hover({ id: draggedId }, monitor) {
-  //     const itemType = monitor.getItemType();
-  //     console.log(itemType);
-  //     if (itemType === 'cards') {
-  //       if (draggedId !== id) {
-  //         const newPos = calculateNewPosition(cards, id, draggedId);
-  //         // setCalculatedListPos(newPos);
-  //         if (newPos && newPos !== -1) {
-  //           // updateListPosByListId(draggedId, newPos);
-  //         }
-  //       }
-  //     }
+  const [{ isOver }, connectDrop] = useDrop<
+    TDraggableElement,
+    unknown,
+    {
+      isOver: boolean;
+    }
+  >({
+    accept: ['card'],
+    hover({ _id: draggedId }, monitor) {
+      const itemType = monitor.getItemType();
+      console.log(itemType);
+      if (itemType === 'card') {
+        if (draggedId !== _id) {
+          // const newPos = calculateNewPosition(cards, _id, draggedId);
+          // // setCalculatedListPos(newPos);
+          // if (newPos && newPos !== -1) {
+          //   // updateListPosByListId(draggedId, newPos);
+          // }
+        }
+      }
+    },
+    drop({ _id: draggedId }) {
+      console.log('did drop', calculatedListPos, draggedId);
+      // if (calculatedListPos === -1) {
+      //   updateBoardById.mutate({ id: _id, data: { action: 'renumbering' } });
+      // }
+      if (calculatedListPos != undefined && calculatedListPos > 0) {
+        //   handleUpdateListPos(draggedId, calculatedListPos);
+      }
+      setCalculatedListPos(undefined);
+    },
+    collect: monitor => ({
+      isOver: monitor.isOver(),
+      differenceOffset: monitor.getDifferenceFromInitialOffset(),
+    }),
+  });
 
-  //   },
-  //   drop({ id: draggedId }) {
-  //     console.log('did drop', calculatedListPos);
-  //     if (calculatedListPos === -1) {
-  //       updateBoardById.mutate({ id: _id, data: { action: 'renumbering' } });
-  //     }
-  //     if (calculatedListPos != undefined && calculatedListPos > 0) {
-  //       handleUpdateListPos(draggedId, calculatedListPos);
-  //     }
-  //     setCalculatedListPos(undefined);
-  //   },
-  //   collect: monitor => ({
-  //     isOver: monitor.isOver(),
-  //     differenceOffset: monitor.getDifferenceFromInitialOffset(),
-  //   }),
-  // });
+  const [{ isDragging }, connectDrag] = useDrag<
+    TDraggableElement,
+    unknown,
+    { isDragging: boolean }
+  >({
+    type: 'card',
+    item: { _id, pos },
+    collect: monitor => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
 
-  // const [{ isDragging }, connectDrag] = useDrag<
-  //   TDraggableElement,
-  //   unknown,
-  //   { isDragging: boolean }
-  // >({
-  //   type: 'list',
-  //   item: { id, pos },
-  //   collect: monitor => ({
-  //     isDragging: monitor.isDragging(),
-  //   }),
-  // });
-
-  // connectDrag(ref);
-  // connectDrop(ref);
+  connectDrag(ref);
+  connectDrop(ref);
 
   return (
     <Link to={`cards/${_id}`} ref={ref} state={{ background: location }}>
-      {children}
+      {isOver && !isDragging ? (
+        <Box
+          sx={{
+            filter: 'brightness(0)',
+            opacity: 0.2,
+            borderRadius: 'inherit',
+          }}
+        >
+          {children}
+        </Box>
+      ) : (
+        children
+      )}
     </Link>
   );
 };

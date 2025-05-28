@@ -24,7 +24,7 @@ const BoardListDndContainer = (
   const ref = useRef<HTMLDivElement>(null);
   const updateListQuery = useUpdateList();
   const updateBoardById = useReNumListsPosInBoard(boardId);
-  const handleUpdateListPos = (listId: string, newPos: number) => {
+  const handleUpdateListPos = (listId: string, newPos: number | null) => {
     updateListQuery.mutate({
       id: listId,
       data: { pos: newPos },
@@ -38,7 +38,7 @@ const BoardListDndContainer = (
       isOver: boolean;
     }
   >({
-    accept: ['list', 'cards'],
+    accept: ['list', 'card'],
     hover({ _id: draggedId }, monitor) {
       const itemType = monitor.getItemType();
       console.log(itemType);

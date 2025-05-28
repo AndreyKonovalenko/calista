@@ -54,44 +54,38 @@ export const useBoardStore = create<IState & IActions>()(
     set => ({
       ...initialState,
       setBoardState: data =>
-        set({
-          _id: data._id,
-          name: data.name,
-          createrId: data.createrId,
-          lists: data.lists.sort(ascendingComparator),
-        }),
+        set(
+          {
+            _id: data._id,
+            name: data.name,
+            createrId: data.createrId,
+            lists: data.lists.sort(ascendingComparator),
+          },
+          undefined,
+          'setBoardState',
+        ),
       reset: () => set(initialState),
       updateListNameBylistId: (id: string, name: string) =>
-        set((state: IState) => ({ lists: updateName(state.lists, name, id) })),
+        set(
+          (state: IState) => ({ lists: updateName(state.lists, name, id) }),
+          undefined,
+          'updateListName',
+        ),
       updateListPosByListId: (draggedId: string, pos: number) =>
-        set((state: IState) => ({
-          lists: updatePos(state.lists, pos, draggedId),
-        })),
+        set(
+          (state: IState) => ({
+            lists: updatePos(state.lists, pos, draggedId),
+          }),
+          undefined,
+          'updateListPos',
+        ),
       setCalculatedListPos: (pos: number | undefined) =>
-        set(() => ({ calculatedListPos: pos })),
+        set(
+          () => ({ calculatedListPos: pos }),
+          undefined,
+          'calculetedNewListPos',
+        ),
     }),
     { name: 'boardStore' },
   ),
 );
-
-// disable devtools for be able to debug react-dnd
-
-// export const useBoardStore = create<TState>()(set => ({
-//   ...initialState,
-//   setBoardState: data =>
-//     set({
-//       _id: data._id,
-//       name: data.name,
-//       createrId: data.createrId,
-//       lists: data.lists.sort(ascendingComparator),
-//     }),
-//   reset: () => set(initialState),
-//   updateListNameBylistId: (id: string, name: string) =>
-//     set((state: TState) => ({ lists: updateName(state.lists, name, id) })),
-//   updateListPosByListId: (id: string, pos: number) =>
-//     set((state: TState) => ({ lists: updatePos(state.lists, pos, id) })),
-//   updateListsOrder: (hoveredId: string, draggedId: string) =>
-//     set((state: TState) => ({
-//       lists: upadteOrder(state.lists, hoveredId, draggedId),
-//     })),
-// }));
