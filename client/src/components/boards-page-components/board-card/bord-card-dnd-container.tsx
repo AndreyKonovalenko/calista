@@ -1,42 +1,47 @@
 import React, { useRef } from 'react';
-import { useLocation, Link } from 'react-router';
-import { Box } from '@mui/material';
+import { useLocation, Link as RouterLink } from 'react-router';
+import { Box, Link, ListItem } from '@mui/material';
 import { useDrop, useDrag } from 'react-dnd';
 import { TDraggableElement } from '../../../utils/types';
-// import { calculateNewPosition } from '../../../utils/utils';
+import { calculateNewPosition } from '../../../utils/utils';
 import { useBoardStore } from '../../../services/boards/board-store';
 
 const BoardCardDndContainer = (props: {
   _id: string;
+  listId: string;
   children: React.ReactNode;
   pos: number;
 }) => {
   const ref = useRef<HTMLAnchorElement>(null);
-  const { _id, children, pos } = props;
+  const { _id, children, pos, listId } = props;
   const location = useLocation();
-  const { calculatedListPos, setCalculatedListPos } = useBoardStore(
+  const { calculatedListPos, setCalculatedListPos, lists } = useBoardStore(
     state => state,
   );
 
   const [{ isOver }, connectDrop] = useDrop<
-    TDraggableElement,
+    TDraggableElement & { listId: string },
     unknown,
     {
       isOver: boolean;
     }
   >({
     accept: ['card'],
-    hover({ _id: draggedId }, monitor) {
-      const itemType = monitor.getItemType();
-      console.log(itemType);
-      if (itemType === 'card') {
-        if (draggedId !== _id) {
-          // const newPos = calculateNewPosition(cards, _id, draggedId);
-          // // setCalculatedListPos(newPos);
-          // if (newPos && newPos !== -1) {
-          //   // updateListPosByListId(draggedId, newPos);
-          // }
+    hover({ _id: draggedId, listId: draggedIdListId }) {
+      if (draggedId !== _id) {
+        console.log(listId, draggedIdListId);
+        if (listId === draggedIdListId) {
+          const dropList = lists.find(element => element._id === listId);
+          if (dropList) {
+            console.log(calculateNewPosition(dropList.cards, draggedId, _id));
+          }
         }
+        // const newPos = calculateN
+        // newPosition(cards, _id, draggedId);
+        // // setCalculatedListPos(newPos);
+        // if (newPos && newPos !== -1) {
+        //   // updateListPosByListId(draggedId, newPos);
+        // }
       }
     },
     drop({ _id: draggedId }) {
@@ -56,12 +61,12 @@ const BoardCardDndContainer = (props: {
   });
 
   const [{ isDragging }, connectDrag] = useDrag<
-    TDraggableElement,
+    TDraggableElement & { listId: string },
     unknown,
     { isDragging: boolean }
   >({
     type: 'card',
-    item: { _id, pos },
+    item: { _id, pos, listId },
     collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),
@@ -71,21 +76,30 @@ const BoardCardDndContainer = (props: {
   connectDrop(ref);
 
   return (
-    <Link to={`cards/${_id}`} ref={ref} state={{ background: location }}>
-      {isOver && !isDragging ? (
-        <Box
-          sx={{
-            filter: 'brightness(0)',
-            opacity: 0.2,
-            borderRadius: 'inherit',
-          }}
-        >
-          {children}
-        </Box>
-      ) : (
-        children
-      )}
-    </Link>
+    <ListItem>
+      <Link
+        sx={{ width: '100%' }}
+        ref={ref}
+        to={`cards/${_id}`}
+        component={RouterLink}
+        state={{ background: location }}
+        underline="none"
+      >
+        {isOver && !isDragging ? (
+          <Box
+            sx={{
+              filter: 'brightness(0)',
+              opacity: 0.2,
+              borderRadius: 'inherit',
+            }}
+          >
+            {children}
+          </Box>
+        ) : (
+          children
+        )}
+      </Link>
+    </ListItem>
   );
 };
 

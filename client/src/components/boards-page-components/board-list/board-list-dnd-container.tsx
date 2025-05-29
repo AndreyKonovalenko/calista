@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { useBoardStore } from '../../../services/boards/board-store';
 import { useDrop, useDrag } from 'react-dnd';
+import { Identifier } from 'dnd-core';
 import { useUpdateList } from '../../../api/lists-api-queries';
 import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
 // import BoardListCustomDragLayer from './board-list-custom-drag-layer';
@@ -31,11 +32,12 @@ const BoardListDndContainer = (
     });
   };
 
-  const [{ isOver }, connectDrop] = useDrop<
+  const [{ isOver, itemType }, connectDrop] = useDrop<
     TDraggableElement,
     unknown,
     {
       isOver: boolean;
+      itemType: Identifier | null;
     }
   >({
     accept: ['list', 'card'],
@@ -68,6 +70,7 @@ const BoardListDndContainer = (
     },
     collect: monitor => ({
       isOver: monitor.isOver(),
+      itemType: monitor.getItemType(),
       differenceOffset: monitor.getDifferenceFromInitialOffset(),
     }),
   });
@@ -101,7 +104,7 @@ const BoardListDndContainer = (
       }}
       ref={ref}
     >
-      {isOver && !isDragging ? (
+      {isOver && itemType === 'list' && !isDragging ? (
         <Box
           sx={{
             filter: 'brightness(0)',

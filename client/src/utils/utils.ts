@@ -1,4 +1,4 @@
-import { IList } from './types';
+import { ICardTrimmed, IList } from './types';
 
 export default function validEnv(name: string | undefined): string {
   if (!name) {
@@ -15,7 +15,7 @@ export function invariantId(value: string | undefined): asserts value {
 }
 
 export function calculateNewPosition(
-  arr: Array<IList>,
+  arr: Array<IList | ICardTrimmed>,
   dropId: string,
   dragId: string,
 ): number | undefined {

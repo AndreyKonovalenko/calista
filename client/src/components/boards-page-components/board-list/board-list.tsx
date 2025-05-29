@@ -28,6 +28,7 @@ const BoardList = (props: IList) => {
             name={element.name}
             _id={element._id}
             pos={element.pos}
+            listId={_id}
           />
         ))}
       </List>

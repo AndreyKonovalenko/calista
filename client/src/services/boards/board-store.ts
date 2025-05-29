@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { IBoard, IList } from '../../utils/types';
+import { IBoard, ICardTrimmed, IList } from '../../utils/types';
 
 interface IState extends IBoard {
   calculatedListPos: undefined | number;
@@ -43,11 +43,20 @@ export function getListNameFromState(arr: Array<IList>, id: string) {
   return list?.name;
 }
 
-export function ascendingComparator(a: IList, b: IList): number {
+export function ascendingComparator(
+  a: IList | ICardTrimmed,
+  b: IList | ICardTrimmed,
+): number {
   if (a.pos < b.pos) return -1;
   if (a.pos > b.pos) return 1;
   return 0;
 }
+const sortDuePosition = (lists: Array<IList>): Array<IList> => {
+  lists
+    .sort(ascendingComparator)
+    .forEach(elment => elment.cards.sort(ascendingComparator));
+  return lists;
+};
 
 export const useBoardStore = create<IState & IActions>()(
   devtools(
@@ -59,7 +68,7 @@ export const useBoardStore = create<IState & IActions>()(
             _id: data._id,
             name: data.name,
             createrId: data.createrId,
-            lists: data.lists.sort(ascendingComparator),
+            lists: sortDuePosition(data.lists),
           },
           undefined,
           'setBoardState',
