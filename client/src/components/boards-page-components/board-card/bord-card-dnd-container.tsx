@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useLocation, Link as RouterLink } from 'react-router';
 import { Box, Link, ListItem } from '@mui/material';
 import { useDrop, useDrag } from 'react-dnd';
@@ -29,14 +29,14 @@ const BoardCardDndContainer = (props: {
     accept: ['card'],
     hover({ _id: draggedId, listId: draggedIdListId }) {
       if (draggedId !== _id) {
-        console.log(listId, draggedIdListId);
         if (listId === draggedIdListId) {
           const dropList = lists.find(element => element._id === listId);
           if (dropList) {
-            const newPos = calculateNewPosition(dropList.cards, draggedId, _id);
+            const newPos = calculateNewPosition(dropList.cards, _id, draggedId);
+            console.log('new pos', newPos, pos)
             setCalculatedPos(newPos)
             if (newPos && newPos !== -1){
-                updateCardPosByCardId(listId, draggedId, newPos)
+                updateCardPosByCardId(draggedIdListId, draggedId, newPos)
             }
           }
         }
@@ -47,7 +47,7 @@ const BoardCardDndContainer = (props: {
         //   // updateListPosByListId(draggedId, newPos);
         // }
       }
-    },
+     },
     drop({ _id: draggedId }) {
       console.log('did drop', calculatedPos, draggedId);
       // if (calculatedListPos === -1) {
@@ -78,6 +78,9 @@ const BoardCardDndContainer = (props: {
 
   connectDrag(ref);
   connectDrop(ref);
+  useEffect(()=>{
+    console.log(isDragging, isOver)
+  })
 
   return (
     <ListItem>

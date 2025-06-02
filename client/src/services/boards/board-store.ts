@@ -31,20 +31,21 @@ const updateName = (arr: Array<IList>, name: string, id: string) => {
 
 const updatePos = (
   arr: Array<IList>,
-  pos: number,
   draggedId: string,
+  pos: number,
 ): Array<IList> => {
   const index: number = arr.findIndex(element => element._id === draggedId);
   arr[index].pos = pos;
   return arr;
 };
 
-const updateCardPos = (arr: Array<IList>, dropListId: string, draggedId: string, pos: number): Array<IList> => {
-  const dropListIndex =  arr.findIndex(elemet => elemet._id === dropListId);
+const updateCardPos = (arr: Array<IList>, listId: string, draggedId: string, pos: number): Array<IList> => {
+  const dropListIndex =  arr.findIndex(elemet => elemet._id === listId);
   if (dropListIndex) {
     const cardIndex =  arr[dropListIndex].cards.findIndex(element => element._id === draggedId)
     if (cardIndex) {
       arr[dropListIndex].cards[cardIndex].pos = pos
+      console.log(arr[dropListIndex].cards[cardIndex].pos, pos)
     }
   }  
   return arr;
@@ -95,14 +96,14 @@ export const useBoardStore = create<IState & IActions>()(
       updateListPosByListId: (draggedId: string, pos: number) =>
         set(
           (state: IState) => ({
-            lists: updatePos(state.lists, pos, draggedId),
+            lists: updatePos(state.lists, draggedId, pos)
           }),
           undefined,
           'updateListPos',
         ),
-      updateCardPosByCardId:(doropListId: string, draggedId: string, pos: number) =>
+      updateCardPosByCardId:(listId: string, draggedId: string, pos: number) =>
         set((state: IState)=> ({
-          lists: updateCardPos(state.lists, doropListId, draggedId, pos)
+          lists: updateCardPos(state.lists, listId, draggedId, pos)
         }),undefined, 'updateCardPos'),
       setCalculatedPos: (pos: number | undefined) =>
         set(
