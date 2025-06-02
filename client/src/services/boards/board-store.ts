@@ -3,14 +3,15 @@ import { devtools } from 'zustand/middleware';
 import { IBoard, ICardTrimmed, IList } from '../../utils/types';
 
 interface IState extends IBoard {
-  calculatedListPos: undefined | number;
+  calculatedPos: undefined | number;
 }
 
 interface IActions {
   setBoardState: (data: IBoard) => void;
   updateListNameBylistId: (id: string, name: string) => void;
   updateListPosByListId: (draggedId: string, pos: number) => void;
-  setCalculatedListPos: (pos: number | undefined) => void;
+  updateCardPosByCardId: (dropListId: string, draggedId:string, pos: number) => void;
+  setCalculatedPos: (pos: number | undefined) => void;
   reset: () => void;
 }
 
@@ -19,7 +20,7 @@ const initialState: IState = {
   name: '',
   createrId: '',
   lists: [],
-  calculatedListPos: undefined,
+  calculatedPos: undefined,
 };
 
 const updateName = (arr: Array<IList>, name: string, id: string) => {
@@ -37,6 +38,17 @@ const updatePos = (
   arr[index].pos = pos;
   return arr;
 };
+
+const updateCardPos = (arr: Array<IList>, dropListId: string, draggedId: string, pos: number): Array<IList> => {
+  const dropListIndex =  arr.findIndex(elemet => elemet._id === dropListId);
+  if (dropListIndex) {
+    const cardIndex =  arr[dropListIndex].cards.findIndex(element => element._id === draggedId)
+    if (cardIndex) {
+      arr[dropListIndex].cards[cardIndex].pos = pos
+    }
+  }  
+  return arr;
+}
 
 export function getListNameFromState(arr: Array<IList>, id: string) {
   const list: IList | undefined = arr.find(element => element._id === id);
@@ -88,11 +100,15 @@ export const useBoardStore = create<IState & IActions>()(
           undefined,
           'updateListPos',
         ),
-      setCalculatedListPos: (pos: number | undefined) =>
+      updateCardPosByCardId:(doropListId: string, draggedId: string, pos: number) =>
+        set((state: IState)=> ({
+          lists: updateCardPos(state.lists, doropListId, draggedId, pos)
+        }),undefined, 'updateCardPos'),
+      setCalculatedPos: (pos: number | undefined) =>
         set(
-          () => ({ calculatedListPos: pos }),
+          () => ({ calculatedPos: pos }),
           undefined,
-          'calculetedNewListPos',
+          'calculetedNewPos',
         ),
     }),
     { name: 'boardStore' },

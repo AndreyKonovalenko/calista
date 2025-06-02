@@ -15,7 +15,7 @@ const BoardCardDndContainer = (props: {
   const ref = useRef<HTMLAnchorElement>(null);
   const { _id, children, pos, listId } = props;
   const location = useLocation();
-  const { calculatedListPos, setCalculatedListPos, lists } = useBoardStore(
+  const { calculatedPos, setCalculatedPos, lists, updateCardPosByCardId } = useBoardStore(
     state => state,
   );
 
@@ -33,7 +33,11 @@ const BoardCardDndContainer = (props: {
         if (listId === draggedIdListId) {
           const dropList = lists.find(element => element._id === listId);
           if (dropList) {
-            console.log(calculateNewPosition(dropList.cards, draggedId, _id));
+            const newPos = calculateNewPosition(dropList.cards, draggedId, _id);
+            setCalculatedPos(newPos)
+            if (newPos && newPos !== -1){
+                updateCardPosByCardId(listId, draggedId, newPos)
+            }
           }
         }
         // const newPos = calculateN
@@ -45,14 +49,14 @@ const BoardCardDndContainer = (props: {
       }
     },
     drop({ _id: draggedId }) {
-      console.log('did drop', calculatedListPos, draggedId);
+      console.log('did drop', calculatedPos, draggedId);
       // if (calculatedListPos === -1) {
       //   updateBoardById.mutate({ id: _id, data: { action: 'renumbering' } });
       // }
-      if (calculatedListPos != undefined && calculatedListPos > 0) {
+      if (calculatedPos != undefined && calculatedPos > 0) {
         //   handleUpdateListPos(draggedId, calculatedListPos);
       }
-      setCalculatedListPos(undefined);
+      setCalculatedPos(undefined);
     },
     collect: monitor => ({
       isOver: monitor.isOver(),

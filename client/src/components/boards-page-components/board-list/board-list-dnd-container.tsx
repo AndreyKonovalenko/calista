@@ -19,8 +19,8 @@ const BoardListDndContainer = (
     updateListPosByListId,
     lists,
     _id: boardId,
-    setCalculatedListPos,
-    calculatedListPos,
+    setCalculatedPos,
+    calculatedPos,
   } = useBoardStore(state => state);
   const ref = useRef<HTMLDivElement>(null);
   const updateListQuery = useUpdateList();
@@ -40,14 +40,14 @@ const BoardListDndContainer = (
       itemType: Identifier | null;
     }
   >({
-    accept: ['list', 'card'],
+    accept: ['list, card'],
     hover({ _id: draggedId }, monitor) {
       const itemType = monitor.getItemType();
       console.log(itemType);
       if (itemType === 'list') {
         if (draggedId !== _id) {
           const newPos = calculateNewPosition(lists, _id, draggedId);
-          setCalculatedListPos(newPos);
+          setCalculatedPos(newPos);
           if (newPos && newPos !== -1) {
             updateListPosByListId(draggedId, newPos);
           }
@@ -59,14 +59,13 @@ const BoardListDndContainer = (
       }
     },
     drop({ _id: draggedId }) {
-      console.log('did drop', calculatedListPos);
-      if (calculatedListPos === -1) {
+      if (calculatedPos === -1) {
         updateBoardById.mutate({ id: _id, data: { action: 'renumbering' } });
       }
-      if (calculatedListPos != undefined && calculatedListPos > 0) {
-        handleUpdateListPos(draggedId, calculatedListPos);
+      if (calculatedPos != undefined && calculatedPos > 0) {
+        handleUpdateListPos(draggedId, calculatedPos);
       }
-      setCalculatedListPos(undefined);
+      setCalculatedPos(undefined);
     },
     collect: monitor => ({
       isOver: monitor.isOver(),
