@@ -78,7 +78,15 @@ const BoardPage = () => {
   });
 
   useEffect(() => {
-    if (isSuccess) setBoardState(data);
+    if (isSuccess) {
+      setBoardState(data);
+      const lists = data.lists.map(element => {
+        const list = element.cards.map(element => [element._id, element]) 
+        return [element._id, {...element, cards: Object.fromEntries(list)}]
+      })
+      const result = {...data, lists:Object.fromEntries(lists)}
+      console.log(result)
+    } 
   }, [data, isSuccess]);
 
   return (

@@ -15,13 +15,33 @@ interface IActions {
   reset: () => void;
 }
 
+type Transformed = {
+  [key: string]: IList | ICardTrimmed
+}
 const initialState: IState = {
   _id: '',
   name: '',
   createrId: '',
-  lists: [],
+  lists: {},
   calculatedPos: undefined,
 };
+
+
+  const transformData = (data:IBoard) => {
+    const lists = data.lists.map(element => {
+    const list = element.cards.map(element => [element._id, element]) 
+      return [element._id, {...element, cards: Object.fromEntries(list)}]
+    })
+    const result = {...data, lists:Object.fromEntries(lists)}
+    return {
+      _id: result._id,
+      name: result.name,
+      createrId: result.createrId,
+      lists: result.lists,
+    }
+  }
+
+// lists: sortDuePosition(data.lists)
 
 const updateName = (arr: Array<IList>, name: string, id: string) => {
   const index: number = arr.findIndex(element => element._id === id);
@@ -64,25 +84,19 @@ export function ascendingComparator(
   if (a.pos > b.pos) return 1;
   return 0;
 }
-const sortDuePosition = (lists: Array<IList>): Array<IList> => {
-  lists
-    .sort(ascendingComparator)
-    .forEach(elment => elment.cards.sort(ascendingComparator));
-  return lists;
-};
+// const sortDuePosition = (lists: Array<IList>): Array<IList> => {
+//   lists
+//     .sort(ascendingComparator)
+//     .forEach(elment => elment.cards.sort(ascendingComparator));
+//   return lists;
+// };
 
 export const useBoardStore = create<IState & IActions>()(
   devtools(
     set => ({
       ...initialState,
       setBoardState: data =>
-        set(
-          {
-            _id: data._id,
-            name: data.name,
-            createrId: data.createrId,
-            lists: sortDuePosition(data.lists),
-          },
+        set(transformData(data),
           undefined,
           'setBoardState',
         ),

@@ -15,6 +15,13 @@ export interface IBoard {
   lists: Array<IList>;
 }
 
+export type TBoard = {
+  _id: string;
+  createrId: string;
+  name: string;
+  lists:{[key: string]: TList};
+}
+
 export interface IBoardTrimmed {
   _id: string;
   name: string;
@@ -25,6 +32,13 @@ export interface IList {
   name: string;
   cards: Array<ICardTrimmed>;
   pos: number;
+}
+
+export type TList = {
+  _id: string;
+  createrId: string;
+  name: string;
+  cards:{[key: string]: ICardTrimmed};
 }
 
 export interface ICard {
