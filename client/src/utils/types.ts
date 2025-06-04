@@ -19,8 +19,8 @@ export type TBoard = {
   _id: string;
   createrId: string;
   name: string;
-  lists:{[key: string]: TList};
-}
+  lists: { [key: string]: TList };
+};
 
 export interface IBoardTrimmed {
   _id: string;
@@ -36,10 +36,10 @@ export interface IList {
 
 export type TList = {
   _id: string;
-  name: string; 
-  cards:{[key: string]: ICardTrimmed}
+  name: string;
+  cards: { [key: string]: ICardTrimmed };
   pos: number;
-}
+};
 
 export interface ICard {
   _id: string;

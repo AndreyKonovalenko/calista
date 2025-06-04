@@ -23,27 +23,30 @@ const initialState: IState = {
   calculatedPos: undefined,
 };
 
-
-  const transformData = (data:IBoard) => {
-    const lists = data.lists.map(element => {
-    const list = element.cards.map(element => [element._id, element]) 
-      return [element._id, {...element, cards: Object.fromEntries(list)}]
-    })
-    const result = {...data, lists:Object.fromEntries(lists)}
-    return {
-      _id: result._id,
-      name: result.name,
-      createrId: result.createrId,
-      lists: result.lists,
-    }
-  }
+const transformData = (data: IBoard) => {
+  const lists = data.lists.map(element => {
+    const list = element.cards.map(element => [element._id, element]);
+    return [element._id, { ...element, cards: Object.fromEntries(list) }];
+  });
+  const result = { ...data, lists: Object.fromEntries(lists) };
+  return {
+    _id: result._id,
+    name: result.name,
+    createrId: result.createrId,
+    lists: sortObjectByKeyAscending(result.lists),
+  };
+};
 
 // lists: sortDuePosition(data.lists)
 
-const updateName = (arr: {[key: string]: TList}, name: string, id: string) => {
+const updateName = (
+  arr: { [key: string]: TList },
+  name: string,
+  id: string,
+) => {
   // const index: number = arr.findIndex(element => element._id === id);
   // arr[index].name = name;
-  console.log(name, id )
+  console.log(name, id);
   return arr;
 };
 
@@ -65,7 +68,7 @@ const updateName = (arr: {[key: string]: TList}, name: string, id: string) => {
 //       arr[dropListIndex].cards[cardIndex].pos = pos
 //       console.log(arr[dropListIndex].cards[cardIndex].pos, pos)
 //     }
-//   }  
+//   }
 //   return arr;
 // }
 
@@ -82,32 +85,62 @@ export function ascendingComparator(
   if (a.pos > b.pos) return 1;
   return 0;
 }
-// const sortDuePosition = (lists: Array<IList>): Array<IList> => {
+// const sortDuePosition = (lists: <IList>): Array<IList> => {
 //   lists
 //     .sort(ascendingComparator)
 //     .forEach(elment => elment.cards.sort(ascendingComparator));
 //   return lists;
 // };
 
-// function sortObjectByKeyAscending(obj) {
-//   return Object.keys(obj)
-//     .sort()
-//     .reduce((acc, key) => {
-//       acc[key] = obj[key];
-//       return acc;
-//     }, {});
-// }
+function sortObjectByKeyAscending(obj: { [key: string]: TList }) {
+  return Object.keys(obj)
+    .sort((a, b) => {
+      if (obj[a].pos < obj[b].pos) return -1;
+      if (obj[a].pos > obj[b].pos) return 1;
+      return 0;
+    })
+    .reduce(
+      (
+        acc: {
+          [key: string]: TList;
+        },
+        key,
+      ) => {
+        // obj[key].cards = sortObjectOfCardsByKeyAscending(obj[key].cards);
+        acc[key] = obj[key];
+        return acc;
+      },
+      {},
+    );
+}
 
+// function sortObjectOfCardsByKeyAscending(obj: { [key: string]: ICardTrimmed }) {
+//   return Object.keys(obj)
+//     .sort((a, b) => {
+//       if (obj[a].pos < obj[b].pos) return -1;
+//       if (obj[a].pos > obj[b].pos) return 1;
+//       return 0;
+//     })
+//     .reduce(
+//       (
+//         acc: {
+//           [key: string]: ICardTrimmed;
+//         },
+//         key,
+//       ) => {
+//         acc[key] = obj[key];
+//         return acc;
+//       },
+//       {},
+//     );
+// }
 
 export const useBoardStore = create<IState & IActions>()(
   devtools(
     set => ({
       ...initialState,
       setBoardState: data =>
-        set(transformData(data),
-          undefined,
-          'setBoardState',
-        ),
+        set(transformData(data), undefined, 'setBoardState'),
       reset: () => set(initialState),
       updateListNameBylistId: (id: string, name: string) =>
         set(
