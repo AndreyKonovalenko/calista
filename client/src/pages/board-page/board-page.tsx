@@ -20,7 +20,7 @@ import {
 import { useCreateList } from '../../api/lists-api-queries';
 import { invariantId } from '../../utils/utils';
 import {
-  ascendingComparator,
+  // ascendingComparator,
   useBoardStore,
 } from '../../services/boards/board-store';
 // import { useGlobalDrop } from '../../hooks/use-global-drop';
@@ -52,9 +52,10 @@ const BoardPage = () => {
   const handleCreateNewList = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let pos = 16384;
-    if (lists.length > 0) {
+    if (Object.keys(lists).length > 0) {
       // when add element in the end of array
-      const last = lists[lists.length - 1].pos;
+      const lastElemKey = Object.keys(lists)[Object.keys(lists).length - 1]
+      const last = lists[lastElemKey].pos;
       pos = pos + last;
     }
     const formData = new FormData(event.currentTarget);
@@ -65,14 +66,14 @@ const BoardPage = () => {
     });
   };
 
-  const boardLists = lists.sort(ascendingComparator).map(element => {
+  const boardLists = Object.keys(lists).map(key => {
     return (
       <BoardList
-        name={element.name}
-        _id={element._id}
+        name={lists[key].name}
+        _id={lists[key]._id}
         key={uuidv4()}
-        pos={element.pos}
-        cards={element.cards}
+        pos={lists[key].pos}
+        cards={lists[key].cards}
       />
     );
   });

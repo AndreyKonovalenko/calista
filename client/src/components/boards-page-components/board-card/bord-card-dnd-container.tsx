@@ -3,7 +3,7 @@ import { useLocation, Link as RouterLink } from 'react-router';
 import { Box, Link, ListItem } from '@mui/material';
 import { useDrop, useDrag } from 'react-dnd';
 import { TDraggableElement } from '../../../utils/types';
-import { calculateNewPosition } from '../../../utils/utils';
+// import { calculateNewPosition } from '../../../utils/utils';
 import { useBoardStore } from '../../../services/boards/board-store';
 
 const BoardCardDndContainer = (props: {
@@ -15,7 +15,7 @@ const BoardCardDndContainer = (props: {
   const ref = useRef<HTMLAnchorElement>(null);
   const { _id, children, pos, listId } = props;
   const location = useLocation();
-  const { calculatedPos, setCalculatedPos, lists, updateCardPosByCardId } = useBoardStore(
+  const { calculatedPos,} = useBoardStore(
     state => state,
   );
 
@@ -30,15 +30,15 @@ const BoardCardDndContainer = (props: {
     hover({ _id: draggedId, listId: draggedIdListId }) {
       if (draggedId !== _id) {
         if (listId === draggedIdListId) {
-          const dropList = lists.find(element => element._id === listId);
-          if (dropList) {
-            const newPos = calculateNewPosition(dropList.cards, _id, draggedId);
-            console.log('new pos', newPos, pos)
-            setCalculatedPos(newPos)
-            if (newPos && newPos !== -1){
-                updateCardPosByCardId(draggedIdListId, draggedId, newPos)
-            }
-          }
+          // const dropList = lists.find(element => element._id === listId);
+          // if (dropList) {
+          //   const newPos = calculateNewPosition(dropList.cards, _id, draggedId);
+          //   console.log('new pos', newPos, pos)
+          //   // setCalculatedPos(newPos)
+          //   if (newPos && newPos !== -1){
+          //       // updateCardPosByCardId(draggedIdListId, draggedId, newPos)
+          //   }
+          // }
         }
         // const newPos = calculateN
         // newPosition(cards, _id, draggedId);
@@ -56,7 +56,7 @@ const BoardCardDndContainer = (props: {
       if (calculatedPos != undefined && calculatedPos > 0) {
         //   handleUpdateListPos(draggedId, calculatedListPos);
       }
-      setCalculatedPos(undefined);
+      // setCalculatedPos(undefined);
     },
     collect: monitor => ({
       isOver: monitor.isOver(),

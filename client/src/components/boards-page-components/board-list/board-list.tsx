@@ -4,14 +4,14 @@ import { v4 as uuidv4 } from 'uuid';
 import BoardCard from '../board-card/bard-card';
 import BoardListContent from './board-list-content';
 import BoardListDndContainer from './board-list-dnd-container';
-import { IList } from '../../../utils/types';
+import { TList } from '../../../utils/types';
 
-const BoardList = (props: IList) => {
+const BoardList = (props: TList) => {
   const { name, _id, pos, cards } = props;
   const { spacing } = useTheme();
 
   const cardsList =
-    cards.length > 0 ? (
+    Object.keys(cards).length > 0 ? (
       <List
         sx={{
           display: 'flex',
@@ -22,12 +22,12 @@ const BoardList = (props: IList) => {
           scrollbarWidth: 'thin',
         }}
       >
-        {cards.map(element => (
+        {Object.keys(cards).map(key => (
           <BoardCard
             key={uuidv4()}
-            name={element.name}
-            _id={element._id}
-            pos={element.pos}
+            name={cards[key].name}
+            _id={cards[key]._id}
+            pos={cards[key].pos}
             listId={_id}
           />
         ))}

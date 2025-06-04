@@ -5,7 +5,6 @@ import BoardListActionMenu from '../board-list-action-menu/board-list-action-men
 import { useState } from 'react';
 import {
   useBoardStore,
-  getListNameFromState,
 } from '../../../services/boards/board-store';
 import { handleFormSubmitEvent } from '../../../utils/utils';
 import { useUpdateList } from '../../../api/lists-api-queries';
@@ -17,7 +16,7 @@ import { ICardTrimmed } from '../../../utils/types';
 const BoardListContent = (props: {
   _id: string;
   name: string;
-  cards: Array<ICardTrimmed>;
+  cards: {[key: string]: ICardTrimmed};
   children: React.ReactNode;
 }) => {
   const { spacing, palette } = useTheme();
@@ -39,7 +38,7 @@ const BoardListContent = (props: {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const listName = formData.get('listName');
-    const stateListName = getListNameFromState(lists, listId);
+    const stateListName = lists[listId].name;
     if (listName !== stateListName) {
       updateListQuery.mutate({
         id: listId,
@@ -51,9 +50,11 @@ const BoardListContent = (props: {
   const handleCreateNewCard = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let pos = 16384;
-    if (cards.length > 0) {
+    if (Object.keys(cards).length > 0) {
       // when add element in the end of array
-      const last = cards[cards.length - 1].pos;
+
+      const lastElemKey = Object.keys(cards)[Object.keys(lists).length - 1]
+      const last = cards[lastElemKey].pos;
       pos = pos + last;
     }
     const formData = new FormData(event.currentTarget);

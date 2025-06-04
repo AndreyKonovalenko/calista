@@ -1,23 +1,20 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { IBoard, ICardTrimmed, IList } from '../../utils/types';
+import { IBoard, ICardTrimmed, IList, TBoard, TList } from '../../utils/types';
 
-interface IState extends IBoard {
+interface IState extends TBoard {
   calculatedPos: undefined | number;
 }
 
 interface IActions {
   setBoardState: (data: IBoard) => void;
   updateListNameBylistId: (id: string, name: string) => void;
-  updateListPosByListId: (draggedId: string, pos: number) => void;
-  updateCardPosByCardId: (dropListId: string, draggedId:string, pos: number) => void;
-  setCalculatedPos: (pos: number | undefined) => void;
+  // updateListPosByListId: (draggedId: string, pos: number) => void;
+  // updateCardPosByCardId: (dropListId: string, draggedId:string, pos: number) => void;
+  // setCalculatedPos: (pos: number | undefined) => void;
   reset: () => void;
 }
 
-type Transformed = {
-  [key: string]: IList | ICardTrimmed
-}
 const initialState: IState = {
   _id: '',
   name: '',
@@ -43,33 +40,34 @@ const initialState: IState = {
 
 // lists: sortDuePosition(data.lists)
 
-const updateName = (arr: Array<IList>, name: string, id: string) => {
-  const index: number = arr.findIndex(element => element._id === id);
-  arr[index].name = name;
+const updateName = (arr: {[key: string]: TList}, name: string, id: string) => {
+  // const index: number = arr.findIndex(element => element._id === id);
+  // arr[index].name = name;
+  console.log(name, id )
   return arr;
 };
 
-const updatePos = (
-  arr: Array<IList>,
-  draggedId: string,
-  pos: number,
-): Array<IList> => {
-  const index: number = arr.findIndex(element => element._id === draggedId);
-  arr[index].pos = pos;
-  return arr;
-};
+// const updatePos = (
+//   arr: {[key: string]: TList},
+//   draggedId: string,
+//   pos: number,
+// ): Array<IList> => {
+//   const index: number = arr.findIndex(element => element._id === draggedId);
+//   arr[index].pos = pos;
+//   return arr;
+// };
 
-const updateCardPos = (arr: Array<IList>, listId: string, draggedId: string, pos: number): Array<IList> => {
-  const dropListIndex =  arr.findIndex(elemet => elemet._id === listId);
-  if (dropListIndex) {
-    const cardIndex =  arr[dropListIndex].cards.findIndex(element => element._id === draggedId)
-    if (cardIndex) {
-      arr[dropListIndex].cards[cardIndex].pos = pos
-      console.log(arr[dropListIndex].cards[cardIndex].pos, pos)
-    }
-  }  
-  return arr;
-}
+// const updateCardPos = (arr: Array<IList>, listId: string, draggedId: string, pos: number): Array<IList> => {
+//   const dropListIndex =  arr.findIndex(elemet => elemet._id === listId);
+//   if (dropListIndex) {
+//     const cardIndex =  arr[dropListIndex].cards.findIndex(element => element._id === draggedId)
+//     if (cardIndex) {
+//       arr[dropListIndex].cards[cardIndex].pos = pos
+//       console.log(arr[dropListIndex].cards[cardIndex].pos, pos)
+//     }
+//   }  
+//   return arr;
+// }
 
 export function getListNameFromState(arr: Array<IList>, id: string) {
   const list: IList | undefined = arr.find(element => element._id === id);
@@ -91,6 +89,16 @@ export function ascendingComparator(
 //   return lists;
 // };
 
+// function sortObjectByKeyAscending(obj) {
+//   return Object.keys(obj)
+//     .sort()
+//     .reduce((acc, key) => {
+//       acc[key] = obj[key];
+//       return acc;
+//     }, {});
+// }
+
+
 export const useBoardStore = create<IState & IActions>()(
   devtools(
     set => ({
@@ -107,24 +115,24 @@ export const useBoardStore = create<IState & IActions>()(
           undefined,
           'updateListName',
         ),
-      updateListPosByListId: (draggedId: string, pos: number) =>
-        set(
-          (state: IState) => ({
-            lists: updatePos(state.lists, draggedId, pos)
-          }),
-          undefined,
-          'updateListPos',
-        ),
-      updateCardPosByCardId:(listId: string, draggedId: string, pos: number) =>
-        set((state: IState)=> ({
-          lists: updateCardPos(state.lists, listId, draggedId, pos)
-        }),undefined, 'updateCardPos'),
-      setCalculatedPos: (pos: number | undefined) =>
-        set(
-          () => ({ calculatedPos: pos }),
-          undefined,
-          'calculetedNewPos',
-        ),
+      // updateListPosByListId: (draggedId: string, pos: number) =>
+      //   set(
+      //     (state: IState) => ({
+      //       lists: updatePos(state.lists, draggedId, pos)
+      //     }),
+      //     undefined,
+      //     'updateListPos',
+      //   ),
+      // updateCardPosByCardId:(listId: string, draggedId: string, pos: number) =>
+      //   set((state: IState)=> ({
+      //     lists: updateCardPos(state.lists, listId, draggedId, pos)
+      //   }),undefined, 'updateCardPos'),
+      // setCalculatedPos: (pos: number | undefined) =>
+      //   set(
+      //     () => ({ calculatedPos: pos }),
+      //     undefined,
+      //     'calculetedNewPos',
+      //   ),
     }),
     { name: 'boardStore' },
   ),

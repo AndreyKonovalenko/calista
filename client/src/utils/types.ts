@@ -36,9 +36,9 @@ export interface IList {
 
 export type TList = {
   _id: string;
-  createrId: string;
-  name: string;
-  cards:{[key: string]: ICardTrimmed};
+  name: string; 
+  cards:{[key: string]: ICardTrimmed}
+  pos: number;
 }
 
 export interface ICard {
