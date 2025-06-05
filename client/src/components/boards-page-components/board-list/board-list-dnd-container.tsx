@@ -45,12 +45,11 @@ const BoardListDndContainer = (
       const itemType = monitor.getItemType();
       if (itemType === 'list') {
         if (draggedId !== _id) {
-           const newPos = calculateNewPosition(lists, _id, draggedId);
-           console.log(newPos, calculatedPos)
-           if(calculatedPos !== newPos){
-              setCalculatedPos(newPos);
-           }
-          if (newPos && newPos !== -1) {
+          const newPos = calculateNewPosition(lists, _id, draggedId);
+          if(newPos && newPos !== calculatedPos) {
+            setCalculatedPos(newPos);
+          }
+          if (newPos && newPos !== -1  && calculatedPos !== newPos) {
             updateListPosByListId(draggedId, newPos);
           }
         }

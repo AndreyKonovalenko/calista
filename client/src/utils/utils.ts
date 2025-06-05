@@ -21,17 +21,17 @@ export function calculateNewPosition(
 ): number | undefined {
   const toArr = Object.keys(obj)
   const dropIndex = toArr.indexOf(dropId);
-  const dragIndex = toArr.indexOf(dragId);
-  console.log(dragIndex, dropIndex)
+  // const dragIndex = toArr.indexOf(dragId);
+  // console.log(dragIndex, dropIndex)
   const dragPos = obj[dragId].pos;
   const dropPos = obj[dropId].pos;
   console.log(dropPos, dragPos)
   const start = Boolean(dropIndex === 0);
   const end = Boolean(dropIndex === toArr.length - 1);
    
-  if (!dropIndex || !dragIndex) {
-    return;
-  }
+  // if (!dropIndex || !dragIndex) {
+  //   return;
+  // }
 
   if (Math.abs(dragPos - dropPos) <= 100) {
     return -1;
@@ -43,8 +43,10 @@ export function calculateNewPosition(
     return obj[toArr[toArr.length - 1]].pos + 16384;
   }
   // drag <--- from right to left 
-  if (dragIndex > dropIndex) {
+  if (dragPos > dropPos) {
+    console.log('from right to left')
     const leftNeihborPos = obj[toArr[dropIndex - 1]].pos;
+    console.log(leftNeihborPos)
     const newPos = Math.trunc((dropPos + leftNeihborPos) / 2);
     if (
       Math.abs(newPos - dropPos) <= 100 ||
@@ -56,7 +58,8 @@ export function calculateNewPosition(
     }
   }
   // drag ---> from left to right 
-  if (dragIndex < dropIndex) {
+  if (dragPos < dropPos) {
+    console.log('from left to right')
     const rightNeighborPos = obj[toArr[dropIndex + 1]].pos;
     console.log(rightNeighborPos)
     const newPos = Math.trunc((dropPos + rightNeighborPos) / 2);
