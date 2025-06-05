@@ -21,8 +21,7 @@ export function calculateNewPosition(
 ): number | undefined {
   const toArr = Object.keys(obj)
   const dropIndex = toArr.indexOf(dropId);
-  // const dragIndex = toArr.indexOf(dragId);
-  // console.log(dragIndex, dropIndex)
+  const dragIndex = toArr.indexOf(dragId);
   const dragPos = obj[dragId].pos;
   const dropPos = obj[dropId].pos;
   console.log(dropPos, dragPos)
@@ -43,9 +42,9 @@ export function calculateNewPosition(
     return obj[toArr[toArr.length - 1]].pos + 16384;
   }
   // drag <--- from right to left 
-  if (dragPos > dropPos) {
+  if (dragIndex < dropIndex) {
     console.log('from right to left')
-    const leftNeihborPos = obj[toArr[dropIndex - 1]].pos;
+    const leftNeihborPos = obj[toArr[dropIndex + 1]].pos;
     console.log(leftNeihborPos)
     const newPos = Math.trunc((dropPos + leftNeihborPos) / 2);
     if (
@@ -58,9 +57,9 @@ export function calculateNewPosition(
     }
   }
   // drag ---> from left to right 
-  if (dragPos < dropPos) {
+  if (dragIndex > dropIndex) {
     console.log('from left to right')
-    const rightNeighborPos = obj[toArr[dropIndex + 1]].pos;
+    const rightNeighborPos = obj[toArr[dropIndex - 1]].pos;
     console.log(rightNeighborPos)
     const newPos = Math.trunc((dropPos + rightNeighborPos) / 2);
     if (
