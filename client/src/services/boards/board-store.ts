@@ -24,16 +24,17 @@ const initialState: IState = {
 };
 
 const transformData = (data: IBoard) => {
-  const lists = data.lists.map(element => {
-    const list = element.cards.map(element => [element._id, element]);
-    return [element._id, { ...element, cards: Object.fromEntries(list) }];
-  });
-  const result =  Object.fromEntries(lists) ;
+  const lists = Object.fromEntries(
+    data.lists.map(element => {
+      const list = element.cards.map(element => [element._id, element]);
+      return [element._id, { ...element, cards: Object.fromEntries(list) }];
+    }),
+  );
   return {
     _id: data._id,
     name: data.name,
     createrId: data.createrId,
-    lists: sortObjectByKeyAscending(result),
+    lists: lists,
   };
 };
 
@@ -149,9 +150,10 @@ export const useBoardStore = create<IState & IActions>()(
               ...state.lists,
               [id]: {
                 ...state.lists[id],
-                name: name
-              }
-          }}),
+                name: name,
+              },
+            },
+          }),
           undefined,
           'updateListName',
         ),
@@ -162,9 +164,9 @@ export const useBoardStore = create<IState & IActions>()(
               ...state.lists,
               [draggedId]: {
                 ...state.lists[draggedId],
-                pos: pos
-              }
-            }
+                pos: pos,
+              },
+            },
           }),
           undefined,
           'updateListPos',
@@ -174,11 +176,7 @@ export const useBoardStore = create<IState & IActions>()(
       //     lists: updateCardPos(state.lists, listId, draggedId, pos)
       //   }),undefined, 'updateCardPos'),
       setCalculatedPos: (pos: number | undefined) =>
-        set(
-          () => ({ calculatedPos: pos }),
-          undefined,
-          'calculetedNewPos',
-        ),
+        set(() => ({ calculatedPos: pos }), undefined, 'calculetedNewPos'),
     }),
     { name: 'boardStore' },
   ),

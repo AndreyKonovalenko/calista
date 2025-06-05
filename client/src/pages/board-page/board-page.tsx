@@ -20,7 +20,6 @@ import {
 import { useCreateList } from '../../api/lists-api-queries';
 import { invariantId } from '../../utils/utils';
 import {
-  sortObjectByKeyAscending,
   // ascendingComparator,
   useBoardStore,
 } from '../../services/boards/board-store';
@@ -55,7 +54,7 @@ const BoardPage = () => {
     let pos = 16384;
     if (Object.keys(lists).length > 0) {
       // when add element in the end of array
-      const lastElemKey = Object.keys(lists)[Object.keys(lists).length - 1]
+      const lastElemKey = Object.keys(lists)[Object.keys(lists).length - 1];
       const last = lists[lastElemKey].pos;
       pos = pos + last;
     }
@@ -67,22 +66,28 @@ const BoardPage = () => {
     });
   };
 
-  const boardLists = Object.keys(sortObjectByKeyAscending(lists)).map(key => {
-    return (
-      <BoardList
-        name={lists[key].name}
-        _id={lists[key]._id}
-        key={uuidv4()}
-        pos={lists[key].pos}
-        cards={lists[key].cards}
-      />
-    );
-  });
+  const boardLists = Object.keys(lists)
+    .sort((a, b) => {
+      if (lists[a].pos < lists[b].pos) return -1;
+      if (lists[a].pos > lists[b].pos) return 1;
+      return 0;
+    })
+    .map(key => {
+      return (
+        <BoardList
+          name={lists[key].name}
+          _id={lists[key]._id}
+          key={uuidv4()}
+          pos={lists[key].pos}
+          cards={lists[key].cards}
+        />
+      );
+    });
 
   useEffect(() => {
     if (isSuccess) {
       setBoardState(data);
-    } 
+    }
   }, [data, isSuccess]);
 
   return (
