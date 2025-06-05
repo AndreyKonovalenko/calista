@@ -20,6 +20,7 @@ import {
 import { useCreateList } from '../../api/lists-api-queries';
 import { invariantId } from '../../utils/utils';
 import {
+  sortObjectByKeyAscending,
   // ascendingComparator,
   useBoardStore,
 } from '../../services/boards/board-store';
@@ -66,7 +67,7 @@ const BoardPage = () => {
     });
   };
 
-  const boardLists = Object.keys(lists).map(key => {
+  const boardLists = Object.keys(sortObjectByKeyAscending(lists)).map(key => {
     return (
       <BoardList
         name={lists[key].name}

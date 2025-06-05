@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useLocation, Link as RouterLink } from 'react-router';
 import { Box, Link, ListItem } from '@mui/material';
 import { useDrop, useDrag } from 'react-dnd';
@@ -78,9 +78,9 @@ const BoardCardDndContainer = (props: {
 
   connectDrag(ref);
   connectDrop(ref);
-  useEffect(()=>{
-    console.log(isDragging, isOver)
-  })
+  // useEffect(()=>{
+  //   console.log(isDragging, isOver)
+  // })
 
   return (
     <ListItem>

@@ -7,7 +7,7 @@ import { useUpdateList } from '../../../api/lists-api-queries';
 import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
 // import BoardListCustomDragLayer from './board-list-custom-drag-layer';
 // import { getEmptyImage } from 'react-dnd-html5-backend';
-// import { calculateNewPosition } from '../../../utils/utils';
+import { calculateNewPosition } from '../../../utils/utils';
 import { TList, TDraggableElement } from '../../../utils/types';
 
 const BoardListDndContainer = (
@@ -16,10 +16,11 @@ const BoardListDndContainer = (
   const { _id, children, name, pos } = props;
   const { spacing } = useTheme();
   const {
-    // updateListPosByListId,
+    updateListPosByListId,
     _id: boardId,
-    // setCalculatedPos,
+    setCalculatedPos,
     calculatedPos,
+    lists,
   } = useBoardStore(state => state);
   const ref = useRef<HTMLDivElement>(null);
   const updateListQuery = useUpdateList();
@@ -39,17 +40,19 @@ const BoardListDndContainer = (
       itemType: Identifier | null;
     }
   >({
-    accept: ['list, card'],
+    accept: ['list', 'card'],
     hover({ _id: draggedId }, monitor) {
       const itemType = monitor.getItemType();
-      console.log(itemType);
       if (itemType === 'list') {
         if (draggedId !== _id) {
-          // const newPos = calculateNewPosition(lists, _id, draggedId);
-          // setCalculatedPos(newPos);
-          // if (newPos && newPos !== -1) {
-          //   updateListPosByListId(draggedId, newPos);
-          // }
+           const newPos = calculateNewPosition(lists, _id, draggedId);
+           console.log(newPos, calculatedPos)
+           if(calculatedPos !== newPos){
+              setCalculatedPos(newPos);
+           }
+          if (newPos && newPos !== -1) {
+            updateListPosByListId(draggedId, newPos);
+          }
         }
       }
 
@@ -64,7 +67,7 @@ const BoardListDndContainer = (
       if (calculatedPos != undefined && calculatedPos > 0) {
         handleUpdateListPos(draggedId, calculatedPos);
       }
-      // setCalculatedPos(undefined);
+      setCalculatedPos(undefined);
     },
     collect: monitor => ({
       isOver: monitor.isOver(),

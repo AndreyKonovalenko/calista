@@ -9,9 +9,9 @@ interface IState extends TBoard {
 interface IActions {
   setBoardState: (data: IBoard) => void;
   updateListNameBylistId: (id: string, name: string) => void;
-  // updateListPosByListId: (draggedId: string, pos: number) => void;
+  updateListPosByListId: (draggedId: string, pos: number) => void;
   // updateCardPosByCardId: (dropListId: string, draggedId:string, pos: number) => void;
-  // setCalculatedPos: (pos: number | undefined) => void;
+  setCalculatedPos: (pos: number | undefined) => void;
   reset: () => void;
 }
 
@@ -28,27 +28,27 @@ const transformData = (data: IBoard) => {
     const list = element.cards.map(element => [element._id, element]);
     return [element._id, { ...element, cards: Object.fromEntries(list) }];
   });
-  const result = { ...data, lists: Object.fromEntries(lists) };
+  const result =  Object.fromEntries(lists) ;
   return {
-    _id: result._id,
-    name: result.name,
-    createrId: result.createrId,
-    lists: sortObjectByKeyAscending(result.lists),
+    _id: data._id,
+    name: data.name,
+    createrId: data.createrId,
+    lists: sortObjectByKeyAscending(result),
   };
 };
 
 // lists: sortDuePosition(data.lists)
 
-const updateName = (
-  arr: { [key: string]: TList },
-  name: string,
-  id: string,
-) => {
-  // const index: number = arr.findIndex(element => element._id === id);
-  // arr[index].name = name;
-  console.log(name, id);
-  return arr;
-};
+// const updateName = (
+//   arr: { [key: string]: TList },
+//   name: string,
+//   id: string,
+// ) => {
+//   // const index: number = arr.findIndex(element => element._id === id);
+//   // arr[index].name = name;
+//   console.log(name, id);
+//   return arr;
+// };
 
 // const updatePos = (
 //   arr: {[key: string]: TList},
@@ -92,7 +92,7 @@ export function ascendingComparator(
 //   return lists;
 // };
 
-function sortObjectByKeyAscending(obj: { [key: string]: TList }) {
+export function sortObjectByKeyAscending(obj: { [key: string]: TList }) {
   return Object.keys(obj)
     .sort((a, b) => {
       if (obj[a].pos < obj[b].pos) return -1;
@@ -144,28 +144,41 @@ export const useBoardStore = create<IState & IActions>()(
       reset: () => set(initialState),
       updateListNameBylistId: (id: string, name: string) =>
         set(
-          (state: IState) => ({ lists: updateName(state.lists, name, id) }),
+          (state: IState) => ({
+            lists: {
+              ...state.lists,
+              [id]: {
+                ...state.lists[id],
+                name: name
+              }
+          }}),
           undefined,
           'updateListName',
         ),
-      // updateListPosByListId: (draggedId: string, pos: number) =>
-      //   set(
-      //     (state: IState) => ({
-      //       lists: updatePos(state.lists, draggedId, pos)
-      //     }),
-      //     undefined,
-      //     'updateListPos',
-      //   ),
+      updateListPosByListId: (draggedId: string, pos: number) =>
+        set(
+          (state: IState) => ({
+            lists: {
+              ...state.lists,
+              [draggedId]: {
+                ...state.lists[draggedId],
+                pos: pos
+              }
+            }
+          }),
+          undefined,
+          'updateListPos',
+        ),
       // updateCardPosByCardId:(listId: string, draggedId: string, pos: number) =>
       //   set((state: IState)=> ({
       //     lists: updateCardPos(state.lists, listId, draggedId, pos)
       //   }),undefined, 'updateCardPos'),
-      // setCalculatedPos: (pos: number | undefined) =>
-      //   set(
-      //     () => ({ calculatedPos: pos }),
-      //     undefined,
-      //     'calculetedNewPos',
-      //   ),
+      setCalculatedPos: (pos: number | undefined) =>
+        set(
+          () => ({ calculatedPos: pos }),
+          undefined,
+          'calculetedNewPos',
+        ),
     }),
     { name: 'boardStore' },
   ),
