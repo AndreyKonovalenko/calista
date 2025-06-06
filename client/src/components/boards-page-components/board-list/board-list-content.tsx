@@ -3,9 +3,7 @@ import { Box, Typography, useTheme, Stack } from '@mui/material';
 import { TitleTextAreaStyled } from '../boards-page-styled-elements/boards-page-styled-elements';
 import BoardListActionMenu from '../board-list-action-menu/board-list-action-menu';
 import { useState } from 'react';
-import {
-  useBoardStore,
-} from '../../../services/boards/board-store';
+import { useBoardStore } from '../../../services/boards/board-store';
 import { handleFormSubmitEvent } from '../../../utils/utils';
 import { useUpdateList } from '../../../api/lists-api-queries';
 import AddItem from '../add-item/add-item';
@@ -16,7 +14,7 @@ import { ICardTrimmed } from '../../../utils/types';
 const BoardListContent = (props: {
   _id: string;
   name: string;
-  cards: {[key: string]: ICardTrimmed};
+  cards: { [key: string]: ICardTrimmed };
   children: React.ReactNode;
 }) => {
   const { spacing, palette } = useTheme();
@@ -53,7 +51,7 @@ const BoardListContent = (props: {
     if (Object.keys(cards).length > 0) {
       // when add element in the end of array
 
-      const lastElemKey = Object.keys(cards)[Object.keys(lists).length - 1]
+      const lastElemKey = Object.keys(cards)[Object.keys(lists).length - 1];
       const last = cards[lastElemKey].pos;
       pos = pos + last;
     }

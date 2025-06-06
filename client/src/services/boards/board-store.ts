@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { IBoard, ICardTrimmed, IList, TBoard, TList } from '../../utils/types';
+import { IBoard, ICardTrimmed, IList, TBoard } from '../../utils/types';
 
 interface IState extends TBoard {
   calculatedPos: undefined | number;
@@ -86,55 +86,6 @@ export function ascendingComparator(
   if (a.pos > b.pos) return 1;
   return 0;
 }
-// const sortDuePosition = (lists: <IList>): Array<IList> => {
-//   lists
-//     .sort(ascendingComparator)
-//     .forEach(elment => elment.cards.sort(ascendingComparator));
-//   return lists;
-// };
-
-export function sortObjectByKeyAscending(obj: { [key: string]: TList }) {
-  return Object.keys(obj)
-    .sort((a, b) => {
-      if (obj[a].pos < obj[b].pos) return -1;
-      if (obj[a].pos > obj[b].pos) return 1;
-      return 0;
-    })
-    .reduce(
-      (
-        acc: {
-          [key: string]: TList;
-        },
-        key,
-      ) => {
-        // obj[key].cards = sortObjectOfCardsByKeyAscending(obj[key].cards);
-        acc[key] = obj[key];
-        return acc;
-      },
-      {},
-    );
-}
-
-// function sortObjectOfCardsByKeyAscending(obj: { [key: string]: ICardTrimmed }) {
-//   return Object.keys(obj)
-//     .sort((a, b) => {
-//       if (obj[a].pos < obj[b].pos) return -1;
-//       if (obj[a].pos > obj[b].pos) return 1;
-//       return 0;
-//     })
-//     .reduce(
-//       (
-//         acc: {
-//           [key: string]: ICardTrimmed;
-//         },
-//         key,
-//       ) => {
-//         acc[key] = obj[key];
-//         return acc;
-//       },
-//       {},
-//     );
-// }
 
 export const useBoardStore = create<IState & IActions>()(
   devtools(

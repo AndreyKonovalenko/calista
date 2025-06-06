@@ -15,9 +15,7 @@ const BoardCardDndContainer = (props: {
   const ref = useRef<HTMLAnchorElement>(null);
   const { _id, children, pos, listId } = props;
   const location = useLocation();
-  const { calculatedPos,} = useBoardStore(
-    state => state,
-  );
+  const { calculatedPos } = useBoardStore(state => state);
 
   const [{ isOver }, connectDrop] = useDrop<
     TDraggableElement & { listId: string },
@@ -47,7 +45,7 @@ const BoardCardDndContainer = (props: {
         //   // updateListPosByListId(draggedId, newPos);
         // }
       }
-     },
+    },
     drop({ _id: draggedId }) {
       console.log('did drop', calculatedPos, draggedId);
       // if (calculatedListPos === -1) {

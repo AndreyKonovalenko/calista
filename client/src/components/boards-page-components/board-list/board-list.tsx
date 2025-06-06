@@ -10,29 +10,21 @@ const BoardList = (props: TList) => {
   const { name, _id, pos, cards } = props;
   const { spacing } = useTheme();
 
-  const cardsList =
-    Object.keys(cards).length > 0 ? (
-      <List
-        sx={{
-          display: 'flex',
-          overflowX: 'auto',
-          height: '100%',
-          flexDirection: 'column',
-          flex: '1 1 auto',
-          scrollbarWidth: 'thin',
-        }}
-      >
-        {Object.keys(cards).map(key => (
-          <BoardCard
-            key={uuidv4()}
-            name={cards[key].name}
-            _id={cards[key]._id}
-            pos={cards[key].pos}
-            listId={_id}
-          />
-        ))}
-      </List>
-    ) : null;
+  const cardsList = Object.keys(cards)
+    .sort((a, b) => {
+      if (cards[a].pos < cards[b].pos) return -1;
+      if (cards[a].pos > cards[b].pos) return 1;
+      return 0;
+    })
+    .map(key => (
+      <BoardCard
+        key={uuidv4()}
+        name={cards[key].name}
+        _id={cards[key]._id}
+        pos={cards[key].pos}
+        listId={_id}
+      />
+    ));
 
   return (
     <Box
@@ -43,7 +35,18 @@ const BoardList = (props: TList) => {
     >
       <BoardListDndContainer _id={_id} name={name} pos={pos} cards={cards}>
         <BoardListContent name={name} cards={cards} _id={_id}>
-          {cardsList}
+          <List
+            sx={{
+              display: 'flex',
+              overflowX: 'auto',
+              height: '100%',
+              flexDirection: 'column',
+              flex: '1 1 auto',
+              scrollbarWidth: 'thin',
+            }}
+          >
+            {cardsList}
+          </List>
         </BoardListContent>
       </BoardListDndContainer>
     </Box>

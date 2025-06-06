@@ -1,4 +1,4 @@
-import {TList } from './types';
+import { TList } from './types';
 
 export default function validEnv(name: string | undefined): string {
   if (!name) {
@@ -15,19 +15,26 @@ export function invariantId(value: string | undefined): asserts value {
 }
 
 export function calculateNewPosition(
-  obj: {[key:string]: TList},
+  obj: { [key: string]: TList },
   dropId: string,
   dragId: string,
 ): number | undefined {
-  const toArr = Object.keys(obj)
-  const dropIndex = toArr.indexOf(dropId);
-  const dragIndex = toArr.indexOf(dragId);
+  
+  const orderedLists = Object.keys(obj).sort((a, b)=> {
+    if (obj[a].pos < obj[b].pos) return -1;
+    if (obj[a].pos > obj[b].pos) return 1;
+    return 0;
+  });
+
+  const dropIndex = orderedLists.indexOf(dropId);
+  const dragIndex = orderedLists.indexOf(dragId);
+
+
   const dragPos = obj[dragId].pos;
   const dropPos = obj[dropId].pos;
-  console.log(dropPos, dragPos)
+
   const start = Boolean(dropIndex === 0);
-  const end = Boolean(dropIndex === toArr.length - 1);
-   
+  const end = Boolean(dropIndex === orderedLists.length - 1);
   // if (!dropIndex || !dragIndex) {
   //   return;
   // }
@@ -36,16 +43,17 @@ export function calculateNewPosition(
     return -1;
   }
   if (start) {
-    return Math.trunc(obj[toArr[0]].pos / 2);
+    return Math.trunc(obj[orderedLists[0]].pos / 2);
   }
   if (end) {
-    return obj[toArr[toArr.length - 1]].pos + 16384;
+    const endIndex = orderedLists.length - 1
+    return obj[orderedLists[endIndex]].pos + 16384;
   }
-  // drag <--- from right to left 
+  // drag <--- from right to left
   if (dragIndex < dropIndex) {
-    console.log('from right to left')
-    const leftNeihborPos = obj[toArr[dropIndex + 1]].pos;
-    console.log(leftNeihborPos)
+    console.log('from right to left');
+    const leftNeihborPos = obj[orderedLists[dropIndex + 1]].pos;
+    console.log(leftNeihborPos);
     const newPos = Math.trunc((dropPos + leftNeihborPos) / 2);
     if (
       Math.abs(newPos - dropPos) <= 100 ||
@@ -56,11 +64,11 @@ export function calculateNewPosition(
       return newPos;
     }
   }
-  // drag ---> from left to right 
+  // drag ---> from left to right
   if (dragIndex > dropIndex) {
-    console.log('from left to right')
-    const rightNeighborPos = obj[toArr[dropIndex - 1]].pos;
-    console.log(rightNeighborPos)
+    console.log('from left to right');
+    const rightNeighborPos = obj[orderedLists[dropIndex - 1]].pos;
+    console.log(rightNeighborPos);
     const newPos = Math.trunc((dropPos + rightNeighborPos) / 2);
     if (
       Math.abs(newPos - dropPos) <= 100 ||
