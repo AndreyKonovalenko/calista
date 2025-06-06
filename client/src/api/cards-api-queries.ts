@@ -28,7 +28,6 @@ export const useFetchCardById = (cardId: string) => {
 
 export const useDeleteCard = () => {
   const { boardId } = useParams();
-
   invariantId(boardId);
   const queryClient = useQueryClient();
   return useMutation({

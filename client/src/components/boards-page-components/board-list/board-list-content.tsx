@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import { Box, Typography, useTheme, Stack } from '@mui/material';
 import { TitleTextAreaStyled } from '../boards-page-styled-elements/boards-page-styled-elements';
 import BoardListActionMenu from '../board-list-action-menu/board-list-action-menu';
@@ -8,27 +8,20 @@ import { handleFormSubmitEvent } from '../../../utils/utils';
 import { useUpdateList } from '../../../api/lists-api-queries';
 import AddItem from '../add-item/add-item';
 
-import { useCreateCard } from '../../../api/cards-api-queries';
-import { ICardTrimmed } from '../../../utils/types';
-
 const BoardListContent = (props: {
   _id: string;
   name: string;
-  cards: { [key: string]: ICardTrimmed };
+  handleCreateNewCard: (event: FormEvent<HTMLFormElement>) => void;
   children: React.ReactNode;
 }) => {
   const { spacing, palette } = useTheme();
-  const { name, _id, children, cards } = props;
-  const {
-    updateListNameBylistId,
-    lists,
-    _id: boardId,
-  } = useBoardStore(state => state);
+  const { name, _id, children, handleCreateNewCard } = props;
+  const { updateListNameBylistId, lists } = useBoardStore(state => state);
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
 
   const updateListQuery = useUpdateList();
-  const createCardQuery = useCreateCard();
+
   const handleUpdateListName = (
     event: React.FormEvent<HTMLFormElement>,
     listId: string,
@@ -43,25 +36,6 @@ const BoardListContent = (props: {
         data: { name: listName },
       });
     }
-  };
-
-  const handleCreateNewCard = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    let pos = 16384;
-    if (Object.keys(cards).length > 0) {
-      // when add element in the end of array
-
-      const lastElemKey = Object.keys(cards)[Object.keys(lists).length - 1];
-      const last = cards[lastElemKey].pos;
-      pos = pos + last;
-    }
-    const formData = new FormData(event.currentTarget);
-    createCardQuery.mutate({
-      name: formData.get('newItemName'),
-      boardId: boardId,
-      listId: _id,
-      pos: pos,
-    });
   };
 
   return (

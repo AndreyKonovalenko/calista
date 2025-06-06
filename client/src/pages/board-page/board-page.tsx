@@ -52,10 +52,14 @@ const BoardPage = () => {
   const handleCreateNewList = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let pos = 16384;
-    if (Object.keys(lists).length > 0) {
-      // when add element in the end of array
-      const lastElemKey = Object.keys(lists)[Object.keys(lists).length - 1];
-      const last = lists[lastElemKey].pos;
+    const keysArr = Object.keys(lists);
+    if (keysArr.length > 0) {
+      keysArr.sort((a, b) => {
+        if (lists[a].pos < lists[b].pos) return -1;
+        if (lists[a].pos > lists[b].pos) return 1;
+        return 0;
+      });
+      const last = lists[keysArr[keysArr.length - 1]].pos;
       pos = pos + last;
     }
     const formData = new FormData(event.currentTarget);
