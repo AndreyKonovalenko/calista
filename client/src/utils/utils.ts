@@ -18,7 +18,7 @@ export function calculateNewPosition(
   obj: { [key: string]: TList | ICardTrimmed },
   dropId: string,
   dragId: string,
-): number | undefined {
+): number | null {
   const orderedLists = Object.keys(obj).sort((a, b) => {
     if (obj[a].pos < obj[b].pos) return -1;
     if (obj[a].pos > obj[b].pos) return 1;
@@ -69,6 +69,7 @@ export function calculateNewPosition(
       return newPos;
     }
   }
+  return null;
 }
 
 export const handleFormSubmitEvent = (

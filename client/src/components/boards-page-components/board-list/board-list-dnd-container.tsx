@@ -61,10 +61,10 @@ const BoardListDndContainer = (
       if (calculatedPos === -1) {
         updateBoardById.mutate({ id: _id, data: { action: 'renumbering' } });
       }
-      if (calculatedPos != undefined && calculatedPos > 0) {
+      if (calculatedPos && calculatedPos > 0) {
         handleUpdateListPos(draggedId, calculatedPos);
       }
-      setCalculatedPos(undefined);
+      setCalculatedPos(null);
     },
     collect: monitor => ({
       isOver: monitor.isOver(),

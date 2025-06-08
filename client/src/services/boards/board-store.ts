@@ -3,7 +3,7 @@ import { devtools } from 'zustand/middleware';
 import { IBoard, ICardTrimmed, IList, TBoard } from '../../utils/types';
 
 interface IState extends TBoard {
-  calculatedPos: undefined | number;
+  calculatedPos: null | number;
 }
 
 interface IActions {
@@ -11,7 +11,7 @@ interface IActions {
   updateListNameBylistId: (id: string, name: string) => void;
   updateListPosByListId: (draggedId: string, pos: number) => void;
   // updateCardPosByCardId: (dropListId: string, draggedId:string, pos: number) => void;
-  setCalculatedPos: (pos: number | undefined) => void;
+  setCalculatedPos: (pos: number | null) => void;
   reset: () => void;
 }
 
@@ -20,7 +20,7 @@ const initialState: IState = {
   name: '',
   createrId: '',
   lists: {},
-  calculatedPos: undefined,
+  calculatedPos: null,
 };
 
 const transformData = (data: IBoard) => {
@@ -126,7 +126,7 @@ export const useBoardStore = create<IState & IActions>()(
       //   set((state: IState)=> ({
       //     lists: updateCardPos(state.lists, listId, draggedId, pos)
       //   }),undefined, 'updateCardPos'),
-      setCalculatedPos: (pos: number | undefined) =>
+      setCalculatedPos: (pos: number | null) =>
         set(() => ({ calculatedPos: pos }), undefined, 'calculetedNewPos'),
     }),
     { name: 'boardStore' },
