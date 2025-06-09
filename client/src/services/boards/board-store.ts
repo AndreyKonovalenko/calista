@@ -10,7 +10,12 @@ interface IActions {
   setBoardState: (data: IBoard) => void;
   updateListNameBylistId: (id: string, name: string) => void;
   updateListPosByListId: (draggedId: string, pos: number) => void;
-  // updateCardPosByCardId: (dropListId: string, draggedId:string, pos: number) => void;
+  updateCardPos: (draggeId: string, dropListId: string, pos: number) => void;
+  moveCardBetweenLists: (
+    draggedId: string,
+    dropListId: string,
+    dragListId: string,
+  ) => void;
   setCalculatedPos: (pos: number | null) => void;
   reset: () => void;
 }
@@ -122,10 +127,48 @@ export const useBoardStore = create<IState & IActions>()(
           undefined,
           'updateListPos',
         ),
-      // updateCardPosByCardId:(listId: string, draggedId: string, pos: number) =>
-      //   set((state: IState)=> ({
-      //     lists: updateCardPos(state.lists, listId, draggedId, pos)
-      //   }),undefined, 'updateCardPos'),
+      updateCardPos: (draggedId: string, dropListId: string, pos: number) =>
+        set(
+          (state: IState) => ({
+            lists: {
+              ...state.lists,
+              [dropListId]: {
+                ...state.lists[dropListId],
+                cards: {
+                  ...state.lists[dropListId].cards,
+                  [draggedId]: {
+                    ...state.lists[dropListId].cards[draggedId],
+                    pos: pos,
+                  },
+                },
+              },
+            },
+          }),
+          undefined,
+          'updateCardPos',
+        ),
+      moveCardBetweenLists: (
+        draggedId: string,
+        dropListId: string,
+        dragListId: string,
+      ) =>
+        set(
+          (state: IState) => ({
+            lists: {
+              ...state.lists,
+              [dragListId]: {
+                ...state.lists[dragListId],
+                cards: Object.fromEntries(
+                  Object.entries(state.lists[dragListId].cards).filter(
+                    ([key]) => key !== draggedId,
+                  ),
+                ),
+              },
+            },
+          }),
+          undefined,
+          'updateCardPos',
+        ),
       setCalculatedPos: (pos: number | null) =>
         set(() => ({ calculatedPos: pos }), undefined, 'calculetedNewPos'),
     }),
