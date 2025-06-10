@@ -26,6 +26,7 @@ export function calculateNewPosition(
   });
   const dropIndex = orderedLists.indexOf(dropId);
   const dragIndex = orderedLists.indexOf(dragId);
+  console.log(obj[dragId])
   const dragPos = obj[dragId].pos;
   const dropPos = obj[dropId].pos;
   const start = Boolean(dropIndex === 0);

@@ -19,7 +19,7 @@ const BoardCardDndContainer = (props: {
     calculatedPos,
     lists,
     setCalculatedPos,
-    updateCardPos,
+    // updateCardPos,
     moveCardBetweenLists,
   } = useBoardStore(state => state);
 
@@ -33,7 +33,6 @@ const BoardCardDndContainer = (props: {
     accept: ['card'],
     hover({ _id: draggedId, listId: draggedIdListId }) {
       if (draggedId !== _id) {
-        if (listId === draggedIdListId) {
           const newPos = calculateNewPosition(
             lists[listId].cards,
             _id,
@@ -41,17 +40,17 @@ const BoardCardDndContainer = (props: {
           );
           setCalculatedPos(newPos);
           if (newPos && newPos !== -1) {
-            updateCardPos(draggedId, listId, newPos);
+            moveCardBetweenLists(draggedId, listId, draggedIdListId, newPos);
           }
-        }
-        if (listId !== draggedIdListId) {
-          // const newPos = calculateNewPosition(lists[listId].cards, _id, draggedId);
-          // setCalculatedPos(newPos)
-          // if (newPos && newPos !== -1){
-          //     moveCardBetweenList( draggedId, listId, draggedIdListId)
-          // }
-          moveCardBetweenLists(draggedId, listId, draggedIdListId);
-        }
+        
+        // if (listId !== draggedIdListId) {
+        //   // const newPos = calculateNewPosition(lists[listId].cards, _id, draggedId);
+        //   // setCalculatedPos(newPos)
+        //   // if (newPos && newPos !== -1){
+        //   //     moveCardBetweenList( draggedId, listId, draggedIdListId)
+        //   // }
+        //   moveCardBetweenLists(draggedId, listId, draggedIdListId);
+        // }
 
         // const newPos = calculateN
         // newPosition(cards, _id, draggedId);
