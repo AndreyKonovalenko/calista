@@ -25,18 +25,18 @@ export function calculateNewPosition(
     return 0;
   });
   const dropIndex = orderedLists.indexOf(dropId);
-  const dragIndex = orderedLists.indexOf(dragId);
-  console.log(obj[dragId])
-  const dragPos = obj[dragId].pos;
+  console.log(dragId)
+  // const dragIndex = orderedLists.indexOf(dragId);
+  // const dragPos = obj[dragId].pos;
   const dropPos = obj[dropId].pos;
   const start = Boolean(dropIndex === 0);
   const end = Boolean(dropIndex === orderedLists.length - 1);
   // if (!dropIndex || !dragIndex) {
   //   return;
   // }
-  if (Math.abs(dragPos - dropPos) <= 100) {
-    return -1;
-  }
+  // if (Math.abs(dragPos - dropPos) <= 100) {
+  //   return -1;
+  // }
   if (start) {
     return Math.trunc(obj[orderedLists[0]].pos / 2);
   }
@@ -44,33 +44,45 @@ export function calculateNewPosition(
     const endIndex = orderedLists.length - 1;
     return obj[orderedLists[endIndex]].pos + 16384;
   }
+
+  const neihborPos = obj[orderedLists[dropIndex + 1]].pos;
+  const newPos = Math.trunc((dropPos + neihborPos) / 2)
+  if (
+      Math.abs(newPos - dropPos) <= 100 ||
+      Math.abs(newPos - neihborPos) <= 100
+  ) {
+      return -1;
+  } else {
+     return newPos;
+  }
+
   // drag <--- from right to left
-  if (dragIndex < dropIndex) {
-    const leftNeihborPos = obj[orderedLists[dropIndex + 1]].pos;
-    const newPos = Math.trunc((dropPos + leftNeihborPos) / 2);
-    if (
-      Math.abs(newPos - dropPos) <= 100 ||
-      Math.abs(newPos - leftNeihborPos) <= 100
-    ) {
-      return -1;
-    } else {
-      return newPos;
-    }
-  }
-  // drag ---> from left to right
-  if (dragIndex > dropIndex) {
-    const rightNeighborPos = obj[orderedLists[dropIndex - 1]].pos;
-    const newPos = Math.trunc((dropPos + rightNeighborPos) / 2);
-    if (
-      Math.abs(newPos - dropPos) <= 100 ||
-      Math.abs(newPos - rightNeighborPos) <= 100
-    ) {
-      return -1;
-    } else {
-      return newPos;
-    }
-  }
-  return null;
+  // if (dragIndex < dropIndex) {
+  //   const leftNeihborPos = obj[orderedLists[dropIndex + 1]].pos;
+  //   const newPos = Math.trunc((dropPos + leftNeihborPos) / 2);
+  //   if (
+  //     Math.abs(newPos - dropPos) <= 100 ||
+  //     Math.abs(newPos - leftNeihborPos) <= 100
+  //   ) {
+  //     return -1;
+  //   } else {
+  //     return newPos;
+  //   }
+  // }
+  // // drag ---> from left to right
+  // if (dragIndex > dropIndex) {
+  //   const rightNeighborPos = obj[orderedLists[dropIndex - 1]].pos;
+  //   const newPos = Math.trunc((dropPos + rightNeighborPos) / 2);
+  //   if (
+  //     Math.abs(newPos - dropPos) <= 100 ||
+  //     Math.abs(newPos - rightNeighborPos) <= 100
+  //   ) {
+  //     return -1;
+  //   } else {
+  //     return newPos;
+  //   }
+  // }
+ 
 }
 
 export const handleFormSubmitEvent = (
