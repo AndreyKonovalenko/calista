@@ -13,7 +13,7 @@ export default function LoadingBage(): JSX.Element {
         alignItems: 'center',
       }}
     >
-      <CircularProgress size={60} />;
+      <CircularProgress size={60} />
     </Box>
   );
 }

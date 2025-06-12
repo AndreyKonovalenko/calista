@@ -101,8 +101,20 @@ const updateCardPosState = (
   dragListId: string,
   newPos: number,
 ): { [key: string]: TList } => {
-  console.log(dragListId);
-  return dropListId === dragListId
+  console.log(
+    Boolean(
+      dropListId === dragListId ||
+        (dragListId !== dropListId && lists[dropListId].cards[draggedId]),
+    ),
+  );
+  console.log({
+    ...lists[dragListId].cards[draggedId],
+    pos: newPos,
+  });
+  console.log({ ...lists[dropListId].cards[draggedId], pos: newPos });
+
+  return dropListId === dragListId ||
+    (dragListId !== dragListId && lists[dropListId].cards[draggedId])
     ? {
         ...lists,
         [dropListId]: {
@@ -123,7 +135,7 @@ const updateCardPosState = (
           cards: {
             ...lists[dropListId].cards,
             [draggedId]: {
-              ...lists[dragListId ? dragListId : dropListId].cards[draggedId],
+              ...lists[dragListId].cards[draggedId],
               pos: newPos,
             },
           },
