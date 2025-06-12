@@ -16,7 +16,7 @@ interface IActions {
     draggedId: string,
     dropListId: string,
     dragListId: string,
-    pos: number
+    pos: number,
   ) => void;
   setCalculatedPos: (pos: number | null) => void;
   reset: () => void;
@@ -94,42 +94,47 @@ export function ascendingComparator(
   return 0;
 }
 
-const updateCardPosState= (lists: {[kye:string]: TList}, draggedId:string, dropListId: string, dragListId: string, newPos:number): {[key: string]: TList}  => { 
-  return (dropListId === dragListId) 
-    ? 
-     {
-      ...lists,
-      [dropListId]: {
-        ...lists[dropListId],
-        cards:{
-          ...lists[dropListId].cards,
-          [draggedId]: {
-            ...lists[dropListId].cards[draggedId],
-            pos: newPos
-          }
-        }
+const updateCardPosState = (
+  lists: { [kye: string]: TList },
+  draggedId: string,
+  dropListId: string,
+  dragListId: string,
+  newPos: number,
+): { [key: string]: TList } => {
+  console.log(dropListId, dragListId);
+  return dropListId === dragListId
+    ? {
+        ...lists,
+        [dropListId]: {
+          ...lists[dropListId],
+          cards: {
+            ...lists[dropListId].cards,
+            [draggedId]: {
+              ...lists[dropListId].cards[draggedId],
+              pos: newPos,
+            },
+          },
+        },
       }
-    }
-  :
-   {
-    ...lists,
-      [dropListId]: {
-        ...lists[dropListId],
-        cards:{
-          ...lists[dropListId].cards,
-          [draggedId]: {
-            ...lists[dropListId].cards[draggedId],
-            pos: newPos
-          }
-        }
-      }, 
-    [dragListId]: {
-      ...lists[dragListId],
-        cards: Object.fromEntries(Object.entries(lists[dragListId].cards).filter(([key]) => key !== draggedId))       
-      }
-    }
-  }   
-
+    : {
+        ...lists,
+        [dropListId]: {
+          ...lists[dropListId],
+          cards: {
+            ...lists[dropListId].cards,
+            [draggedId]: { ...lists[dragListId].cards[draggedId], pos: newPos },
+          },
+        },
+        [dragListId]: {
+          ...lists[dragListId],
+          cards: Object.fromEntries(
+            Object.entries(lists[dragListId].cards).filter(
+              ([key]) => key !== draggedId,
+            ),
+          ),
+        },
+      };
+};
 
 export const useBoardStore = create<IState & IActions>()(
   devtools(
@@ -140,7 +145,7 @@ export const useBoardStore = create<IState & IActions>()(
       reset: () => set(initialState),
       updateListNameBylistId: (id: string, name: string) =>
         set(
-          (state) => ({
+          state => ({
             lists: {
               ...state.lists,
               [id]: {
@@ -154,7 +159,7 @@ export const useBoardStore = create<IState & IActions>()(
         ),
       updateListPosByListId: (draggedId: string, pos: number) =>
         set(
-          (state) => ({
+          state => ({
             lists: {
               ...state.lists,
               [draggedId]: {
@@ -193,9 +198,15 @@ export const useBoardStore = create<IState & IActions>()(
         pos: number,
       ) =>
         set(
-          (state) => ({
-            lists: updateCardPosState(state.lists, draggedId, dropListId, dragListId, pos)     
-         }),
+          state => ({
+            lists: updateCardPosState(
+              state.lists,
+              draggedId,
+              dropListId,
+              dragListId,
+              pos,
+            ),
+          }),
           undefined,
           'updateCardPos',
         ),
@@ -207,4 +218,3 @@ export const useBoardStore = create<IState & IActions>()(
 );
 
 // updateCardPosState(state.lists, draggedId, dropListId, dragListId, pos: number)
-        
