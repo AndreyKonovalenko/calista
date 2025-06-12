@@ -33,16 +33,16 @@ const BoardCardDndContainer = (props: {
     accept: ['card'],
     hover({ _id: draggedId, listId: draggedIdListId }) {
       if (draggedId !== _id) {
-          const newPos = calculateNewPosition(
-            lists[listId].cards,
-            _id,
-            draggedId,
-          );
-          setCalculatedPos(newPos);
-          if (newPos && newPos !== -1) {
-            moveCardBetweenLists(draggedId, listId, draggedIdListId, newPos);
-          }
-        
+        const newPos = calculateNewPosition(
+          lists[listId].cards,
+          _id,
+          draggedId,
+        );
+        setCalculatedPos(newPos);
+        if (newPos && newPos !== -1) {
+          moveCardBetweenLists(draggedId, listId, draggedIdListId, newPos);
+        }
+
         // if (listId !== draggedIdListId) {
         //   // const newPos = calculateNewPosition(lists[listId].cards, _id, draggedId);
         //   // setCalculatedPos(newPos)

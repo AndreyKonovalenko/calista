@@ -25,7 +25,7 @@ export function calculateNewPosition(
     return 0;
   });
   const dropIndex = orderedLists.indexOf(dropId);
-
+  console.log(obj);
   const dropPos = obj[dropId].pos;
   const start = Boolean(dropIndex === 0);
   const end = Boolean(dropIndex === orderedLists.length - 1);
