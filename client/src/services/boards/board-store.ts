@@ -113,9 +113,8 @@ const updateCardPosState = (
   });
   console.log({ ...lists[dropListId].cards[draggedId], pos: newPos });
 
-  return dropListId === dragListId ||
-    (dragListId !== dragListId && lists[dropListId].cards[draggedId])
-    ? {
+  if (dropListId === dragListId) {
+    return {
         ...lists,
         [dropListId]: {
           ...lists[dropListId],
@@ -128,7 +127,26 @@ const updateCardPosState = (
           },
         },
       }
-    : {
+  }
+
+  if ((dropListId !== dragListId) &&lists[dropListId].cards[draggedId]) {
+    return {
+        ...lists,
+        [dropListId]: {
+          ...lists[dropListId],
+          cards: {
+            ...lists[dropListId].cards,
+            [draggedId]: {
+              ...lists[dropListId].cards[draggedId],
+              pos: newPos,
+            },
+          },
+        },
+      }
+  }
+  
+  if ((dropListId !== dragListId) && !lists[dropListId].cards[draggedId]) {
+     return   {
         ...lists,
         [dropListId]: {
           ...lists[dropListId],
@@ -148,8 +166,11 @@ const updateCardPosState = (
             ),
           ),
         },
-      };
-};
+      }
+    }
+   return lists
+} 
+
 
 export const useBoardStore = create<IState & IActions>()(
   devtools(
