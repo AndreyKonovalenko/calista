@@ -1,9 +1,10 @@
-import React, { useRef} from 'react';
+import React, { useRef } from 'react';
 import { useLocation, Link as RouterLink } from 'react-router';
 import { Box, Link, ListItem } from '@mui/material';
 import { useDrop, useDrag } from 'react-dnd';
 import { TDraggableElement } from '../../../utils/types';
 // import { calculateNewPosition } from '../../../utils/utils';
+import { calculateNewPosByTargetPart } from '../../../utils/utils';
 import { useBoardStore } from '../../../services/boards/board-store';
 
 const BoardCardDndContainer = (props: {
@@ -17,10 +18,10 @@ const BoardCardDndContainer = (props: {
   const location = useLocation();
   const {
     calculatedPos,
-    // lists,
+    lists,
     setCalculatedPos,
     // updateCardPos,
-    // moveCardBetweenLists,
+    moveCardBetweenLists,
   } = useBoardStore(state => state);
 
   const [{ isOver }, connectDrop] = useDrop<
@@ -32,51 +33,61 @@ const BoardCardDndContainer = (props: {
   >({
     accept: ['card'],
     // hover({ _id: draggedId, listId: draggedIdListId }) {
-    hover({ _id: draggedId }, monitor) {
-      if(!ref.current || draggedId === _id){
-          return
+    hover({ _id: draggedId, listId: draggedIdListId }, monitor) {
+      if (!ref.current || draggedId === _id) {
+        return;
       }
-       // Determine rectangle on screen
+      // Determine rectangle on screen
       const hoverBoundingRect = ref.current.getBoundingClientRect();
       // Get vertical middle
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       // Determine mouse position
       const clientOffset = monitor.getClientOffset();
       // Get pixels to the top
-      if(!clientOffset){ 
-        return
+      if (!clientOffset) {
+        return;
       }
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-      const targetPart = (hoverClientY > hoverMiddleY) ? 'bottom' : 'top';
-      console.log(targetPart)
+      const targetPart = hoverClientY > hoverMiddleY ? 'bottom' : 'top';
+      console.log(targetPart);
+      const newPos = calculateNewPosByTargetPart(
+        lists[listId].cards,
+        _id,
+        targetPart,
+      );
+      console.log(newPos);
+
+      if (newPos && newPos !== -1) {
+        moveCardBetweenLists(draggedId, listId, draggedIdListId, newPos);
+      }
 
       // if (draggedId !== _id) {
-        // const newPos = calculateNewPosition(
-        //   lists[listId].cards,
-        //   _id,
-        //   draggedId,
-        // );
-        // setCalculatedPos(newPos);
-        // if (newPos && newPos !== -1) {
-        //   moveCardBetweenLists(draggedId, listId, draggedIdListId, newPos);
-        // }
+      // const newPos = calculateNewPosition(
+      //   lists[listId].cards,
+      //   _id,
+      //   draggedId,
+      // );
+      // setCalculatedPos(newPos);
+      // if (newPos && newPos !== -1) {
+      //   moveCardBetweenLists(draggedId, listId, draggedIdListId, newPos);
+      // }
 
-        // if (listId !== draggedIdListId) {
-        //   // const newPos = calculateNewPosition(lists[listId].cards, _id, draggedId);
-        //   // setCalculatedPos(newPos)
-        //   // if (newPos && newPos !== -1){
-        //   //     moveCardBetweenList( draggedId, listId, draggedIdListId)
-        //   // }
-        //   moveCardBetweenLists(draggedId, listId, draggedIdListId);
-        // }
+      // if (listId !== draggedIdListId) {
+      //   // const newPos = calculateNewPosition(lists[listId].cards, _id, draggedId);
+      //   // setCalculatedPos(newPos)
+      //   // if (newPos && newPos !== -1){
+      //   //     moveCardBetweenList( draggedId, listId, draggedIdListId)
+      //   // }
+      //   moveCardBetweenLists(draggedId, listId, draggedIdListId);
+      // }
 
-        // const newPos = calculateN
-        // newPosition(cards, _id, draggedId);
-        // // setCalculatedListPos(newPos);
-        // if (newPos && newPos !== -1) {
-        //   // updateListPosByListId(draggedId, newPos);
-        // }
-
+      // const newPos = calculateN
+      // newPosition(cards, _id, draggedId);
+      // // setCalculatedListPos(newPos);
+      // if (newPos && newPos !== -1) {
+      //   // updateListPosByListId(draggedId, newPos);
+      // }
     },
     drop({ _id: draggedId }) {
       console.log('did drop', calculatedPos, draggedId);
@@ -111,7 +122,6 @@ const BoardCardDndContainer = (props: {
   // useEffect(()=>{
   //   console.log(isDragging, isOver)
   // })
-
 
   return (
     <ListItem>

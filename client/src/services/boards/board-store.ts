@@ -101,67 +101,65 @@ const updateCardPosState = (
   dragListId: string,
   newPos: number,
 ): { [key: string]: TList } => {
-
-  console.log('dragListId:', dragListId, 'dropListId:', dropListId)
+  console.log('dragListId:', dragListId, 'dropListId:', dropListId);
 
   if (dropListId === dragListId) {
     return {
-        ...lists,
-        [dragListId]: {
-          ...lists[dragListId],
-          cards: {
-            ...lists[dragListId].cards,
-            [draggedId]: {
-              ...lists[dragListId].cards[draggedId],
-              pos: newPos,
-            },
+      ...lists,
+      [dragListId]: {
+        ...lists[dragListId],
+        cards: {
+          ...lists[dragListId].cards,
+          [draggedId]: {
+            ...lists[dragListId].cards[draggedId],
+            pos: newPos,
           },
         },
-      }
+      },
+    };
   }
 
-  if ((dropListId !== dragListId) &&lists[dropListId].cards[draggedId]) {
+  if (dropListId !== dragListId && lists[dropListId].cards[draggedId]) {
     return {
-        ...lists,
-        [dropListId]: {
-          ...lists[dropListId],
-          cards: {
-            ...lists[dropListId].cards,
-            [draggedId]: {
-              ...lists[dropListId].cards[draggedId],
-              pos: newPos,
-            },
+      ...lists,
+      [dropListId]: {
+        ...lists[dropListId],
+        cards: {
+          ...lists[dropListId].cards,
+          [draggedId]: {
+            ...lists[dropListId].cards[draggedId],
+            pos: newPos,
           },
         },
-      }
+      },
+    };
   }
-  
-  if ((dropListId !== dragListId) && !lists[dropListId].cards[draggedId]) {
-     return   {
-        ...lists,
-        [dropListId]: {
-          ...lists[dropListId],
-          cards: {
-            ...lists[dropListId].cards,
-            [draggedId]: {
-              ...lists[dragListId].cards[draggedId],
-              pos: newPos,
-            },
+
+  if (dropListId !== dragListId && !lists[dropListId].cards[draggedId]) {
+    return {
+      ...lists,
+      [dropListId]: {
+        ...lists[dropListId],
+        cards: {
+          ...lists[dropListId].cards,
+          [draggedId]: {
+            ...lists[dragListId].cards[draggedId],
+            pos: newPos,
           },
         },
-        [dragListId]: {
-          ...lists[dragListId],
-          cards: Object.fromEntries(
-            Object.entries(lists[dragListId].cards).filter(
-              ([key]) => key !== draggedId,
-            ),
+      },
+      [dragListId]: {
+        ...lists[dragListId],
+        cards: Object.fromEntries(
+          Object.entries(lists[dragListId].cards).filter(
+            ([key]) => key !== draggedId,
           ),
-        },
-      }
-    }
-   return lists
-} 
-
+        ),
+      },
+    };
+  }
+  return lists;
+};
 
 export const useBoardStore = create<IState & IActions>()(
   devtools(
