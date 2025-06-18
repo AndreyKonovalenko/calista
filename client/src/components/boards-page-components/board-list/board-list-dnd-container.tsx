@@ -53,8 +53,8 @@ const BoardListDndContainer = (
         }
       }
 
-      // if (cards.length === 0 && itemType === 'card') {
-      //   //add card to epty card array
+      // if (itemType === 'card') {
+      //   console.log('source list id', _id)
       // }
     },
     drop({ _id: draggedId }) {
