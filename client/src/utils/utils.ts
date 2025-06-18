@@ -18,7 +18,7 @@ export function calculateNewPosByTargetPart(
   obj: { [key: string]: TList | ICardTrimmed },
   dropId: string,
   targetPart: 'before' | 'after',
-): number  {
+): number {
   const orderedLists = Object.keys(obj).sort((a, b) => {
     if (obj[a].pos < obj[b].pos) return -1;
     if (obj[a].pos > obj[b].pos) return 1;
@@ -31,7 +31,9 @@ export function calculateNewPosByTargetPart(
   if (dropIndex === orderedLists.length - 1) {
     return obj[orderedLists[orderedLists.length - 1]].pos + 16384;
   }
-  const targetPartPos = obj[orderedLists[targetPart === 'before'? dropIndex - 1 : dropIndex + 1]].pos;
+  const targetPartPos =
+    obj[orderedLists[targetPart === 'before' ? dropIndex - 1 : dropIndex + 1]]
+      .pos;
   const dropPos = obj[dropId].pos;
   const newPos = Math.trunc((dropPos + targetPartPos) / 2);
   if (
