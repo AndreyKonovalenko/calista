@@ -17,47 +17,31 @@ export function invariantId(value: string | undefined): asserts value {
 export function calculateNewPosByTargetPart(
   obj: { [key: string]: TList | ICardTrimmed },
   dropId: string,
-  targetPart: 'top' | 'bottom',
-): number | null {
+  targetPart: 'before' | 'after',
+): number  {
   const orderedLists = Object.keys(obj).sort((a, b) => {
     if (obj[a].pos < obj[b].pos) return -1;
     if (obj[a].pos > obj[b].pos) return 1;
     return 0;
   });
   const dropIndex = orderedLists.indexOf(dropId);
-  const dropPos = obj[dropId].pos;
-
   if (dropIndex === 0) {
     return Math.trunc(obj[orderedLists[0]].pos / 2);
   }
   if (dropIndex === orderedLists.length - 1) {
-    const endIndex = orderedLists.length - 1;
-    return obj[orderedLists[endIndex]].pos + 16384;
+    return obj[orderedLists[orderedLists.length - 1]].pos + 16384;
   }
-
-  let targetPartIndex;
-
-  if (targetPart === 'top') {
-    targetPartIndex = dropIndex + 1;
+  const targetPartPos = obj[orderedLists[targetPart === 'before'? dropIndex - 1 : dropIndex + 1]].pos;
+  const dropPos = obj[dropId].pos;
+  const newPos = Math.trunc((dropPos + targetPartPos) / 2);
+  if (
+    Math.abs(newPos - dropPos) <= 100 ||
+    Math.abs(newPos - targetPartPos) <= 100
+  ) {
+    return -1;
+  } else {
+    return newPos;
   }
-
-  if (targetPart === 'bottom') {
-    targetPartIndex = dropIndex - 1;
-  }
-
-  if (targetPartIndex) {
-    const targetPartPos = obj[orderedLists[targetPartIndex]].pos;
-    const newPos = Math.trunc((dropPos + targetPartPos) / 2);
-    if (
-      Math.abs(newPos - dropPos) <= 100 ||
-      Math.abs(newPos - targetPartPos) <= 100
-    ) {
-      return -1;
-    } else {
-      return newPos;
-    }
-  }
-  return null;
 }
 
 export function calculateNewPosition(

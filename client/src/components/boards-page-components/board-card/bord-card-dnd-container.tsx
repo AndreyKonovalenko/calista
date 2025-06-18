@@ -49,7 +49,7 @@ const BoardCardDndContainer = (props: {
         return;
       }
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-      const targetPart = hoverClientY > hoverMiddleY ? 'bottom' : 'top';
+      const targetPart = hoverClientY > hoverMiddleY ? 'before' : 'after';
       console.log(targetPart);
       const newPos = calculateNewPosByTargetPart(
         lists[listId].cards,

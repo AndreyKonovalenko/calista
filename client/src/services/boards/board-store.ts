@@ -106,22 +106,6 @@ const updateCardPosState = (
   if (dropListId === dragListId) {
     return {
       ...lists,
-      [dragListId]: {
-        ...lists[dragListId],
-        cards: {
-          ...lists[dragListId].cards,
-          [draggedId]: {
-            ...lists[dragListId].cards[draggedId],
-            pos: newPos,
-          },
-        },
-      },
-    };
-  }
-
-  if (dropListId !== dragListId && lists[dropListId].cards[draggedId]) {
-    return {
-      ...lists,
       [dropListId]: {
         ...lists[dropListId],
         cards: {
@@ -134,6 +118,22 @@ const updateCardPosState = (
       },
     };
   }
+
+  // if (dropListId !== dragListId && lists[dropListId].cards[draggedId]) {
+  //   return {
+  //     ...lists,
+  //     [dropListId]: {
+  //       ...lists[dropListId],
+  //       cards: {
+  //         ...lists[dropListId].cards,
+  //         [draggedId]: {
+  //           ...lists[dropListId].cards[draggedId],
+  //           pos: newPos,
+  //         },
+  //       },
+  //     },
+  //   };
+  // }
 
   if (dropListId !== dragListId && !lists[dropListId].cards[draggedId]) {
     return {
