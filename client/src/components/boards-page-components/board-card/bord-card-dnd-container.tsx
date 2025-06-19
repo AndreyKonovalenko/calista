@@ -21,7 +21,7 @@ const BoardCardDndContainer = (props: {
     lists,
     setCalculatedPos,
     // updateCardPos,
-    moveCardBetweenLists,
+    moveCard,
   } = useBoardStore(state => state);
 
   const [{ isOver }, connectDrop] = useDrop<
@@ -33,7 +33,7 @@ const BoardCardDndContainer = (props: {
   >({
     accept: ['card'],
     // hover({ _id: draggedId, listId: draggedIdListId }) {
-    hover({ _id: draggedId, listId: draggedIdListId }, monitor) {
+    hover({ _id: draggedId }, monitor) {
       if (!ref.current || draggedId === _id) {
         return;
       }
@@ -59,7 +59,7 @@ const BoardCardDndContainer = (props: {
       console.log(newPos);
 
       if (newPos && newPos !== -1) {
-        moveCardBetweenLists(draggedId, listId, draggedIdListId, newPos);
+        moveCard(draggedId, listId, newPos);
       }
 
       // if (draggedId !== _id) {

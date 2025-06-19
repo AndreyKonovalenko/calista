@@ -12,10 +12,9 @@ interface IActions {
   updateListNameBylistId: (id: string, name: string) => void;
   updateListPosByListId: (draggedId: string, pos: number) => void;
   updateCardPos: (draggeId: string, dropListId: string, pos: number) => void;
-  moveCardBetweenLists: (
+  moveCard: (
     draggedId: string,
     dropListId: string,
-    dragListId: string,
     pos: number,
   ) => void;
   setCalculatedPos: (pos: number | null) => void;
@@ -98,12 +97,22 @@ const updateCardPosState = (
   lists: { [kye: string]: TList },
   draggedId: string,
   dropListId: string,
-  dragListId: string,
   newPos: number,
 ): { [key: string]: TList } => {
-  console.log('dragListId:', dragListId, 'dropListId:', dropListId);
+  
+  let sourceList = null
 
-  if (dropListId === dragListId) {
+  for (const [,list] of Object.entries(lists)) {
+        for (const [, cards] of Object.entries(list)){
+          for (const [card] of Object.entries(cards)){       
+            if( card === draggedId) {
+              sourceList = list._id
+            }
+          }
+        }
+  }
+
+  if (dropListId === sourceList) {
     return {
       ...lists,
       [dropListId]: {
@@ -119,23 +128,7 @@ const updateCardPosState = (
     };
   }
 
-  // if (dropListId !== dragListId && lists[dropListId].cards[draggedId]) {
-  //   return {
-  //     ...lists,
-  //     [dropListId]: {
-  //       ...lists[dropListId],
-  //       cards: {
-  //         ...lists[dropListId].cards,
-  //         [draggedId]: {
-  //           ...lists[dropListId].cards[draggedId],
-  //           pos: newPos,
-  //         },
-  //       },
-  //     },
-  //   };
-  // }
-
-  if (dropListId !== dragListId && !lists[dropListId].cards[draggedId]) {
+  if (sourceList && dropListId !== sourceList) {
     return {
       ...lists,
       [dropListId]: {
@@ -143,15 +136,15 @@ const updateCardPosState = (
         cards: {
           ...lists[dropListId].cards,
           [draggedId]: {
-            ...lists[dragListId].cards[draggedId],
+            ...lists[sourceList].cards[draggedId],
             pos: newPos,
           },
         },
       },
-      [dragListId]: {
-        ...lists[dragListId],
+      [sourceList]: {
+        ...lists[sourceList],
         cards: Object.fromEntries(
-          Object.entries(lists[dragListId].cards).filter(
+          Object.entries(lists[sourceList].cards).filter(
             ([key]) => key !== draggedId,
           ),
         ),
@@ -216,10 +209,9 @@ export const useBoardStore = create<IState & IActions>()(
           undefined,
           'updateCardPos',
         ),
-      moveCardBetweenLists: (
+      moveCard: (
         draggedId: string,
         dropListId: string,
-        dragListId: string,
         pos: number,
       ) =>
         set(
@@ -228,7 +220,6 @@ export const useBoardStore = create<IState & IActions>()(
               state.lists,
               draggedId,
               dropListId,
-              dragListId,
               pos,
             ),
           }),
