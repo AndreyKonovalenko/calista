@@ -41,6 +41,21 @@ export const useDeleteList = () => {
   });
 };
 
+export const useReNumCardsPosInBoard = () => {
+  const queryClient = useQueryClient();
+  const { id } = useParams();
+  invariantId(id);
+  return useMutation({
+    mutationFn: api.boards.updateBoard,
+    onSuccess: () => {
+      return queryClient.invalidateQueries({
+        queryKey: ['fetchBoardById', id],
+        exact: true,
+      });
+    },
+  });
+};
+
 export const useUpdateList = () => {
   return useMutation({
     mutationFn: api.lists.updateList,

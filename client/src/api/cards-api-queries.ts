@@ -40,3 +40,9 @@ export const useDeleteCard = () => {
     },
   });
 };
+
+export const useUpdateCard = () => {
+  return useMutation({
+    mutationFn: api.cards.updateCard,
+  });
+};

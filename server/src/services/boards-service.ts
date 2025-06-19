@@ -49,10 +49,10 @@ export async function updateBoardById(
         })
         .exec();
       if (board && board.lists.length > 0) {
-        const sorableList = board.lists;
-        sorableList.sort(ascendingComparator);
+        const sortableList = board.lists;
+        sortableList.sort(ascendingComparator);
         let position = 16384;
-        for (const element of sorableList) {
+        for (const element of sortableList) {
           await ListModel.findByIdAndUpdate(
             new Types.ObjectId(element._id),
             { pos: position },

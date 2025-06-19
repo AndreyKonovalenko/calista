@@ -84,6 +84,8 @@ const cards = {
   cerateCard: (data: TData) => request.post<void>(CARDS, data),
   fetchCardById: (id: string) => request.get<ICard>(`${CARDS}/${id}`),
   deleteCard: (id: string) => request.delete<void>(`${CARDS}/${id}`),
+  updateCard: ({ id, data }: TPutData) =>
+    request.put<void>(`${CARDS}/${id}`, data),
 };
 
 // listsRouter.post('/', protect, addList);

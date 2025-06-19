@@ -1,4 +1,6 @@
 import api from './calista-api';
+import { useParams } from 'react-router';
+import { invariantId } from '../utils/utils';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useFetchBoards = () => {
@@ -42,13 +44,15 @@ export const useDeleteBoard = () => {
   });
 };
 
-export const useReNumListsPosInBoard = (boardId: string) => {
+export const useReNumListsPosInBoard = () => {
+  const { id } = useParams();
+  invariantId(id);
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: api.boards.updateBoard,
     onSuccess: () => {
       return queryClient.invalidateQueries({
-        queryKey: ['fetchBoardById', boardId],
+        queryKey: ['fetchBoardById', id],
         exact: true,
       });
     },

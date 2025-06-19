@@ -11,12 +11,7 @@ interface IActions {
   setBoardState: (data: IBoard) => void;
   updateListNameBylistId: (id: string, name: string) => void;
   updateListPosByListId: (draggedId: string, pos: number) => void;
-  updateCardPos: (draggeId: string, dropListId: string, pos: number) => void;
-  moveCard: (
-    draggedId: string,
-    dropListId: string,
-    pos: number,
-  ) => void;
+  moveCard: (draggedId: string, dropListId: string, pos: number) => void;
   setCalculatedPos: (pos: number | null) => void;
   reset: () => void;
 }
@@ -44,41 +39,6 @@ const transformData = (data: IBoard) => {
   };
 };
 
-// lists: sortDuePosition(data.lists)
-
-// const updateName = (
-//   arr: { [key: string]: TList },
-//   name: string,
-//   id: string,
-// ) => {
-//   // const index: number = arr.findIndex(element => element._id === id);
-//   // arr[index].name = name;
-//   console.log(name, id);
-//   return arr;
-// };
-
-// const updatePos = (
-//   arr: {[key: string]: TList},
-//   draggedId: string,
-//   pos: number,
-// ): Array<IList> => {
-//   const index: number = arr.findIndex(element => element._id === draggedId);
-//   arr[index].pos = pos;
-//   return arr;
-// };
-
-// const updateCardPos = (arr: Array<IList>, listId: string, draggedId: string, pos: number): Array<IList> => {
-//   const dropListIndex =  arr.findIndex(elemet => elemet._id === listId);
-//   if (dropListIndex) {
-//     const cardIndex =  arr[dropListIndex].cards.findIndex(element => element._id === draggedId)
-//     if (cardIndex) {
-//       arr[dropListIndex].cards[cardIndex].pos = pos
-//       console.log(arr[dropListIndex].cards[cardIndex].pos, pos)
-//     }
-//   }
-//   return arr;
-// }
-
 export function getListNameFromState(arr: Array<IList>, id: string) {
   const list: IList | undefined = arr.find(element => element._id === id);
   return list?.name;
@@ -99,17 +59,15 @@ const updateCardPosState = (
   dropListId: string,
   newPos: number,
 ): { [key: string]: TList } => {
-  
-  let sourceList = null
-
-  for (const [,list] of Object.entries(lists)) {
-        for (const [, cards] of Object.entries(list)){
-          for (const [card] of Object.entries(cards)){       
-            if( card === draggedId) {
-              sourceList = list._id
-            }
-          }
+  let sourceList = null;
+  for (const [, list] of Object.entries(lists)) {
+    for (const [, cards] of Object.entries(list)) {
+      for (const [card] of Object.entries(cards)) {
+        if (card === draggedId) {
+          sourceList = list._id;
         }
+      }
+    }
   }
 
   if (dropListId === sourceList) {
@@ -127,8 +85,9 @@ const updateCardPosState = (
       },
     };
   }
+  const dropListLength = Object.keys(lists[dropListId].cards).length;
 
-  if (sourceList && dropListId !== sourceList) {
+  if (sourceList && dropListId !== sourceList && dropListLength !== 0) {
     return {
       ...lists,
       [dropListId]: {
@@ -151,6 +110,31 @@ const updateCardPosState = (
       },
     };
   }
+
+  // cards is empty object case
+  if (sourceList && dropListId !== sourceList && dropListLength === 0) {
+    return {
+      ...lists,
+      [dropListId]: {
+        ...lists[dropListId],
+        cards: {
+          [draggedId]: {
+            ...lists[sourceList].cards[draggedId],
+            pos: newPos,
+          },
+        },
+      },
+      [sourceList]: {
+        ...lists[sourceList],
+        cards: Object.fromEntries(
+          Object.entries(lists[sourceList].cards).filter(
+            ([key]) => key !== draggedId,
+          ),
+        ),
+      },
+    };
+  }
+
   return lists;
 };
 
@@ -189,39 +173,10 @@ export const useBoardStore = create<IState & IActions>()(
           undefined,
           'updateListPos',
         ),
-      updateCardPos: (draggedId: string, dropListId: string, pos: number) =>
-        set(
-          (state: IState) => ({
-            lists: {
-              ...state.lists,
-              [dropListId]: {
-                ...state.lists[dropListId],
-                cards: {
-                  ...state.lists[dropListId].cards,
-                  [draggedId]: {
-                    ...state.lists[dropListId].cards[draggedId],
-                    pos: pos,
-                  },
-                },
-              },
-            },
-          }),
-          undefined,
-          'updateCardPos',
-        ),
-      moveCard: (
-        draggedId: string,
-        dropListId: string,
-        pos: number,
-      ) =>
+      moveCard: (draggedId: string, dropListId: string, pos: number) =>
         set(
           state => ({
-            lists: updateCardPosState(
-              state.lists,
-              draggedId,
-              dropListId,
-              pos,
-            ),
+            lists: updateCardPosState(state.lists, draggedId, dropListId, pos),
           }),
           undefined,
           'updateCardPos',

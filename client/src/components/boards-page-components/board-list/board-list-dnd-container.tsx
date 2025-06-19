@@ -16,15 +16,15 @@ const BoardListDndContainer = (
   const { _id, children, name, pos } = props;
   const { spacing } = useTheme();
   const {
-    _id: boardId,
     setCalculatedPos,
     updateListPosByListId,
     calculatedPos,
+    moveCard,
     lists,
   } = useBoardStore(state => state);
   const ref = useRef<HTMLDivElement>(null);
   const updateListQuery = useUpdateList();
-  const updateBoardById = useReNumListsPosInBoard(boardId);
+  const reNumListsPosInBoard = useReNumListsPosInBoard();
   const handleUpdateListPos = (listId: string, newPos: number | null) => {
     updateListQuery.mutate({
       id: listId,
@@ -53,13 +53,17 @@ const BoardListDndContainer = (
         }
       }
 
-      // if (itemType === 'card') {
-      //   console.log('source list id', _id)
-      // }
+      if (itemType === 'card') {
+        if (Object.keys(lists[_id].cards).length === 0)
+          moveCard(draggedId, _id, 16384);
+      }
     },
     drop({ _id: draggedId }) {
       if (calculatedPos === -1) {
-        updateBoardById.mutate({ id: _id, data: { action: 'renumbering' } });
+        reNumListsPosInBoard.mutate({
+          id: _id,
+          data: { action: 'renumbering' },
+        });
       }
       if (calculatedPos && calculatedPos > 0) {
         handleUpdateListPos(draggedId, calculatedPos);
@@ -87,10 +91,6 @@ const BoardListDndContainer = (
 
   connectDrag(ref);
   connectDrop(ref);
-
-  // useEffect(() => {
-  //   preview(getEmptyImage(), { captureDraggingState: true });
-  // }, [preview]);
 
   return (
     <Box

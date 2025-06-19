@@ -5,6 +5,7 @@ import { CustomError } from '../utils/CustomError';
 import { StatusCodes } from 'http-status-codes';
 import { CheckListItemModel, CheckListModel } from '../models/CheckListModel';
 import { CardModel } from '../models/CardModel';
+import { ascendingComparator } from '../utils/utils';
 
 export async function createList(data: IList) {
   const board = await BoardModel.findById(data.boardId);
@@ -52,7 +53,31 @@ export async function updateListById(
     [key: string]: string | Types.ObjectId | Array<Types.ObjectId> | number;
   },
 ) {
-  await ListModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
-    new: true,
-  });
+  if ('action' in data) {
+    if (data.action === 'renumbering') {
+      const list = await ListModel.findById(new Types.ObjectId(id))
+        .populate<{ cards: { _id: Types.ObjectId; pos: number }[] }>({
+          path: 'cards',
+          select: ['pos'],
+        })
+        .exec();
+      if (list && list.cards.length > 0) {
+        const sortableList = list.cards;
+        sortableList.sort(ascendingComparator);
+        let position = 16384;
+        for (const element of sortableList) {
+          await CardModel.findByIdAndUpdate(
+            new Types.ObjectId(element._id),
+            { pos: position },
+            { new: true },
+          );
+          position = position + 16348;
+        }
+      }
+    }
+  } else {
+    await ListModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
+      new: true,
+    });
+  }
 }

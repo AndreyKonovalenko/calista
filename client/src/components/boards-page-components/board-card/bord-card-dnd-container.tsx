@@ -3,9 +3,10 @@ import { useLocation, Link as RouterLink } from 'react-router';
 import { Box, Link, ListItem } from '@mui/material';
 import { useDrop, useDrag } from 'react-dnd';
 import { TDraggableElement } from '../../../utils/types';
-// import { calculateNewPosition } from '../../../utils/utils';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
 import { useBoardStore } from '../../../services/boards/board-store';
+import { useReNumCardsPosInBoard } from '../../../api/lists-api-queries';
+import { useUpdateCard } from '../../../api/cards-api-queries';
 
 const BoardCardDndContainer = (props: {
   _id: string;
@@ -14,15 +15,23 @@ const BoardCardDndContainer = (props: {
   pos: number;
 }) => {
   const ref = useRef<HTMLAnchorElement>(null);
+  const reNumCardsPosInBoard = useReNumCardsPosInBoard();
   const { _id, children, pos, listId } = props;
   const location = useLocation();
-  const {
-    calculatedPos,
-    lists,
-    setCalculatedPos,
-    // updateCardPos,
-    moveCard,
-  } = useBoardStore(state => state);
+  const { calculatedPos, lists, setCalculatedPos, moveCard } = useBoardStore(
+    state => state,
+  );
+  const updateCardQuery = useUpdateCard();
+  const handleUpdateCardPos = (
+    cardId: string,
+    newPos: number,
+    newListId: string,
+  ) => {
+    updateCardQuery.mutate({
+      id: cardId,
+      data: { pos: newPos, listId: newListId },
+    });
+  };
 
   const [{ isOver }, connectDrop] = useDrop<
     TDraggableElement & { listId: string },
@@ -32,7 +41,6 @@ const BoardCardDndContainer = (props: {
     }
   >({
     accept: ['card'],
-    // hover({ _id: draggedId, listId: draggedIdListId }) {
     hover({ _id: draggedId }, monitor) {
       if (!ref.current || draggedId === _id) {
         return;
@@ -50,52 +58,27 @@ const BoardCardDndContainer = (props: {
       }
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
       const targetPart = hoverClientY > hoverMiddleY ? 'before' : 'after';
-      console.log(targetPart);
       const newPos = calculateNewPosByTargetPart(
         lists[listId].cards,
         _id,
         targetPart,
       );
-      console.log(newPos);
-
+      setCalculatedPos(newPos);
       if (newPos && newPos !== -1) {
         moveCard(draggedId, listId, newPos);
       }
-
-      // if (draggedId !== _id) {
-      // const newPos = calculateNewPosition(
-      //   lists[listId].cards,
-      //   _id,
-      //   draggedId,
-      // );
-      // setCalculatedPos(newPos);
-      // if (newPos && newPos !== -1) {
-      //   moveCardBetweenLists(draggedId, listId, draggedIdListId, newPos);
-      // }
-
-      // if (listId !== draggedIdListId) {
-      //   // const newPos = calculateNewPosition(lists[listId].cards, _id, draggedId);
-      //   // setCalculatedPos(newPos)
-      //   // if (newPos && newPos !== -1){
-      //   //     moveCardBetweenList( draggedId, listId, draggedIdListId)
-      //   // }
-      //   moveCardBetweenLists(draggedId, listId, draggedIdListId);
-      // }
-
-      // const newPos = calculateN
-      // newPosition(cards, _id, draggedId);
-      // // setCalculatedListPos(newPos);
-      // if (newPos && newPos !== -1) {
-      //   // updateListPosByListId(draggedId, newPos);
-      // }
     },
     drop({ _id: draggedId }) {
-      console.log('did drop', calculatedPos, draggedId);
-      // if (calculatedListPos === -1) {
-      //   updateBoardById.mutate({ id: _id, data: { action: 'renumbering' } });
-      // }
+      console.log(calculatedPos);
+      if (calculatedPos === -1) {
+        reNumCardsPosInBoard.mutate({
+          id: _id,
+          data: { action: 'renumbering' },
+        });
+      }
       if (calculatedPos && calculatedPos > 0) {
-        //   handleUpdateListPos(draggedId, calculatedListPos);
+        console.log(calculatedPos);
+        handleUpdateCardPos(draggedId, calculatedPos, listId);
       }
       setCalculatedPos(null);
     },
@@ -119,9 +102,6 @@ const BoardCardDndContainer = (props: {
 
   connectDrag(ref);
   connectDrop(ref);
-  // useEffect(()=>{
-  //   console.log(isDragging, isOver)
-  // })
 
   return (
     <ListItem>
