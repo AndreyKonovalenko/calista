@@ -34,7 +34,7 @@ export async function deletedCardById(id: string) {
     list.cards = list.cards.filter(element => {
       return element.equals(new Types.ObjectId(id)) === false;
     });
-    list.save();
+    await list.save();
   }
   await CheckListItemModel.deleteMany({ cardId: new Types.ObjectId(id) });
   await CheckListModel.deleteMany({ cardId: new Types.ObjectId(id) });
@@ -47,7 +47,38 @@ export async function updateCardById(
     [key: string]: string | Types.ObjectId | Array<Types.ObjectId> | number;
   },
 ) {
+  // moveCard update
+  if (Object.prototype.hasOwnProperty.call(data, 'listId')){
+      const card = await CardModel.findById(new Types.ObjectId(id));
+      // inside one list
+      if(card && card.listId.equals(new Types.ObjectId(data.listId as string))) {
+        delete data.listId
+        await CardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
+          new: true
+        })
+      }
+      // between lists
+      if(card && !card.listId.equals(new Types.ObjectId(data.listId as string))){
+        const sourceList = await ListModel.findById(card.listId)
+        const distList = await ListModel.findById(new Types.ObjectId(data.listId as string))
+        if (sourceList) {
+          sourceList.cards = sourceList.cards.filter(element => {
+            return element.equals(new Types.ObjectId(id)) === false;
+          });
+          await sourceList.save();
+        }
+        if(distList) {
+          distList.cards.push(new Types.ObjectId(id))
+          await distList.save()
+        }
+        await CardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
+          new: true
+        })
+      }
+  }
+   
+  // generel update 
   await CardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
-    new: true,
-  });
+      new: true,
+    }); 
 }

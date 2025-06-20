@@ -66,7 +66,9 @@ const BoardListDndContainer = (
         });
       }
       if (calculatedPos && calculatedPos > 0) {
-        handleUpdateListPos(draggedId, calculatedPos);
+        if( itemType === 'lists'){
+          handleUpdateListPos(draggedId, calculatedPos);
+        }
       }
       setCalculatedPos(null);
     },
