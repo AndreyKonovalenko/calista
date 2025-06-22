@@ -48,37 +48,47 @@ export async function updateCardById(
   },
 ) {
   // moveCard update
-  if (Object.prototype.hasOwnProperty.call(data, 'listId')){
-      const card = await CardModel.findById(new Types.ObjectId(id));
-      // inside one list
-      if(card && card.listId.equals(new Types.ObjectId(data.listId as string))) {
-        delete data.listId
-        await CardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
-          new: true
-        })
+  if (Object.prototype.hasOwnProperty.call(data, 'listId')) {
+    const card = await CardModel.findById(new Types.ObjectId(id));
+    // inside one list
+    if (card && card.listId.equals(new Types.ObjectId(data.listId as string))) {
+      delete data.listId;
+      await CardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
+        new: true,
+      });
+    }
+    // between lists
+    if (
+      card &&
+      !card.listId.equals(new Types.ObjectId(data.listId as string))
+    ) {
+      const sourceList = await ListModel.findById(card.listId);
+      if (!sourceList) {
+        console.log('Source list not found');
+        return;
       }
-      // between lists
-      if(card && !card.listId.equals(new Types.ObjectId(data.listId as string))){
-        const sourceList = await ListModel.findById(card.listId)
-        const distList = await ListModel.findById(new Types.ObjectId(data.listId as string))
-        if (sourceList) {
-          sourceList.cards = sourceList.cards.filter(element => {
-            return element.equals(new Types.ObjectId(id)) === false;
-          });
-          await sourceList.save();
-        }
-        if(distList) {
-          distList.cards.push(new Types.ObjectId(id))
-          await distList.save()
-        }
-        await CardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
-          new: true
-        })
+      const distList = await ListModel.findById(
+        new Types.ObjectId(data.listId as string),
+      );
+
+      if (!distList) {
+        console.log('Distanation list not found');
+        return;
       }
+      distList.cards.push(new Types.ObjectId(id));
+      await distList.save();
+      sourceList.cards = sourceList.cards.filter(element => {
+        return element.equals(new Types.ObjectId(id)) === false;
+      });
+      await sourceList.save();
+      await CardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
+        new: true,
+      });
+    }
   }
-   
-  // generel update 
+
+  // generel update
   await CardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
-      new: true,
-    }); 
+    new: true,
+  });
 }
