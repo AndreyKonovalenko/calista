@@ -66,7 +66,7 @@ const BoardListDndContainer = (
         });
       }
       if (calculatedPos && calculatedPos > 0) {
-        if( itemType === 'lists'){
+        if (itemType === 'lists') {
           handleUpdateListPos(draggedId, calculatedPos);
         }
       }

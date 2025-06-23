@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useLocation, Link as RouterLink } from 'react-router';
 import { Box, Link, ListItem } from '@mui/material';
 import { useDrop, useDrag } from 'react-dnd';
@@ -102,6 +102,9 @@ const BoardCardDndContainer = (props: {
 
   connectDrag(ref);
   connectDrop(ref);
+  useEffect(() => {
+    console.log('Card rerenders', _id);
+  }, [_id]);
 
   return (
     <ListItem>
