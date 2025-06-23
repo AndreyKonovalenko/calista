@@ -13,6 +13,13 @@ export async function findBoards(id: Types.ObjectId) {
   return await BoardModel.find({ createrId: id }).select(['name']);
 }
 
+export async function findListsByBoardId(id: string) {
+  return await ListModel.find({ boardId: new Types.ObjectId(id) });
+}
+export async function findCardsByBoardId(id: string) {
+  return await CardModel.find({ boardId: new Types.ObjectId(id) });
+}
+
 export async function deleteBoardById(id: string) {
   await CheckListItemModel.deleteMany({ boardId: new Types.ObjectId(id) });
   await CheckListModel.deleteMany({ boardId: new Types.ObjectId(id) });

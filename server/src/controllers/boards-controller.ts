@@ -9,6 +9,8 @@ import {
   cerateBoard,
   findBoardById,
   updateBoardById,
+  findListsByBoardId,
+  findCardsByBoardId,
 } from '../services/boards-service';
 
 // GET borads/
@@ -47,6 +49,24 @@ export const addBoard = async (
 };
 
 // GET boards/:id
+// export const getBoard = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction,
+// ): Promise<void> => {
+//   try {
+//     const board = await findBoardById(req.params.id);
+//     if (!board) {
+//       res.status(StatusCodes.OK).send('Board not found');
+//     }
+//     if (board) {
+//       res.status(StatusCodes.OK).json(board);
+//     }
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 export const getBoard = async (
   req: Request,
   res: Response,
@@ -54,11 +74,25 @@ export const getBoard = async (
 ): Promise<void> => {
   try {
     const board = await findBoardById(req.params.id);
+    const lists = await findListsByBoardId(req.params.id);
+    const cards = await findCardsByBoardId(req.params.id);
     if (!board) {
       res.status(StatusCodes.OK).send('Board not found');
     }
     if (board) {
-      res.status(StatusCodes.OK).json(board);
+      res.status(StatusCodes.OK).json({
+        board: {
+          _id: board._id,
+          name: board._id,
+          createrId: board.createrId,
+        },
+        lists: Object.fromEntries(
+          lists.map(element => [element._id, { element }]),
+        ),
+        cards: Object.fromEntries(
+          cards.map(element => [element._id, { element }]),
+        ),
+      });
     }
   } catch (error) {
     next(error);
