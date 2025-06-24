@@ -83,14 +83,14 @@ export const getBoard = async (
       res.status(StatusCodes.OK).json({
         board: {
           _id: board._id,
-          name: board._id,
+          name: board.name,
           createrId: board.createrId,
         },
         lists: Object.fromEntries(
-          lists.map(element => [element._id, { element }]),
+          lists.map(element => [element._id,  element ]),
         ),
         cards: Object.fromEntries(
-          cards.map(element => [element._id, { element }]),
+          cards.map(element => [element._id,  element ]),
         ),
       });
     }

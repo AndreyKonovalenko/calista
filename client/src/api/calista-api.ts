@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import { toast } from 'react-toastify';
-import { TAuthState } from '../services/auth/auth-store';
-import { IBoard, ICard, IBoardTrimmed } from '../utils/types';
+import { TAuthState } from '../services/auth-store';
+import { IBoard, ICard, IBoardTrimmed, IList } from '../utils/types';
 import validEnv from '../utils/utils';
 
 const BASE_URL = validEnv(process.env.BASE_URL);
@@ -64,7 +64,7 @@ const auth = {
 const boards = {
   fetchBoards: () => request.get<Array<IBoardTrimmed>>(BOARDS),
   createBoard: (data: TData) => request.post<void>(BOARDS, data),
-  fetchBoardById: (id: string) => request.get<IBoard>(`${BOARDS}/${id}`),
+  fetchBoardById: (id: string) => request.get<{board: IBoard, lists: {[key:string]:IList}, cards: {[key:string]: ICard}}>(`${BOARDS}/${id}`),
   deleteBoard: (id: string) => request.delete<void>(`${BOARDS}/${id}`),
   updateBoard: ({ id, data }: TPutData) =>
     request.put<void>(`${BOARDS}/${id}`, data),

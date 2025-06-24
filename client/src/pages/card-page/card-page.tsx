@@ -4,7 +4,7 @@ import { Typography, Paper, Stack, Box, useTheme, Button } from '@mui/material';
 import { invariantId } from '../../utils/utils';
 import LoadingBage from '../../components/loading-bage/loading-bage';
 import { useFetchCardById, useDeleteCard } from '../../api/cards-api-queries';
-import { useCardStore } from '../../services/cards/card-store';
+import { useCardStore } from '../../services/card-store';
 import CloseIcon from '@mui/icons-material/Close';
 
 const CardPage = () => {

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { ICard } from '../../utils/types';
+import { ICard } from '../utils/types';
 
 type TState = Omit<ICard, 'pos'>;
 

@@ -5,7 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Person } from '@mui/icons-material';
 import { useMutation } from '@tanstack/react-query';
-import { useAuthStore } from '../../services/auth/auth-store';
+import { useAuthStore } from '../../services/auth-store';
 import { Link as RouterLink } from 'react-router';
 import Link from '@mui/material/Link';
 import api from '../../api/calista-api';

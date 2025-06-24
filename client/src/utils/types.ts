@@ -12,7 +12,6 @@ export interface IBoard {
   _id: string;
   createrId: string;
   name: string;
-  lists: Array<IList>;
 }
 
 export type TBoard = {
@@ -30,7 +29,6 @@ export interface IBoardTrimmed {
 export interface IList {
   _id: string;
   name: string;
-  cards: Array<ICardTrimmed>;
   pos: number;
 }
 

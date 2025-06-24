@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, IconButton, Toolbar, Stack } from '@mui/material';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import BoardDrawer from '../../components/boards-page-components/board-drawer/board-drawer';
 import AddItem from '../../components/boards-page-components/add-item/add-item';
-import BoardList from '../../components/boards-page-components/board-list/board-list';
+// import BoardList from '../../components/boards-page-components/board-list/board-list';
 import LoadingBage from '../../components/loading-bage/loading-bage';
 // import BoardCustomDragLayer from '../../components/boards-page-components/board-custom-drag-layer/board-custom-drag-layer';
 import {
@@ -17,22 +17,26 @@ import {
   useFetchBoardById,
   useDeleteBoard,
 } from '../../api/boards-api-queries';
-import { useCreateList } from '../../api/lists-api-queries';
+// import { useCreateList } from '../../api/lists-api-queries';
 import { invariantId } from '../../utils/utils';
 import {
-  // ascendingComparator,
-  useBoardStore,
-} from '../../services/boards/board-store';
+  useBoardName,
+  useBoardActions
+} from '../../services/board-store';
 // import { useGlobalDrop } from '../../hooks/use-global-drop';
 import { HEADER } from '../../layout/config-layout';
 import { TO_MAIN } from '../../utils/route-constants';
+import { useListActions } from '../../services/list-store';
 
 const BoardPage = () => {
   // useGlobalDrop();
   const navigate = useNavigate();
-  const { name, lists, setBoardState } = useBoardStore(state => state);
+  const name = useBoardName();
+  const { setBoard } = useBoardActions();
+  const { setLists } = useListActions();
+
   const deleteBoardQuery = useDeleteBoard();
-  const createListQuery = useCreateList();
+  // const createListQuery = useCreateList();
   const [open, setOpen] = useState(false);
   const { id } = useParams();
   invariantId(id);
@@ -51,46 +55,50 @@ const BoardPage = () => {
 
   const handleCreateNewList = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    let pos = 16384;
-    const keysArr = Object.keys(lists);
-    if (keysArr.length > 0) {
-      keysArr.sort((a, b) => {
-        if (lists[a].pos < lists[b].pos) return -1;
-        if (lists[a].pos > lists[b].pos) return 1;
-        return 0;
-      });
-      const last = lists[keysArr[keysArr.length - 1]].pos;
-      pos = pos + last;
-    }
-    const formData = new FormData(event.currentTarget);
-    createListQuery.mutate({
-      name: formData.get('newItemName'),
-      boardId: id,
-      pos: pos,
-    });
+    // let pos = 16384;
+    // const keysArr = Object.keys(lists);
+    // if (keysArr.length > 0) {
+    //   keysArr.sort((a, b) => {
+    //     if (lists[a].pos < lists[b].pos) return -1;
+    //     if (lists[a].pos > lists[b].pos) return 1;
+    //     return 0;
+    //   });
+    //   const last = lists[keysArr[keysArr.length - 1]].pos;
+    //   pos = pos + last;
+    // }
+    // const formData = new FormData(event.currentTarget);
+    // createListQuery.mutate({
+    //   name: formData.get('newItemName'),
+    //   boardId: id,
+    //   pos: pos,
+    // });
   };
 
-  const boardLists = Object.keys(lists)
-    .sort((a, b) => {
-      if (lists[a].pos < lists[b].pos) return -1;
-      if (lists[a].pos > lists[b].pos) return 1;
-      return 0;
-    })
-    .map(key => {
-      return (
-        <BoardList
-          name={lists[key].name}
-          _id={lists[key]._id}
-          key={uuidv4()}
-          pos={lists[key].pos}
-          cards={lists[key].cards}
-        />
-      );
-    });
+  // const boardLists = Object.keys(lists)
+  //   .sort((a, b) => {
+  //     if (lists[a].pos < lists[b].pos) return -1;
+  //     if (lists[a].pos > lists[b].pos) return 1;
+  //     return 0;
+  //   })
+  //   .map(key => {
+  //     return (
+  //       <BoardList
+  //         name={lists[key].name}
+  //         _id={lists[key]._id}
+  //         key={uuidv4()}
+  //         pos={lists[key].pos}
+  //         cards={lists[key].cards}
+  //       />
+  //     );
+  //   });
 
   useEffect(() => {
     if (isSuccess) {
-      setBoardState(data);
+      const {board, lists} = data;
+      setBoard(board);
+      setLists(lists);
+      // setListState(lists)
+      // setCardsState(cards)
     }
   }, [data, isSuccess]);
 
@@ -140,7 +148,7 @@ const BoardPage = () => {
               alignItems: 'stretch',
             }}
           >
-            {boardLists}
+            {/* {boardLists} */}
             {/* <BoardCustomDragLayer /> */}
             <AddItem
               handleCreateItem={handleCreateNewList}

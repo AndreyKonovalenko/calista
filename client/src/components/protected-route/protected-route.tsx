@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { TO_LOGIN } from '../../utils/route-constants';
-import { useAuthStore } from '../../services/auth/auth-store';
+import { useAuthStore } from '../../services/auth-store';
 import { useQuery } from '@tanstack/react-query';
 import api from '../../api/calista-api';
 import LoadingBage from '../loading-bage/loading-bage';
