@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { IList } from '../utils/types';
+import { createSelector } from 'reselect';
 
 interface IListActions {
   setLists: (data: {[key: string]: IList }) => void;
@@ -26,17 +27,41 @@ const useListStore = create<IListState>()(
 
 export const useListActions = () => useListStore((state)=> state.actions);
 export const useList = (id: string) => useListStore((state)=> state.lists? state.lists[id]: null)
+export const useLists = () => useListStore((state)=>state.lists)
 export const useListCalculatedPos = () => useListStore((state)=> state.listCalculatedPos)
-export const useSortedLists = () => useListStore((state)=> {
-  if (state.lists) {
-    return Object.keys(state.lists)
-      .sort((a: string, b: string): number => {
-        if(state.lists){
-          if (state.lists[a].pos < state.lists[b].pos) return -1;
-          if (state.lists[a].pos > state.lists[b].pos) return 1;
-        }
-        return 0;
-      })
-  }
-   return null;
+export const useSortedLists = () => useListStore(sortingList)
+const sortingList = createSelector(
+  state => state.lists, 
+  lists => {
+    if(!lists){
+      return null
+    }
+    const result = Object.keys(lists)
+        .sort((a: string, b: string): number => {
+          if(lists){
+            if (lists[a].pos < lists[b].pos) return -1;
+            if (lists[a].pos > lists[b].pos) return 1;
+          }
+          return 0;
+        }) 
+    console.log(result)
+    return result     
+  } 
+)
+
+export const useSortedLists2 = () =>  useListStore((state)=> {
+    const lists = state.lists
+    if(!lists){
+      return null
+    }
+    const result = Object.keys(lists)
+        .sort((a: string, b: string): number => {
+          if(lists){
+            if (lists[a].pos < lists[b].pos) return -1;
+            if (lists[a].pos > lists[b].pos) return 1;
+          }
+          return 0;
+        }) 
+    console.log(result)
+    return result;
 })

@@ -86,12 +86,8 @@ export const getBoard = async (
           name: board.name,
           createrId: board.createrId,
         },
-        lists: Object.fromEntries(
-          lists.map(element => [element._id,  element ]),
-        ),
-        cards: Object.fromEntries(
-          cards.map(element => [element._id,  element ]),
-        ),
+        lists: Object.fromEntries(lists.map(element => [element._id, element])),
+        cards: Object.fromEntries(cards.map(element => [element._id, element])),
       });
     }
   } catch (error) {

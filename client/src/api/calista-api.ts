@@ -64,7 +64,12 @@ const auth = {
 const boards = {
   fetchBoards: () => request.get<Array<IBoardTrimmed>>(BOARDS),
   createBoard: (data: TData) => request.post<void>(BOARDS, data),
-  fetchBoardById: (id: string) => request.get<{board: IBoard, lists: {[key:string]:IList}, cards: {[key:string]: ICard}}>(`${BOARDS}/${id}`),
+  fetchBoardById: (id: string) =>
+    request.get<{
+      board: IBoard;
+      lists: { [key: string]: IList };
+      cards: { [key: string]: ICard };
+    }>(`${BOARDS}/${id}`),
   deleteBoard: (id: string) => request.delete<void>(`${BOARDS}/${id}`),
   updateBoard: ({ id, data }: TPutData) =>
     request.put<void>(`${BOARDS}/${id}`, data),

@@ -8,10 +8,10 @@ import { Identifier } from 'dnd-core';
 // import BoardListCustomDragLayer from './board-list-custom-drag-layer';
 // import { getEmptyImage } from 'react-dnd-html5-backend';
 // import { calculateNewPosition } from '../../../utils/utils';
-import { TList, TDraggableElement } from '../../../utils/types';
+import { TDraggableElement, IList } from '../../../utils/types';
 
 const BoardListDndContainer = (
-  props: TList & { children: React.ReactNode },
+  props: IList & { children: React.ReactNode },
 ) => {
   const { _id, children, name, pos } = props;
   const { spacing } = useTheme();
@@ -43,7 +43,7 @@ const BoardListDndContainer = (
     accept: ['list', 'card'],
     hover({ _id: draggedId }, monitor) {
       const itemType = monitor.getItemType();
-      console.log(draggedId)
+      console.log(draggedId);
       if (itemType === 'list') {
         // if (draggedId !== _id) {
         //   const newPos = calculateNewPosition(lists, _id, draggedId);
@@ -60,7 +60,7 @@ const BoardListDndContainer = (
       }
     },
     drop({ _id: draggedId }) {
-         console.log(draggedId);
+      console.log(draggedId);
       // if (calculatedPos === -1) {
       //   reNumListsPosInBoard.mutate({
       //     id: _id,

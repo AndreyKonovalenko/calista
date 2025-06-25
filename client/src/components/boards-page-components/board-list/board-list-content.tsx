@@ -27,7 +27,7 @@ const BoardListContent = (props: {
     listId: string,
   ) => {
     event.preventDefault();
-    console.log(listId)
+    console.log(listId);
     // const formData = new FormData(event.currentTarget);
     // const listName = formData.get('listName');l
     // const stateListName = lists[listId].name;
@@ -54,8 +54,8 @@ const BoardListContent = (props: {
         sx={{ pl: spacing(2), pt: spacing(2), pr: spacing(2) }}
         component="form"
         onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-          console.log()
-           handleUpdateListName(event, _id);
+          console.log();
+          handleUpdateListName(event, _id);
         }}
       >
         <Stack direction="row" justifyContent="space-between" spacing={2}>

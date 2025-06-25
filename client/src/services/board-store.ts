@@ -17,9 +17,8 @@ import { IBoard } from '../utils/types';
 //   reset: () => void;
 // }
 
-
 interface IBoardActions {
-  setBoard: (data: IBoard) => void
+  setBoard: (data: IBoard) => void;
 }
 
 interface IBoardState {
@@ -52,7 +51,6 @@ interface IBoardState {
 //   };
 // };
 
-
 export const useBoardStore = create<IBoardState>()(
   devtools(
     set => ({
@@ -60,18 +58,20 @@ export const useBoardStore = create<IBoardState>()(
       createrId: '',
       name: '',
       actions: {
-      setBoard: (data) =>
-        set({_id: data._id, createrId: data.createrId, name: data.name}, undefined, 'setBoard'),   
-      }
+        setBoard: data =>
+          set(
+            { _id: data._id, createrId: data.createrId, name: data.name },
+            undefined,
+            'setBoard',
+          ),
+      },
     }),
     { name: 'boardStore' },
   ),
 );
 
-export const useBoardName = () => useBoardStore((state)=> state.name)
-export const useBoardActions = () => useBoardStore((state)=> state.actions)
-
-
+export const useBoardName = () => useBoardStore(state => state.name);
+export const useBoardActions = () => useBoardStore(state => state.actions);
 
 // export function getListNameFromState(arr: Array<IList>, id: string) {
 //   const list: IList | undefined = arr.find(element => element._id === id);

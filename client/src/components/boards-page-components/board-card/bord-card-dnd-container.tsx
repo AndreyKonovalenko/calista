@@ -58,7 +58,7 @@ const BoardCardDndContainer = (props: {
       }
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
       const targetPart = hoverClientY > hoverMiddleY ? 'before' : 'after';
-      console.log(targetPart)
+      console.log(targetPart);
       // const newPos = calculateNewPosByTargetPart(
       //   lists[listId].cards,
       //   _id,
@@ -70,7 +70,7 @@ const BoardCardDndContainer = (props: {
       // }
     },
     drop({ _id: draggedId }) {
-      console.log(draggedId)
+      console.log(draggedId);
       // console.log(calculatedPos);
       // if (calculatedPos === -1) {
       //   reNumCardsPosInBoard.mutate({

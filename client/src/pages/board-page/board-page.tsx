@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, IconButton, Toolbar, Stack } from '@mui/material';
-// import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import BoardDrawer from '../../components/boards-page-components/board-drawer/board-drawer';
 import AddItem from '../../components/boards-page-components/add-item/add-item';
-// import BoardList from '../../components/boards-page-components/board-list/board-list';
+import BoardList from '../../components/boards-page-components/board-list/board-list';
 import LoadingBage from '../../components/loading-bage/loading-bage';
 // import BoardCustomDragLayer from '../../components/boards-page-components/board-custom-drag-layer/board-custom-drag-layer';
 import {
@@ -19,29 +19,26 @@ import {
 } from '../../api/boards-api-queries';
 // import { useCreateList } from '../../api/lists-api-queries';
 import { invariantId } from '../../utils/utils';
-import {
-  useBoardName,
-  useBoardActions
-} from '../../services/board-store';
+import { useBoardName, useBoardActions } from '../../services/board-store';
 // import { useGlobalDrop } from '../../hooks/use-global-drop';
 import { HEADER } from '../../layout/config-layout';
 import { TO_MAIN } from '../../utils/route-constants';
-import { useListActions } from '../../services/list-store';
+import { useListActions,  } from '../../services/list-store';
+import { useSortedLists } from '../../services/list-store';
 
 const BoardPage = () => {
   // useGlobalDrop();
   const navigate = useNavigate();
   const name = useBoardName();
-  const { setBoard } = useBoardActions();
-  const { setLists } = useListActions();
-
   const deleteBoardQuery = useDeleteBoard();
   // const createListQuery = useCreateList();
   const [open, setOpen] = useState(false);
   const { id } = useParams();
   invariantId(id);
   const { data, isSuccess, isLoading } = useFetchBoardById(id);
-
+  const sorterLists = useSortedLists()
+  const { setBoard } = useBoardActions();
+  const { setLists } = useListActions();
   const handleDeleteBoard = (): void => {
     deleteBoardQuery.mutate(id);
     navigate(TO_MAIN);
@@ -74,27 +71,15 @@ const BoardPage = () => {
     // });
   };
 
-  // const boardLists = Object.keys(lists)
-  //   .sort((a, b) => {
-  //     if (lists[a].pos < lists[b].pos) return -1;
-  //     if (lists[a].pos > lists[b].pos) return 1;
-  //     return 0;
-  //   })
-  //   .map(key => {
-  //     return (
-  //       <BoardList
-  //         name={lists[key].name}
-  //         _id={lists[key]._id}
-  //         key={uuidv4()}
-  //         pos={lists[key].pos}
-  //         cards={lists[key].cards}
-  //       />
-  //     );
-  //   });
+  const boardLists = sorterLists ? sorterLists.map(key => {
+        return <BoardList _id={key} key={uuidv4()} />;
+      })
+    : null;
 
   useEffect(() => {
+    console.log('render');
     if (isSuccess) {
-      const {board, lists} = data;
+      const { board, lists } = data;
       setBoard(board);
       setLists(lists);
       // setListState(lists)
@@ -148,7 +133,7 @@ const BoardPage = () => {
               alignItems: 'stretch',
             }}
           >
-            {/* {boardLists} */}
+            {boardLists}
             {/* <BoardCustomDragLayer /> */}
             <AddItem
               handleCreateItem={handleCreateNewList}
