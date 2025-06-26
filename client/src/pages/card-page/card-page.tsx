@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { Typography, Paper, Stack, Box, useTheme, Button } from '@mui/material';
 import { invariantId } from '../../utils/utils';
-import LoadingBage from '../../components/loading-bage/loading-bage';
-import { useFetchCardById, useDeleteCard } from '../../api/cards-api-queries';
-import { useCardStore } from '../../services/card-store';
+// import LoadingBage from '../../components/loading-bage/loading-bage';
+import { useDeleteCard } from '../../api/cards-api-queries';
+import { useCard } from '../../services/card-store';
 import CloseIcon from '@mui/icons-material/Close';
 
 const CardPage = () => {
@@ -12,8 +12,12 @@ const CardPage = () => {
   const { spacing } = useTheme();
   const navigate = useNavigate();
   invariantId(id);
-  const { setCardState, name } = useCardStore(state => state);
-  const { data, isSuccess, isLoading } = useFetchCardById(id);
+  const card = useCard(id)
+  if(!card) {
+    return null
+  }
+  const {name} = card;
+  // const { data, isSuccess, isLoading } = useFetchCardById(id);
   const deleteCardQuery = useDeleteCard();
 
   const handleDeleteCard = (cardId: string) => {
@@ -21,13 +25,11 @@ const CardPage = () => {
     navigate(-1);
   };
 
-  useEffect(() => {
-    if (isSuccess) setCardState(data);
-  }, [data, isSuccess]);
+  // useEffect(() => {
+  //   if (isSuccess) setCardState(data);
+  // }, [data, isSuccess]);
 
-  return isLoading ? (
-    <LoadingBage />
-  ) : (
+  return (
     <Paper sx={{ width: '768px', p: spacing(2), borderRadius: spacing(2) }}>
       <Stack direction="row" justifyContent="space-between">
         <Typography variant="h4">{name}</Typography>
@@ -61,6 +63,7 @@ const CardPage = () => {
       </Stack>
     </Paper>
   );
-};
+  
+}
 
 export default CardPage;

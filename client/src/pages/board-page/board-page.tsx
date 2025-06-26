@@ -18,12 +18,12 @@ import {
   useDeleteBoard,
 } from '../../api/boards-api-queries';
 // import { useCreateList } from '../../api/lists-api-queries';
-import { invariantId } from '../../utils/utils';
 import { useBoardName, useBoardActions } from '../../services/board-store';
 // import { useGlobalDrop } from '../../hooks/use-global-drop';
 import { HEADER } from '../../layout/config-layout';
 import { TO_MAIN } from '../../utils/route-constants';
 import { useListActions,  } from '../../services/list-store';
+import { useCardActions } from '../../services/card-store';
 import { useSortedLists } from '../../services/list-store';
 
 const BoardPage = () => {
@@ -34,11 +34,14 @@ const BoardPage = () => {
   // const createListQuery = useCreateList();
   const [open, setOpen] = useState(false);
   const { id } = useParams();
-  invariantId(id);
+  if (!id){
+    return null
+  }
   const { data, isSuccess, isLoading } = useFetchBoardById(id);
   const sorterLists = useSortedLists()
   const { setBoard } = useBoardActions();
   const { setLists } = useListActions();
+  const {setCards} = useCardActions()
   const handleDeleteBoard = (): void => {
     deleteBoardQuery.mutate(id);
     navigate(TO_MAIN);
@@ -79,9 +82,10 @@ const BoardPage = () => {
   useEffect(() => {
     console.log('render');
     if (isSuccess) {
-      const { board, lists } = data;
+      const { board, lists, cards } = data;
       setBoard(board);
       setLists(lists);
+      setCards(cards)
       // setListState(lists)
       // setCardsState(cards)
     }

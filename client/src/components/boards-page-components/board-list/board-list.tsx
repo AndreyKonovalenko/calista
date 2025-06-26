@@ -6,12 +6,14 @@ import { useParams } from 'react-router';
 import BoardListContent from './board-list-content';
 import BoardListDndContainer from './board-list-dnd-container';
 // import { useCreateCard } from '../../../api/cards-api-queries';
-import { invariantId } from '../../../utils/utils';
 import { useList } from '../../../services/list-store';
+import { useSortedCardsByListId } from '../../../services/card-store';
 
 const BoardList = (props: { _id: string }) => {
   const { id: boardId } = useParams();
-  invariantId(boardId);
+  if (!boardId){
+    return null;
+  }
   const { _id } = props;
   const list = useList(_id);
   if (!list) {
@@ -19,6 +21,7 @@ const BoardList = (props: { _id: string }) => {
   }
   const { name, pos } = list;
   const { spacing } = useTheme();
+  console.log(useSortedCardsByListId(_id))
   
   // const createCardQuery = useCreateCard();
 
