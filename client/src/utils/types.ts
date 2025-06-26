@@ -41,6 +41,7 @@ export type TList = {
 
 export interface ICard {
   _id: string;
+  listId: string;
   name: string;
   pos: number;
   description?: string;
