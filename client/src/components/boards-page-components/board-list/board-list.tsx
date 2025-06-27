@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, useTheme, List } from '@mui/material';
-// import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router';
-// import BoardCard from '../board-card/bard-card';
+import BoardCard from '../board-card/bard-card';
 import BoardListContent from './board-list-content';
 import BoardListDndContainer from './board-list-dnd-container';
 // import { useCreateCard } from '../../../api/cards-api-queries';
@@ -21,7 +21,7 @@ const BoardList = (props: { _id: string }) => {
   }
   const { name, pos } = list;
   const { spacing } = useTheme();
-  console.log(useSortedCardsByListId(_id))
+  const sorterdCards = useSortedCardsByListId(_id)
   
   // const createCardQuery = useCreateCard();
 
@@ -63,6 +63,13 @@ const BoardList = (props: { _id: string }) => {
   //     />
   //   ));
 
+  const cardsList =  sorterdCards? sorterdCards.map(cardId=> 
+    <BoardCard 
+      key={uuidv4()}
+      _id={cardId}
+    />
+  ): null
+
   return (
     <Box
       sx={{
@@ -82,7 +89,7 @@ const BoardList = (props: { _id: string }) => {
               scrollbarWidth: 'thin',
             }}
           >
-            {/* {cardsList} */}
+            {cardsList}
           </List>
         </BoardListContent>
       </BoardListDndContainer>

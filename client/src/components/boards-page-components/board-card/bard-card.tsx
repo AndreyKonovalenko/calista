@@ -2,10 +2,15 @@ import React from 'react';
 
 import BoardCardDndContainer from './bord-card-dnd-container';
 import BoardCardContent from './bord-card-content';
-import { ICardTrimmed } from '../../../utils/types';
+import { useCard } from '../../../services/card-store';
 
-const BoardCard = (props: ICardTrimmed & { listId: string }) => {
-  const { name, _id, pos, listId } = props;
+const BoardCard = (props: {_id: string}) => {
+  const { _id } = props;
+  const card = useCard(_id)
+  if (!card){
+    return null
+  }
+  const {listId, name, pos} = card;
 
   return (
     <BoardCardDndContainer _id={_id} pos={pos} listId={listId}>

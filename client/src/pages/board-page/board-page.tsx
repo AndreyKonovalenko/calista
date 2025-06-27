@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Box, Typography, IconButton, Toolbar, Stack } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router';
@@ -17,31 +17,31 @@ import {
   useFetchBoardById,
   useDeleteBoard,
 } from '../../api/boards-api-queries';
-// import { useCreateList } from '../../api/lists-api-queries';
+import { useCreateList } from '../../api/lists-api-queries';
 import { useBoardName, useBoardActions } from '../../services/board-store';
 // import { useGlobalDrop } from '../../hooks/use-global-drop';
 import { HEADER } from '../../layout/config-layout';
 import { TO_MAIN } from '../../utils/route-constants';
-import { useListActions,  } from '../../services/list-store';
+import { useListActions, useSortedLists } from '../../services/list-store';
 import { useCardActions } from '../../services/card-store';
-import { useSortedLists } from '../../services/list-store';
 
 const BoardPage = () => {
   // useGlobalDrop();
   const navigate = useNavigate();
   const name = useBoardName();
   const deleteBoardQuery = useDeleteBoard();
-  // const createListQuery = useCreateList();
+  const createListQuery = useCreateList();
   const [open, setOpen] = useState(false);
   const { id } = useParams();
-  if (!id){
+  if (!id) {
     return null
   }
   const { data, isSuccess, isLoading } = useFetchBoardById(id);
-  const sorterLists = useSortedLists()
+  const sortedList = useSortedLists()
   const { setBoard } = useBoardActions();
   const { setLists } = useListActions();
-  const {setCards} = useCardActions()
+  const { setCards } = useCardActions();
+
   const handleDeleteBoard = (): void => {
     deleteBoardQuery.mutate(id);
     navigate(TO_MAIN);
@@ -53,28 +53,18 @@ const BoardPage = () => {
     setOpen(false);
   };
 
-  const handleCreateNewList = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleCreateNewList = useCallback((event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // let pos = 16384;
-    // const keysArr = Object.keys(lists);
-    // if (keysArr.length > 0) {
-    //   keysArr.sort((a, b) => {
-    //     if (lists[a].pos < lists[b].pos) return -1;
-    //     if (lists[a].pos > lists[b].pos) return 1;
-    //     return 0;
-    //   });
-    //   const last = lists[keysArr[keysArr.length - 1]].pos;
-    //   pos = pos + last;
-    // }
-    // const formData = new FormData(event.currentTarget);
-    // createListQuery.mutate({
-    //   name: formData.get('newItemName'),
-    //   boardId: id,
-    //   pos: pos,
-    // });
-  };
+    const pos = sortedList? sortedList?.lastPos + 16384: 16384;
+    const formData = new FormData(event.currentTarget);
+    createListQuery.mutate({
+      name: formData.get('newItemName'),
+      boardId: id,
+      pos: pos,
+    });
+  }, [id]);
 
-  const boardLists = sorterLists ? sorterLists.map(key => {
+  const boardLists = sortedList ? sortedList.sorted.map(key => {
         return <BoardList _id={key} key={uuidv4()} />;
       })
     : null;
@@ -86,8 +76,6 @@ const BoardPage = () => {
       setBoard(board);
       setLists(lists);
       setCards(cards)
-      // setListState(lists)
-      // setCardsState(cards)
     }
   }, [data, isSuccess]);
 

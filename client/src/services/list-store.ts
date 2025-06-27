@@ -36,15 +36,16 @@ const getMemoizedList = createSelector(
     if(!lists){
       return null
     }
-    const result = Object.keys(lists)
+    const sorted = Object.keys(lists)
         .sort((a: string, b: string): number => {
           if(lists){
             if (lists[a].pos < lists[b].pos) return -1;
             if (lists[a].pos > lists[b].pos) return 1;
           }
           return 0;
-        }) 
-    console.log(result)
-    return result     
+        })
+        
+    const lastPos: number = sorted.length > 0 ? lists[sorted[sorted.length - 1]].pos : 0;  
+    return {sorted, lastPos}     
   } 
 )
