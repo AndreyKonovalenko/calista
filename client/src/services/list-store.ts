@@ -44,8 +44,7 @@ const getMemoizedList = createSelector(
           }
           return 0;
         })
-        
-    const lastPos: number = sorted.length > 0 ? lists[sorted[sorted.length - 1]].pos : 0;  
-    return {sorted, lastPos}     
+          
+    return sorted     
   } 
 )

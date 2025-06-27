@@ -22,12 +22,13 @@ import { useBoardName, useBoardActions } from '../../services/board-store';
 // import { useGlobalDrop } from '../../hooks/use-global-drop';
 import { HEADER } from '../../layout/config-layout';
 import { TO_MAIN } from '../../utils/route-constants';
-import { useListActions, useSortedLists } from '../../services/list-store';
+import { useListActions, useSortedLists, useLists } from '../../services/list-store';
 import { useCardActions } from '../../services/card-store';
 
 const BoardPage = () => {
   // useGlobalDrop();
   const navigate = useNavigate();
+  const lists = useLists()
   const name = useBoardName();
   const deleteBoardQuery = useDeleteBoard();
   const createListQuery = useCreateList();
@@ -55,16 +56,19 @@ const BoardPage = () => {
 
   const handleCreateNewList = useCallback((event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const pos = sortedList? sortedList?.lastPos + 16384: 16384;
+    let  pos = 16384;
+    if( lists && sortedList && sortedList?.length > 0) {
+      pos = lists[sortedList[sortedList.length-1]].pos + pos 
+    }
     const formData = new FormData(event.currentTarget);
     createListQuery.mutate({
       name: formData.get('newItemName'),
       boardId: id,
       pos: pos,
     });
-  }, [id]);
+  }, [id, lists, sortedList]);
 
-  const boardLists = sortedList ? sortedList.sorted.map(key => {
+  const boardLists = sortedList ? sortedList.map(key => {
         return <BoardList _id={key} key={uuidv4()} />;
       })
     : null;
