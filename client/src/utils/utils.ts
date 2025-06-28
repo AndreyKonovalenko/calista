@@ -1,4 +1,4 @@
-import { ICardTrimmed, TList } from './types';
+import { ICardTrimmed, IList, TList } from './types';
 
 export default function validEnv(name: string | undefined): string {
   if (!name) {
@@ -15,15 +15,11 @@ export function invariantId(value: string | undefined): asserts value {
 }
 
 export function calculateNewPosByTargetPart(
-  obj: { [key: string]: TList | ICardTrimmed },
+  obj: { [key: string]: IList },
+  orderedLists: string[],
   dropId: string,
   targetPart: 'before' | 'after',
 ): number {
-  const orderedLists = Object.keys(obj).sort((a, b) => {
-    if (obj[a].pos < obj[b].pos) return -1;
-    if (obj[a].pos > obj[b].pos) return 1;
-    return 0;
-  });
   const dropIndex = orderedLists.indexOf(dropId);
   if (dropIndex === 0) {
     return Math.trunc(obj[orderedLists[0]].pos / 2);

@@ -85,7 +85,7 @@ const BoardCardDndContainer = (props: {
       // setCalculatedPos(null);
     },
     collect: monitor => ({
-      isOver: monitor.isOver(),
+      isOver: monitor.isOver({ shallow: true }),
       differenceOffset: monitor.getDifferenceFromInitialOffset(),
     }),
   });
