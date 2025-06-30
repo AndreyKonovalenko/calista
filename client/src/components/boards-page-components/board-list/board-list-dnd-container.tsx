@@ -1,15 +1,11 @@
 import React, { memo, useRef, useMemo } from 'react';
 import { Box, useTheme } from '@mui/material';
-// import { useBoardStore } from '../../../services/boards/board-store';
 import { useDrop, useDrag } from 'react-dnd';
 import { Identifier } from 'dnd-core';
-// import { useUpdateList } from '../../../api/lists-api-queries';
-// import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
-// import BoardListCustomDragLayer from './board-list-custom-drag-layer';
-// import { getEmptyImage } from 'react-dnd-html5-backend';
-// import { calculateNewPosition } from '../../../utils/utils';
+import { useUpdateList } from '../../../api/lists-api-queries';
+import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
 import { TDraggableElement, IList } from '../../../utils/types';
-import { useLists, useSortedLists } from '../../../services/list-store';
+import { useListActions, useListCalculatedPos, useLists, useSortedLists } from '../../../services/list-store';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
 
 const BoardListDndContainer = memo(function BoradListDndContainer(
@@ -19,23 +15,17 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
   const { spacing } = useTheme();
   const lists = useLists();
   const sortedLists = useSortedLists();
-
-  // const {
-  //   setCalculatedPos,
-  //   updateListPosByListId,
-  //   calculatedPos,
-  //   moveCard,
-  //   lists,
-  // } = useBoardStore(state => state);
+  const calculatedPos = useListCalculatedPos();
+  const {updateListPosByListId, setListCulclulatedPos} = useListActions()
   const ref = useRef<HTMLDivElement>(null);
-  // const updateListQuery = useUpdateList();
-  // const reNumListsPosInBoard = useReNumListsPosInBoard();
-  // const handleUpdateListPos = (listId: string, newPos: number | null) => {
-  //   updateListQuery.mutate({
-  //     id: listId,
-  //     data: { pos: newPos },
-  //   });
-  // };
+  const updateListQuery = useUpdateList();
+  const reNumListsPosInBoard = useReNumListsPosInBoard();
+  const handleUpdateListPos = (listId: string, newPos: number | null) => {
+    updateListQuery.mutate({
+      id: listId,
+      data: { pos: newPos },
+    });
+  };
 
   const [{ isOver, itemType }, connectDrop] = useDrop<
     TDraggableElement,
@@ -53,7 +43,6 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
           if (!ref.current || draggedId === _id || !lists || !sortedLists) {
             return;
           }
-
           // Determine rectangle on screen
           const hoverBoundingRect = ref.current.getBoundingClientRect();
           // Get vertical middle
@@ -73,16 +62,11 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
             _id,
             targetPart,
           );
-          console.log(newPos);
-
-          // if (draggedId !== _id) {
-          //   const newPos = calculateNewPosition(lists, _id, draggedId);
-          //   setCalculatedPos(newPos);
-          //   if (newPos && newPos !== -1) {
-          //     updateListPosByListId(draggedId, newPos);
-          //   }
-          // }
-        }
+          setListCulclulatedPos(newPos)
+          if(newPos && newPos !==1) {
+            updateListPosByListId(draggedId, newPos)
+          }
+       }
 
         if (itemType === 'card') {
           // if (Object.keys(lists[_id].cards).length === 0)
@@ -90,19 +74,20 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
         }
       },
       drop({ _id: draggedId }) {
-        console.log(draggedId);
-        // if (calculatedPos === -1) {
-        //   reNumListsPosInBoard.mutate({
-        //     id: _id,
-        //     data: { action: 'renumbering' },
-        //   });
-        // }
-        // if (calculatedPos && calculatedPos > 0) {
-        //   if (itemType === 'lists') {
-        //     handleUpdateListPos(draggedId, calculatedPos);
-        //   }
-        // }
-        // setCalculatedPos(null);
+        console.log(draggedId, calculatedPos);
+        if (calculatedPos === -1) {
+          reNumListsPosInBoard.mutate({
+            id: _id,
+            data: { action: 'renumbering' },
+          });
+        }
+        if (calculatedPos && calculatedPos > 0) {
+          if (itemType === 'list') {
+            console.log('run update list query')
+            handleUpdateListPos(draggedId, calculatedPos);
+          }
+        }
+        setListCulclulatedPos(null);
       },
       collect: monitor => ({
         isOver: monitor.isOver({ shallow: true }),
