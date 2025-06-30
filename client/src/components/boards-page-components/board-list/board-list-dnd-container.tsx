@@ -5,7 +5,12 @@ import { Identifier } from 'dnd-core';
 import { useUpdateList } from '../../../api/lists-api-queries';
 import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
 import { TDraggableElement, IList } from '../../../utils/types';
-import { useListActions, useListCalculatedPos, useLists, useSortedLists } from '../../../services/list-store';
+import {
+  useListActions,
+  useListCalculatedPos,
+  useLists,
+  useSortedLists,
+} from '../../../services/list-store';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
 
 const BoardListDndContainer = memo(function BoradListDndContainer(
@@ -16,7 +21,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
   const lists = useLists();
   const sortedLists = useSortedLists();
   const calculatedPos = useListCalculatedPos();
-  const {updateListPosByListId, setListCulclulatedPos} = useListActions()
+  const { updateListPosByListId, setListCulclulatedPos } = useListActions();
   const ref = useRef<HTMLDivElement>(null);
   const updateListQuery = useUpdateList();
   const reNumListsPosInBoard = useReNumListsPosInBoard();
@@ -62,11 +67,11 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
             _id,
             targetPart,
           );
-          setListCulclulatedPos(newPos)
-          if(newPos && newPos !==1) {
-            updateListPosByListId(draggedId, newPos)
+          setListCulclulatedPos(newPos);
+          if (newPos && newPos !== 1) {
+            updateListPosByListId(draggedId, newPos);
           }
-       }
+        }
 
         if (itemType === 'card') {
           // if (Object.keys(lists[_id].cards).length === 0)
@@ -83,7 +88,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
         }
         if (calculatedPos && calculatedPos > 0) {
           if (itemType === 'list') {
-            console.log('run update list query')
+            console.log('run update list query');
             handleUpdateListPos(draggedId, calculatedPos);
           }
         }
