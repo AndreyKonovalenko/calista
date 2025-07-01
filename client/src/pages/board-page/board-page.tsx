@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Box, Typography, IconButton, Toolbar, Stack } from '@mui/material';
-import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -69,7 +68,7 @@ const BoardPage = () => {
   }, [id, lists, sortedList]);
 
   const boardLists = sortedList ? sortedList.map(key => {
-        return <BoardList _id={key} key={uuidv4()} />;
+        return <BoardList _id={key} key={key} />;
       })
     : null;
 

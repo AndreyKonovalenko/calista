@@ -7,6 +7,7 @@ interface IListActions {
   setLists: (data: {[key: string]: IList }) => void;
   updateListPosByListId: (draggedId: string, pos: number) => void;
   setListCulclulatedPos: (pos: number | null) => void
+  updateListNameBylistId: (id: string, name: string) => void
 }
 
 interface IListState {
@@ -32,7 +33,16 @@ const useListStore = create<IListState>()(
         }
       }
       }), undefined, "updateListPos"),
-      setListCulclulatedPos: (pos: number | null) => set(({listCalculatedPos: pos}), undefined, 'setListCalculatedPos')
+      setListCulclulatedPos: (pos: number | null) => set(({listCalculatedPos: pos}), undefined, 'setListCalculatedPos'),
+      updateListNameBylistId:(_id, name) => set(state => ({
+        lists: {
+          ...state.lists,
+          [_id]: {
+            ...state.lists[_id],
+              name: name      
+          }
+        }
+      })),
     }
   }),
     {name: 'listStore'} 

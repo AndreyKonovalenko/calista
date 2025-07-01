@@ -125,7 +125,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
       width: spacing(34),
       opacity: isDragging ? 0.3 : 1,
     }),
-    [isDragging],
+    [isDragging, spacing],
   );
 
   const style = {
