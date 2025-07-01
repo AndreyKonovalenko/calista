@@ -53,6 +53,8 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
           // Get vertical middle
           const hoverMiddleX =
             (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
+          const diff =
+            (hoverBoundingRect.right - hoverBoundingRect.left) * 0.25;
           // Determine mouse position
           const clientOffset = monitor.getClientOffset();
           // Get pixels to the top
@@ -60,19 +62,28 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
             return;
           }
           const hoverClientX = clientOffset.x - hoverBoundingRect.left;
-          const targetPart = hoverClientX > hoverMiddleX ? 'before' : 'after';
-          const newPos = calculateNewPosByTargetPart(
-            lists,
-            sortedLists,
-            _id,
-            targetPart,
-          );
-          setListCulclulatedPos(newPos);
-          if (newPos && newPos !== 1) {
-            updateListPosByListId(draggedId, newPos);
+          let targetPart;
+          if (hoverClientX > hoverMiddleX - diff) {
+            targetPart = 'before';
+          }
+          if (hoverClientX < hoverMiddleX + diff) {
+            targetPart = 'after';
+          }
+
+          if (targetPart === 'before' || targetPart === 'after') {
+            const newPos = calculateNewPosByTargetPart(
+              lists,
+              sortedLists,
+              _id,
+              targetPart,
+            );
+            setListCulclulatedPos(newPos);
+
+            if (newPos && newPos !== 1) {
+              updateListPosByListId(draggedId, newPos);
+            }
           }
         }
-
         if (itemType === 'card') {
           // if (Object.keys(lists[_id].cards).length === 0)
           //   moveCard(draggedId, _id, 16384);
