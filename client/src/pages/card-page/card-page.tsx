@@ -12,11 +12,11 @@ const CardPage = () => {
   const { spacing } = useTheme();
   const navigate = useNavigate();
   invariantId(id);
-  const card = useCard(id)
-  if(!card) {
-    return null
+  const card = useCard(id);
+  if (!card) {
+    return null;
   }
-  const {name} = card;
+  const { name } = card;
   // const { data, isSuccess, isLoading } = useFetchCardById(id);
   const deleteCardQuery = useDeleteCard();
 
@@ -63,7 +63,6 @@ const CardPage = () => {
       </Stack>
     </Paper>
   );
-  
-}
+};
 
 export default CardPage;

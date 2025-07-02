@@ -9,31 +9,31 @@ import { useUpdateList } from '../../../api/lists-api-queries';
 import AddItem from '../add-item/add-item';
 
 const styles = {
-  container:{
+  container: {
     stack: {
-          backgroundColor: 'listBackground.main',
-          borderRadius: 'inherit',
-          width: '100%',
-          position: 'relative',
-          flexShrink: 0,
-        },
+      backgroundColor: 'listBackground.main',
+      borderRadius: 'inherit',
+      width: '100%',
+      position: 'relative',
+      flexShrink: 0,
+    },
     box: {
-       pl: 2, 
-       pt: 2, 
-       pr: 2 
-    }  
+      pl: 2,
+      pt: 2,
+      pr: 2,
+    },
   },
   textarea: {
     box: {
-     cursor: 'pointer', 
+      cursor: 'pointer',
     },
     typography: {
       overflow: 'hidden',
       overflowWrap: 'anywhere',
-      resize: 'none',   
-    }
-  }
-}
+      resize: 'none',
+    },
+  },
+};
 
 const BoardListContent = (props: {
   _id: string;
@@ -55,7 +55,7 @@ const BoardListContent = (props: {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const listName = formData.get('listName');
-    console.log(name, listName)
+    console.log(name, listName);
     if (listName !== name) {
       updateListQuery.mutate({
         id: listId,
@@ -65,10 +65,7 @@ const BoardListContent = (props: {
   };
 
   return (
-    <Stack
-      spacing={2}
-      sx={styles.container.stack}
-    >
+    <Stack spacing={2} sx={styles.container.stack}>
       <Box
         sx={styles.container.box}
         component="form"
@@ -104,11 +101,11 @@ const BoardListContent = (props: {
               }}
             />
           ) : (
-            <Box onClick={() => setEditing(true)} sx={styles.textarea.typography}>
-              <Typography
-                sx={styles.textarea.box}
-                variant="h6"
-              >
+            <Box
+              onClick={() => setEditing(true)}
+              sx={styles.textarea.typography}
+            >
+              <Typography sx={styles.textarea.box} variant="h6">
                 {listName}
               </Typography>
             </Box>

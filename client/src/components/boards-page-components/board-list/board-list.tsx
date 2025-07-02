@@ -11,7 +11,7 @@ import { useSortedCardsByListId } from '../../../services/card-store';
 
 const BoardList = (props: { _id: string }) => {
   const { id: boardId } = useParams();
-  if (!boardId){
+  if (!boardId) {
     return null;
   }
   const { _id } = props;
@@ -21,8 +21,8 @@ const BoardList = (props: { _id: string }) => {
   }
   const { name, pos } = list;
   const { spacing } = useTheme();
-  const sorterdCards = useSortedCardsByListId(_id)
-  
+  const sorterdCards = useSortedCardsByListId(_id);
+
   // const createCardQuery = useCreateCard();
 
   // const handleCreateNewCard = (event: React.FormEvent<HTMLFormElement>) => {
@@ -63,12 +63,9 @@ const BoardList = (props: { _id: string }) => {
   //     />
   //   ));
 
-  const cardsList =  sorterdCards? sorterdCards.map(cardId=> 
-    <BoardCard 
-      key={uuidv4()}
-      _id={cardId}
-    />
-  ): null
+  const cardsList = sorterdCards
+    ? sorterdCards.map(cardId => <BoardCard key={uuidv4()} _id={cardId} />)
+    : null;
 
   return (
     <Box

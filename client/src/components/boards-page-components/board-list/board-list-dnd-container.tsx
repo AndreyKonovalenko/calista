@@ -13,6 +13,12 @@ import {
 } from '../../../services/list-store';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
 
+const previewStyle = {
+  filter: 'brightness(0)',
+  opacity: 0.2,
+  borderRadius: 'inherit',
+};
+
 const BoardListDndContainer = memo(function BoradListDndContainer(
   props: IList & { children: React.ReactNode },
 ) {
@@ -62,13 +68,15 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
             return;
           }
           const hoverClientX = clientOffset.x - hoverBoundingRect.left;
-          let targetPart;
-          if (hoverClientX > hoverMiddleX - diff) {
-            targetPart = 'before';
-          }
-          if (hoverClientX < hoverMiddleX + diff) {
-            targetPart = 'after';
-          }
+          // if the client gets into a segment of 25% form hoverMiddle, then newPos calculation starts
+          // if not, renders grey element preview  
+          const targetPart =
+            hoverClientX < hoverMiddleX + diff && hoverClientX > hoverMiddleX
+              ? 'before'
+              : hoverClientX > hoverMiddleX - diff &&
+                  hoverClientX < hoverMiddleX
+                ? 'after'
+                : undefined;
 
           if (targetPart === 'before' || targetPart === 'after') {
             const newPos = calculateNewPosByTargetPart(
@@ -139,11 +147,6 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
     [isDragging, spacing],
   );
 
-  const style = {
-    filter: 'brightness(0)',
-    opacity: 0.2,
-    borderRadius: 'inherit',
-  };
 
   connectDrag(ref);
   connectDrop(ref);
@@ -151,7 +154,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
   return (
     <Box sx={dragStyle} ref={ref}>
       {isOver && itemType === 'list' && !isDragging ? (
-        <Box sx={style}>{children}</Box>
+        <Box sx={previewStyle}>{children}</Box>
       ) : (
         children
       )}
