@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useEffect } from 'react';
 import { Box, Typography, Stack } from '@mui/material';
 import { TitleTextAreaStyled } from '../boards-page-styled-elements/boards-page-styled-elements';
 import BoardListActionMenu from '../board-list-action-menu/board-list-action-menu';
@@ -63,6 +63,12 @@ const BoardListContent = (props: {
       });
     }
   };
+
+  useEffect(()=> {
+    if (listName.length === 0) {
+      setListName(name)
+    }     
+  },[listName])
 
   return (
     <Stack spacing={2} sx={styles.container.stack}>
