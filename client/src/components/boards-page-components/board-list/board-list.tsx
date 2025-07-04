@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Box, useTheme, List } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router';
 import BoardCard from '../board-card/bard-card';
 import BoardListContent from './board-list-content';
 import BoardListDndContainer from './board-list-dnd-container';
-// import { useCreateCard } from '../../../api/cards-api-queries';
+import { useCreateCard } from '../../../api/cards-api-queries';
 import { useList } from '../../../services/list-store';
 import { useSortedCardsByListId } from '../../../services/card-store';
+import { useCards } from '../../../services/card-store';
 
 const BoardList = (props: { _id: string }) => {
   const { id: boardId } = useParams();
@@ -22,46 +23,27 @@ const BoardList = (props: { _id: string }) => {
   const { name, pos } = list;
   const { spacing } = useTheme();
   const sorterdCards = useSortedCardsByListId(_id);
+  const cards = useCards();
 
-  // const createCardQuery = useCreateCard();
+  const createCardQuery = useCreateCard();
 
-  // const handleCreateNewCard = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   let pos = 16384;
-  //   const keysArr = Object.keys(cards);
-  //   if (keysArr.length > 0) {
-  //     keysArr.sort((a, b) => {
-  //       if (cards[a].pos < cards[b].pos) return -1;
-  //       if (cards[a].pos > cards[b].pos) return 1;
-  //       return 0;
-  //     });
-  //     const last = cards[keysArr[keysArr.length - 1]].pos;
-  //     pos = pos + last;
-  //   }
-  //   const formData = new FormData(event.currentTarget);
-  //   createCardQuery.mutate({
-  //     name: formData.get('newItemName'),
-  //     boardId: boardId,
-  //     listId: _id,
-  //     pos: pos,
-  //   });
-  // };
-
-  // const cardsList = Object.keys(cards)
-  //   .sort((a, b) => {
-  //     if (cards[a].pos < cards[b].pos) return -1;
-  //     if (cards[a].pos > cards[b].pos) return 1;
-  //     return 0;
-  //   })
-  //   .map(key => (
-  //     <BoardCard
-  //       key={uuidv4()}
-  //       name={cards[key].name}
-  //       _id={cards[key]._id}
-  //       pos={cards[key].pos}
-  //       listId={_id}
-  //     />
-  //   ));
+  const handleCreateNewCard = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      let pos = 16384;
+      if (cards && sorterdCards && sorterdCards?.length > 0) {
+        pos = cards[sorterdCards[sorterdCards.length - 1]].pos + pos;
+      }
+      const formData = new FormData(event.currentTarget);
+      createCardQuery.mutate({
+        name: formData.get('newItemName'),
+        boardId: boardId,
+        listId: _id,
+        pos: pos,
+      });
+    },
+    [_id, cards, sorterdCards],
+  );
 
   const cardsList = sorterdCards
     ? sorterdCards.map(cardId => <BoardCard key={uuidv4()} _id={cardId} />)
@@ -75,7 +57,11 @@ const BoardList = (props: { _id: string }) => {
       }}
     >
       <BoardListDndContainer _id={_id} name={name} pos={pos}>
-        <BoardListContent name={name} _id={_id} handleCreateNewCard={() => {}}>
+        <BoardListContent
+          name={name}
+          _id={_id}
+          handleCreateNewCard={handleCreateNewCard}
+        >
           <List
             sx={{
               display: 'flex',

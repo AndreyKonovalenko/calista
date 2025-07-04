@@ -69,7 +69,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
           }
           const hoverClientX = clientOffset.x - hoverBoundingRect.left;
           // if the client gets into a segment of 25% form hoverMiddle, then newPos calculation starts
-          // if not, renders grey element preview  
+          // if not, renders grey element preview
           const targetPart =
             hoverClientX < hoverMiddleX + diff && hoverClientX > hoverMiddleX
               ? 'before'
@@ -146,7 +146,6 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
     }),
     [isDragging, spacing],
   );
-
 
   connectDrag(ref);
   connectDrop(ref);

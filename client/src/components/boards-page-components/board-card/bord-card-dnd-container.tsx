@@ -7,6 +7,19 @@ import { TDraggableElement } from '../../../utils/types';
 // import { useBoardStore } from '../../../services/boards/board-store';
 // import { useReNumCardsPosInBoard } from '../../../api/lists-api-queries';
 // import { useUpdateCard } from '../../../api/cards-api-queries';
+import { useSortedCardsByListId, useCards } from '../../../services/card-store';
+import { calculateNewPosByTargetPart } from '../../../utils/utils';
+
+const styles = {
+  link: {
+    width: '100%',
+  },
+  previewStyle: {
+    filter: 'brightness(0)',
+    opacity: 0.2,
+    borderRadius: 'inherit',
+  },
+};
 
 const BoardCardDndContainer = (props: {
   _id: string;
@@ -17,13 +30,15 @@ const BoardCardDndContainer = (props: {
   const ref = useRef<HTMLAnchorElement>(null);
   // const reNumCardsPosInBoard = useReNumCardsPosInBoard();
   const { _id, children, pos, listId } = props;
+  const cards = useCards();
+  const sortedCardsByListId = useSortedCardsByListId(listId);
   const location = useLocation();
   // const { calculatedPos, lists, setCalculatedPos, moveCard } = useBoardStore(
   //   state => state,
   // );
   // const updateCardQuery = useUpdateCard();
   // const handleUpdateCardPos = (
-  //   cardId: string,
+  //   cardId: string,l
   //   newPos: number,
   //   newListId: string,
   // ) => {
@@ -42,7 +57,7 @@ const BoardCardDndContainer = (props: {
   >({
     accept: ['card'],
     hover({ _id: draggedId }, monitor) {
-      if (!ref.current || draggedId === _id) {
+      if (!ref.current || draggedId === _id || !cards || !sortedCardsByListId) {
         return;
       }
       // Determine rectangle on screen
@@ -59,6 +74,14 @@ const BoardCardDndContainer = (props: {
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
       const targetPart = hoverClientY > hoverMiddleY ? 'before' : 'after';
       console.log(targetPart);
+      const newPos = calculateNewPosByTargetPart(
+        cards,
+        sortedCardsByListId,
+        _id,
+        targetPart,
+      );
+      console.log(newPos);
+
       // const newPos = calculateNewPosByTargetPart(
       //   lists[listId].cards,
       //   _id,
@@ -111,7 +134,7 @@ const BoardCardDndContainer = (props: {
   return (
     <ListItem>
       <Link
-        sx={{ width: '100%' }}
+        sx={styles.link}
         ref={ref}
         to={`cards/${_id}`}
         component={RouterLink}
@@ -119,15 +142,7 @@ const BoardCardDndContainer = (props: {
         underline="none"
       >
         {isOver && !isDragging ? (
-          <Box
-            sx={{
-              filter: 'brightness(0)',
-              opacity: 0.2,
-              borderRadius: 'inherit',
-            }}
-          >
-            {children}
-          </Box>
+          <Box sx={styles.previewStyle}>{children}</Box>
         ) : (
           children
         )}

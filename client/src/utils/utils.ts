@@ -1,4 +1,4 @@
-import { ICardTrimmed, IList, TList } from './types';
+import { ICard, ICardTrimmed, IList, TList } from './types';
 
 export default function validEnv(name: string | undefined): string {
   if (!name) {
@@ -15,7 +15,7 @@ export function invariantId(value: string | undefined): asserts value {
 }
 
 export function calculateNewPosByTargetPart(
-  obj: { [key: string]: IList },
+  obj: { [key: string]: IList | ICard },
   orderedLists: string[],
   dropId: string,
   targetPart: 'before' | 'after',

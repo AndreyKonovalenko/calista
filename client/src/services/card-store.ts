@@ -8,14 +8,14 @@ interface ICardActions {
 }
 
 interface ICardStore {
-  cards: { [key: string]: ICard } | null;
+  cards: { [key: string]: ICard };
   cardCalculatedPos: number | null;
   actions: ICardActions;
 }
 
 const useCardStore = create<ICardStore>()(
   devtools(set => ({
-    cards: null,
+    cards: {},
     cardCalculatedPos: null,
     actions: {
       setCards: cards => set({ cards }, undefined, 'setCards'),
@@ -24,6 +24,7 @@ const useCardStore = create<ICardStore>()(
 );
 
 export const useCardActions = () => useCardStore(state => state.actions);
+export const useCards = () => useCardStore(state => state.cards);
 export const useCard = (id: string) =>
   useCardStore(state => (state.cards ? state.cards[id] : null));
 export const useSortedCardsByListId = (listId: string) =>
@@ -34,7 +35,7 @@ const getMemoizedCards = createSelector(
   [selectCards, selectListId],
   (cards: { [key: string]: ICard } | null, listId: string) => {
     if (!cards || !listId) {
-      return null;
+      return;
     }
     const result = Object.keys(cards)
       .filter(key => cards[key].listId === listId)

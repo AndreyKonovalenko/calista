@@ -64,11 +64,11 @@ const BoardListContent = (props: {
     }
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     if (listName.length === 0) {
-      setListName(name)
-    }     
-  },[listName])
+      setListName(name);
+    }
+  }, [listName]);
 
   return (
     <Stack spacing={2} sx={styles.container.stack}>
