@@ -7,7 +7,11 @@ import { TDraggableElement } from '../../../utils/types';
 // import { useBoardStore } from '../../../services/boards/board-store';
 // import { useReNumCardsPosInBoard } from '../../../api/lists-api-queries';
 // import { useUpdateCard } from '../../../api/cards-api-queries';
-import { useSortedCardsByListId, useCards } from '../../../services/card-store';
+import {
+  useSortedCardsByListId,
+  useCards,
+  useCardActions,
+} from '../../../services/card-store';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
 
 const styles = {
@@ -29,6 +33,7 @@ const BoardCardDndContainer = (props: {
 }) => {
   const ref = useRef<HTMLAnchorElement>(null);
   // const reNumCardsPosInBoard = useReNumCardsPosInBoard();
+  const { moveCard } = useCardActions();
   const { _id, children, pos, listId } = props;
   const cards = useCards();
   const sortedCardsByListId = useSortedCardsByListId(listId);
@@ -88,9 +93,9 @@ const BoardCardDndContainer = (props: {
       //   targetPart,
       // );
       // setCalculatedPos(newPos);
-      // if (newPos && newPos !== -1) {
-      //   moveCard(draggedId, listId, newPos);
-      // }
+      if (newPos && newPos !== -1) {
+        moveCard(draggedId, listId, newPos);
+      }
     },
     drop({ _id: draggedId }) {
       console.log(draggedId);

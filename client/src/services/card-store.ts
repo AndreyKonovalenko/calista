@@ -5,6 +5,7 @@ import { ICard } from '../utils/types';
 
 interface ICardActions {
   setCards: (data: { [kay: string]: ICard }) => void;
+  moveCard: (draggedId: string, listId: string, pos: number) => void;
 }
 
 interface ICardStore {
@@ -14,13 +15,31 @@ interface ICardStore {
 }
 
 const useCardStore = create<ICardStore>()(
-  devtools(set => ({
-    cards: {},
-    cardCalculatedPos: null,
-    actions: {
-      setCards: cards => set({ cards }, undefined, 'setCards'),
-    },
-  })),
+  devtools(
+    set => ({
+      cards: {},
+      cardCalculatedPos: null,
+      actions: {
+        setCards: cards => set({ cards }, undefined, 'setCards'),
+        moveCard: (draggedId, listId, pos) =>
+          set(
+            state => ({
+              cards: {
+                ...state.cards,
+                [draggedId]: {
+                  ...state.cards[draggedId],
+                  listId: listId,
+                  pos: pos,
+                },
+              },
+            }),
+            undefined,
+            'moveCard',
+          ),
+      },
+    }),
+    { name: 'cardStore' },
+  ),
 );
 
 export const useCardActions = () => useCardStore(state => state.actions);
