@@ -1,4 +1,4 @@
-import React, { memo, useRef, useMemo } from 'react';
+import React, { memo, useRef, useMemo, useEffect } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { useDrop, useDrag } from 'react-dnd';
 import { Identifier } from 'dnd-core';
@@ -12,7 +12,7 @@ import {
   useSortedLists,
 } from '../../../services/list-store';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
-import { useCards, useSortedCardsByListId } from '../../../services/card-store';
+import { useCardActions } from '../../../services/card-store';
 
 const previewStyle = {
   filter: 'brightness(0)',
@@ -27,14 +27,13 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
   const { spacing } = useTheme();
   const lists = useLists();
   const sortedLists = useSortedLists();
-  const cards = useCards();
   const calculatedPos = useListCalculatedPos();
   const { updateListPosByListId, setListCulclulatedPos } = useListActions();
+  const { moveCard } = useCardActions();
   const ref = useRef<HTMLDivElement>(null);
-  const sortedCurdsbyListId = useSortedCardsByListId(_id);
+
   const updateListQuery = useUpdateList();
   const reNumListsPosInBoard = useReNumListsPosInBoard();
-
   const handleUpdateListPos = (listId: string, newPos: number | null) => {
     updateListQuery.mutate({
       id: listId,
@@ -55,10 +54,10 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
       hover({ _id: draggedId }, monitor) {
         const itemType = monitor.getItemType();
         const item = monitor.getItem();
+        if (!ref.current || draggedId === _id || !lists || !sortedLists) {
+          return;
+        }
         if (itemType === 'list') {
-          if (!ref.current || draggedId === _id || !lists || !sortedLists) {
-            return;
-          }
           // Determine rectangle on screen
           const hoverBoundingRect = ref.current.getBoundingClientRect();
           // Get vertical middle
@@ -96,12 +95,8 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
             }
           }
         }
-        if (
-          itemType === 'card' &&
-          item.listId !== _id &&
-          sortedCurdsbyListId.length === 0
-        ) {
-          console.log(cards[draggedId]);
+        if (itemType === 'card' && item.listId !== _id) {
+          moveCard(draggedId, _id, 16384);
           console.log('item type card');
         }
       },
@@ -153,6 +148,10 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
     }),
     [isDragging, spacing],
   );
+
+  useEffect(() => {
+    console.log('list rerender');
+  }, []);
 
   connectDrag(ref);
   connectDrop(ref);
