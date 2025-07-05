@@ -6,6 +6,7 @@ import { ICard } from '../utils/types';
 interface ICardActions {
   setCards: (data: { [kay: string]: ICard }) => void;
   moveCard: (draggedId: string, listId: string, pos: number) => void;
+  setCardCalculatedPos: (pos: number | null) => void;
 }
 
 interface ICardStore {
@@ -21,6 +22,8 @@ const useCardStore = create<ICardStore>()(
       cardCalculatedPos: null,
       actions: {
         setCards: cards => set({ cards }, undefined, 'setCards'),
+        setCardCalculatedPos: (pos: number | null) =>
+          set({ cardCalculatedPos: pos }, undefined, 'setCardCalculatedPos'),
         moveCard: (draggedId, listId, pos) =>
           set(
             state => ({
@@ -43,6 +46,8 @@ const useCardStore = create<ICardStore>()(
 );
 
 export const useCardActions = () => useCardStore(state => state.actions);
+export const useCardCalculatedPos = () =>
+  useCardStore(state => state.cardCalculatedPos);
 export const useCards = () => useCardStore(state => state.cards);
 export const useCard = (id: string) =>
   useCardStore(state => (state.cards ? state.cards[id] : null));
@@ -52,10 +57,7 @@ const selectCards = (state: ICardStore) => state.cards;
 const selectListId = (_: ICardStore, listId: string) => listId;
 const getMemoizedCards = createSelector(
   [selectCards, selectListId],
-  (cards: { [key: string]: ICard } | null, listId: string) => {
-    if (!cards || !listId) {
-      return;
-    }
+  (cards: { [key: string]: ICard }, listId: string) => {
     const result = Object.keys(cards)
       .filter(key => cards[key].listId === listId)
       .sort((a: string, b: string): number => {

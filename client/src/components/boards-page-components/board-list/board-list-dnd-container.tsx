@@ -12,6 +12,10 @@ import {
   useSortedLists,
 } from '../../../services/list-store';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
+import {
+  useCardActions,
+  useSortedCardsByListId,
+} from '../../../services/card-store';
 
 const previewStyle = {
   filter: 'brightness(0)',
@@ -31,6 +35,12 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
   const ref = useRef<HTMLDivElement>(null);
   const updateListQuery = useUpdateList();
   const reNumListsPosInBoard = useReNumListsPosInBoard();
+  const { moveCard } = useCardActions();
+  const sortedCardsByListId = useSortedCardsByListId(_id);
+  const emptyList = useMemo(
+    () => Boolean(sortedCardsByListId.length === 0),
+    [sortedCardsByListId],
+  );
   const handleUpdateListPos = (listId: string, newPos: number | null) => {
     updateListQuery.mutate({
       id: listId,
@@ -39,7 +49,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
   };
 
   const [{ isOver, itemType }, connectDrop] = useDrop<
-    TDraggableElement,
+    TDraggableElement & { listId: string },
     unknown,
     {
       isOver: boolean;
@@ -85,16 +95,20 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
               _id,
               targetPart,
             );
-            setListCulclulatedPos(newPos);
-
             if (newPos && newPos !== 1) {
+              setListCulclulatedPos(newPos);
               updateListPosByListId(draggedId, newPos);
             }
           }
         }
         if (itemType === 'card') {
-          // if (Object.keys(lists[_id].cards).length === 0)
-          //   moveCard(draggedId, _id, 16384);
+          const item = monitor.getItem();
+          if (item.listId === _id) {
+            return;
+          }
+          if (emptyList) {
+            moveCard(draggedId, _id, 16384);
+          }
         }
       },
       drop({ _id: draggedId }) {

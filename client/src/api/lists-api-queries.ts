@@ -57,7 +57,6 @@ export const useReNumCardsPosInBoard = () => {
 };
 
 export const useUpdateList = () => {
-  console.log('useUpdatelist');
   return useMutation({
     mutationFn: api.lists.updateList,
   });

@@ -1,16 +1,15 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { useLocation, Link as RouterLink } from 'react-router';
 import { Box, Link, ListItem } from '@mui/material';
 import { useDrop, useDrag } from 'react-dnd';
 import { TDraggableElement } from '../../../utils/types';
-// import { calculateNewPosByTargetPart } from '../../../utils/utils';
-// import { useBoardStore } from '../../../services/boards/board-store';
-// import { useReNumCardsPosInBoard } from '../../../api/lists-api-queries';
-// import { useUpdateCard } from '../../../api/cards-api-queries';
+import { useReNumCardsPosInBoard } from '../../../api/lists-api-queries';
+import { useUpdateCard } from '../../../api/cards-api-queries';
 import {
   useSortedCardsByListId,
   useCards,
   useCardActions,
+  useCardCalculatedPos,
 } from '../../../services/card-store';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
 
@@ -32,26 +31,25 @@ const BoardCardDndContainer = (props: {
   pos: number;
 }) => {
   const ref = useRef<HTMLAnchorElement>(null);
-  // const reNumCardsPosInBoard = useReNumCardsPosInBoard();
-  const { moveCard } = useCardActions();
   const { _id, children, pos, listId } = props;
+  const reNumCardsPosInBoard = useReNumCardsPosInBoard();
+  const { moveCard, setCardCalculatedPos } = useCardActions();
   const cards = useCards();
   const sortedCardsByListId = useSortedCardsByListId(listId);
+  const cardCalculatedPod = useCardCalculatedPos();
   const location = useLocation();
-  // const { calculatedPos, lists, setCalculatedPos, moveCard } = useBoardStore(
-  //   state => state,
-  // );
-  // const updateCardQuery = useUpdateCard();
-  // const handleUpdateCardPos = (
-  //   cardId: string,l
-  //   newPos: number,
-  //   newListId: string,
-  // ) => {
-  //   updateCardQuery.mutate({
-  //     id: cardId,
-  //     data: { pos: newPos, listId: newListId },
-  //   });
-  // };
+
+  const updateCardQuery = useUpdateCard();
+  const handleUpdateCardPos = (
+    cardId: string,
+    newPos: number,
+    newListId: string,
+  ) => {
+    updateCardQuery.mutate({
+      id: cardId,
+      data: { pos: newPos, listId: newListId },
+    });
+  };
 
   const [{ isOver }, connectDrop] = useDrop<
     TDraggableElement & { listId: string },
@@ -78,39 +76,28 @@ const BoardCardDndContainer = (props: {
       }
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
       const targetPart = hoverClientY > hoverMiddleY ? 'before' : 'after';
-      console.log(targetPart);
       const newPos = calculateNewPosByTargetPart(
         cards,
         sortedCardsByListId,
         _id,
         targetPart,
       );
-      console.log(newPos);
-
-      // const newPos = calculateNewPosByTargetPart(
-      //   lists[listId].cards,
-      //   _id,
-      //   targetPart,
-      // );
-      // setCalculatedPos(newPos);
       if (newPos && newPos !== -1) {
+        setCardCalculatedPos(newPos);
         moveCard(draggedId, listId, newPos);
       }
     },
     drop({ _id: draggedId }) {
-      console.log(draggedId);
-      // console.log(calculatedPos);
-      // if (calculatedPos === -1) {
-      //   reNumCardsPosInBoard.mutate({
-      //     id: _id,
-      //     data: { action: 'renumbering' },
-      //   });
-      // }
-      // if (calculatedPos && calculatedPos > 0) {
-      //   console.log(calculatedPos);
-      //   handleUpdateCardPos(draggedId, calculatedPos, listId);
-      // }
-      // setCalculatedPos(null);
+      if (cardCalculatedPod === -1) {
+        reNumCardsPosInBoard.mutate({
+          id: _id,
+          data: { action: 'renumbering' },
+        });
+      }
+      if (cardCalculatedPod && cardCalculatedPod > 0) {
+        handleUpdateCardPos(draggedId, cardCalculatedPod, listId);
+      }
+      setCardCalculatedPos(null);
     },
     collect: monitor => ({
       isOver: monitor.isOver({ shallow: true }),
@@ -132,9 +119,6 @@ const BoardCardDndContainer = (props: {
 
   connectDrag(ref);
   connectDrop(ref);
-  useEffect(() => {
-    console.log('Card rerenders', _id);
-  }, [_id]);
 
   return (
     <ListItem>
