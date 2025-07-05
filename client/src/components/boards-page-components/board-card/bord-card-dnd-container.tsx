@@ -60,6 +60,7 @@ const BoardCardDndContainer = (props: {
   >({
     accept: ['card'],
     hover({ _id: draggedId }, monitor) {
+      console.log('hover card', Boolean(draggedId === _id));
       if (!ref.current || draggedId === _id || !cards || !sortedCardsByListId) {
         return;
       }

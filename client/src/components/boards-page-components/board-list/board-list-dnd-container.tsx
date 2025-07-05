@@ -12,10 +12,7 @@ import {
   useSortedLists,
 } from '../../../services/list-store';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
-import {
-  useCardActions,
-  useSortedCardsByListId,
-} from '../../../services/card-store';
+import { useCards, useSortedCardsByListId } from '../../../services/card-store';
 
 const previewStyle = {
   filter: 'brightness(0)',
@@ -30,17 +27,14 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
   const { spacing } = useTheme();
   const lists = useLists();
   const sortedLists = useSortedLists();
+  const cards = useCards();
   const calculatedPos = useListCalculatedPos();
   const { updateListPosByListId, setListCulclulatedPos } = useListActions();
   const ref = useRef<HTMLDivElement>(null);
+  const sortedCurdsbyListId = useSortedCardsByListId(_id);
   const updateListQuery = useUpdateList();
   const reNumListsPosInBoard = useReNumListsPosInBoard();
-  const { moveCard } = useCardActions();
-  const sortedCardsByListId = useSortedCardsByListId(_id);
-  const emptyList = useMemo(
-    () => Boolean(sortedCardsByListId.length === 0),
-    [sortedCardsByListId],
-  );
+
   const handleUpdateListPos = (listId: string, newPos: number | null) => {
     updateListQuery.mutate({
       id: listId,
@@ -60,6 +54,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
       accept: ['list', 'card'],
       hover({ _id: draggedId }, monitor) {
         const itemType = monitor.getItemType();
+        const item = monitor.getItem();
         if (itemType === 'list') {
           if (!ref.current || draggedId === _id || !lists || !sortedLists) {
             return;
@@ -101,14 +96,13 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
             }
           }
         }
-        if (itemType === 'card') {
-          const item = monitor.getItem();
-          if (item.listId === _id) {
-            return;
-          }
-          if (emptyList) {
-            moveCard(draggedId, _id, 16384);
-          }
+        if (
+          itemType === 'card' &&
+          item.listId !== _id &&
+          sortedCurdsbyListId.length === 0
+        ) {
+          console.log(cards[draggedId]);
+          console.log('item type card');
         }
       },
       drop({ _id: draggedId }) {
@@ -130,7 +124,6 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
       collect: monitor => ({
         isOver: monitor.isOver({ shallow: true }),
         itemType: monitor.getItemType(),
-        differenceOffset: monitor.getDifferenceFromInitialOffset(),
       }),
     },
     [_id, sortedLists, lists, calculateNewPosByTargetPart],
