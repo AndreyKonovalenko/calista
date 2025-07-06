@@ -12,8 +12,8 @@ import {
   useSortedLists,
 } from '../../../services/list-store';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
+import { useListNotEmpty } from '../../../services/card-store';
 import { useCardActions } from '../../../services/card-store';
-
 const previewStyle = {
   filter: 'brightness(0)',
   opacity: 0.2,
@@ -28,6 +28,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
   const lists = useLists();
   const sortedLists = useSortedLists();
   const calculatedPos = useListCalculatedPos();
+  const listHasCards = useListNotEmpty(_id);
   const { updateListPosByListId, setListCulclulatedPos } = useListActions();
   const { moveCard } = useCardActions();
   const ref = useRef<HTMLDivElement>(null);
@@ -95,7 +96,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
             }
           }
         }
-        if (itemType === 'card' && item.listId !== _id) {
+        if (itemType === 'card' && item.listId !== _id && !listHasCards) {
           moveCard(draggedId, _id, 16384);
           console.log('item type card');
         }
