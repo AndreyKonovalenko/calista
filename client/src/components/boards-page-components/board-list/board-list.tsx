@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Box, useTheme, List } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router';
@@ -49,6 +49,10 @@ const BoardList = (props: { _id: string }) => {
     ? sorterdCards.map(cardId => <BoardCard key={uuidv4()} _id={cardId} />)
     : null;
 
+  useEffect(()=>{
+    console.log('board-list rerender')
+  },[])
+
   return (
     <Box
       sx={{
@@ -56,7 +60,7 @@ const BoardList = (props: { _id: string }) => {
         borderRadius: spacing(2),
       }}
     >
-      <BoardListDndContainer _id={_id} name={name} pos={pos}>
+      <BoardListDndContainer _id={_id} name={name} pos={pos} hasCards={cardsList && cardsList?.length > 0 ? true: false}>
         <BoardListContent
           name={name}
           _id={_id}

@@ -15,7 +15,7 @@ interface ICardStore {
   actions: ICardActions;
 }
 
-const useCardStore = create<ICardStore>()(
+export const useCardStore = create<ICardStore>()(
   devtools(
     set => ({
       cards: {},

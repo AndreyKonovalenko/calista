@@ -1,4 +1,4 @@
-import React, { memo, useRef, useMemo, useEffect } from 'react';
+import React, { memo, useRef, useMemo} from 'react';
 import { Box, useTheme } from '@mui/material';
 import { useDrop, useDrag } from 'react-dnd';
 import { Identifier } from 'dnd-core';
@@ -12,7 +12,6 @@ import {
   useSortedLists,
 } from '../../../services/list-store';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
-import { useListNotEmpty } from '../../../services/card-store';
 import { useCardActions } from '../../../services/card-store';
 const previewStyle = {
   filter: 'brightness(0)',
@@ -21,16 +20,16 @@ const previewStyle = {
 };
 
 const BoardListDndContainer = memo(function BoradListDndContainer(
-  props: IList & { children: React.ReactNode },
+  props: IList & { children: React.ReactNode  } & {hasCards: boolean},
 ) {
-  const { _id, children, name, pos } = props;
+  const { _id, children, name, pos, hasCards } = props;
   const { spacing } = useTheme();
   const lists = useLists();
   const sortedLists = useSortedLists();
   const calculatedPos = useListCalculatedPos();
-  const listHasCards = useListNotEmpty(_id);
   const { updateListPosByListId, setListCulclulatedPos } = useListActions();
   const { moveCard } = useCardActions();
+
   const ref = useRef<HTMLDivElement>(null);
 
   const updateListQuery = useUpdateList();
@@ -52,7 +51,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
   >(
     {
       accept: ['list', 'card'],
-      hover({ _id: draggedId }, monitor) {
+      hover({ _id: draggedId }, monitor) {<s></s>
         const itemType = monitor.getItemType();
         const item = monitor.getItem();
         if (!ref.current || draggedId === _id || !lists || !sortedLists) {
@@ -96,10 +95,11 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
             }
           }
         }
-        if (itemType === 'card' && item.listId !== _id && !listHasCards) {
+        if (itemType === 'card' && item.listId !== _id &&  !hasCards ) {
+          console.log(hasCards)
+          console.log('move card')
           moveCard(draggedId, _id, 16384);
-          console.log('item type card');
-        }
+        }                  
       },
       drop({ _id: draggedId }) {
         console.log(draggedId, calculatedPos);
@@ -122,7 +122,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
         itemType: monitor.getItemType(),
       }),
     },
-    [_id, sortedLists, lists, calculateNewPosByTargetPart],
+    [_id, sortedLists, lists, calculateNewPosByTargetPart, hasCards],
   );
 
   const [{ isDragging }, connectDrag] = useDrag<
@@ -149,10 +149,6 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
     }),
     [isDragging, spacing],
   );
-
-  useEffect(() => {
-    console.log('list rerender');
-  }, []);
 
   connectDrag(ref);
   connectDrop(ref);
