@@ -129,6 +129,8 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
         }
         if (itemType === 'card') {
           console.log(hasCards);
+
+          return {listId: _id, draggedId:draggedId, dropped: true}
           // handleUpdateCardPos(draggedId, _id, 16384);
           // setCardCalculatedPos(null)
         }

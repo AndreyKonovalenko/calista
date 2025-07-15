@@ -114,6 +114,12 @@ const BoardCardDndContainer = (props: {
   >({
     type: 'card',
     item: { _id, pos, listId },
+    end({_id: draggedId}, monitor){
+      if(monitor.didDrop()){
+        console.log(monitor.getDropResult(), 'draggadeId', draggedId)
+      }
+    },
+
     collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),
