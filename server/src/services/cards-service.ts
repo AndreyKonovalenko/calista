@@ -52,10 +52,13 @@ export async function updateCardById(
     const card = await CardModel.findById(new Types.ObjectId(id));
     // inside one list
     if (card && card.listId.equals(new Types.ObjectId(data.listId as string))) {
-      delete data.listId;
-      await CardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
-        new: true,
-      });
+      await CardModel.findByIdAndUpdate(
+        new Types.ObjectId(id),
+        { pos: data.pos },
+        {
+          new: true,
+        },
+      );
     }
     // between lists
     if (
@@ -88,7 +91,9 @@ export async function updateCardById(
   }
 
   // generel update
-  await CardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
-    new: true,
-  });
+  if (!Object.prototype.hasOwnProperty.call(data, 'listId')) {
+    await CardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
+      new: true,
+    });
+  }
 }

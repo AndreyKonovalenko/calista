@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { Box, useTheme, List } from '@mui/material';
+import { Box, List } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router';
 import BoardCard from '../board-card/bard-card';
@@ -21,7 +21,6 @@ const BoardList = (props: { _id: string }) => {
     return null;
   }
   const { name, pos } = list;
-  const { spacing } = useTheme();
   const sorterdCards = useSortedCardsByListId(_id);
   const cards = useCards();
 
@@ -49,18 +48,23 @@ const BoardList = (props: { _id: string }) => {
     ? sorterdCards.map(cardId => <BoardCard key={uuidv4()} _id={cardId} />)
     : null;
 
-  useEffect(()=>{
-    console.log('board-list rerender')
-  },[])
+  useEffect(() => {
+    console.log('board-list rerender');
+  }, []);
 
   return (
     <Box
       sx={{
-        width: spacing(34),
-        borderRadius: spacing(2),
+        width: 272,
+        borderRadius: 2,
       }}
     >
-      <BoardListDndContainer _id={_id} name={name} pos={pos} hasCards={cardsList && cardsList?.length > 0 ? true: false}>
+      <BoardListDndContainer
+        _id={_id}
+        name={name}
+        pos={pos}
+        hasCards={cardsList && cardsList?.length > 0 ? true : false}
+      >
         <BoardListContent
           name={name}
           _id={_id}

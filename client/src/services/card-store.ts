@@ -15,7 +15,7 @@ interface ICardStore {
   actions: ICardActions;
 }
 
-export const useCardStore = create<ICardStore>()(
+const useCardStore = create<ICardStore>()(
   devtools(
     set => ({
       cards: {},
@@ -53,8 +53,6 @@ export const useCard = (id: string) =>
   useCardStore(state => (state.cards ? state.cards[id] : null));
 export const useSortedCardsByListId = (listId: string) =>
   useCardStore(state => getMemoizedCards(state, listId));
-export const useListNotEmpty = (listId: string) =>
-  useCardStore(state => getMomoGardsBylistId(state, listId));
 const selectCards = (state: ICardStore) => state.cards;
 const selectListId = (_: ICardStore, listId: string) => listId;
 const getMemoizedCards = createSelector(
@@ -70,16 +68,5 @@ const getMemoizedCards = createSelector(
         return 0;
       });
     return result;
-  },
-);
-
-const getMomoGardsBylistId = createSelector(
-  [selectCards, selectListId],
-  (cards: { [key: string]: ICard }, listId: string) => {
-    const result = Object.keys(cards).filter(
-      key => cards[key].listId === listId,
-    );
-    console.log(result.length > 0 ? true : false);
-    return result.length > 0 ? true : false;
   },
 );

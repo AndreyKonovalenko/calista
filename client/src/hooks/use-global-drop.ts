@@ -13,7 +13,7 @@ export const useGlobalDrop = () => {
       if (monitor.isOver({ shallow: true })) handleDropOutside(item);
       const didDrop = monitor.didDrop();
       if (didDrop) {
-        console.log('doped on child');
+        console.log('droped on child');
       }
     },
   });

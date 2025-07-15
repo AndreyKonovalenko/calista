@@ -72,6 +72,5 @@ const getMemoizedList = createSelector([state => state.lists], lists => {
     }
     return 0;
   });
-
   return sorted;
 });

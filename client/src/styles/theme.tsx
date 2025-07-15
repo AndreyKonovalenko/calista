@@ -39,4 +39,7 @@ export const theme: Theme = createTheme({
       main: '#A8A9AA',
     },
   },
+  shape: {
+    borderRadius: 8,
+  },
 });

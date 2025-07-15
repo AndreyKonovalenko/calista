@@ -38,8 +38,8 @@ const BoardCardDndContainer = (props: {
   const sortedCardsByListId = useSortedCardsByListId(listId);
   const cardCalculatedPod = useCardCalculatedPos();
   const location = useLocation();
-
   const updateCardQuery = useUpdateCard();
+
   const handleUpdateCardPos = (
     cardId: string,
     newPos: number,
@@ -88,6 +88,7 @@ const BoardCardDndContainer = (props: {
       }
     },
     drop({ _id: draggedId }) {
+      console.log(draggedId, _id);
       if (cardCalculatedPod === -1) {
         reNumCardsPosInBoard.mutate({
           id: _id,
@@ -95,6 +96,7 @@ const BoardCardDndContainer = (props: {
         });
       }
       if (cardCalculatedPod && cardCalculatedPod > 0) {
+        console.log('card update from card dnd component');
         handleUpdateCardPos(draggedId, cardCalculatedPod, listId);
       }
       setCardCalculatedPos(null);
