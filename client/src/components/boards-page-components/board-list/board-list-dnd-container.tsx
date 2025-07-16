@@ -130,7 +130,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
         if (itemType === 'card') {
           console.log(hasCards);
 
-          return {listId: _id, draggedId:draggedId, dropped: true}
+          return {listId: _id, draggedId:draggedId, dropped: true, targetType: 'list'}
           // handleUpdateCardPos(draggedId, _id, 16384);
           // setCardCalculatedPos(null)
         }

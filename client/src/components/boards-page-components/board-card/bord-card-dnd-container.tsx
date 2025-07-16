@@ -36,7 +36,7 @@ const BoardCardDndContainer = (props: {
   const { moveCard, setCardCalculatedPos } = useCardActions();
   const cards = useCards();
   const sortedCardsByListId = useSortedCardsByListId(listId);
-  const cardCalculatedPod = useCardCalculatedPos();
+  const cardCalculatedPos = useCardCalculatedPos();
   const location = useLocation();
   const updateCardQuery = useUpdateCard();
 
@@ -76,36 +76,29 @@ const BoardCardDndContainer = (props: {
       }
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
       const targetPart = hoverClientY > hoverMiddleY ? 'before' : 'after';
+      console.log(targetPart)
       const newPos = calculateNewPosByTargetPart(
         cards,
         sortedCardsByListId,
         _id,
         targetPart,
       );
-      if (newPos && newPos !== -1) {
+      console.log(newPos,targetPart)
+      if (newPos) {
         setCardCalculatedPos(newPos);
         moveCard(draggedId, listId, newPos);
       }
     },
     drop({ _id: draggedId }) {
-      console.log(draggedId, _id);
-      if (cardCalculatedPod === -1) {
-        reNumCardsPosInBoard.mutate({
-          id: _id,
-          data: { action: 'renumbering' },
-        });
-      }
-      if (cardCalculatedPod && cardCalculatedPod > 0) {
-        console.log('card update from card dnd component');
-        handleUpdateCardPos(draggedId, cardCalculatedPod, listId);
-      }
-      setCardCalculatedPos(null);
+      console.log(cardCalculatedPos)
+      // need to add cardCalucltedpos to return object
+      return {listId: listId, draggedId:draggedId, dropped: true, tragetType: 'card'} 
     },
     collect: monitor => ({
       isOver: monitor.isOver({ shallow: true }),
       differenceOffset: monitor.getDifferenceFromInitialOffset(),
     }),
-  });
+  },[_id, children, pos, listId, cardCalculatedPos]);
 
   const [{ isDragging }, connectDrag] = useDrag<
     TDraggableElement & { listId: string },
@@ -115,15 +108,29 @@ const BoardCardDndContainer = (props: {
     type: 'card',
     item: { _id, pos, listId },
     end({_id: draggedId}, monitor){
-      if(monitor.didDrop()){
-        console.log(monitor.getDropResult(), 'draggadeId', draggedId)
+      console.log(cardCalculatedPos)
+      if (monitor.didDrop()){
+        const dropResult: {dropped: boolean, listId: string} | null = monitor.getDropResult()
+        console.log(dropResult,cardCalculatedPos)
+        if(dropResult && dropResult.dropped){
+          if (cardCalculatedPos === -1) {
+              reNumCardsPosInBoard.mutate({
+                id: _id,
+                data: { action: 'renumbering' },
+              });
+            }
+          if (cardCalculatedPos && cardCalculatedPos > 0) {
+            console.log('card update from card dnd component');
+            handleUpdateCardPos(draggedId, cardCalculatedPos, dropResult.listId);
+          }
+        setCardCalculatedPos(null);
       }
+    }
     },
-
     collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),
-  });
+  },[cardCalculatedPos]);
 
   connectDrag(ref);
   connectDrop(ref);
