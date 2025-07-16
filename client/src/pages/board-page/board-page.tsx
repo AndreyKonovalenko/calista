@@ -81,7 +81,6 @@ const BoardPage = () => {
     : null;
 
   useEffect(() => {
-    console.log('render');
     if (isSuccess) {
       const { board, lists, cards } = data;
       setBoard(board);

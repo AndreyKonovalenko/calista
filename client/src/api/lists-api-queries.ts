@@ -46,7 +46,7 @@ export const useReNumCardsPosInBoard = () => {
   const { id } = useParams();
   invariantId(id);
   return useMutation({
-    mutationFn: api.boards.updateBoard,
+    mutationFn: api.lists.updateList,
     onSuccess: () => {
       return queryClient.invalidateQueries({
         queryKey: ['fetchBoardById', id],

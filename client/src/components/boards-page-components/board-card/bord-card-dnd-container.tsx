@@ -13,6 +13,12 @@ import {
 } from '../../../services/card-store';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
 
+export type TDropCardResult = {
+  dropped: boolean;
+  listId: string;
+  cardCalculatedPos: number | null;
+} | null
+
 const styles = {
   link: {
     width: '100%',
@@ -84,15 +90,21 @@ const BoardCardDndContainer = (props: {
         targetPart,
       );
       console.log(newPos,targetPart)
-      if (newPos) {
-        setCardCalculatedPos(newPos);
+      setCardCalculatedPos(newPos);
+      if (newPos&& newPos !== -1) {
         moveCard(draggedId, listId, newPos);
       }
     },
     drop({ _id: draggedId }) {
       console.log(cardCalculatedPos)
       // need to add cardCalucltedpos to return object
-      return {listId: listId, draggedId:draggedId, dropped: true, tragetType: 'card'} 
+      return {
+        listId: listId, 
+        draggedId:draggedId, 
+        dropped: true, 
+        tragetType: 'card',
+        cardCalculatedPos: cardCalculatedPos
+      } 
     },
     collect: monitor => ({
       isOver: monitor.isOver({ shallow: true }),
@@ -108,20 +120,19 @@ const BoardCardDndContainer = (props: {
     type: 'card',
     item: { _id, pos, listId },
     end({_id: draggedId}, monitor){
-      console.log(cardCalculatedPos)
       if (monitor.didDrop()){
-        const dropResult: {dropped: boolean, listId: string} | null = monitor.getDropResult()
-        console.log(dropResult,cardCalculatedPos)
+        const dropResult: TDropCardResult = monitor.getDropResult()
         if(dropResult && dropResult.dropped){
-          if (cardCalculatedPos === -1) {
+          console.log(dropResult.cardCalculatedPos)
+          if (dropResult.cardCalculatedPos === -1) {
               reNumCardsPosInBoard.mutate({
-                id: _id,
+                id: dropResult.listId,
                 data: { action: 'renumbering' },
               });
             }
-          if (cardCalculatedPos && cardCalculatedPos > 0) {
+          if (dropResult.cardCalculatedPos && dropResult.cardCalculatedPos > 0) {
             console.log('card update from card dnd component');
-            handleUpdateCardPos(draggedId, cardCalculatedPos, dropResult.listId);
+            handleUpdateCardPos(draggedId, dropResult.cardCalculatedPos, dropResult.listId);
           }
         setCardCalculatedPos(null);
       }
