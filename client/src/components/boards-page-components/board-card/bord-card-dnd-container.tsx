@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { useLocation, Link as RouterLink } from 'react-router';
 import { Box, Link, ListItem } from '@mui/material';
 import { useDrop, useDrag } from 'react-dnd';
@@ -17,7 +17,7 @@ export type TDropCardResult = {
   dropped: boolean;
   listId: string;
   cardCalculatedPos: number | null;
-} | null
+} | null;
 
 const styles = {
   link: {
@@ -26,7 +26,6 @@ const styles = {
   previewStyle: {
     filter: 'brightness(0)',
     opacity: 0.2,
-    borderRadius: 'inherit',
   },
 };
 
@@ -63,85 +62,112 @@ const BoardCardDndContainer = (props: {
     {
       isOver: boolean;
     }
-  >({
-    accept: ['card'],
-    hover({ _id: draggedId }, monitor) {
-      if (!ref.current || draggedId === _id || !cards || !sortedCardsByListId) {
-        return;
-      }
-      // Determine rectangle on screen
-      const hoverBoundingRect = ref.current.getBoundingClientRect();
-      // Get vertical middle
-      const hoverMiddleY =
-        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      // Determine mouse position
-      const clientOffset = monitor.getClientOffset();
-      // Get pixels to the top
-      if (!clientOffset) {
-        return;
-      }
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-      const targetPart = hoverClientY > hoverMiddleY ? 'before' : 'after';
-      console.log(targetPart)
-      const newPos = calculateNewPosByTargetPart(
-        cards,
-        sortedCardsByListId,
-        _id,
-        targetPart,
-      );
-      console.log(newPos,targetPart)
-      setCardCalculatedPos(newPos);
-      if (newPos&& newPos !== -1) {
-        moveCard(draggedId, listId, newPos);
-      }
+  >(
+    {
+      accept: ['card'],
+      hover({ _id: draggedId }, monitor) {
+        if (
+          !ref.current ||
+          draggedId === _id ||
+          !cards ||
+          !sortedCardsByListId
+        ) {
+          return;
+        }
+        // Determine rectangle on screen
+        const hoverBoundingRect = ref.current.getBoundingClientRect();
+        // Get vertical middle
+        const hoverMiddleY =
+          (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+        // Determine mouse position
+        const clientOffset = monitor.getClientOffset();
+        // Get pixels to the top
+        if (!clientOffset) {
+          return;
+        }
+        const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+        const targetPart = hoverClientY > hoverMiddleY ? 'before' : 'after';
+        console.log(targetPart);
+        const newPos = calculateNewPosByTargetPart(
+          cards,
+          sortedCardsByListId,
+          _id,
+          targetPart,
+        );
+        console.log(newPos, targetPart);
+        setCardCalculatedPos(newPos);
+        if (newPos && newPos !== -1) {
+          moveCard(draggedId, listId, newPos);
+        }
+      },
+      drop({ _id: draggedId }) {
+        return {
+          listId: listId,
+          draggedId: draggedId,
+          dropped: true,
+          tragetType: 'card',
+          cardCalculatedPos: cardCalculatedPos,
+        };
+      },
+      collect: monitor => ({
+        isOver: monitor.isOver({ shallow: true }),
+        differenceOffset: monitor.getDifferenceFromInitialOffset(),
+      }),
     },
-    drop({ _id: draggedId }) {
-      console.log(cardCalculatedPos)
-      // need to add cardCalucltedpos to return object
-      return {
-        listId: listId, 
-        draggedId:draggedId, 
-        dropped: true, 
-        tragetType: 'card',
-        cardCalculatedPos: cardCalculatedPos
-      } 
-    },
-    collect: monitor => ({
-      isOver: monitor.isOver({ shallow: true }),
-      differenceOffset: monitor.getDifferenceFromInitialOffset(),
-    }),
-  },[_id, children, pos, listId, cardCalculatedPos]);
+    [_id, children, pos, listId, cardCalculatedPos],
+  );
 
   const [{ isDragging }, connectDrag] = useDrag<
     TDraggableElement & { listId: string },
     unknown,
     { isDragging: boolean }
-  >({
-    type: 'card',
-    item: { _id, pos, listId },
-    end({_id: draggedId}, monitor){
-      if (monitor.didDrop()){
-        const dropResult: TDropCardResult = monitor.getDropResult()
-        if(dropResult && dropResult.dropped){
-          console.log(dropResult.cardCalculatedPos)
-          if (dropResult.cardCalculatedPos === -1) {
+  >(
+    {
+      type: 'card',
+      item: { _id, pos, listId },
+      end({ _id: draggedId }, monitor) {
+        if (monitor.didDrop()) {
+          const dropResult: TDropCardResult = monitor.getDropResult();
+          if (dropResult && dropResult.dropped) {
+            console.log(dropResult.cardCalculatedPos);
+            if (dropResult.cardCalculatedPos === -1) {
               reNumCardsPosInBoard.mutate({
                 id: dropResult.listId,
                 data: { action: 'renumbering' },
               });
             }
-          if (dropResult.cardCalculatedPos && dropResult.cardCalculatedPos > 0) {
-            console.log('card update from card dnd component');
-            handleUpdateCardPos(draggedId, dropResult.cardCalculatedPos, dropResult.listId);
+            if (
+              dropResult.cardCalculatedPos &&
+              dropResult.cardCalculatedPos > 0
+            ) {
+              console.log('card update from card dnd component');
+              handleUpdateCardPos(
+                draggedId,
+                dropResult.cardCalculatedPos,
+                dropResult.listId,
+              );
+            }
+            setCardCalculatedPos(null);
           }
-        setCardCalculatedPos(null);
-      }
-    }
+        }
+      },
+      collect: monitor => ({
+        isDragging: monitor.isDragging(),
+      }),
     },
-    collect: monitor => ({
-      isDragging: monitor.isDragging(),
+    [cardCalculatedPos],
+  );
+
+  const dragStyle = useMemo(
+    () => ({
+      height: '100%',
+      width: '100%',
+      opacity: isDragging ? 0.3 : 1,
+      p: 0,
+      transform: 'translate(0, 0)',
     }),
-  },[cardCalculatedPos]);
+    [isDragging],
+  );
 
   connectDrag(ref);
   connectDrop(ref);
@@ -149,7 +175,7 @@ const BoardCardDndContainer = (props: {
   return (
     <ListItem>
       <Link
-        sx={styles.link}
+        sx={dragStyle}
         ref={ref}
         to={`cards/${_id}`}
         component={RouterLink}

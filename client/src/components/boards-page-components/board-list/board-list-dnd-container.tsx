@@ -12,7 +12,10 @@ import {
   useSortedLists,
 } from '../../../services/list-store';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
-import { useCardActions, useCardCalculatedPos } from '../../../services/card-store';
+import {
+  useCardActions,
+  useCardCalculatedPos,
+} from '../../../services/card-store';
 // import { useUpdateCard } from '../../../api/cards-api-queries';
 
 const previewStyle = {
@@ -30,7 +33,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
   const lists = useLists();
   const sortedLists = useSortedLists();
   const calculatedPos = useListCalculatedPos();
-  const cardCalculatedPos = useCardCalculatedPos()
+  const cardCalculatedPos = useCardCalculatedPos();
   // const updateCardQuery = useUpdateCard()
   const ref = useRef<HTMLDivElement>(null);
   const updateListQuery = useUpdateList();
@@ -130,13 +133,13 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
         }
         if (itemType === 'card') {
           console.log(hasCards);
-          return { 
-            listId: _id, 
-            draggedId: draggedId, 
-            dropped: true, 
-            targetType: 'list', 
-            cardCalculatedPos:cardCalculatedPos 
-          }
+          return {
+            listId: _id,
+            draggedId: draggedId,
+            dropped: true,
+            targetType: 'list',
+            cardCalculatedPos: cardCalculatedPos,
+          };
           // handleUpdateCardPos(draggedId, _id, 16384);
           // setCardCalculatedPos(null)
         }

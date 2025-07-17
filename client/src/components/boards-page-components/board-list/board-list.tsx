@@ -1,4 +1,4 @@
-import React, { useCallback} from 'react';
+import React, { useCallback } from 'react';
 import { Box, List } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router';
@@ -47,7 +47,6 @@ const BoardList = (props: { _id: string }) => {
   const cardsList = sorterdCards
     ? sorterdCards.map(cardId => <BoardCard key={uuidv4()} _id={cardId} />)
     : null;
-
 
   return (
     <Box
