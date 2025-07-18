@@ -20,9 +20,6 @@ export type TDropCardResult = {
 } | null;
 
 const styles = {
-  link: {
-    width: '100%',
-  },
   previewStyle: {
     filter: 'brightness(0)',
     opacity: 0.2,
@@ -33,10 +30,9 @@ const BoardCardDndContainer = (props: {
   _id: string;
   listId: string;
   children: React.ReactNode;
-  pos: number;
 }) => {
   const ref = useRef<HTMLAnchorElement>(null);
-  const { _id, children, pos, listId } = props;
+  const { _id, children, listId } = props;
   const reNumCardsPosInBoard = useReNumCardsPosInBoard();
   const { moveCard, setCardCalculatedPos } = useCardActions();
   const cards = useCards();
@@ -87,16 +83,14 @@ const BoardCardDndContainer = (props: {
         }
         const hoverClientY = clientOffset.y - hoverBoundingRect.top;
         const targetPart = hoverClientY > hoverMiddleY ? 'before' : 'after';
-        console.log(targetPart);
         const newPos = calculateNewPosByTargetPart(
           cards,
           sortedCardsByListId,
           _id,
           targetPart,
         );
-        console.log(newPos, targetPart);
         setCardCalculatedPos(newPos);
-        if (newPos && newPos !== -1) {
+        if (newPos !== -1) {
           moveCard(draggedId, listId, newPos);
         }
       },
@@ -114,17 +108,17 @@ const BoardCardDndContainer = (props: {
         differenceOffset: monitor.getDifferenceFromInitialOffset(),
       }),
     },
-    [_id, children, pos, listId, cardCalculatedPos],
+    [_id, children, listId, cardCalculatedPos],
   );
 
-  const [{ isDragging }, connectDrag] = useDrag<
+  const [{ isDragging, canDrag }, connectDrag] = useDrag<
     TDraggableElement & { listId: string },
     unknown,
-    { isDragging: boolean }
+    { isDragging: boolean; canDrag: boolean }
   >(
     {
       type: 'card',
-      item: { _id, pos, listId },
+      item: { _id, listId },
       end({ _id: draggedId }, monitor) {
         if (monitor.didDrop()) {
           const dropResult: TDropCardResult = monitor.getDropResult();
@@ -153,6 +147,7 @@ const BoardCardDndContainer = (props: {
       },
       collect: monitor => ({
         isDragging: monitor.isDragging(),
+        canDrag: monitor.canDrag(),
       }),
     },
     [cardCalculatedPos],
@@ -165,8 +160,14 @@ const BoardCardDndContainer = (props: {
       opacity: isDragging ? 0.3 : 1,
       p: 0,
       transform: 'translate(0, 0)',
+      '&:hover': {
+        borderStyle: canDrag && !isDragging ? 'solid' : 'none',
+        borderWidth: 'thick',
+        borderRadius: 2,
+        borderColor: 'primary.main',
+      },
     }),
-    [isDragging],
+    [isDragging, canDrag],
   );
 
   connectDrag(ref);

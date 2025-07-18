@@ -27,7 +27,7 @@ const previewStyle = {
 const BoardListDndContainer = memo(function BoradListDndContainer(
   props: IList & { children: React.ReactNode } & { hasCards: boolean },
 ) {
-  const { _id, children, name, pos, hasCards } = props;
+  const { _id, children, name, hasCards } = props;
   const { updateListPosByListId, setListCulclulatedPos } = useListActions();
   const { moveCard, setCardCalculatedPos } = useCardActions();
   const lists = useLists();
@@ -159,7 +159,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
   >(
     {
       type: 'list',
-      item: { _id, name, pos },
+      item: { _id, name },
       collect: monitor => ({
         isDragging: monitor.isDragging(),
       }),

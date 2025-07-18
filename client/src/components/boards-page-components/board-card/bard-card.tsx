@@ -10,10 +10,10 @@ const BoardCard = (props: { _id: string }) => {
   if (!card) {
     return null;
   }
-  const { listId, name, pos } = card;
+  const { listId, name } = card;
 
   return (
-    <BoardCardDndContainer _id={_id} pos={pos} listId={listId}>
+    <BoardCardDndContainer _id={_id} listId={listId}>
       <BoardCardContent name={name} />
     </BoardCardDndContainer>
   );

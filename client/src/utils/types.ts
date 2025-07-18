@@ -5,7 +5,6 @@ export type TForm = {
 export type TDraggableElement = {
   _id: string;
   name?: string;
-  pos: number;
 };
 
 export interface IBoard {
