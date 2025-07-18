@@ -3,16 +3,23 @@ import { RefObject, useState, useEffect } from 'react';
 export const useHover = <T extends HTMLElement = HTMLElement>(
   ref: RefObject<T>,
 ): boolean => {
-  const [hoverd, setHovered] = useState(false);
+  const [hoverd, setHovered] = useState<boolean>(false);
+  const handleMouseEnter = () => {
+    setHovered(true);
+  };
+  const handleMouseLeave = () => {
+    setHovered(false);
+  };
   useEffect(() => {
     const targetElement = ref.current;
-    console.log(targetElement);
     if (!(targetElement && targetElement.addEventListener)) return;
-
-    targetElement.addEventListener('mouseover', () => setHovered(true));
+    targetElement.addEventListener('mouseenter', handleMouseEnter);
+    targetElement.addEventListener('mouseleave', handleMouseLeave);
     return () => {
-      targetElement.removeEventListener('mouseout', () => setHovered(false));
+      targetElement.removeEventListener('mouseenter', handleMouseLeave);
+      targetElement.removeEventListener('mouseleave', handleMouseLeave);
     };
-  });
+  }, []);
+
   return hoverd;
 };
