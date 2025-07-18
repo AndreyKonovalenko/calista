@@ -111,10 +111,10 @@ const BoardCardDndContainer = (props: {
     [_id, children, listId, cardCalculatedPos],
   );
 
-  const [{ isDragging, canDrag }, connectDrag] = useDrag<
+  const [{ isDragging, canDrag, didDrop }, connectDrag] = useDrag<
     TDraggableElement & { listId: string },
     unknown,
-    { isDragging: boolean; canDrag: boolean }
+    { isDragging: boolean; canDrag: boolean, didDrop:boolean }
   >(
     {
       type: 'card',
@@ -148,6 +148,7 @@ const BoardCardDndContainer = (props: {
       collect: monitor => ({
         isDragging: monitor.isDragging(),
         canDrag: monitor.canDrag(),
+        didDrop: monitor.didDrop()
       }),
     },
     [cardCalculatedPos],
@@ -155,13 +156,12 @@ const BoardCardDndContainer = (props: {
 
   const dragStyle = useMemo(
     () => ({
-      height: '100%',
       width: '100%',
       opacity: isDragging ? 0.3 : 1,
       p: 0,
       transform: 'translate(0, 0)',
       '&:hover': {
-        borderStyle: canDrag && !isDragging ? 'solid' : 'none',
+        borderStyle: canDrag && !didDrop ? 'solid' : 'none',
         borderWidth: 'thick',
         borderRadius: 2,
         borderColor: 'primary.main',
