@@ -12,6 +12,7 @@ import {
   useCardCalculatedPos,
 } from '../../../services/card-store';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
+import { useHover } from '../../../hooks/use-hover';
 
 export type TDropCardResult = {
   dropped: boolean;
@@ -24,6 +25,12 @@ const styles = {
     filter: 'brightness(0)',
     opacity: 0.2,
   },
+  border: {
+    borderStyle: 'solid',
+    borderWidth: 'thick',
+    borderRadius: 2,
+    borderColor: 'primary.main',
+  },
 };
 
 const BoardCardDndContainer = (props: {
@@ -32,6 +39,8 @@ const BoardCardDndContainer = (props: {
   children: React.ReactNode;
 }) => {
   const ref = useRef<HTMLAnchorElement>(null);
+  const hoverRef = useRef<HTMLLIElement>(null);
+  const hovered = useHover(hoverRef);
   const { _id, children, listId } = props;
   const reNumCardsPosInBoard = useReNumCardsPosInBoard();
   const { moveCard, setCardCalculatedPos } = useCardActions();
@@ -105,7 +114,6 @@ const BoardCardDndContainer = (props: {
       },
       collect: monitor => ({
         isOver: monitor.isOver({ shallow: true }),
-        differenceOffset: monitor.getDifferenceFromInitialOffset(),
       }),
     },
     [_id, children, listId, cardCalculatedPos],
@@ -123,7 +131,6 @@ const BoardCardDndContainer = (props: {
         if (monitor.didDrop()) {
           const dropResult: TDropCardResult = monitor.getDropResult();
           if (dropResult && dropResult.dropped) {
-            console.log(dropResult.cardCalculatedPos);
             if (dropResult.cardCalculatedPos === -1) {
               reNumCardsPosInBoard.mutate({
                 id: dropResult.listId,
@@ -146,7 +153,7 @@ const BoardCardDndContainer = (props: {
         }
       },
       collect: monitor => ({
-        isDragging: monitor.isDragging(),
+        isDragging: !!monitor.isDragging(),
       }),
     },
     [cardCalculatedPos],
@@ -166,7 +173,7 @@ const BoardCardDndContainer = (props: {
   connectDrop(ref);
 
   return (
-    <ListItem>
+    <ListItem ref={hoverRef} sx={hovered ? styles.border : null}>
       <Link
         sx={dragStyle}
         ref={ref}
