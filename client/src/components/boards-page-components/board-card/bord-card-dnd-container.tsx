@@ -1,6 +1,6 @@
 import React, { useRef, useMemo } from 'react';
 import { useLocation, Link as RouterLink } from 'react-router';
-import { Box, Link, ListItem } from '@mui/material';
+import { Box, Link, ListItem} from '@mui/material';
 import { useDrop, useDrag } from 'react-dnd';
 import { TDraggableElement } from '../../../utils/types';
 import { useReNumCardsPosInBoard } from '../../../api/lists-api-queries';
@@ -12,7 +12,6 @@ import {
   useCardCalculatedPos,
 } from '../../../services/card-store';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
-import { useHover } from '../../../hooks/use-hover';
 
 export type TDropCardResult = {
   dropped: boolean;
@@ -39,8 +38,6 @@ const BoardCardDndContainer = (props: {
   children: React.ReactNode;
 }) => {
   const ref = useRef<HTMLAnchorElement>(null);
-  const hoverRef = useRef<HTMLLIElement>(null);
-  const hovered = useHover(hoverRef);
   const { _id, children, listId } = props;
   const reNumCardsPosInBoard = useReNumCardsPosInBoard();
   const { moveCard, setCardCalculatedPos } = useCardActions();
@@ -49,6 +46,8 @@ const BoardCardDndContainer = (props: {
   const cardCalculatedPos = useCardCalculatedPos();
   const location = useLocation();
   const updateCardQuery = useUpdateCard();
+  const draggableClientRect = ref.current?.getBoundingClientRect()
+  console.log(draggableClientRect)
 
   const handleUpdateCardPos = (
     cardId: string,
@@ -119,10 +118,10 @@ const BoardCardDndContainer = (props: {
     [_id, children, listId, cardCalculatedPos],
   );
 
-  const [{ isDragging }, connectDrag] = useDrag<
+  const [{ isDragging, draggable}, connectDrag] = useDrag<
     TDraggableElement & { listId: string },
     unknown,
-    { isDragging: boolean }
+    { isDragging: boolean, draggable:boolean }
   >(
     {
       type: 'card',
@@ -154,6 +153,8 @@ const BoardCardDndContainer = (props: {
       },
       collect: monitor => ({
         isDragging: !!monitor.isDragging(),
+        draggable: !!monitor.canDrag(),
+        didDrop: !!monitor.didDrop()
       }),
     },
     [cardCalculatedPos],
@@ -166,14 +167,13 @@ const BoardCardDndContainer = (props: {
       p: 0,
       transform: 'translate(0, 0)',
     }),
-    [isDragging],
+    [isDragging, draggable],
   );
-
   connectDrag(ref);
   connectDrop(ref);
 
   return (
-    <ListItem ref={hoverRef} sx={hovered ? styles.border : null}>
+    <ListItem>
       <Link
         sx={dragStyle}
         ref={ref}
