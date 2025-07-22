@@ -1,6 +1,6 @@
 import React, { useRef, useMemo } from 'react';
 import { useLocation, Link as RouterLink } from 'react-router';
-import { Box, Link, ListItem} from '@mui/material';
+import { Box, Link, ListItem } from '@mui/material';
 import { useDrop, useDrag } from 'react-dnd';
 import { TDraggableElement } from '../../../utils/types';
 import { useReNumCardsPosInBoard } from '../../../api/lists-api-queries';
@@ -46,8 +46,6 @@ const BoardCardDndContainer = (props: {
   const cardCalculatedPos = useCardCalculatedPos();
   const location = useLocation();
   const updateCardQuery = useUpdateCard();
-  const draggableClientRect = ref.current?.getBoundingClientRect()
-  console.log(draggableClientRect)
 
   const handleUpdateCardPos = (
     cardId: string,
@@ -78,6 +76,7 @@ const BoardCardDndContainer = (props: {
         ) {
           return;
         }
+
         // Determine rectangle on screen
         const hoverBoundingRect = ref.current.getBoundingClientRect();
         // Get vertical middle
@@ -118,10 +117,10 @@ const BoardCardDndContainer = (props: {
     [_id, children, listId, cardCalculatedPos],
   );
 
-  const [{ isDragging, draggable}, connectDrag] = useDrag<
+  const [{ isDragging }, connectDrag] = useDrag<
     TDraggableElement & { listId: string },
     unknown,
-    { isDragging: boolean, draggable:boolean }
+    { isDragging: boolean }
   >(
     {
       type: 'card',
@@ -140,7 +139,6 @@ const BoardCardDndContainer = (props: {
               dropResult.cardCalculatedPos &&
               dropResult.cardCalculatedPos > 0
             ) {
-              console.log('card update from card dnd component');
               handleUpdateCardPos(
                 draggedId,
                 dropResult.cardCalculatedPos,
@@ -153,8 +151,6 @@ const BoardCardDndContainer = (props: {
       },
       collect: monitor => ({
         isDragging: !!monitor.isDragging(),
-        draggable: !!monitor.canDrag(),
-        didDrop: !!monitor.didDrop()
       }),
     },
     [cardCalculatedPos],
@@ -167,7 +163,7 @@ const BoardCardDndContainer = (props: {
       p: 0,
       transform: 'translate(0, 0)',
     }),
-    [isDragging, draggable],
+    [isDragging],
   );
   connectDrag(ref);
   connectDrop(ref);
