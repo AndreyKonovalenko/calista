@@ -29,7 +29,7 @@ export async function deleteBoardById(id: string) {
 }
 
 export async function findBoardById(id: string) {
-  return await BoardModel.findById(new Types.ObjectId(id))
+  return await BoardModel.findById(new Types.ObjectId(id));
 }
 
 export async function updateBoardById(
@@ -40,19 +40,21 @@ export async function updateBoardById(
 ) {
   if ('action' in data) {
     if (data.action === 'renumbering') {
-      const lists = await ListModel.find({boardId: new  Types.ObjectId(id)}).select(['pos'])
+      const lists = await ListModel.find({
+        boardId: new Types.ObjectId(id),
+      }).select(['pos']);
       if (lists.length > 0) {
-        lists.sort(ascendingComparator)
+        lists.sort(ascendingComparator);
         let position = 16384;
-        for (const element of lists){
-           await ListModel.findByIdAndUpdate(
+        for (const element of lists) {
+          await ListModel.findByIdAndUpdate(
             new Types.ObjectId(element._id),
             { pos: position },
             { new: true },
           );
           position = position + 16348;
         }
-      }   
+      }
     }
   } else {
     await BoardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {

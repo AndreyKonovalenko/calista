@@ -5,7 +5,11 @@ import Toolbar from '@mui/material/Toolbar';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Person } from '@mui/icons-material';
 import { useMutation } from '@tanstack/react-query';
-import { useAuthActions, useIsAuth, useUsername } from '../../services/auth-store';
+import {
+  useAuthActions,
+  useIsAuth,
+  useUsername,
+} from '../../services/auth-store';
 
 import { Link as RouterLink } from 'react-router';
 import Link from '@mui/material/Link';
@@ -14,23 +18,21 @@ import api from '../../api/calista-api';
 import { TO_LOGIN, TO_MAIN } from '../../utils/route-constants';
 import { Stack, Typography } from '@mui/material';
 
-
-const styles = { 
+const styles = {
   box: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   stack: {
-    alignItems: 'center'
+    alignItems: 'center',
   },
   link: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',          
-  }
-}
+    justifyContent: 'center',
+  },
+};
 
 export default function HeaderBar() {
-
   const { setAuthStatus } = useAuthActions();
   const isAuth = useIsAuth();
   const username = useUsername();
@@ -39,7 +41,7 @@ export default function HeaderBar() {
   });
 
   const handleLogout = () => {
-    setAuthStatus({isAuth: false, username: ''});
+    setAuthStatus({ isAuth: false, username: '' });
     mutate();
   };
 

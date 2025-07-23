@@ -21,7 +21,7 @@ export default function LoginPage() {
     mutationFn: api.auth.login,
   });
   const navigate = useNavigate();
-  const {setAuthStatus} = useAuthActions()
+  const { setAuthStatus } = useAuthActions();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);

@@ -1,60 +1,64 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { Typography, Paper, Stack, Box, useTheme, Button } from '@mui/material';
-import { invariantId } from '../../utils/utils';
-// import LoadingBage from '../../components/loading-bage/loading-bage';
+import { Typography, Paper, Stack, Box, Button } from '@mui/material';
 import { useDeleteCard } from '../../api/cards-api-queries';
 import { useCard } from '../../services/card-store';
 import CloseIcon from '@mui/icons-material/Close';
 
-const CardPage = () => {
-  const { id } = useParams();
-  const { spacing } = useTheme();
-  const navigate = useNavigate();
-  invariantId(id);
-  const card = useCard(id);
-  if (!card) {
-    return null;
-  }
-  const { name } = card;
-  // const { data, isSuccess, isLoading } = useFetchCardById(id);
-  const deleteCardQuery = useDeleteCard();
+const styles = {
+  container: {
+    width: '768px',
+    p: 2,
+    borderRadius: 2,
+  },
+  mainWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    cursor: 'pointer',
+  },
+  mainContainer: {
+    mt: 2,
+  },
+  description: {
+    width: '512px',
+  },
+  actions: {
+    width: '168px',
+  },
+};
 
+const CardPage = () => {
+  const navigate = useNavigate();
+  const deleteCardQuery = useDeleteCard();
+  const { id } = useParams();
+  if (!id) return null;
+  const card = useCard(id);
+  if (!card) return null;
+  const { name } = card;
   const handleDeleteCard = (cardId: string) => {
     deleteCardQuery.mutate(cardId);
     navigate(-1);
   };
 
-  // useEffect(() => {
-  //   if (isSuccess) setCardState(data);
-  // }, [data, isSuccess]);
-
   return (
-    <Paper sx={{ width: '768px', p: spacing(2), borderRadius: spacing(2) }}>
+    <Paper sx={styles.container}>
       <Stack direction="row" justifyContent="space-between">
         <Typography variant="h4">{name}</Typography>
-        <Box
-          onClick={() => navigate(-1)}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            cursor: 'pointer',
-          }}
-        >
+        <Box onClick={() => navigate(-1)} sx={styles.mainWrapper}>
           <CloseIcon fontSize="large" />
         </Box>
       </Stack>
       <Stack
         direction="row"
         justifyContent="space-between"
-        sx={{ marginTop: spacing(2) }}
+        sx={styles.mainContainer}
       >
-        <Stack sx={{ width: '512px' }}>
+        <Stack sx={styles.description}>
           <Typography variant="h6">Description</Typography>
           <Typography variant="h6">Check list placeholder</Typography>
         </Stack>
-        <Stack sx={{ width: '168px' }}>
+        <Stack sx={styles.actions}>
           <Typography variant="h6">Actions:</Typography>
           <Button fullWidth={true} onClick={() => handleDeleteCard(id)}>
             DELETE CARD

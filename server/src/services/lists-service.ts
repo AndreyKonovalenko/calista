@@ -21,7 +21,7 @@ export async function createList(data: IList) {
 }
 
 export async function findListById(id: string) {
-  return await ListModel.findById(new Types.ObjectId(id))
+  return await ListModel.findById(new Types.ObjectId(id));
 }
 
 export async function deleteListById(id: string) {
@@ -39,7 +39,9 @@ export async function updateListById(
 ) {
   if ('action' in data) {
     if (data.action === 'renumbering') {
-      const cards = await CardModel.find({listId: new Types.ObjectId(id)}).select(['pos'])  
+      const cards = await CardModel.find({
+        listId: new Types.ObjectId(id),
+      }).select(['pos']);
       if (cards.length > 0) {
         cards.sort(ascendingComparator);
         let position = 16384;
