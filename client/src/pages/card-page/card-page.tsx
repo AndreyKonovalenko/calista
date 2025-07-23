@@ -1,6 +1,8 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { Typography, Paper, Stack, Box, Button } from '@mui/material';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
+
 import { useDeleteCard } from '../../api/cards-api-queries';
 import { useCard } from '../../services/card-store';
 import CloseIcon from '@mui/icons-material/Close';
@@ -11,7 +13,7 @@ const styles = {
     p: 2,
     borderRadius: 2,
   },
-  mainWrapper: {
+  closeButton: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -22,6 +24,7 @@ const styles = {
   },
   description: {
     width: '512px',
+    overflowY: 'scroll',
   },
   actions: {
     width: '168px',
@@ -45,7 +48,7 @@ const CardPage = () => {
     <Paper sx={styles.container}>
       <Stack direction="row" justifyContent="space-between">
         <Typography variant="h4">{name}</Typography>
-        <Box onClick={() => navigate(-1)} sx={styles.mainWrapper}>
+        <Box onClick={() => navigate(-1)} sx={styles.closeButton}>
           <CloseIcon fontSize="large" />
         </Box>
       </Stack>
@@ -56,6 +59,12 @@ const CardPage = () => {
       >
         <Stack sx={styles.description}>
           <Typography variant="h6">Description</Typography>
+          <TextareaAutosize
+            aria-label="minimum height"
+            minRows={6}
+            placeholder="Add a more detailed descripion..."
+            style={{ width: '100%', maxWidth:"100%" }}
+          />
           <Typography variant="h6">Check list placeholder</Typography>
         </Stack>
         <Stack sx={styles.actions}>

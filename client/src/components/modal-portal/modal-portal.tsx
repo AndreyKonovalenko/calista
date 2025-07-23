@@ -1,9 +1,8 @@
 import React from 'react';
-import { Box, useTheme } from '@mui/material';
+import { Box} from '@mui/material';
 
 const ModalPortal = (props: { children: React.ReactNode }) => {
   const { children } = props;
-  const { spacing } = useTheme();
   const overlay = {
     width: '100%',
     background: '#131316',
@@ -20,8 +19,8 @@ const ModalPortal = (props: { children: React.ReactNode }) => {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'fixed',
-    top: spacing(14),
+    position: 'absolute',
+    top: '150px',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     opacity: 1,
