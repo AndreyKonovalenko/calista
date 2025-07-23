@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { useAuthStore } from '../../services/auth-store';
+import { useAuthActions } from '../../services/auth-store';
 import { useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
@@ -21,7 +21,7 @@ export default function LoginPage() {
     mutationFn: api.auth.login,
   });
   const navigate = useNavigate();
-  const { setAuthStatus } = useAuthStore(state => state);
+  const {setAuthStatus} = useAuthActions()
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);

@@ -22,7 +22,6 @@ export const addList = async (
     createrId: user._id,
     boardId: req.body.boardId,
     name: req.body.name,
-    cards: [],
     pos: req.body.pos ? req.body.pos : 16384,
   };
   try {

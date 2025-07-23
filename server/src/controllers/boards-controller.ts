@@ -38,7 +38,6 @@ export const addBoard = async (
   const data: IBoard = {
     name: req.body.name,
     createrId: user._id,
-    lists: [],
   };
   try {
     await cerateBoard(data);
@@ -47,25 +46,6 @@ export const addBoard = async (
     next(error);
   }
 };
-
-// GET boards/:id
-// export const getBoard = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction,
-// ): Promise<void> => {
-//   try {
-//     const board = await findBoardById(req.params.id);
-//     if (!board) {
-//       res.status(StatusCodes.OK).send('Board not found');
-//     }
-//     if (board) {
-//       res.status(StatusCodes.OK).json(board);
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 export const getBoard = async (
   req: Request,

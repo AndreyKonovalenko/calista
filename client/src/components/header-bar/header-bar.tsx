@@ -5,7 +5,8 @@ import Toolbar from '@mui/material/Toolbar';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Person } from '@mui/icons-material';
 import { useMutation } from '@tanstack/react-query';
-import { useAuthStore } from '../../services/auth-store';
+import { useAuthActions, useIsAuth, useUsername } from '../../services/auth-store';
+
 import { Link as RouterLink } from 'react-router';
 import Link from '@mui/material/Link';
 import api from '../../api/calista-api';
@@ -13,21 +14,39 @@ import api from '../../api/calista-api';
 import { TO_LOGIN, TO_MAIN } from '../../utils/route-constants';
 import { Stack, Typography } from '@mui/material';
 
+
+const styles = { 
+  box: {
+    flexGrow: 1
+  },
+  stack: {
+    alignItems: 'center'
+  },
+  link: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',          
+  }
+}
+
 export default function HeaderBar() {
-  const { isAuth, username, reset } = useAuthStore(state => state);
+
+  const { setAuthStatus } = useAuthActions();
+  const isAuth = useIsAuth();
+  const username = useUsername();
   const { mutate } = useMutation({
     mutationFn: api.auth.logout,
   });
 
   const handleLogout = () => {
-    reset();
+    setAuthStatus({isAuth: false, username: ''});
     mutate();
   };
 
   return (
     <AppBar position="fixed">
       <Toolbar>
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={styles.box}>
           <Link
             component={RouterLink}
             variant="h6"
@@ -40,7 +59,7 @@ export default function HeaderBar() {
         </Box>
         {isAuth && (
           <Stack direction="row" spacing={4}>
-            <Stack direction="row" sx={{ alignItems: 'center' }} spacing={1}>
+            <Stack direction="row" sx={styles.stack} spacing={1}>
               <Person color="inherit" fontSize="large" />
               <Typography variant="h6">{username}</Typography>
             </Stack>
@@ -51,11 +70,7 @@ export default function HeaderBar() {
               to={TO_LOGIN}
               color="inherit"
               onClick={handleLogout}
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-              }}
+              sx={styles.link}
             >
               <LogoutIcon fontSize="large" />
             </Link>

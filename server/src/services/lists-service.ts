@@ -16,31 +16,15 @@ export async function createList(data: IList) {
     );
   }
   if (board) {
-    const list = await ListModel.create(data);
-    board.lists.push(list._id);
-    await board.save();
+    await ListModel.create(data);
   }
 }
 
 export async function findListById(id: string) {
-  return await ListModel.findById(new Types.ObjectId(id)).populate({
-    path: 'cards',
-    populate: {
-      path: 'checkLists',
-      select: 'name',
-    },
-  });
+  return await ListModel.findById(new Types.ObjectId(id))
 }
 
 export async function deleteListById(id: string) {
-  const list = await ListModel.findById(new Types.ObjectId(id));
-  const board = await BoardModel.findById(list?.boardId);
-  if (board) {
-    board.lists = board.lists.filter(element => {
-      return element.equals(new Types.ObjectId(id)) === false;
-    });
-    board.save();
-  }
   await CheckListItemModel.deleteMany({ listId: new Types.ObjectId(id) });
   await CheckListModel.deleteMany({ listId: new Types.ObjectId(id) });
   await CardModel.deleteMany({ listId: new Types.ObjectId(id) });
@@ -55,17 +39,11 @@ export async function updateListById(
 ) {
   if ('action' in data) {
     if (data.action === 'renumbering') {
-      const list = await ListModel.findById(new Types.ObjectId(id))
-        .populate<{ cards: { _id: Types.ObjectId; pos: number }[] }>({
-          path: 'cards',
-          select: ['pos'],
-        })
-        .exec();
-      if (list && list.cards.length > 0) {
-        const sortableList = list.cards;
-        sortableList.sort(ascendingComparator);
+      const cards = await CardModel.find({listId: new Types.ObjectId(id)}).select(['pos'])  
+      if (cards.length > 0) {
+        cards.sort(ascendingComparator);
         let position = 16384;
-        for (const element of sortableList) {
+        for (const element of cards) {
           await CardModel.findByIdAndUpdate(
             new Types.ObjectId(element._id),
             { pos: position },

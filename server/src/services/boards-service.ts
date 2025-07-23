@@ -30,15 +30,6 @@ export async function deleteBoardById(id: string) {
 
 export async function findBoardById(id: string) {
   return await BoardModel.findById(new Types.ObjectId(id))
-    .populate({
-      path: 'lists',
-      select: ['name', 'pos', 'cards'],
-      populate: {
-        path: 'cards',
-        select: ['name', 'pos'],
-      },
-    })
-    .exec();
 }
 
 export async function updateBoardById(
@@ -49,25 +40,19 @@ export async function updateBoardById(
 ) {
   if ('action' in data) {
     if (data.action === 'renumbering') {
-      const board = await BoardModel.findById(new Types.ObjectId(id))
-        .populate<{ lists: { _id: Types.ObjectId; pos: number }[] }>({
-          path: 'lists',
-          select: ['pos'],
-        })
-        .exec();
-      if (board && board.lists.length > 0) {
-        const sortableList = board.lists;
-        sortableList.sort(ascendingComparator);
+      const lists = await ListModel.find({boardId: new  Types.ObjectId(id)}).select(['pos'])
+      if (lists.length > 0) {
+        lists.sort(ascendingComparator)
         let position = 16384;
-        for (const element of sortableList) {
-          await ListModel.findByIdAndUpdate(
+        for (const element of lists){
+           await ListModel.findByIdAndUpdate(
             new Types.ObjectId(element._id),
             { pos: position },
             { new: true },
           );
           position = position + 16348;
         }
-      }
+      }   
     }
   } else {
     await BoardModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
