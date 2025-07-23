@@ -24,7 +24,6 @@ const styles = {
   },
   description: {
     width: '512px',
-    overflowY: 'scroll',
   },
   actions: {
     width: '168px',
@@ -63,7 +62,7 @@ const CardPage = () => {
             aria-label="minimum height"
             minRows={6}
             placeholder="Add a more detailed descripion..."
-            style={{ width: '100%', maxWidth:"100%" }}
+            style={{ width: '100%', maxWidth: '100%' }}
           />
           <Typography variant="h6">Check list placeholder</Typography>
         </Stack>

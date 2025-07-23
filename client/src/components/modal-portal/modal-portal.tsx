@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box} from '@mui/material';
+import { Box } from '@mui/material';
 
 const ModalPortal = (props: { children: React.ReactNode }) => {
   const { children } = props;
@@ -7,22 +7,23 @@ const ModalPortal = (props: { children: React.ReactNode }) => {
     width: '100%',
     background: '#131316',
     position: 'absolute',
-    right: 0,
     top: 0,
+    left: 0,
     bottom: 0,
     opacity: 0.45,
     zIndex: 9998,
   };
 
   const container = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
     display: 'flex',
+    mt: 8,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'absolute',
-    top: '150px',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
     opacity: 1,
     zIndex: 9999,
   };
