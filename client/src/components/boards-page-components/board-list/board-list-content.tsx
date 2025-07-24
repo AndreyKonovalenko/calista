@@ -55,7 +55,6 @@ const BoardListContent = (props: {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const listName = formData.get('listName');
-    console.log(name, listName);
     if (listName !== name) {
       updateListQuery.mutate({
         id: listId,
