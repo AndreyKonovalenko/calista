@@ -1,8 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { Typography, Paper, Stack, Box, Button } from '@mui/material';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
-
+import { Typography, Paper, Stack, Box, Button, TextField} from '@mui/material';
 import { useDeleteCard } from '../../api/cards-api-queries';
 import { useCard } from '../../services/card-store';
 import CloseIcon from '@mui/icons-material/Close';
@@ -34,19 +32,22 @@ const CardPage = () => {
   const navigate = useNavigate();
   const deleteCardQuery = useDeleteCard();
   const { id } = useParams();
-  if (!id) return null;
   const card = useCard(id);
-  if (!card) return null;
-  const { name } = card;
-  const handleDeleteCard = (cardId: string) => {
+  const [descriptionValue, setDescriptionValue] = useState(card?.description)
+  const handleDeleteCard = (cardId: string | undefined) => {
+    if(!cardId) return
     deleteCardQuery.mutate(cardId);
     navigate(-1);
   };
 
-  return (
-    <Paper sx={styles.container}>
+  const handleDeisctiptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDescriptionValue(event.target.value);
+  }
+
+  return  card ? 
+    (<Paper sx={styles.container}>
       <Stack direction="row" justifyContent="space-between">
-        <Typography variant="h4">{name}</Typography>
+        <Typography variant="h4">{card.name}</Typography>
         <Box onClick={() => navigate(-1)} sx={styles.closeButton}>
           <CloseIcon fontSize="large" />
         </Box>
@@ -58,11 +59,14 @@ const CardPage = () => {
       >
         <Stack sx={styles.description}>
           <Typography variant="h6">Description</Typography>
-          <TextareaAutosize
-            aria-label="minimum height"
-            minRows={6}
+          <TextField
+            fullWidth
+            rows={8}
+            multiline={true}
+            name='description'
+            onChange={handleDeisctiptionChange}
+            value={descriptionValue}
             placeholder="Add a more detailed descripion..."
-            style={{ width: '100%', maxWidth: '100%' }}
           />
           <Typography variant="h6">Check list placeholder</Typography>
         </Stack>
@@ -74,7 +78,7 @@ const CardPage = () => {
         </Stack>
       </Stack>
     </Paper>
-  );
+  ): null;
 };
 
 export default CardPage;

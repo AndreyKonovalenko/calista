@@ -49,8 +49,11 @@ export const useCardActions = () => useCardStore(state => state.actions);
 export const useCardCalculatedPos = () =>
   useCardStore(state => state.cardCalculatedPos);
 export const useCards = () => useCardStore(state => state.cards);
-export const useCard = (id: string) =>
-  useCardStore(state => (state.cards ? state.cards[id] : null));
+export const useCard = (id: string|  undefined) => {
+  if (!id) return null
+  return useCardStore(state => (state.cards ? state.cards[id] : null));
+}
+  
 export const useSortedCardsByListId = (listId: string) =>
   useCardStore(state => getMemoizedCards(state, listId));
 const selectCards = (state: ICardStore) => state.cards;
