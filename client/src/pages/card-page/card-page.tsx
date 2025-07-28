@@ -5,6 +5,7 @@ import { useDeleteCard } from '../../api/cards-api-queries';
 import { useCard, useCardActions } from '../../services/card-store';
 import CloseIcon from '@mui/icons-material/Close';
 import { useUpdateCard } from '../../api/cards-api-queries';
+const descriptionPlaceholder = 'Add a more detailed descripion...'
 const styles = {
   container: {
     width: '768px',
@@ -26,6 +27,10 @@ const styles = {
   actions: {
     width: '168px',
   },
+  descriptionCustomButton:{
+    textTransform: 'none', 
+    justifyContent: 'start'
+  }
 };
 
 const CardPage = () => {
@@ -90,8 +95,9 @@ const CardPage = () => {
             direction='column'
             spacing={1}
             component='form'
-            onSubmit={(event: React.FormEvent<HTMLFormElement>)=> handleUpdateDescription(event, id)}
+            onSubmit={(event: React.FormEvent<HTMLFormElement>) => handleUpdateDescription(event, id)}
           >
+            <Button variant='outlined' fullWidth sx={styles.descriptionCustomButton}>{descriptionPlaceholder}</Button>
             <TextField
               fullWidth
               rows={8}
@@ -99,7 +105,7 @@ const CardPage = () => {
               name='description'
               onChange={handleDeisctiptionChange}
               value={descriptionValue}
-              placeholder="Add a more detailed descripion..."
+              placeholder={descriptionPlaceholder}
             />  
             <Stack direction='row' justifyContent="start" spacing={1}>
               <Button variant='contained' type='submit'>SAVE</Button>
