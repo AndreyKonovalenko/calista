@@ -1,25 +1,25 @@
 import React from 'react';
 import { Box } from '@mui/material';
 const overlay = {
-    position: 'fixed',
-    width: '100%',
-    height: '100%',
-    background: '#131316',
-    top: 0,
-    left: 0,
-    opacity: 0.45,
-    zIndex: 9998,
+  position: 'fixed',
+  width: '100%',
+  height: '100%',
+  background: '#131316',
+  top: 0,
+  left: 0,
+  opacity: 0.45,
+  zIndex: 9998,
 };
 
 const modal = {
   position: 'fixed',
-  height:'400px',
+  height: '400px',
   width: '768px',
   maxWidth: '100%',
-  maxHeight: '100%',  
+  maxHeight: '100%',
   top: '28.5%',
   left: '50%',
-  transform: "translate(-50%, -50%)",
+  transform: 'translate(-50%, -50%)',
   opacity: 1,
   zIndex: 9999,
 };

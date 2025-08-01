@@ -7,7 +7,7 @@ interface ICardActions {
   setCards: (data: { [kay: string]: ICard }) => void;
   moveCard: (draggedId: string, listId: string, pos: number) => void;
   setCardCalculatedPos: (pos: number | null) => void;
-  updateCardDescription:(_id: string, description: string) => void
+  updateCardDescription: (_id: string, description: string) => void;
 }
 
 interface ICardStore {
@@ -60,11 +60,11 @@ export const useCardActions = () => useCardStore(state => state.actions);
 export const useCardCalculatedPos = () =>
   useCardStore(state => state.cardCalculatedPos);
 export const useCards = () => useCardStore(state => state.cards);
-export const useCard = (id: string|  undefined) => {
-  if (!id) return null
+export const useCard = (id: string | undefined) => {
+  if (!id) return null;
   return useCardStore(state => (state.cards ? state.cards[id] : null));
-}
-  
+};
+
 export const useSortedCardsByListId = (listId: string) =>
   useCardStore(state => getMemoizedCards(state, listId));
 const selectCards = (state: ICardStore) => state.cards;
