@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams, useNavigate } from 'react-router';
 import {
   Typography,
@@ -6,13 +6,14 @@ import {
   Stack,
   Box,
   Button,
-  TextField,
+  Divider
 } from '@mui/material';
+import CardDescription from '../../components/card-page-components/card-descriprion/card-descritpion';
 import { useDeleteCard } from '../../api/cards-api-queries';
-import { useCard, useCardActions } from '../../services/card-store';
+import { useCard } from '../../services/card-store';
 import CloseIcon from '@mui/icons-material/Close';
-import { useUpdateCard } from '../../api/cards-api-queries';
-const descriptionPlaceholder = 'Add a more detailed descripion...';
+// import { useUpdateCard } from '../../api/cards-api-queries';
+// const descriptionPlaceholder = 'Add a more detailed descripion...';
 const styles = {
   container: {
     width: '768px',
@@ -34,56 +35,18 @@ const styles = {
   actions: {
     width: '168px',
   },
-  descriptionCustomButton: {
-    textTransform: 'none',
-    justifyContent: 'start',
-  },
 };
 
 const CardPage = () => {
   const navigate = useNavigate();
   const deleteCardQuery = useDeleteCard();
-  const { updateCardDescription } = useCardActions();
-  const { mutate: updateCardMutate } = useUpdateCard();
-  const [descripionEdit, setDescriptionEdit] = useState(false);
   const { id } = useParams();
   const card = useCard(id);
-  const [descriptionValue, setDescriptionValue] = useState(card?.description);
 
   const handleDeleteCard = (cardId: string | undefined) => {
     if (!cardId) return;
     deleteCardQuery.mutate(cardId);
     navigate(-1);
-  };
-
-  const handleDesctiptionChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setDescriptionValue(event.target.value);
-  };
-  const handleDesctiptionCancle = () => {
-    setDescriptionEdit(false);
-  };
-
-  const handleSetDescriptionEdit = () => {
-    setDescriptionEdit(true);
-  };
-
-  const handleUpdateDescription = (
-    event: React.FormEvent<HTMLFormElement>,
-    id: string | undefined,
-  ) => {
-    event.preventDefault();
-    if (!id) return;
-    const formData = new FormData(event.currentTarget);
-    const newDescription = formData.get('description') as string;
-    if (newDescription && newDescription !== card?.description) {
-      updateCardMutate({
-        id: id,
-        data: { description: newDescription },
-      });
-      updateCardDescription(id, newDescription);
-    }
   };
 
   return card ? (
@@ -100,58 +63,10 @@ const CardPage = () => {
         sx={styles.mainContainer}
       >
         <Stack direction="column" spacing={1} sx={styles.description}>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Typography variant="h6">Description:</Typography>
-            {card.description && card.description.length > 0 ? (
-              <Button variant="text" onClick={handleSetDescriptionEdit}>
-                EDIT
-              </Button>
-            ) : null}
-          </Stack>
-          {descripionEdit ? (
-            <Stack
-              direction="column"
-              spacing={1}
-              component="form"
-              onSubmit={(event: React.FormEvent<HTMLFormElement>) =>
-                handleUpdateDescription(event, id)
-              }
-            >
-              <TextField
-                fullWidth
-                rows={8}
-                multiline={true}
-                name="description"
-                onChange={handleDesctiptionChange}
-                value={descriptionValue}
-                placeholder={descriptionPlaceholder}
-              />
-
-              <Stack direction="row" justifyContent="start" spacing={1}>
-                <Button variant="contained" type="submit">
-                  SAVE
-                </Button>
-                <Button variant="outlined" onClick={handleDesctiptionCancle}>
-                  CANCLE
-                </Button>
-              </Stack>
-            </Stack>
-          ) : (
-            <Button
-              variant="outlined"
-              fullWidth
-              onClick={handleSetDescriptionEdit}
-              sx={styles.descriptionCustomButton}
-            >
-              {descriptionPlaceholder}
-            </Button>
-          )}
+          <CardDescription card={card} />
           <Typography variant="h6">Check list placeholder</Typography>
         </Stack>
+        <Divider orientation='vertical' variant='middle' flexItem/>
         <Stack sx={styles.actions}>
           <Typography variant="h6">Actions:</Typography>
           <Button fullWidth={true} onClick={() => handleDeleteCard(id)}>
