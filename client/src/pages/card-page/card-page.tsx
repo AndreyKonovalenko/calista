@@ -1,19 +1,11 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router';
-import {
-  Typography,
-  Paper,
-  Stack,
-  Box,
-  Button,
-  Divider
-} from '@mui/material';
+import { Typography, Paper, Stack, Box, Button, Divider } from '@mui/material';
 import CardDescription from '../../components/card-page-components/card-descriprion/card-descritpion';
+import CardPageTitle from '../../components/card-page-components/card-title/card-title';
 import { useDeleteCard } from '../../api/cards-api-queries';
 import { useCard } from '../../services/card-store';
 import CloseIcon from '@mui/icons-material/Close';
-// import { useUpdateCard } from '../../api/cards-api-queries';
-// const descriptionPlaceholder = 'Add a more detailed descripion...';
 const styles = {
   container: {
     width: '768px',
@@ -52,7 +44,7 @@ const CardPage = () => {
   return card ? (
     <Paper sx={styles.container}>
       <Stack direction="row" justifyContent="space-between">
-        <Typography variant="h4">{card.name}</Typography>
+        <CardPageTitle _id={card._id} name={card.name} />
         <Box onClick={() => navigate(-1)} sx={styles.closeButton}>
           <CloseIcon fontSize="large" />
         </Box>
@@ -66,7 +58,7 @@ const CardPage = () => {
           <CardDescription card={card} />
           <Typography variant="h6">Check list placeholder</Typography>
         </Stack>
-        <Divider orientation='vertical' variant='middle' flexItem/>
+        <Divider orientation="vertical" variant="middle" flexItem />
         <Stack sx={styles.actions}>
           <Typography variant="h6">Actions:</Typography>
           <Button fullWidth={true} onClick={() => handleDeleteCard(id)}>

@@ -1,0 +1,19 @@
+import { styled } from '@mui/material';
+
+export const CardNameTextAreaStyled = styled('textarea')(({ theme }) => ({
+  backgroundColor: theme.palette.listBackground.main,
+  fontSize: theme.typography.h4.fontSize,
+  fontWeight: theme.typography.h4.fontWeight,
+  lineHeight: theme.typography.h4.lineHeight,
+  fontFamily: theme.typography.h4.fontFamily,
+  border: `2px solid ${theme.palette.primary.dark}`,
+  borderRadius: theme.spacing(1),
+  overflow: 'hidden',
+  overflowWrap: 'anywhere',
+  resize: 'none',
+  '&:focus': {
+    backgroundColor: theme.palette.background.default,
+    userSelect: 'all',
+  },
+  '&:focus-visible': { outline: 'none' },
+}));

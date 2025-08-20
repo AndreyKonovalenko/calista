@@ -3,6 +3,7 @@ import { ICard } from '../../../utils/types';
 import { useCardActions } from '../../../services/card-store';
 import { useUpdateCard } from '../../../api/cards-api-queries';
 import { Stack, TextField, Button, Typography } from '@mui/material';
+import NotesIcon from '@mui/icons-material/Notes';
 
 const styles = {
   closeButton: {
@@ -61,7 +62,13 @@ const CardDescription = (props: { card: ICard }) => {
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Typography variant="h6">Description:</Typography>
+        <Stack direction="row" spacing={1}>
+          <Stack direction="column" justifyContent="center">
+            <NotesIcon fontSize="small" />
+          </Stack>
+          <Typography variant="h6">description</Typography>
+        </Stack>
+
         {!descripionEdit && description ? (
           <Button variant="text" onClick={handleSetDescriptionEdit}>
             EDIT
@@ -73,11 +80,10 @@ const CardDescription = (props: { card: ICard }) => {
           direction="column"
           spacing={1}
           component="form"
-          onSubmit={(event: React.FormEvent<HTMLFormElement>) =>{
-            handleUpdateDescription(event, _id)
-            setDescriptionEdit(false)
-          }
-          }
+          onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
+            handleUpdateDescription(event, _id);
+            setDescriptionEdit(false);
+          }}
         >
           <TextField
             fullWidth
@@ -97,16 +103,18 @@ const CardDescription = (props: { card: ICard }) => {
             </Button>
           </Stack>
         </Stack>
-      ) :  description ? <Typography>{ description }</Typography> :        
-        (<Button
+      ) : description ? (
+        <Typography>{description}</Typography>
+      ) : (
+        <Button
           variant="outlined"
           fullWidth
           onClick={handleSetDescriptionEdit}
           sx={styles.descriptionCustomButton}
         >
           {descriptionPlaceholder}
-        </Button>)  
-    }
+        </Button>
+      )}
     </>
   );
 };

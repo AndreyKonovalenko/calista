@@ -8,6 +8,7 @@ interface ICardActions {
   moveCard: (draggedId: string, listId: string, pos: number) => void;
   setCardCalculatedPos: (pos: number | null) => void;
   updateCardDescription: (_id: string, description: string) => void;
+  updateCardName: (_id: string, name: string) => void;
 }
 
 interface ICardStore {
@@ -32,6 +33,16 @@ const useCardStore = create<ICardStore>()(
               [_id]: {
                 ...state.cards[_id],
                 description: description,
+              },
+            },
+          })),
+        updateCardName: (_id, name) =>
+          set(state => ({
+            cards: {
+              ...state.cards,
+              [_id]: {
+                ...state.cards[_id],
+                name: name,
               },
             },
           })),
