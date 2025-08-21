@@ -17,3 +17,20 @@ export const CardNameTextAreaStyled = styled('textarea')(({ theme }) => ({
   },
   '&:focus-visible': { outline: 'none' },
 }));
+
+
+export const CardCheckListTextAreaStyled = styled('textarea')(({ theme }) => ({
+  fontSize: theme.typography.h6.fontSize,
+  fontWeight: theme.typography.h6.fontWeight,
+  lineHeight: theme.typography.h6.lineHeight,
+  fontFamily: theme.typography.h6.fontFamily,
+  border: `2px solid ${theme.palette.primary.dark}`,
+  borderRadius: theme.spacing(1),
+  overflow: 'hidden',
+  overflowWrap: 'anywhere',
+  resize: 'none',
+  '&:focus': {
+    userSelect: 'all',
+  },
+  '&:focus-visible': { outline: 'none' },
+}));

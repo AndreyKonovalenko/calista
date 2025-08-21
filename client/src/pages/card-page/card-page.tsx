@@ -1,11 +1,14 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { Typography, Paper, Stack, Box, Divider } from '@mui/material';
+import {Paper, Stack, Box, Divider, Button } from '@mui/material';
 import CardDescription from '../../components/card-page-components/card-descriprion/card-descritpion';
 import CardPageTitle from '../../components/card-page-components/card-title/card-title';
 import CardActions from '../../components/card-page-components/card-actions/card-actions';
 import { useCard } from '../../services/card-store';
 import CloseIcon from '@mui/icons-material/Close';
+import { CardCheckListTextAreaStyled } from '../../components/card-page-components/card-page-styled-elements/card-page-styled-elements';
+import ChecklistIcon from '@mui/icons-material/Checklist';
+
 const styles = {
   container: {
     width: '768px',
@@ -45,9 +48,18 @@ const CardPage = () => {
         justifyContent="space-between"
         sx={styles.mainContainer}
       >
-        <Stack direction="column" spacing={1} sx={styles.description}>
+        <Stack direction="column" spacing={5} sx={styles.description}>
           <CardDescription card={card} />
-          <Typography variant="h6">Check list placeholder</Typography>
+          <Stack spacing={1}>
+            <Stack direction='row' spacing={1}>
+              <ChecklistIcon fontSize='small'/>
+              <CardCheckListTextAreaStyled rows={1}/>
+            </Stack>
+            <Stack direction='row'>
+              <Button variant='text'>ADD</Button>
+              <Button variant='text'>CANCEL</Button>
+            </Stack>
+          </Stack>
         </Stack>
         <Divider orientation="vertical" variant="middle" flexItem />
         <CardActions cardId={card._id} />

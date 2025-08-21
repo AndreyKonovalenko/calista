@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Stack, Button, Typography, Menu } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import { useDeleteCard } from '../../../api/cards-api-queries';
 import { useNavigate } from 'react-router';
 
@@ -41,7 +42,12 @@ const CardActions = (props: { cardId: string }) => {
 
   return (
     <Stack sx={styles.actions}>
-      <Typography variant="h6">Actions:</Typography>
+      <Stack direction="row" spacing={1}>
+        <Stack direction="column" justifyContent="center">
+          <MenuIcon fontSize="small" />
+        </Stack>
+          <Typography variant="h6">Actions</Typography>
+      </Stack>
       <Button fullWidth={true} onClick={() => {}}>
         ADD CHECKLIST
       </Button>
@@ -55,7 +61,7 @@ const CardActions = (props: { cardId: string }) => {
         onClose={handleCloseDeleteMenu}
       >
         <Stack sx={styles.menuContent} spacing={2}>
-          <Typography>Are you sure you wont to delete this card?</Typography>
+          <Typography variant='h6'>Are you sure you wont to delete this card?</Typography>
           <Stack direction="row" justifyContent="end" spacing={2}>
             <Button onClick={handleCloseDeleteMenu}>Cancel</Button>
             <Button
