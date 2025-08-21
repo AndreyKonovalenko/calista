@@ -1,9 +1,9 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { Typography, Paper, Stack, Box, Button, Divider } from '@mui/material';
+import { Typography, Paper, Stack, Box, Divider } from '@mui/material';
 import CardDescription from '../../components/card-page-components/card-descriprion/card-descritpion';
 import CardPageTitle from '../../components/card-page-components/card-title/card-title';
-import { useDeleteCard } from '../../api/cards-api-queries';
+import CardActions from '../../components/card-page-components/card-actions/card-actions';
 import { useCard } from '../../services/card-store';
 import CloseIcon from '@mui/icons-material/Close';
 const styles = {
@@ -24,22 +24,13 @@ const styles = {
   description: {
     width: '512px',
   },
-  actions: {
-    width: '168px',
-  },
 };
 
 const CardPage = () => {
   const navigate = useNavigate();
-  const deleteCardQuery = useDeleteCard();
+
   const { id } = useParams();
   const card = useCard(id);
-
-  const handleDeleteCard = (cardId: string | undefined) => {
-    if (!cardId) return;
-    deleteCardQuery.mutate(cardId);
-    navigate(-1);
-  };
 
   return card ? (
     <Paper sx={styles.container}>
@@ -59,12 +50,7 @@ const CardPage = () => {
           <Typography variant="h6">Check list placeholder</Typography>
         </Stack>
         <Divider orientation="vertical" variant="middle" flexItem />
-        <Stack sx={styles.actions}>
-          <Typography variant="h6">Actions:</Typography>
-          <Button fullWidth={true} onClick={() => handleDeleteCard(id)}>
-            DELETE CARD
-          </Button>
-        </Stack>
+        <CardActions cardId={card._id} />
       </Stack>
     </Paper>
   ) : null;

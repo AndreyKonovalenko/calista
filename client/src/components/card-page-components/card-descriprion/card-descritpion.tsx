@@ -66,7 +66,7 @@ const CardDescription = (props: { card: ICard }) => {
           <Stack direction="column" justifyContent="center">
             <NotesIcon fontSize="small" />
           </Stack>
-          <Typography variant="h6">description</Typography>
+          <Typography variant="h6">Description</Typography>
         </Stack>
 
         {!descripionEdit && description ? (
