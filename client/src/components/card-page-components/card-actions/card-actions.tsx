@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Stack, Button, Typography, Menu } from '@mui/material';
+import { Stack, Button, Typography, Menu, Divider } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useDeleteCard } from '../../../api/cards-api-queries';
 import { useNavigate } from 'react-router';
@@ -17,10 +17,13 @@ const styles = {
     pl: 2,
     pr: 2,
   },
+  extraPadding: {
+    pb:1
+  }
 };
 
-const CardActions = (props: { cardId: string }) => {
-  const { cardId } = props;
+const CardActions = (props: { cardId: string, handleAdd: () =>void }) => {
+  const { cardId, handleAdd } = props;
   const navigate = useNavigate();
   const deleteCardQuery = useDeleteCard();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -42,16 +45,17 @@ const CardActions = (props: { cardId: string }) => {
 
   return (
     <Stack sx={styles.actions}>
-      <Stack direction="row" spacing={1}>
+      <Stack direction="row" spacing={1} sx={styles.extraPadding}>
         <Stack direction="column" justifyContent="center">
           <MenuIcon fontSize="small" />
         </Stack>
           <Typography variant="h6">Actions</Typography>
       </Stack>
-      <Button fullWidth={true} onClick={() => {}}>
+      <Divider orientation="horizontal" variant="middle" flexItem />
+      <Button onClick={handleAdd}>
         ADD CHECKLIST
       </Button>
-      <Button fullWidth={true} onClick={handleOpenDeleteMenu}>
+      <Button onClick={handleOpenDeleteMenu}>
         DELETE CARD
       </Button>
       <Menu

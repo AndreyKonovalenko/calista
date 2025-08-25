@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { useParams, useNavigate } from 'react-router';
 import {Paper, Stack, Box, Divider, Button } from '@mui/material';
 import CardDescription from '../../components/card-page-components/card-descriprion/card-descritpion';
@@ -31,9 +31,12 @@ const styles = {
 
 const CardPage = () => {
   const navigate = useNavigate();
-
-  const { id } = useParams();
+   const { id } = useParams();
   const card = useCard(id);
+  const [addCheckList, setAddCheckList] = useState(false)
+  const handleAddChecklist = () =>{
+    setAddCheckList(!addCheckList)
+  }
 
   return card ? (
     <Paper sx={styles.container}>
@@ -50,19 +53,24 @@ const CardPage = () => {
       >
         <Stack direction="column" spacing={5} sx={styles.description}>
           <CardDescription card={card} />
-          <Stack spacing={1}>
+          {addCheckList ?
+
+          (<Stack spacing={1}>
             <Stack direction='row' spacing={1}>
-              <ChecklistIcon fontSize='small'/>
+              <Stack direction='column' justifyContent='center'>
+                <ChecklistIcon fontSize='small'/>
+              </Stack>
               <CardCheckListTextAreaStyled rows={1}/>
             </Stack>
             <Stack direction='row'>
-              <Button variant='text'>ADD</Button>
-              <Button variant='text'>CANCEL</Button>
+              <Button variant='contained'>ADD</Button>
+              <Button variant='text' onClick={handleAddChecklist}>CANCEL</Button>
             </Stack>
-          </Stack>
+          </Stack>)
+          : null}
         </Stack>
         <Divider orientation="vertical" variant="middle" flexItem />
-        <CardActions cardId={card._id} />
+        <CardActions handleAdd={handleAddChecklist} cardId={card._id} />
       </Stack>
     </Paper>
   ) : null;
