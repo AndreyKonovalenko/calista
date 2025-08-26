@@ -44,7 +44,6 @@ export interface ICard {
   name: string;
   pos: number;
   description?: string;
-  checkLists: Array<ICheckList>;
 }
 
 export interface ICardTrimmed {
