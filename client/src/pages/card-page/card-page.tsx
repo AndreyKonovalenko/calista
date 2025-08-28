@@ -8,8 +8,6 @@ import CheckListSection from '../../components/card-page-components/checklist-se
 import { useCard } from '../../services/card-store';
 import CloseIcon from '@mui/icons-material/Close';
 
-
-
 const styles = {
   container: {
     width: '768px',
@@ -54,7 +52,7 @@ const CardPage = () => {
       >
         <Stack direction="column" spacing={5} sx={styles.description}>
           <CardDescription card={card} />
-          <CheckListSection/>
+          <CheckListSection cardId={card._id}/>
         </Stack>
         <Divider orientation="vertical" variant="middle" flexItem />
         <CardActions cardId={card._id} />
