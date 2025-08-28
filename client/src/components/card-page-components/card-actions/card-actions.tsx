@@ -3,6 +3,7 @@ import { Stack, Button, Typography, Menu, Divider } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useDeleteCard } from '../../../api/cards-api-queries';
 import { useNavigate } from 'react-router';
+import { useUIActions } from '../../../services/ui-store';
 
 const styles = {
   actions: {
@@ -22,10 +23,11 @@ const styles = {
   }
 };
 
-const CardActions = (props: { cardId: string, handleAdd: () =>void }) => {
-  const { cardId, handleAdd } = props;
+const CardActions = (props: { cardId: string }) => {
+  const { cardId} = props;
   const navigate = useNavigate();
   const deleteCardQuery = useDeleteCard();
+  const {setAddChecklist} = useUIActions();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -52,7 +54,7 @@ const CardActions = (props: { cardId: string, handleAdd: () =>void }) => {
           <Typography variant="h6">Actions</Typography>
       </Stack>
       <Divider orientation="horizontal" variant="middle" flexItem />
-      <Button onClick={handleAdd}>
+      <Button onClick={setAddChecklist}>
         ADD CHECKLIST
       </Button>
       <Button onClick={handleOpenDeleteMenu}>
