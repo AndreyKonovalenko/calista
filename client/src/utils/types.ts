@@ -52,13 +52,13 @@ export interface ICardTrimmed {
   pos: number;
 }
 
-export interface ICheckList {
+export interface IChecklist {
   _id: string;
-  checkItems?: Array<ICheckListItem>;
   name: string;
+  pos: string;
 }
 
-export interface ICheckListItem {
+export interface IChecklistItem {
   _id: string;
   name: string;
   state: 'complite' | 'incomplite';

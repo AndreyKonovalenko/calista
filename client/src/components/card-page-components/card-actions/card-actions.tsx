@@ -19,15 +19,15 @@ const styles = {
     pr: 2,
   },
   extraPadding: {
-    pb:1
-  }
+    pb: 1,
+  },
 };
 
 const CardActions = (props: { cardId: string }) => {
-  const { cardId} = props;
+  const { cardId } = props;
   const navigate = useNavigate();
   const deleteCardQuery = useDeleteCard();
-  const {setAddChecklist} = useUIActions();
+  const { setAddChecklist } = useUIActions();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -51,15 +51,11 @@ const CardActions = (props: { cardId: string }) => {
         <Stack direction="column" justifyContent="center">
           <MenuIcon fontSize="small" />
         </Stack>
-          <Typography variant="h6">Actions</Typography>
+        <Typography variant="h6">Actions</Typography>
       </Stack>
       <Divider orientation="horizontal" variant="middle" flexItem />
-      <Button onClick={setAddChecklist}>
-        ADD CHECKLIST
-      </Button>
-      <Button onClick={handleOpenDeleteMenu}>
-        DELETE CARD
-      </Button>
+      <Button onClick={setAddChecklist}>ADD CHECKLIST</Button>
+      <Button onClick={handleOpenDeleteMenu}>DELETE CARD</Button>
       <Menu
         sx={styles.menu}
         anchorEl={anchorEl}
@@ -67,7 +63,9 @@ const CardActions = (props: { cardId: string }) => {
         onClose={handleCloseDeleteMenu}
       >
         <Stack sx={styles.menuContent} spacing={2}>
-          <Typography variant='h6'>Are you sure you wont to delete this card?</Typography>
+          <Typography variant="h6">
+            Are you sure you wont to delete this card?
+          </Typography>
           <Stack direction="row" justifyContent="end" spacing={2}>
             <Button onClick={handleCloseDeleteMenu}>Cancel</Button>
             <Button

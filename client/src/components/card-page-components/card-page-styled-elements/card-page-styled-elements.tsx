@@ -18,7 +18,6 @@ export const CardNameTextAreaStyled = styled('textarea')(({ theme }) => ({
   '&:focus-visible': { outline: 'none' },
 }));
 
-
 export const CardCheckListTextAreaStyled = styled('textarea')(({ theme }) => ({
   fontSize: theme.typography.subtitle1.fontSize,
   fontWeight: theme.typography.subtitle1.fontWeight,

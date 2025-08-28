@@ -12,18 +12,22 @@ type IUIActions = {
 
 const useUIStore = create<TUIState>()(
   devtools(
-    set=> ({
+    set => ({
       addChecklist: false,
       actions: {
-        setAddChecklist: () => set(state=> ({
-          addChecklist: !state.addChecklist,
-        })
-        )
-      }
+        setAddChecklist: () =>
+          set(
+            state => ({
+              addChecklist: !state.addChecklist,
+            }),
+            undefined,
+            'setAddChecklist',
+          ),
+      },
     }),
     { name: 'UIStore' },
   ),
 );
 
-export const useAddChecklist =() => useUIStore(state => state.addChecklist)
-export const useUIActions = ()=>  useUIStore(state => state.actions)
+export const useAddChecklist = () => useUIStore(state => state.addChecklist);
+export const useUIActions = () => useUIStore(state => state.actions);

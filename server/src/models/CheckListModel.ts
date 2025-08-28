@@ -28,7 +28,7 @@ const checkListSchema = new Schema<ICheckList>({
   cardId: { type: Schema.Types.ObjectId, ref: 'Card', required: true },
   checkItems: [{ type: Schema.Types.ObjectId, ref: 'CheckListItem' }],
   name: { type: String, required: true },
-  pos: {type: Number, required: true}
+  pos: { type: Number, required: true },
 });
 
 const checkListItemSchema = new Schema<ICheckListItem>({

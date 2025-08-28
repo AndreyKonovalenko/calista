@@ -29,7 +29,7 @@ export const addCheckList = async (
       cardId: req.body.cardId,
       name: req.body.name,
       checkItems: [],
-      pos: req.body.pos ? req.body.pos : 16384
+      pos: req.body.pos ? req.body.pos : 16384,
     };
     await createCheckList(data);
     res.status(StatusCodes.OK).send(`board ${data.name} successfuly created`);

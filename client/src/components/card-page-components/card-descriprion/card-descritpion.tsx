@@ -60,7 +60,7 @@ const CardDescription = (props: { card: ICard }) => {
   };
 
   return (
-    <Stack direction='column' justifyContent='start' spacing={1}>
+    <Stack direction="column" justifyContent="start" spacing={1}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Stack direction="row" spacing={1}>
           <Stack direction="column" justifyContent="center">

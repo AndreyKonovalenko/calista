@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router';
-import {Paper, Stack, Box, Divider } from '@mui/material';
+import { Paper, Stack, Box, Divider } from '@mui/material';
 import CardDescription from '../../components/card-page-components/card-descriprion/card-descritpion';
 import CardPageTitle from '../../components/card-page-components/card-title/card-title';
 import CardActions from '../../components/card-page-components/card-actions/card-actions';
@@ -30,7 +30,7 @@ const styles = {
 
 const CardPage = () => {
   const navigate = useNavigate();
-   const { id } = useParams();
+  const { id } = useParams();
   const card = useCard(id);
   // const [addCheckList, setAddCheckList] = useState(false)
   // const handleAddChecklist = () =>{
@@ -52,7 +52,7 @@ const CardPage = () => {
       >
         <Stack direction="column" spacing={5} sx={styles.description}>
           <CardDescription card={card} />
-          <CheckListSection cardId={card._id}/>
+          <CheckListSection cardId={card._id} />
         </Stack>
         <Divider orientation="vertical" variant="middle" flexItem />
         <CardActions cardId={card._id} />
