@@ -7,8 +7,8 @@ interface IChecklistActions {
   setChecklists: (data: { [key: string]: IChecklist }) => void;
   setChecklistItems: (data: { [key: string]: IChecklistItem }) => void;
   updateChecklistName: (_id: string, name: string) => void;
+  setSetChecklistItemCalculatedPos: (pos: number | null) => void;
   // moveCard: (draggedId: string, listId: string, pos: number) => void;
-  // setCardCalculatedPos: (pos: number | null) => void;
   // updateCardDescription: (_id: string, description: string) => void;
   // updateCardName: (_id: string, name: string) => void;
 }
@@ -16,24 +16,37 @@ interface IChecklistActions {
 interface IChecklistStore {
   checklists: { [key: string]: IChecklist };
   checklistItems: { [key: string]: IChecklistItem };
-  itemCalculatedPos: number | null;
+  checklistItemCalculatedPos: number | null;
   actions: IChecklistActions;
 }
 
-const useCardStore = create<IChecklistStore>()(
+const useChecklistStore = create<IChecklistStore>()(
   devtools(
     set => ({
       checklists: {},
       checklistItems: {},
-      itemCalculatedPos: null,
+      checklistItemCalculatedPos: null,
       actions: {
         setChecklists: checklists =>
           set({ checklists }, undefined, 'setChecklists'),
         setChecklistItems: checklistItems =>
           set({ checklistItems }, undefined, 'setChecklistItems'),
-      },
+        updateChecklistName: (_id, name) => 
+          set(state => ({
+            checklists: {
+              ...state.checklists,
+              [_id]: {
+                ...state.checklists[_id],
+                name: name
+              }
+            }
+          }
+        ), undefined, 'updateChecklistName'),
+        setSetChecklistItemCalculatedPos:(pos: number|null)=>
+          set({checklistItemCalculatedPos: pos}, undefined, 'setChecklistItemCalculatedPos' )
+      }
     }),
-    { name: 'cardStore' },
+    { name: 'cardStore' }, 
   ),
 );
 
@@ -88,31 +101,33 @@ const useCardStore = create<IChecklistStore>()(
 //   ),
 // );
 
-export const useCardActions = () => useCardStore(state => state.actions);
-export const useCardCalculatedPos = () =>
-  useCardStore(state => state.cardCalculatedPos);
-export const useCards = () => useCardStore(state => state.cards);
-export const useCard = (id: string | undefined) => {
-  if (!id) return null;
-  return useCardStore(state => (state.cards ? state.cards[id] : null));
-};
+export const useChecklist = () => useChecklistStore(state => state.checklists)
 
-export const useSortedCardsByListId = (listId: string) =>
-  useCardStore(state => getMemoizedCards(state, listId));
-const selectCards = (state: ICardStore) => state.cards;
-const selectListId = (_: ICardStore, listId: string) => listId;
-const getMemoizedCards = createSelector(
-  [selectCards, selectListId],
-  (cards: { [key: string]: ICard }, listId: string) => {
-    const result = Object.keys(cards)
-      .filter(key => cards[key].listId === listId)
-      .sort((a: string, b: string): number => {
-        if (cards) {
-          if (cards[a].pos < cards[b].pos) return -1;
-          if (cards[a].pos > cards[b].pos) return 1;
-        }
-        return 0;
-      });
-    return result;
-  },
-);
+// export const useCardActions = () => useCardStore(state => state.actions);
+// export const useCardCalculatedPos = () =>
+//   useCardStore(state => state.cardCalculatedPos);
+// export const useCards = () => useCardStore(state => state.cards);
+// export const useCard = (id: string | undefined) => {
+//   if (!id) return null;
+//   return useCardStore(state => (state.cards ? state.cards[id] : null));
+// };
+
+// export const useSortedCardsByListId = (listId: string) =>
+//   useCardStore(state => getMemoizedCards(state, listId));
+// const selectCards = (state: ICardStore) => state.cards;
+// const selectListId = (_: ICardStore, listId: string) => listId;
+// const getMemoizedCards = createSelector(
+//   [selectCards, selectListId],
+//   (cards: { [key: string]: ICard }, listId: string) => {
+//     const result = Object.keys(cards)
+//       .filter(key => cards[key].listId === listId)
+//       .sort((a: string, b: string): number => {
+//         if (cards) {
+//           if (cards[a].pos < cards[b].pos) return -1;
+//           if (cards[a].pos > cards[b].pos) return 1;
+//         }
+//         return 0;
+//       });
+//     return result;
+//   },
+// );
