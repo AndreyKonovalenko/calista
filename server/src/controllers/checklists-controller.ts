@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from 'express';
 import { CustomRequest } from '../middleware/protected';
 import { StatusCodes } from 'http-status-codes';
-import { ICheckList, ICheckListItem } from '../models/CheckListModel';
+import { ICheckList, ICheckListItem } from '../models/ChecklistModel';
 import { DeleteResult } from 'mongoose';
 import {
   createCheckList,
@@ -12,7 +12,7 @@ import {
   deleteCheckLisItemById,
   updateCheckListById,
   updateChecklistItemById,
-} from '../services/check-lists-service';
+} from '../services/checklists-service';
 
 // POST 'checklists/' @private
 export const addCheckList = async (

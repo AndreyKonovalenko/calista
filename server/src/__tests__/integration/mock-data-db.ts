@@ -1,8 +1,8 @@
 import { UserModel } from '../../models/UserModel';
 import { BoardModel } from '../../models/BoardModel';
 import { ListModel } from '../../models/ListModel';
-import { CheckListItemModel } from '../../models/CheckListModel';
-import { CheckListModel } from '../../models/CheckListModel';
+import { CheckListItemModel } from '../../models/ChecklistModel';
+import { CheckListModel } from '../../models/ChecklistModel';
 import { CardModel } from '../../models/CardModel';
 
 export async function setUpMockDb() {

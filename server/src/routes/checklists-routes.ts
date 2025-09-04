@@ -9,7 +9,7 @@ import {
   getCheckListItem,
   updateCheckList,
   updateChecklistItem,
-} from '../controllers/check-lists-controller';
+} from '../controllers/checklists-controller';
 
 export const checkListsRouter = express.Router();
 checkListsRouter.post('/', protect, addCheckList);

@@ -3,7 +3,7 @@ import { CardModel, ICard } from '../models/CardModel';
 import { ListModel } from '../models/ListModel';
 import { CustomError } from '../utils/CustomError';
 import { Types } from 'mongoose';
-import { CheckListItemModel, CheckListModel } from '../models/CheckListModel';
+import { CheckListItemModel, CheckListModel } from '../models/ChecklistModel';
 
 export async function createCard(data: ICard) {
   const list = await ListModel.findById(data.listId);

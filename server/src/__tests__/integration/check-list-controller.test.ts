@@ -13,7 +13,7 @@ import {
   CheckListModel,
   ICheckList,
   ICheckListItem,
-} from '../../models/CheckListModel';
+} from '../../models/ChecklistModel';
 import { BoardModel } from '../../models/BoardModel';
 
 const app = express();

@@ -3,7 +3,7 @@ import { IList, ListModel } from '../models/ListModel';
 import { Types } from 'mongoose';
 import { CustomError } from '../utils/CustomError';
 import { StatusCodes } from 'http-status-codes';
-import { CheckListItemModel, CheckListModel } from '../models/CheckListModel';
+import { CheckListItemModel, CheckListModel } from '../models/ChecklistModel';
 import { CardModel } from '../models/CardModel';
 import { ascendingComparator } from '../utils/utils';
 

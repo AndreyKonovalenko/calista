@@ -13,7 +13,7 @@ import { CardModel, ICard } from '../../models/CardModel';
 import {
   CheckListItemModel,
   CheckListModel,
-} from '../../models/CheckListModel';
+} from '../../models/ChecklistModel';
 
 const app = express();
 beforeAll(async () => dbConnect());

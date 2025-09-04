@@ -10,7 +10,7 @@ import { CardModel } from '../../models/CardModel';
 import {
   CheckListItemModel,
   CheckListModel,
-} from '../../models/CheckListModel';
+} from '../../models/ChecklistModel';
 import { generateToken } from '../../services/auth-service';
 import { setUpMockDb } from './mock-data-db';
 import { UserModel } from '../../models/UserModel';

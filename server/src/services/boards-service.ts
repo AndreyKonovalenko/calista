@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import { BoardModel, IBoard } from '../models/BoardModel';
-import { CheckListItemModel, CheckListModel } from '../models/CheckListModel';
+import { CheckListItemModel, CheckListModel } from '../models/ChecklistModel';
 import { CardModel } from '../models/CardModel';
 import { ListModel } from '../models/ListModel';
 import { ascendingComparator } from '../utils/utils';
