@@ -1,4 +1,3 @@
-
 import { Types, Schema, model } from 'mongoose';
 
 export interface IChecklistItem {

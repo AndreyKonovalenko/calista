@@ -33,7 +33,6 @@ export const addChecklist = async (
   }
 };
 
-
 // GET 'checklists/:id' @private
 export const getChecklist = async (
   req: Request,
@@ -87,4 +86,3 @@ export const deleteChecklist = async (
     next(error);
   }
 };
-

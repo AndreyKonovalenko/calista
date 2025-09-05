@@ -12,6 +12,8 @@ const BOARDS = validEnv(process.env.BOARDS);
 const CARDS = validEnv(process.env.CARDS);
 const AUTH = validEnv(process.env.AUTH);
 const SSE = validEnv(process.env.SSE);
+const CHECKLISTS = validEnv(process.env.CHECKLISTS);
+const CHECKLIST_ITEMS = validEnv(process.env.CHECKLIST_ITEMS);
 axios.defaults.baseURL = BASE_URL;
 
 type TData = {
@@ -76,7 +78,7 @@ const boards = {
 };
 
 const lists = {
-  cerateList: (data: TData) => request.post<void>(LISTS, data),
+  createList: (data: TData) => request.post<void>(LISTS, data),
   // fetchListById: (id: string) => {
   //   request.get<IList>(`${LISTS}/${id}`);
   // },
@@ -86,17 +88,28 @@ const lists = {
 };
 
 const cards = {
-  cerateCard: (data: TData) => request.post<void>(CARDS, data),
+  createCard: (data: TData) => request.post<void>(CARDS, data),
   fetchCardById: (id: string) => request.get<ICard>(`${CARDS}/${id}`),
   deleteCard: (id: string) => request.delete<void>(`${CARDS}/${id}`),
   updateCard: ({ id, data }: TPutData) =>
     request.put<void>(`${CARDS}/${id}`, data),
 };
 
-// listsRouter.post('/', protect, addList);
-// listsRouter.get('/:id', protect, getList);
-// listsRouter.put('/:id', protect, updateList);
-// listsRouter.delete('/:id', protect, deleteList);
+const checklists = {
+  createChecklist: (data: TData) => request.post<void>(CHECKLISTS, data),
+  deleteChecklist: (id: string) => request.delete<void>(`${CHECKLISTS}/${id}`),
+  updateChecklist: ({ id, data }: TPutData) =>
+    request.put<void>(`${CHECKLISTS}/${id}`, data),
+};
+
+const checklistItems = {
+  createChecklistItem: (data: TData) =>
+    request.post<void>(CHECKLIST_ITEMS, data),
+  deleteChecklistItem: (id: string) =>
+    request.delete<void>(`${CHECKLIST_ITEMS}/${id}`),
+  updateChecklistItem: ({ id, data }: TPutData) =>
+    request.put<void>(`${CHECKLIST_ITEMS}/${id}`, data),
+};
 
 const sse = {
   setConnection: () =>
@@ -108,6 +121,8 @@ const api = {
   boards,
   lists,
   cards,
+  checklists,
+  checklistItems,
   sse,
 };
 

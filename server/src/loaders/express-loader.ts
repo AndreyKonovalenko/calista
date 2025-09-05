@@ -38,7 +38,7 @@ const expressLoader = async (app: Express) => {
   app.use('/api/lists', listsRouter);
   app.use('/api/cards', cardsRouter);
   app.use('/api/checklists', checklistsRouter);
-  app.use('/api/checklist_items', checklistItemsRouter)
+  app.use('/api/checklist_items', checklistItemsRouter);
   // app.use('/api/sse', sseRouter);
 
   if (config.nodeEnv === 'production') {

@@ -1,8 +1,11 @@
-import { Types } from "mongoose";
-import { ChecklistModel } from "../models/ChecklistModel";
-import { IChecklistItem, ChecklistItemModel } from "../models/ChecklistItemMedel";
-import { CustomError } from "../utils/CustomError";
-import { StatusCodes } from "http-status-codes";
+import { Types } from 'mongoose';
+import { ChecklistModel } from '../models/ChecklistModel';
+import {
+  IChecklistItem,
+  ChecklistItemModel,
+} from '../models/ChecklistItemMedel';
+import { CustomError } from '../utils/CustomError';
+import { StatusCodes } from 'http-status-codes';
 
 export async function createChecklistItem(data: IChecklistItem) {
   const checklist = await ChecklistModel.findById(data.checklistId);

@@ -1,39 +1,54 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 // import { createSelector } from 'reselect';
-import { IChecklist } from '../utils/types';
+import { IChecklistItem } from '../utils/types';
 
 interface IChecklistActions {
-  setChecklists: (data: { [key: string]: IChecklist }) => void;
-  updateChecklistName: (_id: string, name: string) => void;
+  setChecklistItems: (data: { [key: string]: IChecklistItem }) => void;
+  updateChecklistItemName: (_id: string, name: string) => void;
+  setSetChecklistItemCalculatedPos: (pos: number | null) => void;
+  // moveCard: (draggedId: string, listId: string, pos: number) => void;
+  // updateCardDescription: (_id: string, description: string) => void;
+  // updateCardName: (_id: string, name: string) => void;
 }
 
-interface IChecklistStore {
-  checklists: { [key: string]: IChecklist };
+interface IChecklistItemStore {
+  checklistItems: { [key: string]: IChecklistItem };
+  checklistItemCalculatedPos: number | null;
   actions: IChecklistActions;
 }
 
-const useChecklistStore = create<IChecklistStore>()(
+const useChecklistStore = create<IChecklistItemStore>()(
   devtools(
     set => ({
-      checklists: {},
+      checklistItems: {},
+      checklistItemCalculatedPos: null,
       actions: {
-        setChecklists: checklists =>
-          set({ checklists }, undefined, 'setChecklists'),
-        updateChecklistName: (_id, name) => 
-          set(state => ({
-            checklists: {
-              ...state.checklists,
-              [_id]: {
-                ...state.checklists[_id],
-                name: name
-              }
-            }
-          }
-        ), undefined, 'updateChecklistName'),  
-      }
+        setChecklistItems: checklistItems =>
+          set({ checklistItems }, undefined, 'setChecklistItems'),
+        updateChecklistItemName: (_id, name) =>
+          set(
+            state => ({
+              checklistItems: {
+                ...state.checklistItems,
+                [_id]: {
+                  ...state.checklistItems[_id],
+                  name: name,
+                },
+              },
+            }),
+            undefined,
+            'updateChecklistItemName',
+          ),
+        setSetChecklistItemCalculatedPos: (pos: number | null) =>
+          set(
+            { checklistItemCalculatedPos: pos },
+            undefined,
+            'setChecklistItemCalculatedPos',
+          ),
+      },
     }),
-    { name: 'checklistStore' }, 
+    { name: 'cardStore' },
   ),
 );
 
@@ -88,7 +103,8 @@ const useChecklistStore = create<IChecklistStore>()(
 //   ),
 // );
 
-export const useChecklist = () => useChecklistStore(state => state.checklists)
+export const useChecklistItem = () =>
+  useChecklistStore(state => state.checklistItems);
 
 // export const useCardActions = () => useCardStore(state => state.actions);
 // export const useCardCalculatedPos = () =>

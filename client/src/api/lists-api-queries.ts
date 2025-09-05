@@ -8,7 +8,7 @@ export const useCreateList = () => {
   invariantId(id);
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: api.lists.cerateList,
+    mutationFn: api.lists.createList,
     onSuccess: () => {
       return queryClient.invalidateQueries({
         queryKey: ['fetchBoardById', id],

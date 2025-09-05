@@ -8,7 +8,7 @@ export const useCreateCard = () => {
   invariantId(id);
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: api.cards.cerateCard,
+    mutationFn: api.cards.createCard,
     onSuccess: () => {
       return queryClient.invalidateQueries({
         queryKey: ['fetchBoardById', id],

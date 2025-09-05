@@ -9,6 +9,10 @@ import {
   updateCardById,
 } from '../services/cards-service';
 import { DeleteResult } from 'mongoose';
+import {
+  findChecklistItemsByCardId,
+  findChecklistsByCardId,
+} from '../services/cards-service';
 
 // POST cards/ @pirvate
 // Add new card
@@ -41,11 +45,21 @@ export const getCard = async (
 ): Promise<void> => {
   try {
     const card = await findCardById(req.params.id);
+    const checklists = await findChecklistsByCardId(req.params.id);
+    const checklistItems = await findChecklistItemsByCardId(req.params.id);
     if (!card) {
       res.status(StatusCodes.OK).send('Card not found');
     }
     if (card) {
-      res.status(StatusCodes.OK).json(card);
+      res.status(StatusCodes.OK).json({
+        card,
+        checklists: Object.fromEntries(
+          checklists.map(element => [element._id, element]),
+        ),
+        checklistItems: Object.fromEntries(
+          checklistItems.map(element => [element._id, element]),
+        ),
+      });
     }
   } catch (error) {
     next(error);

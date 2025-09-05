@@ -1,10 +1,7 @@
 import { Types } from 'mongoose';
 import { CustomError } from '../utils/CustomError';
 import { StatusCodes } from 'http-status-codes';
-import {
-  ChecklistModel,
-  IChecklist,
-} from '../models/ChecklistModel';
+import { ChecklistModel, IChecklist } from '../models/ChecklistModel';
 import { ChecklistItemModel } from '../models/ChecklistItemMedel';
 import { CardModel } from '../models/CardModel';
 
@@ -18,12 +15,11 @@ export async function createChecklist(data: IChecklist) {
   }
   if (card) {
     await ChecklistModel.create(data);
-
   }
 }
 
 export async function findChecklistById(id: string) {
-  return await ChecklistModel.findById(new Types.ObjectId(id))
+  return await ChecklistModel.findById(new Types.ObjectId(id));
 }
 
 export async function deleteChecklistById(id: string) {
@@ -41,5 +37,3 @@ export async function updateChecklistById(
     new: true,
   });
 }
-
-

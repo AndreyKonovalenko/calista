@@ -26,6 +26,14 @@ export async function findCardById(id: string) {
   });
 }
 
+export async function findChecklistsByCardId(id: string) {
+  return await ChecklistModel.find({ cardId: new Types.ObjectId(id) });
+}
+
+export async function findChecklistItemsByCardId(id: string) {
+  return await ChecklistItemModel.find({ cardId: new Types.ObjectId(id) });
+}
+
 export async function deletedCardById(id: string) {
   await ChecklistItemModel.deleteMany({ cardId: new Types.ObjectId(id) });
   await ChecklistModel.deleteMany({ cardId: new Types.ObjectId(id) });

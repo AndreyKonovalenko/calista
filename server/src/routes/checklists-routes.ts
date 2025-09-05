@@ -12,4 +12,3 @@ checklistsRouter.post('/', protect, addChecklist);
 checklistsRouter.get('/:id', protect, getChecklist);
 checklistsRouter.put('/:id', protect, updateChecklist);
 checklistsRouter.delete('/:id', protect, deleteChecklist);
-
