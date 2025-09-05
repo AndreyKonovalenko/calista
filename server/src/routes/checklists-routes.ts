@@ -1,22 +1,15 @@
 import express from 'express';
 import { protect } from '../middleware/protected';
 import {
-  addCheckList,
-  addCheckListItem,
-  deleteCheckList,
-  deletedCheckListItem,
-  getCheckList,
-  getCheckListItem,
-  updateCheckList,
-  updateChecklistItem,
+  addChecklist,
+  deleteChecklist,
+  getChecklist,
+  updateChecklist,
 } from '../controllers/checklists-controller';
 
-export const checkListsRouter = express.Router();
-checkListsRouter.post('/', protect, addCheckList);
-checkListsRouter.post('/:id/items/', protect, addCheckListItem);
-checkListsRouter.get('/:id', protect, getCheckList);
-checkListsRouter.get('/:id/items/:itmeId', protect, getCheckListItem);
-checkListsRouter.put('/:id', protect, updateCheckList);
-checkListsRouter.put('/:id/items/:itemId', protect, updateChecklistItem);
-checkListsRouter.delete('/:id', protect, deleteCheckList);
-checkListsRouter.delete('/:id/items/:itemId', protect, deletedCheckListItem);
+export const checklistsRouter = express.Router();
+checklistsRouter.post('/', protect, addChecklist);
+checklistsRouter.get('/:id', protect, getChecklist);
+checklistsRouter.put('/:id', protect, updateChecklist);
+checklistsRouter.delete('/:id', protect, deleteChecklist);
+

@@ -23,7 +23,6 @@ export const addCard = async (
     boardId: req.body.boardId,
     listId: req.body.listId,
     name: req.body.name,
-    checkLists: [],
     pos: req.body.pos ? req.body.pos : 16384,
   };
   try {

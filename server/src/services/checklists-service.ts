@@ -5,6 +5,7 @@ import {
   ChecklistModel,
   IChecklist,
 } from '../models/ChecklistModel';
+import { ChecklistItemModel } from '../models/ChecklistItemMedel';
 import { CardModel } from '../models/CardModel';
 
 export async function createChecklist(data: IChecklist) {
@@ -16,43 +17,27 @@ export async function createChecklist(data: IChecklist) {
     );
   }
   if (card) {
-    const checkList = await ChecklistModel.create(data);
-    card.checkLists.push(checkList._id);
-    await card.save();
+    await ChecklistModel.create(data);
+
   }
 }
 
-
-export async function findCheckListById(id: string) {
-  return await CheckListModel.findById(new Types.ObjectId(id)).populate({
-    path: 'checkItems',
-    select: ['name', 'state'],
-  });
+export async function findChecklistById(id: string) {
+  return await ChecklistModel.findById(new Types.ObjectId(id))
 }
 
-
-export async function deleteCheckListById(id: string) {
-  // clear parent arrey of id references
-  const checkList = await CheckListModel.findById(new Types.ObjectId(id));
-  const card = await CardModel.findById(checkList?.cardId);
-  if (card) {
-    card.checkLists = card.checkLists.filter(element => {
-      return element.equals(new Types.ObjectId(id)) === false;
-    });
-    await card.save();
-  }
-  await CheckListItemModel.deleteMany({ checkListId: new Types.ObjectId(id) });
-  return await CheckListModel.deleteOne({ _id: new Types.ObjectId(id) });
+export async function deleteChecklistById(id: string) {
+  await ChecklistItemModel.deleteMany({ checklistId: new Types.ObjectId(id) });
+  return await ChecklistModel.deleteOne({ _id: new Types.ObjectId(id) });
 }
 
-
-export async function updateCheckListById(
+export async function updateChecklistById(
   id: string,
   data: {
-    [key: string]: string | Types.ObjectId | Array<Types.ObjectId> | number;
+    [key: string]: string | Types.ObjectId | number;
   },
 ) {
-  await CheckListModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
+  await ChecklistModel.findByIdAndUpdate(new Types.ObjectId(id), data, {
     new: true,
   });
 }

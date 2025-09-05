@@ -3,7 +3,8 @@ import { CardModel, ICard } from '../models/CardModel';
 import { ListModel } from '../models/ListModel';
 import { CustomError } from '../utils/CustomError';
 import { Types } from 'mongoose';
-import { CheckListItemModel, CheckListModel } from '../models/ChecklistModel';
+import { ChecklistModel } from '../models/ChecklistModel';
+import { ChecklistItemModel } from '../models/ChecklistItemMedel';
 
 export async function createCard(data: ICard) {
   const list = await ListModel.findById(data.listId);
@@ -26,8 +27,8 @@ export async function findCardById(id: string) {
 }
 
 export async function deletedCardById(id: string) {
-  await CheckListItemModel.deleteMany({ cardId: new Types.ObjectId(id) });
-  await CheckListModel.deleteMany({ cardId: new Types.ObjectId(id) });
+  await ChecklistItemModel.deleteMany({ cardId: new Types.ObjectId(id) });
+  await ChecklistModel.deleteMany({ cardId: new Types.ObjectId(id) });
   return await CardModel.deleteOne({ _id: new Types.ObjectId(id) });
 }
 

@@ -1,6 +1,7 @@
 import { Types } from 'mongoose';
 import { BoardModel, IBoard } from '../models/BoardModel';
-import { CheckListItemModel, CheckListModel } from '../models/ChecklistModel';
+import { ChecklistModel } from '../models/ChecklistModel';
+import { ChecklistItemModel } from '../models/ChecklistItemMedel';
 import { CardModel } from '../models/CardModel';
 import { ListModel } from '../models/ListModel';
 import { ascendingComparator } from '../utils/utils';
@@ -21,8 +22,8 @@ export async function findCardsByBoardId(id: string) {
 }
 
 export async function deleteBoardById(id: string) {
-  await CheckListItemModel.deleteMany({ boardId: new Types.ObjectId(id) });
-  await CheckListModel.deleteMany({ boardId: new Types.ObjectId(id) });
+  await ChecklistItemModel.deleteMany({ boardId: new Types.ObjectId(id) });
+  await ChecklistModel.deleteMany({ boardId: new Types.ObjectId(id) });
   await CardModel.deleteMany({ boardId: new Types.ObjectId(id) });
   await ListModel.deleteMany({ boardId: new Types.ObjectId(id) });
   return await BoardModel.deleteOne({ _id: new Types.ObjectId(id) });

@@ -3,7 +3,8 @@ import { IList, ListModel } from '../models/ListModel';
 import { Types } from 'mongoose';
 import { CustomError } from '../utils/CustomError';
 import { StatusCodes } from 'http-status-codes';
-import { CheckListItemModel, CheckListModel } from '../models/ChecklistModel';
+import { ChecklistModel } from '../models/ChecklistModel';
+import { ChecklistItemModel } from '../models/ChecklistItemMedel';
 import { CardModel } from '../models/CardModel';
 import { ascendingComparator } from '../utils/utils';
 
@@ -25,8 +26,8 @@ export async function findListById(id: string) {
 }
 
 export async function deleteListById(id: string) {
-  await CheckListItemModel.deleteMany({ listId: new Types.ObjectId(id) });
-  await CheckListModel.deleteMany({ listId: new Types.ObjectId(id) });
+  await ChecklistItemModel.deleteMany({ listId: new Types.ObjectId(id) });
+  await ChecklistModel.deleteMany({ listId: new Types.ObjectId(id) });
   await CardModel.deleteMany({ listId: new Types.ObjectId(id) });
   return await ListModel.deleteOne({ _id: new Types.ObjectId(id) });
 }

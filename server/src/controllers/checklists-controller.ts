@@ -1,100 +1,52 @@
 import { Response, Request, NextFunction } from 'express';
 import { CustomRequest } from '../middleware/protected';
 import { StatusCodes } from 'http-status-codes';
-import { ICheckList, ICheckListItem } from '../models/ChecklistModel';
+import { IChecklist } from '../models/ChecklistModel';
 import { DeleteResult } from 'mongoose';
 import {
-  createCheckList,
-  createCheckListItem,
-  findCheckListById,
-  findCheckListItemById,
-  deleteCheckListById,
-  deleteCheckLisItemById,
-  updateCheckListById,
-  updateChecklistItemById,
+  createChecklist,
+  findChecklistById,
+  deleteChecklistById,
+  updateChecklistById,
 } from '../services/checklists-service';
 
 // POST 'checklists/' @private
-export const addCheckList = async (
+export const addChecklist = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
     const { user } = req as CustomRequest;
-    const data: ICheckList = {
+    const data: IChecklist = {
       createrId: user._id,
       boardId: req.body.boardId,
       listId: req.body.listId,
       cardId: req.body.cardId,
       name: req.body.name,
-      checkItems: [],
       pos: req.body.pos ? req.body.pos : 16384,
     };
-    await createCheckList(data);
+    await createChecklist(data);
     res.status(StatusCodes.OK).send(`board ${data.name} successfuly created`);
   } catch (error) {
     next(error);
   }
 };
 
-// POST 'checklists/:id/items
-export const addCheckListItem = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const { user } = req as CustomRequest;
-    const data: ICheckListItem = {
-      createrId: user._id,
-      checkListId: req.body.checkListId,
-      boardId: req.body.boardId,
-      listId: req.body.listId,
-      cardId: req.body.cardId,
-      name: req.body.name,
-      state: 'incomplite',
-      pos: req.body.pos ? req.body.pos : 16384,
-    };
-    await createCheckListItem(data);
-    res.status(StatusCodes.OK).send(`item ${data.name} succesfuly created`);
-  } catch (error) {
-    next(error);
-  }
-};
 
 // GET 'checklists/:id' @private
-export const getCheckList = async (
+export const getChecklist = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const checkList = await findCheckListById(req.params.id);
-    if (!checkList) {
-      res.status(StatusCodes.OK).send('CheckList not found');
+    const checklist = await findChecklistById(req.params.id);
+    if (!checklist) {
+      res.status(StatusCodes.OK).send('Checklist not found');
     }
-    if (checkList) {
-      res.status(StatusCodes.OK).json(checkList);
-    }
-  } catch (error) {
-    next(error);
-  }
-};
-
-// GET 'checklists/:id/itmes/:itemId
-export const getCheckListItem = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  try {
-    const checkListItem = await findCheckListItemById(req.params.itmeId);
-    if (!checkListItem) {
-      res.status(StatusCodes.OK).send('CheckListItem not found');
-    }
-    if (checkListItem) {
-      res.status(StatusCodes.OK).json(checkListItem);
+    if (checklist) {
+      res.status(StatusCodes.OK).json(checklist);
     }
   } catch (error) {
     next(error);
@@ -102,72 +54,37 @@ export const getCheckListItem = async (
 };
 
 // PUT 'checklists/:id @private
-export const updateCheckList = async (
+export const updateChecklist = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
   try {
     const data = { ...req.body };
-    await updateCheckListById(req.params.id, data);
-    res.status(StatusCodes.OK).send('CheckList successfully updated');
-  } catch (error) {
-    next(error);
-  }
-};
-
-// PUT 'checklists:/:id/items/:itemId
-
-export const updateChecklistItem = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  try {
-    const data = { ...req.body };
-    await updateChecklistItemById(req.params.itemId, data);
-    res.status(StatusCodes.OK).send('CheckListItem successfully updated');
+    await updateChecklistById(req.params.id, data);
+    res.status(StatusCodes.OK).send('Checklist successfully updated');
   } catch (error) {
     next(error);
   }
 };
 
 // DELETE: checklists/:id/ @private
-export const deleteCheckList = async (
+export const deleteChecklist = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const result: DeleteResult = await deleteCheckListById(req.params.id);
+    const result: DeleteResult = await deleteChecklistById(req.params.id);
     if (result.deletedCount > 0) {
-      res.status(StatusCodes.OK).send(`checkList id: ${req.params.id} deleted`);
+      res.status(StatusCodes.OK).send(`checklist id: ${req.params.id} deleted`);
     } else {
       res
         .status(StatusCodes.OK)
-        .send(`checkList id: ${req.params.id} not found`);
+        .send(`checklist id: ${req.params.id} not found`);
     }
   } catch (error) {
     next(error);
   }
 };
 
-// DELETE: checklists/:id/items/:itemId:
-export const deletedCheckListItem = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  try {
-    const result: DeleteResult = await deleteCheckLisItemById(req.params);
-    if (result.deletedCount > 0) {
-      res.status(StatusCodes.OK).send(`item id: ${req.params.itemId} deleted`);
-    } else {
-      res
-        .status(StatusCodes.OK)
-        .send(`item id: ${req.params.ietmId} not found`);
-    }
-  } catch (error) {
-    next(error);
-  }
-};

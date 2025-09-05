@@ -11,7 +11,7 @@ import { boardsRouter } from '../routes/boards-routes';
 import { cardsRouter } from '../routes/cards-routes';
 // import { sseRouter } from '../routes/sse-routes';
 import { listsRouter } from '../routes/lists-routes';
-import { checkListsRouter } from '../routes/checklists-routes';
+import { checklistsRouter } from '../routes/checklists-routes';
 import { checklistItemsRouter } from '../routes/checklist-items-routes';
 import config from '../config';
 import path from 'path';
@@ -37,7 +37,7 @@ const expressLoader = async (app: Express) => {
   app.use('/api/boards', boardsRouter);
   app.use('/api/lists', listsRouter);
   app.use('/api/cards', cardsRouter);
-  app.use('/api/checklists', checkListsRouter);
+  app.use('/api/checklists', checklistsRouter);
   app.use('/api/checklist_items', checklistItemsRouter)
   // app.use('/api/sse', sseRouter);
 
