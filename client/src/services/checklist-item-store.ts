@@ -3,7 +3,7 @@ import { devtools } from 'zustand/middleware';
 // import { createSelector } from 'reselect';
 import { IChecklistItem } from '../utils/types';
 
-interface IChecklistActions {
+interface IChecklistItemActions {
   setChecklistItems: (data: { [key: string]: IChecklistItem }) => void;
   updateChecklistItemName: (_id: string, name: string) => void;
   setSetChecklistItemCalculatedPos: (pos: number | null) => void;
@@ -15,7 +15,7 @@ interface IChecklistActions {
 interface IChecklistItemStore {
   checklistItems: { [key: string]: IChecklistItem };
   checklistItemCalculatedPos: number | null;
-  actions: IChecklistActions;
+  actions: IChecklistItemActions;
 }
 
 const useChecklistStore = create<IChecklistItemStore>()(
@@ -25,7 +25,7 @@ const useChecklistStore = create<IChecklistItemStore>()(
       checklistItemCalculatedPos: null,
       actions: {
         setChecklistItems: checklistItems =>
-          set({ checklistItems }, undefined, 'setChecklistItems'),
+          set({ checklistItems }, undefined, 'setChecklistItem'),
         updateChecklistItemName: (_id, name) =>
           set(
             state => ({

@@ -3,12 +3,19 @@ import { Stack, Button } from '@mui/material';
 import { CardCheckListTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 import ChecklistIcon from '@mui/icons-material/Checklist';
 import { handleFormSubmitEvent } from '../../../utils/utils';
-import { useAddChecklist } from '../../../services/ui-store';
+import { useAddChecklist, useUIActions } from '../../../services/ui-store';
+
 
 const CheckListSection = (props: { cardId: string }) => {
   const addChecklist = useAddChecklist();
+  const { setAddChecklist  } = useUIActions();
   const { cardId } = props;
   const [checklistName, setChecklistName] = useState('cheklist name');
+
+
+  const handleCancelAddChecklist = () => {
+    setAddChecklist()
+  } 
 
   const handleAddChecklist = (
     event: React.FormEvent<HTMLFormElement>,
@@ -19,7 +26,7 @@ const CheckListSection = (props: { cardId: string }) => {
     const checklistName = formData.get('checklistName');
     console.log(checklistName, cardId);
   };
-  return addChecklist ? (
+  const addChecklistform =  (
     <Stack
       component="form"
       onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
@@ -57,11 +64,16 @@ const CheckListSection = (props: { cardId: string }) => {
         <Button variant="contained" type="submit">
           ADD
         </Button>
-        <Button variant="text" onClick={() => {}}>
+        <Button variant="text" onClick={handleCancelAddChecklist}>
           CANCEL
         </Button>
       </Stack>
     </Stack>
-  ) : null;
+  );
+
+  return addChecklist ?  addChecklistform :  null;
+
+
+
 };
 export default CheckListSection;

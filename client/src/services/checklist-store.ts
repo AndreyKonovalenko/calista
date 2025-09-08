@@ -19,7 +19,7 @@ const useChecklistStore = create<IChecklistStore>()(
       checklists: {},
       actions: {
         setChecklists: checklists =>
-          set({ checklists }, undefined, 'setChecklists'),
+          set({ checklists }, undefined, 'setChecklist'),
         updateChecklistName: (_id, name) => 
           set(state => ({
             checklists: {
@@ -88,16 +88,17 @@ const useChecklistStore = create<IChecklistStore>()(
 //   ),
 // );
 
-export const useChecklist = () => useChecklistStore(state => state.checklists)
+export const useChecklists = () => useChecklistStore(state => state.checklists)
+export const useCardActions = () => useChecklistStore(state => state.actions);
+export const useChecklist = (id: string | undefined) => {
+  if (!id) return null;
+  return useChecklistStore(state => (state.checklists ? state.checklists[id] : null));
+};
 
-// export const useCardActions = () => useCardStore(state => state.actions);
 // export const useCardCalculatedPos = () =>
 //   useCardStore(state => state.cardCalculatedPos);
 // export const useCards = () => useCardStore(state => state.cards);
-// export const useCard = (id: string | undefined) => {
-//   if (!id) return null;
-//   return useCardStore(state => (state.cards ? state.cards[id] : null));
-// };
+
 
 // export const useSortedCardsByListId = (listId: string) =>
 //   useCardStore(state => getMemoizedCards(state, listId));
