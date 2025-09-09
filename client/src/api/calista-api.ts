@@ -1,7 +1,14 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import { TAuthState } from '../services/auth-store';
-import { IBoard, ICard, IBoardTrimmed, IList } from '../utils/types';
+import {
+  IBoard,
+  ICard,
+  IBoardTrimmed,
+  IList,
+  IChecklist,
+  IChecklistItem,
+} from '../utils/types';
 import validEnv from '../utils/utils';
 
 const BASE_URL = validEnv(process.env.BASE_URL);
@@ -89,7 +96,12 @@ const lists = {
 
 const cards = {
   createCard: (data: TData) => request.post<void>(CARDS, data),
-  fetchCardById: (id: string) => request.get<ICard>(`${CARDS}/${id}`),
+  fetchCardById: (id: string) =>
+    request.get<{
+      card: ICard;
+      checklists: { [key: string]: IChecklist };
+      checklistItems: { [key: string]: IChecklistItem };
+    }>(`${CARDS}/${id}`),
   deleteCard: (id: string) => request.delete<void>(`${CARDS}/${id}`),
   updateCard: ({ id, data }: TPutData) =>
     request.put<void>(`${CARDS}/${id}`, data),

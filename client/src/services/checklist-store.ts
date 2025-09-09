@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-// import { createSelector } from 'reselect';
+import { createSelector } from 'reselect';
 import { IChecklist } from '../utils/types';
 
 interface IChecklistActions {
@@ -20,20 +20,23 @@ const useChecklistStore = create<IChecklistStore>()(
       actions: {
         setChecklists: checklists =>
           set({ checklists }, undefined, 'setChecklist'),
-        updateChecklistName: (_id, name) => 
-          set(state => ({
-            checklists: {
-              ...state.checklists,
-              [_id]: {
-                ...state.checklists[_id],
-                name: name
-              }
-            }
-          }
-        ), undefined, 'updateChecklistName'),  
-      }
+        updateChecklistName: (_id, name) =>
+          set(
+            state => ({
+              checklists: {
+                ...state.checklists,
+                [_id]: {
+                  ...state.checklists[_id],
+                  name: name,
+                },
+              },
+            }),
+            undefined,
+            'updateChecklistName',
+          ),
+      },
     }),
-    { name: 'checklistStore' }, 
+    { name: 'checklistStore' },
   ),
 );
 
@@ -88,20 +91,43 @@ const useChecklistStore = create<IChecklistStore>()(
 //   ),
 // );
 
-export const useChecklists = () => useChecklistStore(state => state.checklists)
-export const useCardActions = () => useChecklistStore(state => state.actions);
+export const useChecklistActions = () =>
+  useChecklistStore(state => state.actions);
+export const useChecklists = () => useChecklistStore(state => state.checklists);
 export const useChecklist = (id: string | undefined) => {
   if (!id) return null;
-  return useChecklistStore(state => (state.checklists ? state.checklists[id] : null));
+  return useChecklistStore(state =>
+    state.checklists ? state.checklists[id] : null,
+  );
 };
+export const useSortedChecklists = () =>
+  useChecklistStore(getMemoizedChecklists);
+const getMemoizedChecklists = createSelector(
+  [state => state.checklists],
+  checklists => {
+    if (!checklists) {
+      return;
+    }
+    const sorted = Object.keys(checklists).sort(
+      (a: string, b: string): number => {
+        if (checklists) {
+          if (checklists[a].pos < checklists[b].pos) return -1;
+          if (checklists[a].pos > checklists[b].pos) return 1;
+        }
+        return 0;
+      },
+    );
+    return sorted;
+  },
+);
 
 // export const useCardCalculatedPos = () =>
 //   useCardStore(state => state.cardCalculatedPos);
 // export const useCards = () => useCardStore(state => state.cards);
 
-
 // export const useSortedCardsByListId = (listId: string) =>
 //   useCardStore(state => getMemoizedCards(state, listId));
+
 // const selectCards = (state: ICardStore) => state.cards;
 // const selectListId = (_: ICardStore, listId: string) => listId;
 // const getMemoizedCards = createSelector(

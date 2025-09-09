@@ -18,14 +18,6 @@ export const useCreateChecklist = () => {
   });
 };
 
-// export const useFetchCardById = (cardId: string) => {
-//   return useQuery({
-//     queryKey: ['fetchCardById', cardId],
-//     queryFn: () => api.cards.fetchCardById(cardId),
-//     enabled: !!cardId,
-//   });
-// };
-
 export const useDeleteChecklist = () => {
   const { id } = useParams();
   //id - means cardId from url params

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-// import { createSelector } from 'reselect';
+import { createSelector } from 'reselect';
 import { IChecklistItem } from '../utils/types';
 
 interface IChecklistItemActions {
@@ -18,7 +18,7 @@ interface IChecklistItemStore {
   actions: IChecklistItemActions;
 }
 
-const useChecklistStore = create<IChecklistItemStore>()(
+const useChecklistItemStore = create<IChecklistItemStore>()(
   devtools(
     set => ({
       checklistItems: {},
@@ -48,7 +48,7 @@ const useChecklistStore = create<IChecklistItemStore>()(
           ),
       },
     }),
-    { name: 'cardStore' },
+    { name: 'checklistItemStore' },
   ),
 );
 
@@ -104,7 +104,29 @@ const useChecklistStore = create<IChecklistItemStore>()(
 // );
 
 export const useChecklistItem = () =>
-  useChecklistStore(state => state.checklistItems);
+  useChecklistItemStore(state => state.checklistItems);
+export const useChecklistItemActrions = () =>
+  useChecklistItemStore(state => state.actions);
+export const useSortedChecklistItems = () =>
+  useChecklistItemStore(getMemoizedChecklistItems);
+const getMemoizedChecklistItems = createSelector(
+  [state => state.checklistItems],
+  checklistItems => {
+    if (!checklistItems) {
+      return;
+    }
+    const sorted = Object.keys(checklistItems).sort(
+      (a: string, b: string): number => {
+        if (checklistItems) {
+          if (checklistItems[a].pos < checklistItems[b].pos) return -1;
+          if (checklistItems[a].pos > checklistItems[b].pos) return 1;
+        }
+        return 0;
+      },
+    );
+    return sorted;
+  },
+);
 
 // export const useCardActions = () => useCardStore(state => state.actions);
 // export const useCardCalculatedPos = () =>

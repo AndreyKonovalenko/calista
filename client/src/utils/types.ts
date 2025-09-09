@@ -55,7 +55,7 @@ export interface ICardTrimmed {
 export interface IChecklist {
   _id: string;
   name: string;
-  pos: string;
+  pos: number;
 }
 
 export interface IChecklistItem {

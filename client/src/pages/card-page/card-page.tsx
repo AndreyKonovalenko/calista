@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { Paper, Stack, Box, Divider } from '@mui/material';
 import CardDescription from '../../components/card-page-components/card-descriprion/card-descritpion';
@@ -7,6 +7,9 @@ import CardActions from '../../components/card-page-components/card-actions/card
 import CheckListSection from '../../components/card-page-components/checklist-section/checklist-section';
 import { useCard } from '../../services/card-store';
 import CloseIcon from '@mui/icons-material/Close';
+import { useFetchCardById } from '../../api/cards-api-queries';
+import { useChecklistActions } from '../../services/checklist-store';
+import { useChecklistItemActrions } from '../../services/checklist-item-store';
 
 const styles = {
   container: {
@@ -30,12 +33,27 @@ const styles = {
 
 const CardPage = () => {
   const navigate = useNavigate();
+  const { setChecklists } = useChecklistActions();
+  const { setChecklistItems } = useChecklistItemActrions();
   const { id } = useParams();
   const card = useCard(id);
+  if (!id) {
+    return null;
+  }
+  const { data, isSuccess, isLoading } = useFetchCardById(id);
   // const [addCheckList, setAddCheckList] = useState(false)
   // const handleAddChecklist = () =>{
   //   setAddCheckList(!addCheckList)
   // }
+
+  console.log(data, isSuccess, isLoading);
+
+  useEffect(() => {
+    if (data) {
+      setChecklists(data.checklists);
+      setChecklistItems(data.checklistItems);
+    }
+  }, [data]);
 
   return card ? (
     <Paper sx={styles.container}>

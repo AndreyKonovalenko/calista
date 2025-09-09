@@ -20,7 +20,7 @@ export async function createCard(data: ICard) {
 }
 
 export async function findCardById(id: string) {
-  return await CardModel.findById(new Types.ObjectId(id))
+  return await CardModel.findById(new Types.ObjectId(id));
 }
 
 export async function findChecklistsByCardId(id: string) {

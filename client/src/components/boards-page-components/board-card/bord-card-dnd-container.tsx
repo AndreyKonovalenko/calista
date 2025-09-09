@@ -173,7 +173,7 @@ const BoardCardDndContainer = (props: {
       <Link
         sx={dragStyle}
         ref={ref}
-        to={`cards/${_id}`}
+        to={`lists/${listId}/cards/${_id}`}
         component={RouterLink}
         state={{ background: location }}
         underline="none"
