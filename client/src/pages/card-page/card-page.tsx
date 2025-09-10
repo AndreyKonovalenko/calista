@@ -9,6 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useFetchCardById } from '../../api/cards-api-queries';
 import { useChecklistActions } from '../../services/checklist-store';
 import { useChecklistItemActions } from '../../services/checklist-item-store';
+import LoadingBage from '../../components/loading-bage/loading-bage';
 
 const styles = {
   container: {
@@ -38,13 +39,13 @@ const CardPage = () => {
   if (!id) {
     return null;
   }
-  const { data, isSuccess, isLoading } = useFetchCardById(id);
+  const { data,  isLoading } = useFetchCardById(id);
   // const [addCheckList, setAddCheckList] = useState(false)
   // const handleAddChecklist = () =>{
   //   setAddCheckList(!addCheckList)
   // }
 
-  console.log(data, isSuccess, isLoading);
+  console.log(data, isLoading);
 
   useEffect(() => {
     if (data) {
@@ -68,13 +69,13 @@ const CardPage = () => {
       >
         <Stack direction="column" spacing={5} sx={styles.description}>
           <CardDescription card={data.card} />
-          <CheckListSection cardId={data.card._id} />
+          <CheckListSection cardId={data.card._id} boardId={data.card.boardId} listId={data.card.listId}/>
         </Stack>
         <Divider orientation="vertical" variant="middle" flexItem />
         <CardActions cardId={data.card._id} />
       </Stack>
     </Paper>
-  ) : null;
+  ) : (isLoading? <LoadingBage/>: null);
 };
 
 export default CardPage;

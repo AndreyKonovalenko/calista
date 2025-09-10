@@ -10,13 +10,13 @@ import {
 } from '../../../services/checklist-store';
 import { useCreateChecklist } from '../../../api/checklists-api-queries';
 
-const CheckListSection = (props: { cardId: string }) => {
+const CheckListSection = (props: { cardId: string, listId: string, boardId: string }) => {
   const addChecklist = useAddChecklist();
   const createChecklistQuery = useCreateChecklist();
   const { setAddChecklist } = useUIActions();
   const checklists = useChecklists();
   const sortedChecklists = useSortedChecklists();
-  const { cardId } = props;
+  const { cardId, listId, boardId } = props;
 
   const [checklistName, setChecklistName] = useState('cheklist name');
 
@@ -25,7 +25,7 @@ const CheckListSection = (props: { cardId: string }) => {
   };
 
   const handleAddNewChecklist = useCallback(
-    (event: React.FormEvent<HTMLFormElement>, cardId: string) => {
+    (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       let pos = 16584;
       if (checklists && sortedChecklists && sortedChecklists?.length > 0) {
@@ -33,15 +33,14 @@ const CheckListSection = (props: { cardId: string }) => {
           checklists[sortedChecklists[sortedChecklists.length - 1]].pos + pos;
       }
       const formData = new FormData(event.currentTarget);
-      const checklistName = formData.get('checklistName');
-      createChecklistQuery.mutate({
+        createChecklistQuery.mutate({
         name: formData.get('checklistName'),
-        // boardId: req.body.boardId,
-        // listId: req.body.listId,
+        boardId: boardId,
+        listId: listId,
         cardId: cardId,
         pos: pos,
       });
-      console.log(checklistName, cardId);
+
     },
     [cardId, checklists, sortedChecklists],
   );
@@ -50,7 +49,7 @@ const CheckListSection = (props: { cardId: string }) => {
     <Stack
       component="form"
       onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-        handleAddNewChecklist(event, cardId);
+        handleAddNewChecklist(event);
       }}
       spacing={1}
     >
@@ -81,7 +80,7 @@ const CheckListSection = (props: { cardId: string }) => {
         />
       </Stack>
       <Stack direction="row">
-        <Button variant="contained" type="submit">
+        <Button type="submit" variant="contained">
           ADD
         </Button>
         <Button variant="text" onClick={handleCancelAddChecklist}>
