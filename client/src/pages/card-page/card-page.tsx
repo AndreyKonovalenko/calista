@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router';
+import { useParams, useNavigate} from 'react-router';
 import { Paper, Stack, Box, Divider } from '@mui/material';
 import CardDescription from '../../components/card-page-components/card-descriprion/card-descritpion';
 import CardPageTitle from '../../components/card-page-components/card-title/card-title';
 import CardActions from '../../components/card-page-components/card-actions/card-actions';
 import CheckListSection from '../../components/card-page-components/checklist-section/checklist-section';
-import { useCard } from '../../services/card-store';
 import CloseIcon from '@mui/icons-material/Close';
 import { useFetchCardById } from '../../api/cards-api-queries';
 import { useChecklistActions } from '../../services/checklist-store';
-import { useChecklistItemActrions } from '../../services/checklist-item-store';
+import { useChecklistItemActions } from '../../services/checklist-item-store';
 
 const styles = {
   container: {
@@ -34,9 +33,8 @@ const styles = {
 const CardPage = () => {
   const navigate = useNavigate();
   const { setChecklists } = useChecklistActions();
-  const { setChecklistItems } = useChecklistItemActrions();
-  const { id } = useParams();
-  const card = useCard(id);
+  const { setChecklistItems } = useChecklistItemActions();
+  const { id, boardId } = useParams();
   if (!id) {
     return null;
   }
@@ -55,11 +53,11 @@ const CardPage = () => {
     }
   }, [data]);
 
-  return card ? (
+  return data ? (
     <Paper sx={styles.container}>
       <Stack direction="row" justifyContent="space-between">
-        <CardPageTitle _id={card._id} name={card.name} />
-        <Box onClick={() => navigate(-1)} sx={styles.closeButton}>
+        <CardPageTitle _id={data.card._id} name={data.card.name} />
+        <Box onClick={() => navigate(`/boards/${boardId}`,{replace:true})} sx={styles.closeButton}>
           <CloseIcon fontSize="large" />
         </Box>
       </Stack>
@@ -69,11 +67,11 @@ const CardPage = () => {
         sx={styles.mainContainer}
       >
         <Stack direction="column" spacing={5} sx={styles.description}>
-          <CardDescription card={card} />
-          <CheckListSection cardId={card._id} />
+          <CardDescription card={data.card} />
+          <CheckListSection cardId={data.card._id} />
         </Stack>
         <Divider orientation="vertical" variant="middle" flexItem />
-        <CardActions cardId={card._id} />
+        <CardActions cardId={data.card._id} />
       </Stack>
     </Paper>
   ) : null;

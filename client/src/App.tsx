@@ -9,7 +9,7 @@ import MainLayout from './layout/MainLayout';
 import AuthLayout from './layout/AuthLayout';
 import LoginPage from './pages/login-page/login-page';
 import RegisterPage from './pages/register-page/register-page';
-import NotFoundPage from './pages/page-not-found/page-not-found';
+// import NotFoundPage from './pages/page-not-found/page-not-found';
 import CardPage from './pages/card-page/card-page';
 import ModalPortal from './components/modal-portal/modal-portal';
 
@@ -25,12 +25,24 @@ const App = (): JSX.Element => {
             path="boards/:id"
             element={<ProtectedRoute element={<BoardPage />} />}
           />
+          <Route
+            path="boards/:boardId/lists/:listId/cards/:id"
+            element={
+              <ProtectedRoute
+                element={
+                  <ModalPortal>
+                    <CardPage />
+                  </ModalPortal>
+                }
+              />
+            }
+          />
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
         </Route>
-        <Route path="*" element={<NotFoundPage />} />
+        {/* <Route path="*" element={<NotFoundPage />} /> */}
       </Routes>
       {background && (
         <Routes>

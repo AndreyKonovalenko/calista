@@ -105,7 +105,7 @@ const useChecklistItemStore = create<IChecklistItemStore>()(
 
 export const useChecklistItem = () =>
   useChecklistItemStore(state => state.checklistItems);
-export const useChecklistItemActrions = () =>
+export const useChecklistItemActions = () =>
   useChecklistItemStore(state => state.actions);
 export const useSortedChecklistItems = () =>
   useChecklistItemStore(getMemoizedChecklistItems);
