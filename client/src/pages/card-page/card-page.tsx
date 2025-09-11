@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams, useNavigate} from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import { Paper, Stack, Box, Divider } from '@mui/material';
 import CardDescription from '../../components/card-page-components/card-descriprion/card-descritpion';
 import CardPageTitle from '../../components/card-page-components/card-title/card-title';
@@ -39,26 +39,27 @@ const CardPage = () => {
   if (!id) {
     return null;
   }
-  const { data,  isLoading } = useFetchCardById(id);
+  const { data, isSuccess, isLoading } = useFetchCardById(id);
   // const [addCheckList, setAddCheckList] = useState(false)
   // const handleAddChecklist = () =>{
   //   setAddCheckList(!addCheckList)
   // }
 
-  console.log(data, isLoading);
-
   useEffect(() => {
-    if (data) {
+    if (isSuccess) {
       setChecklists(data.checklists);
       setChecklistItems(data.checklistItems);
     }
-  }, [data]);
+  }, [isSuccess, data]);
 
   return data ? (
     <Paper sx={styles.container}>
       <Stack direction="row" justifyContent="space-between">
         <CardPageTitle _id={data.card._id} name={data.card.name} />
-        <Box onClick={() => navigate(`/boards/${boardId}`,{replace:true})} sx={styles.closeButton}>
+        <Box
+          onClick={() => navigate(`/boards/${boardId}`, { replace: true })}
+          sx={styles.closeButton}
+        >
           <CloseIcon fontSize="large" />
         </Box>
       </Stack>
@@ -68,14 +69,23 @@ const CardPage = () => {
         sx={styles.mainContainer}
       >
         <Stack direction="column" spacing={5} sx={styles.description}>
-          <CardDescription card={data.card} />
-          <CheckListSection cardId={data.card._id} boardId={data.card.boardId} listId={data.card.listId}/>
+          <CardDescription
+            cardId={data.card._id}
+            description={data.card.description}
+          />
+          <CheckListSection
+            cardId={data.card._id}
+            boardId={data.card.boardId}
+            listId={data.card.listId}
+          />
         </Stack>
         <Divider orientation="vertical" variant="middle" flexItem />
         <CardActions cardId={data.card._id} />
       </Stack>
     </Paper>
-  ) : (isLoading? <LoadingBage/>: null);
+  ) : isLoading ? (
+    <LoadingBage />
+  ) : null;
 };
 
 export default CardPage;

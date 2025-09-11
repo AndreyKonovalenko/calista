@@ -39,7 +39,7 @@ const CardActions = (props: { cardId: string }) => {
     setAnchorEl(null);
   };
 
-  const handleDeleteCard = (cardId: string | undefined) => {
+  const handleDeleteCard = () => {
     if (!cardId) return;
     deleteCardQuery.mutate(cardId);
     navigate(-1);
@@ -68,10 +68,7 @@ const CardActions = (props: { cardId: string }) => {
           </Typography>
           <Stack direction="row" justifyContent="end" spacing={2}>
             <Button onClick={handleCloseDeleteMenu}>Cancel</Button>
-            <Button
-              variant="contained"
-              onClick={() => handleDeleteCard(cardId)}
-            >
+            <Button variant="contained" onClick={handleDeleteCard}>
               Delete
             </Button>
           </Stack>

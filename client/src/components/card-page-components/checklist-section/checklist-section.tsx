@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Stack, Button, Typography } from '@mui/material';
+import { Stack, Button } from '@mui/material';
 import { CardCheckListTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 import ChecklistIcon from '@mui/icons-material/Checklist';
 import { handleFormSubmitEvent } from '../../../utils/utils';
@@ -9,8 +9,13 @@ import {
   useSortedChecklists,
 } from '../../../services/checklist-store';
 import { useCreateChecklist } from '../../../api/checklists-api-queries';
+import ChecklistCard from '../checklist-card/checklist-card';
 
-const CheckListSection = (props: { cardId: string, listId: string, boardId: string }) => {
+const CheckListSection = (props: {
+  cardId: string;
+  listId: string;
+  boardId: string;
+}) => {
   const addChecklist = useAddChecklist();
   const createChecklistQuery = useCreateChecklist();
   const { setAddChecklist } = useUIActions();
@@ -32,19 +37,20 @@ const CheckListSection = (props: { cardId: string, listId: string, boardId: stri
           checklists[sortedChecklists[sortedChecklists.length - 1]].pos + pos;
       }
       const formData = new FormData(event.currentTarget);
-        createChecklistQuery.mutate({
+      createChecklistQuery.mutate({
         name: formData.get('checklistName'),
         boardId: boardId,
         listId: listId,
         cardId: cardId,
         pos: pos,
       });
-
     },
     [cardId, checklists, sortedChecklists],
   );
   const checklistData = sortedChecklists
-    ? sortedChecklists.map(id => (<Typography key={id}>{checklists[id].name}</Typography>))
+    ? sortedChecklists.map(id => (
+        <ChecklistCard key={id} _id={id} name={checklists[id].name} />
+      ))
     : null;
 
   const addChecklistform = (
@@ -71,7 +77,7 @@ const CheckListSection = (props: { cardId: string, listId: string, boardId: stri
             event.target.select();
           }}
           onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-           event.target.focus();
+            event.target.focus();
           }}
           onKeyDown={(event: React.KeyboardEvent<HTMLTextAreaElement>) => {
             if (event.key === 'Enter') {
@@ -94,11 +100,9 @@ const CheckListSection = (props: { cardId: string, listId: string, boardId: stri
 
   return (
     <React.Fragment>
-    {addChecklist ? addChecklistform : null}
-    <Stack>
-    {checklistData}
-    </Stack>
+      {addChecklist ? addChecklistform : null}
+      <Stack>{checklistData}</Stack>
     </React.Fragment>
-    )
+  );
 };
 export default CheckListSection;

@@ -42,7 +42,16 @@ export const useDeleteCard = () => {
 };
 
 export const useUpdateCard = () => {
+  const { id } = useParams();
+  invariantId(id);
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: api.cards.updateCard,
+    onSuccess: () => {
+      return queryClient.invalidateQueries({
+        queryKey: ['fetchCardById', id],
+        exact: true,
+      });
+    },
   });
 };

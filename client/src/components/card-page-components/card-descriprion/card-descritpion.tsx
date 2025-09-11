@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ICard } from '../../../utils/types';
 import { useCardActions } from '../../../services/card-store';
 import { useUpdateCard } from '../../../api/cards-api-queries';
 import { Stack, TextField, Button, Typography } from '@mui/material';
@@ -22,10 +21,13 @@ const styles = {
 };
 const descriptionPlaceholder = 'Add a more detailed descripion...';
 
-const CardDescription = (props: { card: ICard }) => {
+const CardDescription = (props: {
+  cardId: string;
+  description: string | undefined;
+}) => {
   const { updateCardDescription } = useCardActions();
   const { mutate: updateCardMutate } = useUpdateCard();
-  const { description, _id } = props.card;
+  const { description, cardId } = props;
   const [descripionEdit, setDescriptionEdit] = useState(false);
   const [descriptionValue, setDescriptionValue] = useState(description);
 
@@ -55,7 +57,7 @@ const CardDescription = (props: { card: ICard }) => {
         id: id,
         data: { description: newDescription },
       });
-      updateCardDescription(_id, newDescription);
+      updateCardDescription(cardId, newDescription);
     }
   };
 
@@ -81,7 +83,7 @@ const CardDescription = (props: { card: ICard }) => {
           spacing={1}
           component="form"
           onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-            handleUpdateDescription(event, _id);
+            handleUpdateDescription(event, cardId);
             setDescriptionEdit(false);
           }}
         >

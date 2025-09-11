@@ -24,7 +24,7 @@ export const useDeleteChecklist = () => {
   invariantId(id);
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: api.cards.deleteCard,
+    mutationFn: api.checklists.deleteChecklist,
     onSuccess: () => {
       return queryClient.invalidateQueries({
         queryKey: ['fetchCardById', id],
