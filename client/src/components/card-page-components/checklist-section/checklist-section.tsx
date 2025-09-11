@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Stack, Button } from '@mui/material';
+import { Stack, Button, Typography } from '@mui/material';
 import { CardCheckListTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 import ChecklistIcon from '@mui/icons-material/Checklist';
 import { handleFormSubmitEvent } from '../../../utils/utils';
@@ -17,7 +17,6 @@ const CheckListSection = (props: { cardId: string, listId: string, boardId: stri
   const checklists = useChecklists();
   const sortedChecklists = useSortedChecklists();
   const { cardId, listId, boardId } = props;
-
   const [checklistName, setChecklistName] = useState('cheklist name');
 
   const handleCancelAddChecklist = () => {
@@ -44,6 +43,9 @@ const CheckListSection = (props: { cardId: string, listId: string, boardId: stri
     },
     [cardId, checklists, sortedChecklists],
   );
+  const checklistData = sortedChecklists
+    ? sortedChecklists.map(id => (<Typography key={id}>{checklists[id].name}</Typography>))
+    : null;
 
   const addChecklistform = (
     <Stack
@@ -69,7 +71,7 @@ const CheckListSection = (props: { cardId: string, listId: string, boardId: stri
             event.target.select();
           }}
           onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-            handleFormSubmitEvent(event);
+           event.target.focus();
           }}
           onKeyDown={(event: React.KeyboardEvent<HTMLTextAreaElement>) => {
             if (event.key === 'Enter') {
@@ -90,6 +92,13 @@ const CheckListSection = (props: { cardId: string, listId: string, boardId: stri
     </Stack>
   );
 
-  return addChecklist ? addChecklistform : null;
+  return (
+    <React.Fragment>
+    {addChecklist ? addChecklistform : null}
+    <Stack>
+    {checklistData}
+    </Stack>
+    </React.Fragment>
+    )
 };
 export default CheckListSection;
