@@ -83,6 +83,7 @@ const CheckListSection = (props: {
             if (event.key === 'Enter') {
               event.preventDefault();
               handleFormSubmitEvent(event);
+              setAddChecklist();
             }
           }}
         />
