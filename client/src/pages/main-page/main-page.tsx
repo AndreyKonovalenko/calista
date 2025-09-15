@@ -4,6 +4,7 @@ import { Box, Card, Divider, Typography, Button, Stack } from '@mui/material';
 import { Person } from '@mui/icons-material';
 import Board from '../../components/main-page-components/board/board';
 import AddBoardPopper from '../../components/main-page-components/add-baard-popper/add-board-popper';
+import LoadingBage from '../../components/loading-bage/loading-bage';
 import { v4 as uuidv4 } from 'uuid';
 // import useSse from '../../hooks/useSse';
 import { useEscapeKey } from '../../hooks/use-escape-key';
@@ -13,7 +14,7 @@ const MainPage = () => {
   // useSse();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState(false);
-  const { data } = useFetchBoards();
+  const { data, isLoading } = useFetchBoards();
   const { mutate } = useCreateBoard();
 
   const handleCreateNewBoard = (event: React.FormEvent<HTMLFormElement>) => {
@@ -97,7 +98,7 @@ const MainPage = () => {
         flexWrap="wrap"
         useFlexGap
       >
-        {boards}
+        {isLoading ? <LoadingBage/>: boards}
         {AddBoradCard}
       </Stack>
     </Box>

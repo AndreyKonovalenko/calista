@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
-import { CardNameTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
-import { useCardActions } from '../../../services/card-store';
-import { useUpdateCard } from '../../../api/cards-api-queries';
-import { handleFormSubmitEvent } from '../../../utils/utils';
+import { CardNameTextAreaStyled } from '../card-page-styled-elements';
+import { useCardActions } from '../../../../services/card-store';
+import { useUpdateCard } from '../../../../api/cards-api-queries';
+import { handleFormSubmitEvent } from '../../../../utils/utils';
 
 const styles = {
   textarea: {

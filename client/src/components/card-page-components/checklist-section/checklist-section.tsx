@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Stack, Button } from '@mui/material';
-import { CardCheckListTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
+import { CardChecklistTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 import ChecklistIcon from '@mui/icons-material/Checklist';
 import { handleFormSubmitEvent } from '../../../utils/utils';
 import { useAddChecklist, useUIActions } from '../../../services/ui-store';
@@ -65,7 +65,7 @@ const CheckListSection = (props: {
         <Stack direction="column" justifyContent="center">
           <ChecklistIcon fontSize="small" />
         </Stack>
-        <CardCheckListTextAreaStyled
+        <CardChecklistTextAreaStyled
           name="checklistName"
           autoFocus
           rows={1}

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { Paper, Stack, Box, Divider } from '@mui/material';
 import CardDescription from '../../components/card-page-components/card-descriprion/card-descritpion';
-import CardPageTitle from '../../components/card-page-components/card-title/card-title';
+import CardPageTitle from '../../components/card-page-components/card-page-styled-elements/card-title/card-title';
 import CardActions from '../../components/card-page-components/card-actions/card-actions';
 import CheckListSection from '../../components/card-page-components/checklist-section/checklist-section';
 import CloseIcon from '@mui/icons-material/Close';
