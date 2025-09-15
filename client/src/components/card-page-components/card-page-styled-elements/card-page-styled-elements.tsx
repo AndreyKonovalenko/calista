@@ -16,7 +16,7 @@ export const CardNameTextAreaStyled = styled('textarea')(({ theme }) => ({
     userSelect: 'all',
   },
   '&:focus-visible': { outline: 'none' },
-})); 
+}));
 
 export const CardChecklistTextAreaStyled = styled('textarea')(({ theme }) => ({
   fontSize: theme.typography.subtitle1.fontSize,
@@ -34,19 +34,20 @@ export const CardChecklistTextAreaStyled = styled('textarea')(({ theme }) => ({
   '&:focus-visible': { outline: 'none' },
 }));
 
-
-export const CardChecklistNameTextAreaStyled = styled('textarea')(({ theme }) => ({
-  fontSize: theme.typography.body1.fontSize,
-  fontWeight: theme.typography.body1.fontWeight,
-  lineHeight: theme.typography.body1.lineHeight,
-  fontFamily: theme.typography.body1.fontFamily,
-  width: '100%',
-  border: `2px solid ${theme.palette.primary.dark}`,
-  overflow: 'hidden',
-  overflowWrap: 'anywhere',
-  resize: 'none',
-  '&:focus': {
-    userSelect: 'all',
-  },
-  '&:focus-visible': { outline: 'none' },
-}));
+export const CardChecklistNameTextAreaStyled = styled('textarea')(
+  ({ theme }) => ({
+    fontSize: theme.typography.body1.fontSize,
+    fontWeight: theme.typography.body1.fontWeight,
+    lineHeight: theme.typography.body1.lineHeight,
+    fontFamily: theme.typography.body1.fontFamily,
+    width: '100%',
+    border: `2px solid ${theme.palette.primary.dark}`,
+    overflow: 'hidden',
+    overflowWrap: 'anywhere',
+    resize: 'none',
+    '&:focus': {
+      userSelect: 'all',
+    },
+    '&:focus-visible': { outline: 'none' },
+  }),
+);

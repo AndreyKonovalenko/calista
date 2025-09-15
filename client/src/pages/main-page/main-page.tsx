@@ -98,7 +98,7 @@ const MainPage = () => {
         flexWrap="wrap"
         useFlexGap
       >
-        {isLoading ? <LoadingBage/>: boards}
+        {isLoading ? <LoadingBage /> : boards}
         {AddBoradCard}
       </Stack>
     </Box>

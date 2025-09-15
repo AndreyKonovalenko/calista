@@ -100,6 +100,7 @@ export const useChecklist = (id: string | undefined) => {
     state.checklists ? state.checklists[id] : null,
   );
 };
+
 export const useSortedChecklists = () =>
   useChecklistStore(getMemoizedChecklists);
 const getMemoizedChecklists = createSelector(
