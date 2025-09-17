@@ -58,11 +58,12 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
-      const checlistName = formData.get('cheklistName');
+      const checklistName = formData.get('cheklistName');
       updateChecklistNameQuery.mutate({
         id: _id,
-        data: { name: checlistName },
+        data: { name: checklistName },
       });
+    
     },
     [_id],
   );
@@ -82,6 +83,7 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
           autoFocus
           rows={1}
           value={checklistName}
+          placeholder={name}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
             setChecklistName(event.target.value);
           }}
@@ -89,15 +91,26 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
             event.target.select();
           }}
           onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-            handleFormSubmitEvent(event);
-            updateChecklistName(_id, checklistName);
+              if (checklistName.length === 0){
+                setChecklistName(name)
+              } 
+              if (checklistName.length > 0 && checklistName !== name){
+                updateChecklistName(_id, checklistName);
+                handleFormSubmitEvent(event);
+              }
             setEditing(false);
           }}
           onKeyDown={(event: React.KeyboardEvent<HTMLTextAreaElement>) => {
             if (event.key === 'Enter') {
-              event.preventDefault();
-              handleFormSubmitEvent(event);
-              updateChecklistName(_id, checklistName);
+              event.preventDefault();              
+              if (checklistName.length === 0){
+                setChecklistName(name)
+              } 
+              if (checklistName.length > 0 && checklistName !== name) {
+                updateChecklistName(_id, checklistName);
+                handleFormSubmitEvent(event);
+              }
+             
               setEditing(false);
             }
           }}

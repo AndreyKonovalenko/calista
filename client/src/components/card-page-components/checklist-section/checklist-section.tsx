@@ -77,7 +77,11 @@ const CheckListSection = (props: {
             event.target.select();
           }}
           onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-            event.target.focus();
+            const submitButton = document.getElementById('newChecklistSubmitButton')
+            if (event.relatedTarget === submitButton) {
+              return;
+            }
+            setAddChecklist()
           }}
           onKeyDown={(event: React.KeyboardEvent<HTMLTextAreaElement>) => {
             if (event.key === 'Enter') {
@@ -89,10 +93,10 @@ const CheckListSection = (props: {
         />
       </Stack>
       <Stack direction="row">
-        <Button type="submit" variant="contained">
+        <Button id="newChecklistSubmitButton" type="submit" variant="contained">
           ADD
         </Button>
-        <Button variant="text" onClick={handleCancelAddChecklist}>
+        <Button  variant="text" onClick={handleCancelAddChecklist}>
           CANCEL
         </Button>
       </Stack>
@@ -101,8 +105,8 @@ const CheckListSection = (props: {
 
   return (
     <React.Fragment>
-      {addChecklist ? addChecklistform : null}
       <Stack>{checklistData}</Stack>
+      {addChecklist ? addChecklistform : null}
     </React.Fragment>
   );
 };
