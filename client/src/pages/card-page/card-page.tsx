@@ -73,11 +73,7 @@ const CardPage = () => {
             cardId={data.card._id}
             description={data.card.description}
           />
-          <CheckListSection
-            cardId={data.card._id}
-            boardId={data.card.boardId}
-            listId={data.card.listId}
-          />
+          <CheckListSection />
         </Stack>
         <Divider orientation="vertical" variant="middle" flexItem />
         <CardActions cardId={data.card._id} />

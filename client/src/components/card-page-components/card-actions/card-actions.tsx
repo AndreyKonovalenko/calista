@@ -3,8 +3,8 @@ import { Stack, Button, Typography, Divider } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useDeleteCard } from '../../../api/cards-api-queries';
 import { useNavigate } from 'react-router';
-import { useUIActions } from '../../../services/ui-store';
 import DeleteCardMenu from '../delete-card-menu/delete-card-menu';
+import AddChecklistMenu from '../add-checklist-menu/add-checklist-menu';
 
 const styles = {
   actions: {
@@ -19,15 +19,26 @@ const CardActions = (props: { cardId: string }) => {
   const { cardId } = props;
   const navigate = useNavigate();
   const deleteCardQuery = useDeleteCard();
-  const { setAddChecklist } = useUIActions();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorSecondEl, setAnchorSecondEl] = useState<null | HTMLElement>(
+    null,
+  );
 
   const handleOpenDeleteMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleOpenAddChecklistMenu = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    setAnchorSecondEl(event.currentTarget);
+  };
   const handleCloseDeleteMenu = () => {
     setAnchorEl(null);
+  };
+
+  const handleCloseAddChecklistMenu = () => {
+    setAnchorSecondEl(null);
   };
 
   const handleDeleteCard = () => {
@@ -45,12 +56,16 @@ const CardActions = (props: { cardId: string }) => {
         <Typography variant="h6">Actions</Typography>
       </Stack>
       <Divider orientation="horizontal" variant="middle" flexItem />
-      <Button onClick={setAddChecklist}>ADD CHECKLIST</Button>
+      <Button onClick={handleOpenAddChecklistMenu}>ADD CHECKLIST</Button>
       <Button onClick={handleOpenDeleteMenu}>DELETE CARD</Button>
       <DeleteCardMenu
         anchorEl={anchorEl}
         closeDeleteMenu={handleCloseDeleteMenu}
         deleteCard={handleDeleteCard}
+      />
+      <AddChecklistMenu
+        anchorEl={anchorSecondEl}
+        closeAddChecklistMenu={handleCloseAddChecklistMenu}
       />
     </Stack>
   );
