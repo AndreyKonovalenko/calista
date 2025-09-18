@@ -46,14 +46,12 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
   const handleCloseDeleteMenu = () => {
     setAnchorEl(null);
   };
-
   const handleDeleteChecklist = () => {
     deleteChecklistQuery.mutate(_id);
   };
   const handleSetEditing = () => {
     setEditing(true);
   };
-
   const handleUpdateChecklistName = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
@@ -63,19 +61,58 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
         id: _id,
         data: { name: checklistName },
       });
-    
     },
     [_id],
   );
+  const onChangeEventHandler = (
+    event: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setChecklistName(event.target.value);
+  };
+  const onFocusEventHandler = (
+    event: React.FocusEvent<HTMLTextAreaElement>,
+  ) => {
+    event.target.select();
+  };
+  const onBlurEventHandler = (event: React.FocusEvent<HTMLTextAreaElement>) => {
+    if (checklistName.length === 0) {
+      setChecklistName(name);
+    }
+    if (checklistName.length > 0 && checklistName !== name) {
+      updateChecklistName(_id, checklistName);
+      handleFormSubmitEvent(event);
+    }
+    setEditing(false);
+  };
+  const onKeyDownEventHandler = (
+    event: React.KeyboardEvent<HTMLTextAreaElement>,
+  ) => {
+    console.log(event.key);
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      if (checklistName.length === 0) {
+        setChecklistName(name);
+      }
+      if (checklistName.length > 0 && checklistName !== name) {
+        updateChecklistName(_id, checklistName);
+        handleFormSubmitEvent(event);
+      }
+      setEditing(false);
+    }
+    if (event.key === 'Escape') {
+      setEditing(false);
+    }
+  };
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    handleUpdateChecklistName(event);
+  };
 
   const checklistNameForm = (
     <Stack
       direction="column"
       justifyContent="center"
       component="form"
-      onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-        handleUpdateChecklistName(event);
-      }}
+      onSubmit={onSubmit}
     >
       {editing ? (
         <CardChecklistNameTextAreaStyled
@@ -84,36 +121,10 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
           rows={1}
           value={checklistName}
           placeholder={name}
-          onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-            setChecklistName(event.target.value);
-          }}
-          onFocus={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-            event.target.select();
-          }}
-          onBlur={(event: React.FocusEvent<HTMLTextAreaElement>) => {
-              if (checklistName.length === 0){
-                setChecklistName(name)
-              } 
-              if (checklistName.length > 0 && checklistName !== name){
-                updateChecklistName(_id, checklistName);
-                handleFormSubmitEvent(event);
-              }
-            setEditing(false);
-          }}
-          onKeyDown={(event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-            if (event.key === 'Enter') {
-              event.preventDefault();              
-              if (checklistName.length === 0){
-                setChecklistName(name)
-              } 
-              if (checklistName.length > 0 && checklistName !== name) {
-                updateChecklistName(_id, checklistName);
-                handleFormSubmitEvent(event);
-              }
-             
-              setEditing(false);
-            }
-          }}
+          onChange={onChangeEventHandler}
+          onFocus={onFocusEventHandler}
+          onBlur={onBlurEventHandler}
+          onKeyDown={onKeyDownEventHandler}
         />
       ) : (
         <Stack
