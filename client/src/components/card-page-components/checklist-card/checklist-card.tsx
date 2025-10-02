@@ -84,10 +84,10 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
     }
     setEditing(false);
   };
+  
   const onKeyDownEventHandler = (
     event: React.KeyboardEvent<HTMLTextAreaElement>,
   ) => {
-    console.log(event.key);
     if (event.key === 'Enter') {
       event.preventDefault();
       if (checklistName.length === 0) {
