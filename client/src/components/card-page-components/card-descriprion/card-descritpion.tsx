@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCardActions } from '../../../services/card-store';
 import { useUpdateCard } from '../../../api/cards-api-queries';
-import { Stack, TextField, Button, Typography } from '@mui/material';
+import { Stack, TextField, Button, Typography, Box } from '@mui/material';
 import NotesIcon from '@mui/icons-material/Notes';
 
 const styles = {
@@ -12,12 +12,15 @@ const styles = {
     cursor: 'pointer',
   },
   description: {
-    width: '512px',
+    width: '100%',
   },
   descriptionCustomButton: {
     textTransform: 'none',
     justifyContent: 'start',
   },
+  emptyBox: {
+    width: '20px'
+  }
 };
 const descriptionPlaceholder = 'Add a more detailed descripion...';
 
@@ -78,31 +81,35 @@ const CardDescription = (props: {
         ) : null}
       </Stack>
       {descripionEdit ? (
-        <Stack
-          direction="column"
-          spacing={1}
-          component="form"
-          onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-            handleUpdateDescription(event, cardId);
-            setDescriptionEdit(false);
-          }}
-        >
-          <TextField
-            fullWidth
-            rows={8}
-            multiline={true}
-            name="description"
-            onChange={handleDesctiptionChange}
-            value={descriptionValue}
-            placeholder={descriptionPlaceholder}
-          />
-          <Stack direction="row" justifyContent="start" spacing={1}>
-            <Button variant="contained" type="submit">
-              SAVE
-            </Button>
-            <Button variant="outlined" onClick={handleDesctiptionCancle}>
-              CANCLE
-            </Button>
+        <Stack direction='row' spacing={1}>
+          <Box sx={styles.emptyBox}/>
+          <Stack
+            direction="column"
+            spacing={1}
+            sx={styles.description}
+            component="form"
+            onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
+              handleUpdateDescription(event, cardId);
+              setDescriptionEdit(false);
+            }}
+          >
+            <TextField
+              fullWidth
+              rows={4}
+              multiline={true}
+              name="description"
+              onChange={handleDesctiptionChange}
+              value={descriptionValue}
+              placeholder={descriptionPlaceholder}
+            />
+            <Stack direction="row" justifyContent="start" spacing={1}>
+              <Button variant="contained" type="submit">
+                SAVE
+              </Button>
+              <Button variant="outlined" onClick={handleDesctiptionCancle}>
+                CANCLE
+              </Button>
+            </Stack>
           </Stack>
         </Stack>
       ) : description ? (
