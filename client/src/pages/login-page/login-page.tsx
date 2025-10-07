@@ -85,7 +85,7 @@ export default function LoginPage() {
             Login
           </Button>
           <Grid container justifyContent="flex-end">
-            <Grid item>
+            <Grid>
               <Link href="register" variant="body2">
                 {"Don't have an account? Create account"}
               </Link>

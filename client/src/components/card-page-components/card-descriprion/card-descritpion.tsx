@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCardActions } from '../../../services/card-store';
 import { useUpdateCard } from '../../../api/cards-api-queries';
-import { Stack, TextField, Button, Typography, Box } from '@mui/material';
+import { Stack, TextField, Button, Typography, Box, Grid } from '@mui/material';
 import NotesIcon from '@mui/icons-material/Notes';
 
 const styles = {
@@ -65,21 +65,20 @@ const CardDescription = (props: {
   };
 
   return (
-    <Stack direction="column" justifyContent="start" spacing={1}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Stack direction="row" spacing={1}>
-          <Stack direction="column" justifyContent="center">
-            <NotesIcon fontSize="small" />
-          </Stack>
+    <Box>
+      <Grid container spacing={0.5} columns={18}>
+        <Grid size={1} sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'start'}}>
+          <NotesIcon fontSize="small" />
+        </Grid>
+        <Grid size={17}>
           <Typography variant="h6">Description</Typography>
-        </Stack>
-
-        {!descripionEdit && description ? (
+        </Grid>      
+           {/* {!descripionEdit && description ? (
           <Button variant="text" onClick={handleSetDescriptionEdit}>
             EDIT
           </Button>
-        ) : null}
-      </Stack>
+        ) : null} */}
+      </Grid>
       {descripionEdit ? (
         <Stack direction='row' spacing={1}>
           <Box sx={styles.emptyBox}/>
@@ -113,7 +112,10 @@ const CardDescription = (props: {
           </Stack>
         </Stack>
       ) : description ? (
-        <Typography>{description}</Typography>
+        <Stack direction='row' spacing={1}>
+          <Box sx={styles.emptyBox}/>
+          <Typography>{description}</Typography>
+        </Stack>
       ) : (
         <Button
           variant="outlined"
@@ -124,7 +126,7 @@ const CardDescription = (props: {
           {descriptionPlaceholder}
         </Button>
       )}
-    </Stack>
+    </Box>
   );
 };
 
