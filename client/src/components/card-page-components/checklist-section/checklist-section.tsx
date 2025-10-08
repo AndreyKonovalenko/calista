@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack } from '@mui/material';
+import { Grid } from '@mui/material';
 import {
   useChecklists,
   useSortedChecklists,
@@ -16,9 +16,9 @@ const CheckListSection = () => {
     : null;
 
   return (
-    <React.Fragment>
-      <Stack>{checklistData}</Stack>
-    </React.Fragment>
+    <Grid container columns={18} rowSpacing={1}>
+      {checklistData}
+    </Grid>
   );
 };
 export default CheckListSection;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCardActions } from '../../../services/card-store';
 import { useUpdateCard } from '../../../api/cards-api-queries';
-import { Stack, TextField, Button, Typography, Box, Grid } from '@mui/material';
+import { Stack, TextField, Button, Typography, Grid } from '@mui/material';
 import NotesIcon from '@mui/icons-material/Notes';
 
 const styles = {
@@ -18,9 +18,6 @@ const styles = {
     textTransform: 'none',
     justifyContent: 'start',
   },
-  emptyBox: {
-    width: '20px'
-  }
 };
 const descriptionPlaceholder = 'Add a more detailed descripion...';
 
@@ -65,33 +62,45 @@ const CardDescription = (props: {
   };
 
   return (
-    <Box>
-      <Grid container spacing={0.5} columns={18}>
-        <Grid size={1} sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'start'}}>
+    <Grid container rowSpacing={1} columns={18}>
+      <Grid container size={18} columns={18} rowSpacing={1}>
+        <Grid
+          size={1}
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+        >
           <NotesIcon fontSize="small" />
         </Grid>
         <Grid size={17}>
-          <Typography variant="h6">Description</Typography>
-        </Grid>      
-           {/* {!descripionEdit && description ? (
-          <Button variant="text" onClick={handleSetDescriptionEdit}>
-            EDIT
-          </Button>
-        ) : null} */}
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="h6">Description</Typography>
+            {!descripionEdit && description ? (
+              <Button variant="text" onClick={handleSetDescriptionEdit}>
+                EDIT
+              </Button>
+            ) : null}
+          </Stack>
+        </Grid>
       </Grid>
       {descripionEdit ? (
-        <Stack direction='row' spacing={1}>
-          <Box sx={styles.emptyBox}/>
-          <Stack
-            direction="column"
-            spacing={1}
-            sx={styles.description}
-            component="form"
-            onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-              handleUpdateDescription(event, cardId);
-              setDescriptionEdit(false);
-            }}
-          >
+        <Grid
+          container
+          size={18}
+          columns={18}
+          rowSpacing={1}
+          component="form"
+          onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
+            handleUpdateDescription(event, cardId);
+            setDescriptionEdit(false);
+          }}
+        >
+          <Grid size={1} />
+          <Grid size={17}>
             <TextField
               fullWidth
               rows={4}
@@ -101,6 +110,9 @@ const CardDescription = (props: {
               value={descriptionValue}
               placeholder={descriptionPlaceholder}
             />
+          </Grid>
+          <Grid size={1} />
+          <Grid size={17}>
             <Stack direction="row" justifyContent="start" spacing={1}>
               <Button variant="contained" type="submit">
                 SAVE
@@ -109,24 +121,28 @@ const CardDescription = (props: {
                 CANCLE
               </Button>
             </Stack>
-          </Stack>
-        </Stack>
-      ) : description ? (
-        <Stack direction='row' spacing={1}>
-          <Box sx={styles.emptyBox}/>
-          <Typography>{description}</Typography>
-        </Stack>
+          </Grid>
+        </Grid>
       ) : (
-        <Button
-          variant="outlined"
-          fullWidth
-          onClick={handleSetDescriptionEdit}
-          sx={styles.descriptionCustomButton}
-        >
-          {descriptionPlaceholder}
-        </Button>
+        <Grid size={18} container columns={18}>
+          <Grid size={1} />
+          <Grid size={17}>
+            {description ? (
+              <Typography>{description}</Typography>
+            ) : (
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={handleSetDescriptionEdit}
+                sx={styles.descriptionCustomButton}
+              >
+                {descriptionPlaceholder}
+              </Button>
+            )}
+          </Grid>
+        </Grid>
       )}
-    </Box>
+    </Grid>
   );
 };
 
