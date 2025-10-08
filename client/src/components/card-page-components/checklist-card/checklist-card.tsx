@@ -8,6 +8,7 @@ import {
 import { CardChecklistNameTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 import { handleFormSubmitEvent } from '../../../utils/utils';
 import { useChecklistActions } from '../../../services/checklist-store';
+import LinearProgress from '@mui/material/LinearProgress';
 
 const styles = {
   menu: {
@@ -39,6 +40,7 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
   const [editing, setEditing] = useState(false);
   const [checklistName, setChecklistName] = useState(name);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const progress = 18;
   const handleOpenDeleteMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -141,7 +143,7 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
   );
 
   return (
-    <Grid container size={18} columns={18}>
+    <Grid container size={18} columns={18} rowSpacing={1}>
       <Grid
         size={1}
         display="flex"
@@ -185,6 +187,35 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
             </Stack>
           </Stack>
         </Menu>
+      </Grid>
+      <Grid
+        size={1}
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+      >
+        <Typography fontSize="small" variant="body1">
+          {progress}%
+        </Typography>
+      </Grid>
+      <Grid
+        size={17}
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+      >
+        <LinearProgress variant="determinate" value={progress} />
+      </Grid>
+      <Grid size={1} />
+      <Grid
+        size={5}
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+      >
+        <Button variant="outlined" onClick={() => {}}>
+          Add an item
+        </Button>
       </Grid>
     </Grid>
   );
