@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Stack, Typography, Button } from '@mui/material';
+import { Menu, Stack, Typography, Button, PopoverOrigin } from '@mui/material';
 
 const styles = {
   actions: {
@@ -16,6 +16,16 @@ const styles = {
   },
 };
 
+const anchorOrigin: PopoverOrigin = {
+    vertical: 'center',
+    horizontal: 'center'
+}
+const transformOrigin: PopoverOrigin = {
+    vertical: 'top',
+    horizontal: 'center',
+}
+
+
 const DeleteCardMenu = (props: {
   anchorEl: null | HTMLElement;
   closeDeleteMenu: () => void;
@@ -26,6 +36,8 @@ const DeleteCardMenu = (props: {
   return (
     <Menu
       sx={styles.menu}
+      anchorOrigin={anchorOrigin}
+      transformOrigin={transformOrigin}
       anchorEl={anchorEl}
       open={open}
       onClose={closeDeleteMenu}

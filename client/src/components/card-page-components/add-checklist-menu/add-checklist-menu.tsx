@@ -4,7 +4,7 @@ import {
   useSortedChecklists,
   useChecklists,
 } from '../../../services/checklist-store';
-import { Stack, Button, Menu } from '@mui/material';
+import { Stack, Button, Menu, PopoverOrigin } from '@mui/material';
 import { useCreateChecklist } from '../../../api/checklists-api-queries';
 import { handleFormSubmitEvent } from '../../../utils/utils';
 import { CardChecklistTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
@@ -20,6 +20,15 @@ const styles = {
     pr: 2,
   },
 };
+
+const anchorOrigin: PopoverOrigin = {
+    vertical: 'center',
+    horizontal: 'center'
+}
+const transformOrigin: PopoverOrigin = {
+    vertical: 'top',
+    horizontal: 'center',
+}
 
 const AddChecklistMenu = (props: {
   anchorEl: null | HTMLElement;
@@ -95,6 +104,8 @@ const AddChecklistMenu = (props: {
   return (
     <Menu
       sx={styles.menu}
+      anchorOrigin={anchorOrigin}
+      transformOrigin={transformOrigin}
       anchorEl={anchorEl}
       open={open}
       onClose={closeAddChecklistMenu}

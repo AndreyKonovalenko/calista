@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Typography, Stack, Grid, Button, Menu } from '@mui/material';
+import { Typography, Stack, Grid, Button, Menu, PopoverOrigin } from '@mui/material';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import {
   useDeleteChecklist,
@@ -9,6 +9,7 @@ import { CardChecklistNameTextAreaStyled } from '../card-page-styled-elements/ca
 import { handleFormSubmitEvent } from '../../../utils/utils';
 import { useChecklistActions } from '../../../services/checklist-store';
 import LinearProgress from '@mui/material/LinearProgress';
+
 
 const styles = {
   menu: {
@@ -29,8 +30,17 @@ const styles = {
       overflowWrap: 'anywhere',
       resize: 'none',
     },
-  },
+  }, 
 };
+
+const anchorOrigin: PopoverOrigin = {
+    vertical: 'center',
+    horizontal: 'center'
+}
+const transformOrigin: PopoverOrigin = {
+    vertical: 'top',
+    horizontal: 'center',
+}
 
 const ChecklistCard = (props: { _id: string; name: string }) => {
   const { _id, name } = props;
@@ -166,6 +176,8 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
         </Button>
         <Menu
           sx={styles.menu}
+          anchorOrigin={anchorOrigin}
+          transformOrigin={transformOrigin}
           anchorEl={anchorEl}
           open={open}
           onClose={handleCloseDeleteMenu}
