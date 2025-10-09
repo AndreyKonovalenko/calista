@@ -1,5 +1,12 @@
 import React, { useState, useCallback } from 'react';
-import { Typography, Stack, Grid, Button, Menu, PopoverOrigin } from '@mui/material';
+import {
+  Typography,
+  Stack,
+  Grid,
+  Button,
+  Menu,
+  PopoverOrigin,
+} from '@mui/material';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import {
   useDeleteChecklist,
@@ -9,7 +16,6 @@ import { CardChecklistNameTextAreaStyled } from '../card-page-styled-elements/ca
 import { handleFormSubmitEvent } from '../../../utils/utils';
 import { useChecklistActions } from '../../../services/checklist-store';
 import LinearProgress from '@mui/material/LinearProgress';
-
 
 const styles = {
   menu: {
@@ -30,17 +36,17 @@ const styles = {
       overflowWrap: 'anywhere',
       resize: 'none',
     },
-  }, 
+  },
 };
 
 const anchorOrigin: PopoverOrigin = {
-    vertical: 'center',
-    horizontal: 'center'
-}
+  vertical: 'center',
+  horizontal: 'center',
+};
 const transformOrigin: PopoverOrigin = {
-    vertical: 'top',
-    horizontal: 'center',
-}
+  vertical: 'top',
+  horizontal: 'center',
+};
 
 const ChecklistCard = (props: { _id: string; name: string }) => {
   const { _id, name } = props;
@@ -50,6 +56,7 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
   const [editing, setEditing] = useState(false);
   const [checklistName, setChecklistName] = useState(name);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [addAnItem, setAddAnItem] = useState(false);
   const progress = 18;
   const handleOpenDeleteMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -64,6 +71,13 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
   const handleSetEditing = () => {
     setEditing(true);
   };
+  const handleSetAddAnItem = () => {
+    setAddAnItem(true);
+  };
+  const handleCancelationAddAnItem = () => {
+    setAddAnItem(false);
+  };
+
   const handleUpdateChecklistName = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
@@ -152,6 +166,52 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
     </Stack>
   );
 
+  const addAnItmeFrom = (
+    <Grid
+      container
+      size={18}
+      columns={18}
+      rowSpacing={1}
+      component="form"
+      onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
+        console.log(event);
+        // handleUpdateDescription(event, cardId);
+        // setDescriptionEdit(false);
+      }}
+    >
+      <Grid size={1} />
+      <Grid
+        size={17}
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+      >
+        <CardChecklistNameTextAreaStyled
+          name="newItemName"
+          autoFocus
+          rows={1}
+          value={'newIem name'}
+          placeholder={'and an new item'}
+          onChange={() => {}}
+          onFocus={() => {}}
+          onBlur={() => {}}
+          onKeyDown={() => {}}
+        />
+      </Grid>
+      <Grid size={1} />
+      <Grid size={17}>
+        <Stack direction="row" justifyContent="start" spacing={1}>
+          <Button variant="contained" type="submit">
+            SAVE
+          </Button>
+          <Button variant="outlined" onClick={handleCancelationAddAnItem}>
+            CANCLE
+          </Button>
+        </Stack>
+      </Grid>
+    </Grid>
+  );
+
   return (
     <Grid container size={18} columns={18} rowSpacing={1}>
       <Grid
@@ -218,17 +278,23 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
       >
         <LinearProgress variant="determinate" value={progress} />
       </Grid>
-      <Grid size={1} />
-      <Grid
-        size={5}
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-      >
-        <Button variant="outlined" onClick={() => {}}>
-          Add an item
-        </Button>
-      </Grid>
+      {addAnItem ? (
+        addAnItmeFrom
+      ) : (
+        <React.Fragment>
+          <Grid size={1} />
+          <Grid
+            size={5}
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+          >
+            <Button variant="outlined" onClick={handleSetAddAnItem}>
+              Add an item
+            </Button>
+          </Grid>
+        </React.Fragment>
+      )}
     </Grid>
   );
 };

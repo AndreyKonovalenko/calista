@@ -17,14 +17,13 @@ const styles = {
 };
 
 const anchorOrigin: PopoverOrigin = {
-    vertical: 'center',
-    horizontal: 'center'
-}
+  vertical: 'center',
+  horizontal: 'center',
+};
 const transformOrigin: PopoverOrigin = {
-    vertical: 'top',
-    horizontal: 'center',
-}
-
+  vertical: 'top',
+  horizontal: 'center',
+};
 
 const DeleteCardMenu = (props: {
   anchorEl: null | HTMLElement;
