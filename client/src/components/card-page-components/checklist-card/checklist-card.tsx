@@ -12,6 +12,7 @@ import {
   useDeleteChecklist,
   useUpdateChecklist,
 } from '../../../api/checklists-api-queries';
+import CheckListAddItemFrom from '../chekclist-add-item-form/checklist-add-item-form';
 import { CardChecklistNameTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 import { handleFormSubmitEvent } from '../../../utils/utils';
 import { useChecklistActions } from '../../../services/checklist-store';
@@ -166,51 +167,51 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
     </Stack>
   );
 
-  const addAnItmeFrom = (
-    <Grid
-      container
-      size={18}
-      columns={18}
-      rowSpacing={1}
-      component="form"
-      onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-        console.log(event);
-        // handleUpdateDescription(event, cardId);
-        // setDescriptionEdit(false);
-      }}
-    >
-      <Grid size={1} />
-      <Grid
-        size={17}
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-      >
-        <CardChecklistNameTextAreaStyled
-          name="newItemName"
-          autoFocus
-          rows={1}
-          value={'newIem name'}
-          placeholder={'and an new item'}
-          onChange={() => {}}
-          onFocus={() => {}}
-          onBlur={() => {}}
-          onKeyDown={() => {}}
-        />
-      </Grid>
-      <Grid size={1} />
-      <Grid size={17}>
-        <Stack direction="row" justifyContent="start" spacing={1}>
-          <Button variant="contained" type="submit">
-            SAVE
-          </Button>
-          <Button variant="outlined" onClick={handleCancelationAddAnItem}>
-            CANCLE
-          </Button>
-        </Stack>
-      </Grid>
-    </Grid>
-  );
+  // const addAnItmeFrom = (
+  //   <Grid
+  //     container
+  //     size={18}
+  //     columns={18}
+  //     rowSpacing={1}
+  //     component="form"
+  //     onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
+  //       console.log(event);
+  //       // handleUpdateDescription(event, cardId);
+  //       // setDescriptionEdit(false);
+  //     }}
+  //   >
+  //     <Grid size={1} />
+  //     <Grid
+  //       size={17}
+  //       display="flex"
+  //       flexDirection="column"
+  //       justifyContent="center"
+  //     >
+  //       <CardChecklistNameTextAreaStyled
+  //         name="newItemName"
+  //         autoFocus
+  //         rows={1}
+  //         value={'newIem name'}
+  //         placeholder={'and an new item'}
+  //         onChange={() => {}}
+  //         onFocus={() => {}}
+  //         onBlur={() => {}}
+  //         onKeyDown={() => {}}
+  //       />
+  //     </Grid>
+  //     <Grid size={1} />
+  //     <Grid size={17}>
+  //       <Stack direction="row" justifyContent="start" spacing={1}>
+  //         <Button variant="contained" type="submit">
+  //           SAVE
+  //         </Button>
+  //         <Button variant="outlined" onClick={handleCancelationAddAnItem}>
+  //           CANCLE
+  //         </Button>
+  //       </Stack>
+  //     </Grid>
+  //   </Grid>
+  // );
 
   return (
     <Grid container size={18} columns={18} rowSpacing={1}>
@@ -279,7 +280,10 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
         <LinearProgress variant="determinate" value={progress} />
       </Grid>
       {addAnItem ? (
-        addAnItmeFrom
+        <CheckListAddItemFrom
+          _id={_id}
+          handleCancelationAddAnItem={handleCancelationAddAnItem}
+        />
       ) : (
         <React.Fragment>
           <Grid size={1} />
