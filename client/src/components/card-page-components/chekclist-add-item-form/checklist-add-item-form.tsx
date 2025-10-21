@@ -1,32 +1,36 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Grid, Stack, Button } from '@mui/material';
 import { useParams } from 'react-router';
 import { CardChecklistNameTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 import { useCreateChecklistItem } from '../../../api/checklist-items-api-queries';
+import { useSortedChecklistItems, useChecklistItems} from '../../../services/checklist-item-store';
+import { handleFormSubmitEvent } from '../../../utils/utils';
 
 const CheckListAddItemFrom = (props: {
   _id: string;
   handleCancelationAddAnItem: () => void;
 }) => {
   const { boardId, listId, id } = useParams();
+  const checklistItems = useChecklistItems();
+  const sortedChecklistItems = useSortedChecklistItems()
   if (!id || !boardId || !listId) {
     return null;
   }
-
   const { _id, handleCancelationAddAnItem } = props;
   const createChecklistItemQuery = useCreateChecklistItem();
+  const [checklistItemName, setChecklistItemName] = useState('new checklist item name')
 
   const handleAddNewChecklistItem = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       let pos = 16584;
-      if (checklists && sortedChecklists && sortedChecklists?.length > 0) {
+      if (checklistItems && sortedChecklistItems && sortedChecklistItems?.length > 0) {
         pos =
-          checklists[sortedChecklists[sortedChecklists.length - 1]].pos + pos;
+          checklistItems[sortedChecklistItems[sortedChecklistItems.length - 1]].pos + pos;
       }
       const formData = new FormData(event.currentTarget);
       createChecklistItemQuery.mutate({
-        name: formData.get('newItemName'),
+        name: formData.get('checklistItemName'),
         boardId: boardId,
         listId: listId,
         cardId: id,
@@ -34,43 +38,37 @@ const CheckListAddItemFrom = (props: {
         pos: pos,
       });
     },
-    [id, checklists, sortedChecklists],
+    [id, checklistItems, sortedChecklistItems],
   );
 
-  // const onSubmitEventHandler = (event: React.FormEvent<HTMLFormElement>) => {
-  //   handleAddNewChecklist(event);
-  // };
+  const onSubmitEventHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    handleAddNewChecklistItem(event);
+  };
 
-  // const onChangeEventHandler = (
-  //   event: React.ChangeEvent<HTMLTextAreaElement>,
-  // ) => {
-  //   setChecklistName(event.target.value);
-  // };
+  const onChangeEventHandler = (
+    event: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setChecklistItemName(event.target.value);
+  };
 
-  // const onFocusEventHandler = (
-  //   event: React.FocusEvent<HTMLTextAreaElement>,
-  // ) => {
-  //   event.target.select();
-  // };
+  const onFocusEventHandler = (
+    event: React.FocusEvent<HTMLTextAreaElement>,
+  ) => {
+    event.target.select();
+  };
 
-  // const onBlurEventHandler = (event: React.FocusEvent<HTMLTextAreaElement>) => {
-  //   const submitButton = document.getElementById('newChecklistSubmitButton');
-  //   if (event.relatedTarget === submitButton) {
-  //     return;
-  //   }
-  // };
-
-  // const onEneterDownEventHandler = (
-  //   event: React.KeyboardEvent<HTMLTextAreaElement>,
-  // ) => {
-  //   if (event.key === 'Enter') {
-  //     event.preventDefault();
-  //     handleFormSubmitEvent(event);
-  //     closeAddChecklistMenu();
-  //   }
-  //   if (event.key === 'Escape') {
-  //     closeAddChecklistMenu();
-  //   }
+  const onEneterDownEventHandler = (
+    event: React.KeyboardEvent<HTMLTextAreaElement>,
+  ) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleFormSubmitEvent(event);
+      handleCancelationAddAnItem();
+    }
+    if (event.key === 'Escape') {
+      handleCancelationAddAnItem();
+    }
+  };
 
   return (
     <Grid
@@ -79,11 +77,7 @@ const CheckListAddItemFrom = (props: {
       columns={18}
       rowSpacing={1}
       component="form"
-      onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-        console.log(event);
-        handleAddNewChecklistItem(event);
-        // setDescriptionEdit(false);
-      }}
+      onSubmit={onSubmitEventHandler}
     >
       <Grid size={1} />
       <Grid
@@ -93,21 +87,20 @@ const CheckListAddItemFrom = (props: {
         justifyContent="center"
       >
         <CardChecklistNameTextAreaStyled
-          name="newItemName"
+          name="checklistItemName"
           autoFocus
           rows={1}
-          value={'newIem name'}
-          placeholder={'and an new item'}
-          onChange={() => {}}
-          onFocus={() => {}}
-          onBlur={() => {}}
-          onKeyDown={() => {}}
+          value={checklistItemName}
+          placeholder={"and an new item"}
+          onChange={onChangeEventHandler}
+          onFocus={onFocusEventHandler}
+          onKeyDown={onEneterDownEventHandler}
         />
       </Grid>
       <Grid size={1} />
       <Grid size={17}>
         <Stack direction="row" justifyContent="start" spacing={1}>
-          <Button variant="contained" type="submit">
+          <Button id="newChecklistItemSubmitButton" variant="contained" type="submit">
             SAVE
           </Button>
           <Button variant="outlined" onClick={handleCancelationAddAnItem}>
@@ -119,4 +112,4 @@ const CheckListAddItemFrom = (props: {
   );
 };
 
-export default CheckListAddItemFrom;
+export default CheckListAddItemFrom
