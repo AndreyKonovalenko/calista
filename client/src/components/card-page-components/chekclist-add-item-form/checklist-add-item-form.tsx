@@ -3,7 +3,7 @@ import { Grid, Stack, Button } from '@mui/material';
 import { useParams } from 'react-router';
 import { CardChecklistNameTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 import { useCreateChecklistItem } from '../../../api/checklist-items-api-queries';
-import { useSortedChecklistItems, useChecklistItems} from '../../../services/checklist-item-store';
+import { useSortedChecklistItemsByChecklistId, useChecklistItems} from '../../../services/checklist-item-store';
 import { handleFormSubmitEvent } from '../../../utils/utils';
 
 const CheckListAddItemFrom = (props: {
@@ -12,11 +12,12 @@ const CheckListAddItemFrom = (props: {
 }) => {
   const { boardId, listId, id } = useParams();
   const checklistItems = useChecklistItems();
-  const sortedChecklistItems = useSortedChecklistItems()
-  if (!id || !boardId || !listId) {
+    if (!id || !boardId || !listId) {
     return null;
   }
   const { _id, handleCancelationAddAnItem } = props;
+  const sortedChecklistItems = useSortedChecklistItemsByChecklistId(_id)
+
   const createChecklistItemQuery = useCreateChecklistItem();
   const [checklistItemName, setChecklistItemName] = useState('new checklist item name')
 

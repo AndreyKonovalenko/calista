@@ -61,6 +61,9 @@ export interface IChecklist {
 
 export interface IChecklistItem {
   _id: string;
+  boardId: string;
+  listId: string;
+  checklistId:string;
   name: string;
   state: 'complite' | 'incomplite';
   pos: number;

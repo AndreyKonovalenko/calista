@@ -12,10 +12,12 @@ import {
   useDeleteChecklist,
   useUpdateChecklist,
 } from '../../../api/checklists-api-queries';
+import ChecklistItem from '../checklist-item/checklist-item';
 import CheckListAddItemFrom from '../chekclist-add-item-form/checklist-add-item-form';
 import { CardChecklistNameTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 import { handleFormSubmitEvent } from '../../../utils/utils';
 import { useChecklistActions } from '../../../services/checklist-store';
+import { useSortedChecklistItemsByChecklistId } from '../../../services/checklist-item-store';
 import LinearProgress from '@mui/material/LinearProgress';
 
 const styles = {
@@ -52,6 +54,7 @@ const transformOrigin: PopoverOrigin = {
 const ChecklistCard = (props: { _id: string; name: string }) => {
   const { _id, name } = props;
   const deleteChecklistQuery = useDeleteChecklist();
+  const sortedChecklistItems = useSortedChecklistItemsByChecklistId(_id)
   const updateChecklistNameQuery = useUpdateChecklist();
   const { updateChecklistName } = useChecklistActions();
   const [editing, setEditing] = useState(false);
@@ -134,6 +137,10 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
     handleUpdateChecklistName(event);
   };
 
+   const checklistItmesList = sortedChecklistItems
+      ? sortedChecklistItems.map(checklistItemId => <ChecklistItem key={checklistItemId} _id={checklistItemId} />)
+      : null;
+
   const checklistNameForm = (
     <Stack
       direction="column"
@@ -166,52 +173,6 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
       )}
     </Stack>
   );
-
-  // const addAnItmeFrom = (
-  //   <Grid
-  //     container
-  //     size={18}
-  //     columns={18}
-  //     rowSpacing={1}
-  //     component="form"
-  //     onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-  //       console.log(event);
-  //       // handleUpdateDescription(event, cardId);
-  //       // setDescriptionEdit(false);
-  //     }}
-  //   >
-  //     <Grid size={1} />
-  //     <Grid
-  //       size={17}
-  //       display="flex"
-  //       flexDirection="column"
-  //       justifyContent="center"
-  //     >
-  //       <CardChecklistNameTextAreaStyled
-  //         name="newItemName"
-  //         autoFocus
-  //         rows={1}
-  //         value={'newIem name'}
-  //         placeholder={'and an new item'}
-  //         onChange={() => {}}
-  //         onFocus={() => {}}
-  //         onBlur={() => {}}
-  //         onKeyDown={() => {}}
-  //       />
-  //     </Grid>
-  //     <Grid size={1} />
-  //     <Grid size={17}>
-  //       <Stack direction="row" justifyContent="start" spacing={1}>
-  //         <Button variant="contained" type="submit">
-  //           SAVE
-  //         </Button>
-  //         <Button variant="outlined" onClick={handleCancelationAddAnItem}>
-  //           CANCLE
-  //         </Button>
-  //       </Stack>
-  //     </Grid>
-  //   </Grid>
-  // );
 
   return (
     <Grid container size={18} columns={18} rowSpacing={1}>
@@ -279,6 +240,7 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
       >
         <LinearProgress variant="determinate" value={progress} />
       </Grid>
+      <Grid size={18}>{checklistItmesList}</Grid>
       {addAnItem ? (
         <CheckListAddItemFrom
           _id={_id}
