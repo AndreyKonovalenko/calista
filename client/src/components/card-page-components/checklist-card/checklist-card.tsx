@@ -17,8 +17,10 @@ import CheckListAddItemFrom from '../chekclist-add-item-form/checklist-add-item-
 import { CardChecklistNameTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 import { handleFormSubmitEvent } from '../../../utils/utils';
 import { useChecklistActions } from '../../../services/checklist-store';
+import { useChecklistItems } from '../../../services/checklist-item-store';
 import { useSortedChecklistItemsByChecklistId } from '../../../services/checklist-item-store';
 import LinearProgress from '@mui/material/LinearProgress';
+import { progressCalc } from '../../../utils/utils';
 
 const styles = {
   menu: {
@@ -54,14 +56,15 @@ const transformOrigin: PopoverOrigin = {
 const ChecklistCard = (props: { _id: string; name: string }) => {
   const { _id, name } = props;
   const deleteChecklistQuery = useDeleteChecklist();
-  const sortedChecklistItems = useSortedChecklistItemsByChecklistId(_id)
+  const sortedChecklistItems = useSortedChecklistItemsByChecklistId(_id);
+  const checklistItems = useChecklistItems();
   const updateChecklistNameQuery = useUpdateChecklist();
   const { updateChecklistName } = useChecklistActions();
   const [editing, setEditing] = useState(false);
   const [checklistName, setChecklistName] = useState(name);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [addAnItem, setAddAnItem] = useState(false);
-  const progress = 18;
+  const progress = progressCalc(sortedChecklistItems, checklistItems);
   const handleOpenDeleteMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -137,9 +140,11 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
     handleUpdateChecklistName(event);
   };
 
-   const checklistItmesList = sortedChecklistItems
-      ? sortedChecklistItems.map(checklistItemId => <ChecklistItem key={checklistItemId} _id={checklistItemId} />)
-      : null;
+  const checklistItmesList = sortedChecklistItems
+    ? sortedChecklistItems.map(checklistItemId => (
+        <ChecklistItem key={checklistItemId} _id={checklistItemId} />
+      ))
+    : null;
 
   const checklistNameForm = (
     <Stack
@@ -222,24 +227,27 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
           </Stack>
         </Menu>
       </Grid>
-      <Grid
-        size={1}
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-      >
-        <Typography fontSize="small" variant="body1">
-          {progress}%
-        </Typography>
+      <Grid container size={18} columns={18} columnGap={1}>
+        <Grid
+          size={1}
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+        >
+          <Typography fontSize="small" variant="body1">
+            {progress}%
+          </Typography>
+        </Grid>
+        <Grid
+          size={16}
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+        >
+          <LinearProgress variant="determinate" value={progress} />
+        </Grid>
       </Grid>
-      <Grid
-        size={17}
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-      >
-        <LinearProgress variant="determinate" value={progress} />
-      </Grid>
+
       <Grid size={18}>{checklistItmesList}</Grid>
       {addAnItem ? (
         <CheckListAddItemFrom

@@ -7,6 +7,10 @@ interface IChecklistItemActions {
   setChecklistItems: (data: { [key: string]: IChecklistItem }) => void;
   updateChecklistItemName: (_id: string, name: string) => void;
   setSetChecklistItemCalculatedPos: (pos: number | null) => void;
+  updateChecklistItemState: (
+    _id: string,
+    state: 'incomplite' | 'complite',
+  ) => void;
   // moveCard: (draggedId: string, listId: string, pos: number) => void;
   // updateCardDescription: (_id: string, description: string) => void;
   // updateCardName: (_id: string, name: string) => void;
@@ -40,6 +44,20 @@ const useChecklistItemStore = create<IChecklistItemStore>()(
             undefined,
             'updateChecklistItemName',
           ),
+        updateChecklistItemState: (_id, itemState) =>
+          set(
+            state => ({
+              checklistItems: {
+                ...state.checklistItems,
+                [_id]: {
+                  ...state.checklistItems[_id],
+                  state: itemState,
+                },
+              },
+            }),
+            undefined,
+            'updateChecklistItemState',
+          ),
         setSetChecklistItemCalculatedPos: (pos: number | null) =>
           set(
             { checklistItemCalculatedPos: pos },
@@ -58,13 +76,17 @@ export const useChecklistItemActions = () =>
   useChecklistItemStore(state => state.actions);
 export const useChecklistItem = (id: string | undefined) => {
   if (!id) return null;
-  return useChecklistItemStore(state => (state.checklistItems ? state.checklistItems[id] : null));
-}
+  return useChecklistItemStore(state =>
+    state.checklistItems ? state.checklistItems[id] : null,
+  );
+};
 
 export const useSortedChecklistItemsByChecklistId = (checklistId: string) =>
   useChecklistItemStore(state => getMemoizedChecklistItems(state, checklistId));
-const selectChecklistId = (_:IChecklistItemStore, checklistId: string )=> checklistId;
-const selectChecklistItems = (state: IChecklistItemStore) => state.checklistItems;
+const selectChecklistId = (_: IChecklistItemStore, checklistId: string) =>
+  checklistId;
+const selectChecklistItems = (state: IChecklistItemStore) =>
+  state.checklistItems;
 const getMemoizedChecklistItems = createSelector(
   [selectChecklistItems, selectChecklistId],
   (checklistItems: { [key: string]: IChecklistItem }, checklistId: string) => {

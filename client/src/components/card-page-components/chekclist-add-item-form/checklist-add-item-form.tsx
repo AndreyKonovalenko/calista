@@ -3,7 +3,10 @@ import { Grid, Stack, Button } from '@mui/material';
 import { useParams } from 'react-router';
 import { CardChecklistNameTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 import { useCreateChecklistItem } from '../../../api/checklist-items-api-queries';
-import { useSortedChecklistItemsByChecklistId, useChecklistItems} from '../../../services/checklist-item-store';
+import {
+  useSortedChecklistItemsByChecklistId,
+  useChecklistItems,
+} from '../../../services/checklist-item-store';
 import { handleFormSubmitEvent } from '../../../utils/utils';
 
 const CheckListAddItemFrom = (props: {
@@ -12,22 +15,29 @@ const CheckListAddItemFrom = (props: {
 }) => {
   const { boardId, listId, id } = useParams();
   const checklistItems = useChecklistItems();
-    if (!id || !boardId || !listId) {
+  if (!id || !boardId || !listId) {
     return null;
   }
   const { _id, handleCancelationAddAnItem } = props;
-  const sortedChecklistItems = useSortedChecklistItemsByChecklistId(_id)
+  const sortedChecklistItems = useSortedChecklistItemsByChecklistId(_id);
 
   const createChecklistItemQuery = useCreateChecklistItem();
-  const [checklistItemName, setChecklistItemName] = useState('new checklist item name')
+  const [checklistItemName, setChecklistItemName] = useState(
+    'new checklist item name',
+  );
 
   const handleAddNewChecklistItem = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       let pos = 16584;
-      if (checklistItems && sortedChecklistItems && sortedChecklistItems?.length > 0) {
+      if (
+        checklistItems &&
+        sortedChecklistItems &&
+        sortedChecklistItems?.length > 0
+      ) {
         pos =
-          checklistItems[sortedChecklistItems[sortedChecklistItems.length - 1]].pos + pos;
+          checklistItems[sortedChecklistItems[sortedChecklistItems.length - 1]]
+            .pos + pos;
       }
       const formData = new FormData(event.currentTarget);
       createChecklistItemQuery.mutate({
@@ -92,7 +102,7 @@ const CheckListAddItemFrom = (props: {
           autoFocus
           rows={1}
           value={checklistItemName}
-          placeholder={"and an new item"}
+          placeholder={'and an new item'}
           onChange={onChangeEventHandler}
           onFocus={onFocusEventHandler}
           onKeyDown={onEneterDownEventHandler}
@@ -101,7 +111,11 @@ const CheckListAddItemFrom = (props: {
       <Grid size={1} />
       <Grid size={17}>
         <Stack direction="row" justifyContent="start" spacing={1}>
-          <Button id="newChecklistItemSubmitButton" variant="contained" type="submit">
+          <Button
+            id="newChecklistItemSubmitButton"
+            variant="contained"
+            type="submit"
+          >
             SAVE
           </Button>
           <Button variant="outlined" onClick={handleCancelationAddAnItem}>
@@ -113,4 +127,4 @@ const CheckListAddItemFrom = (props: {
   );
 };
 
-export default CheckListAddItemFrom
+export default CheckListAddItemFrom;

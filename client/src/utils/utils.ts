@@ -1,4 +1,4 @@
-import { ICard, IList } from './types';
+import { ICard, IChecklistItem, IList } from './types';
 
 export default function validEnv(name: string | undefined): string {
   if (!name) {
@@ -53,3 +53,25 @@ export const handleFormSubmitEvent = (
   });
   event.currentTarget.form?.dispatchEvent(formEvent);
 };
+
+export function progressCalc(
+  sortedChecklistItemList: string[],
+  checklistItems: { [key: string]: IChecklistItem },
+): number {
+  if (sortedChecklistItemList.length > 0) {
+    const length = sortedChecklistItemList.length;
+    const conplited = sortedChecklistItemList.reduce(
+      (accumulator, currentValue) => {
+        const complite =
+          checklistItems[currentValue as keyof typeof checklistItems].state ===
+          'complite'
+            ? 1
+            : 0;
+        return accumulator + complite;
+      },
+      0,
+    );
+    return Math.floor((conplited / length) * 100);
+  }
+  return 0;
+}

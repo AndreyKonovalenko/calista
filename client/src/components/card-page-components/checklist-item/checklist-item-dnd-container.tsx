@@ -1,13 +1,11 @@
-import React, {memo} from 'react';
+import React, { memo } from 'react';
 import { Box } from '@mui/material';
 
-const ChecklistItemDndContainer = memo(function ChecklistItemDndContainer(props: {children: React.ReactNode}) {
-  const {children} = props;
-  return (
-    <Box>
-      {children}
-    </Box>
-  )
-})
+const ChecklistItemDndContainer = memo(
+  function ChecklistItemDndContainer(props: { children: React.ReactNode }) {
+    const { children } = props;
+    return <Box>{children}</Box>;
+  },
+);
 
-export default ChecklistItemDndContainer
+export default ChecklistItemDndContainer;
