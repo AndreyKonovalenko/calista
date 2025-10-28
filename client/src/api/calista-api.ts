@@ -23,7 +23,7 @@ const CHECKLISTS = validEnv(process.env.CHECKLISTS);
 const CHECKLIST_ITEMS = validEnv(process.env.CHECKLIST_ITEMS);
 axios.defaults.baseURL = BASE_URL;
 
-type TData = {
+export type TData = {
   [key: string]: FormDataEntryValue | string | number | null;
 };
 

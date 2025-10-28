@@ -8,7 +8,6 @@ import {
   useChecklistItems,
 } from '../../../services/checklist-item-store';
 import { handleFormSubmitEvent } from '../../../utils/utils';
-
 const CheckListAddItemFrom = (props: {
   _id: string;
   handleCancelationAddAnItem: () => void;

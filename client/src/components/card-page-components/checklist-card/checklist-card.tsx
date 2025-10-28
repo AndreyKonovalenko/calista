@@ -7,12 +7,12 @@ import {
   Menu,
   PopoverOrigin,
 } from '@mui/material';
-import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import {
   useDeleteChecklist,
   useUpdateChecklist,
 } from '../../../api/checklists-api-queries';
 import ChecklistItem from '../checklist-item/checklist-item';
+import LibraryAddCheckOutlinedIcon from '@mui/icons-material/LibraryAddCheckOutlined';
 import CheckListAddItemFrom from '../chekclist-add-item-form/checklist-add-item-form';
 import { CardChecklistNameTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 import { handleFormSubmitEvent } from '../../../utils/utils';
@@ -187,7 +187,7 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
         flexDirection="column"
         justifyContent="center"
       >
-        <CheckBoxOutlinedIcon fontSize="small" />
+        <LibraryAddCheckOutlinedIcon color="primary" fontSize="small" />
       </Grid>
       <Grid
         size={15}

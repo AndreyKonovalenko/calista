@@ -26,6 +26,13 @@ const styles = {
   mainContainer: {
     mt: 2,
   },
+  overflow: {
+    width: '540px',
+    minHeight: '512px',
+    maxHeight: 'calc(100dvh - 256px)',
+    overflowY: 'auto',
+    overflowX: 'hidden',
+  },
   description: {
     width: '512px',
   },
@@ -68,13 +75,15 @@ const CardPage = () => {
         justifyContent="space-between"
         sx={styles.mainContainer}
       >
-        <Stack direction="column" spacing={5} sx={styles.description}>
-          <CardDescription
-            cardId={data.card._id}
-            description={data.card.description}
-          />
-          <CheckListSection />
-        </Stack>
+        <Box sx={styles.overflow}>
+          <Stack direction="column" spacing={5} sx={styles.description}>
+            <CardDescription
+              cardId={data.card._id}
+              description={data.card.description}
+            />
+            <CheckListSection />
+          </Stack>
+        </Box>
         <Divider orientation="vertical" variant="middle" flexItem />
         <CardActions cardId={data.card._id} />
       </Stack>
