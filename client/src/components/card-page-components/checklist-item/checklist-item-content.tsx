@@ -1,11 +1,22 @@
 import React from 'react';
-import { Typography, Grid } from '@mui/material';
+import { Typography, Grid, Stack, IconButton } from '@mui/material';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const styles = {
   cursor: {
     cursor: 'pointer',
+  },
+  itemBody: {
+    pl: 1,
+    pr: 1,
+    pt: 0.5,
+    pb: 0.5,
+    '&:hover': {
+      backgroundColor: 'listBackground.main',
+      borderRadius: 2,
+    },
   },
 };
 
@@ -31,8 +42,24 @@ const ChecklistItemContent = (props: {
           <CheckBoxIcon color="primary" fontSize="small" />
         )}
       </Grid>
-      <Grid size={17}>
-        <Typography variant="h6">{name}</Typography>
+      <Grid size={17} sx={styles.itemBody}>
+        <Stack
+          display="flex"
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Typography variant="body1" fontSize="large">
+            {name}
+          </Typography>
+          <IconButton
+            color="inherit"
+            aria-label="open item action"
+            onClick={() => {}}
+          >
+            <MoreHorizIcon fontSize="small" />
+          </IconButton>
+        </Stack>
       </Grid>
     </Grid>
   );

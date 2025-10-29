@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
-import { Stack, Button, Typography, Divider } from '@mui/material';
+import {
+  Stack,
+  Button,
+  Typography,
+  Divider,
+  PopoverOrigin,
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useDeleteCard } from '../../../api/cards-api-queries';
 import { useNavigate } from 'react-router';
-import DeleteCardMenu from '../delete-card-menu/delete-card-menu';
+import DeleteItemMenu from '../delete-item-menu/delete-item-menu';
+
 import AddChecklistMenu from '../add-checklist-menu/add-checklist-menu';
 
 const styles = {
@@ -13,6 +20,14 @@ const styles = {
   extraPadding: {
     pb: 1,
   },
+};
+const anchorOrigin: PopoverOrigin = {
+  vertical: 'center',
+  horizontal: 'center',
+};
+const transformOrigin: PopoverOrigin = {
+  vertical: 'top',
+  horizontal: 'center',
 };
 
 const CardActions = (props: { cardId: string }) => {
@@ -58,10 +73,13 @@ const CardActions = (props: { cardId: string }) => {
       <Divider orientation="horizontal" variant="middle" flexItem />
       <Button onClick={handleOpenAddChecklistMenu}>ADD CHECKLIST</Button>
       <Button onClick={handleOpenDeleteMenu}>DELETE CARD</Button>
-      <DeleteCardMenu
+      <DeleteItemMenu
         anchorEl={anchorEl}
-        closeDeleteMenu={handleCloseDeleteMenu}
-        deleteCard={handleDeleteCard}
+        closeHandler={handleCloseDeleteMenu}
+        deleteHandler={handleDeleteCard}
+        prompt="Are you sure you wont to delete this card?"
+        anchorOrigin={anchorOrigin}
+        transformOrigin={transformOrigin}
       />
       <AddChecklistMenu
         anchorEl={anchorSecondEl}

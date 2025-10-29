@@ -1,12 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import {
-  Typography,
-  Stack,
-  Grid,
-  Button,
-  Menu,
-  PopoverOrigin,
-} from '@mui/material';
+import { Typography, Stack, Grid, Button, PopoverOrigin } from '@mui/material';
 import {
   useDeleteChecklist,
   useUpdateChecklist,
@@ -21,6 +14,7 @@ import { useChecklistItems } from '../../../services/checklist-item-store';
 import { useSortedChecklistItemsByChecklistId } from '../../../services/checklist-item-store';
 import LinearProgress from '@mui/material/LinearProgress';
 import { progressCalc } from '../../../utils/utils';
+import DeleteItemMenu from '../delete-item-menu/delete-item-menu';
 
 const styles = {
   menu: {
@@ -45,7 +39,7 @@ const styles = {
 };
 
 const anchorOrigin: PopoverOrigin = {
-  vertical: 'center',
+  vertical: 'bottom',
   horizontal: 'center',
 };
 const transformOrigin: PopoverOrigin = {
@@ -68,7 +62,6 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
   const handleOpenDeleteMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const open = Boolean(anchorEl);
   const handleCloseDeleteMenu = () => {
     setAnchorEl(null);
   };
@@ -171,7 +164,12 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
           justifyContent="center"
           onClick={handleSetEditing}
         >
-          <Typography sx={styles.textarea.box} variant="body1">
+          <Typography
+            sx={styles.textarea.box}
+            variant="body1"
+            fontSize="large"
+            fontWeight="500"
+          >
             {checklistName}
           </Typography>
         </Stack>
@@ -201,31 +199,14 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
         <Button variant="text" onClick={handleOpenDeleteMenu}>
           DELETE
         </Button>
-        <Menu
-          sx={styles.menu}
+        <DeleteItemMenu
+          anchorEl={anchorEl}
+          closeHandler={handleCloseDeleteMenu}
+          deleteHandler={handleDeleteChecklist}
+          prompt="Deleting a checklist is permanent and there is no way to get it back."
           anchorOrigin={anchorOrigin}
           transformOrigin={transformOrigin}
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleCloseDeleteMenu}
-        >
-          <Stack sx={styles.menuContent} spacing={2}>
-            <Typography variant="h6">
-              Deleting a checklist is permanent and there is no way to get it
-              back.
-            </Typography>
-            <Stack direction="row" justifyContent="end" spacing={2}>
-              <Button onClick={handleCloseDeleteMenu}>Cancel</Button>
-              <Button
-                variant="contained"
-                onClick={handleDeleteChecklist}
-                color="error"
-              >
-                Delete Checklist
-              </Button>
-            </Stack>
-          </Stack>
-        </Menu>
+        />
       </Grid>
       <Grid container size={18} columns={18} columnGap={1}>
         <Grid

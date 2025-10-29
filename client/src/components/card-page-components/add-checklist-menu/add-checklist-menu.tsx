@@ -113,13 +113,10 @@ const AddChecklistMenu = (props: {
       <Stack
         component="form"
         onSubmit={onSubmitEventHandler}
-        spacing={1}
+        spacing={3}
         sx={styles.menuContent}
       >
         <Stack direction="row" spacing={1}>
-          {/* <Stack direction="column" justifyContent="center">
-            <ChecklistIcon fontSize="small" />
-          </Stack> */}
           <CardChecklistTextAreaStyled
             name="checklistName"
             autoFocus
@@ -131,7 +128,7 @@ const AddChecklistMenu = (props: {
             onKeyDown={onEneterDownEventHandler}
           />
         </Stack>
-        <Stack direction="row">
+        <Stack direction="row" justifyContent="end" spacing={2}>
           <Button
             id="newChecklistSubmitButton"
             type="submit"
@@ -139,9 +136,7 @@ const AddChecklistMenu = (props: {
           >
             ADD
           </Button>
-          <Button variant="text" onClick={closeAddChecklistMenu}>
-            CANCEL
-          </Button>
+          <Button onClick={closeAddChecklistMenu}>CANCEL</Button>
         </Stack>
       </Stack>
     </Menu>
