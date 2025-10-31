@@ -6,6 +6,7 @@ import {
   PopoverOrigin,
   IconButton,
   Grid,
+  Divider,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -13,8 +14,10 @@ const styles = {
   menu: {
     zIndex: 10000,
   },
+  divider: {
+    width: '80%',
+  },
 };
-
 const ChecklistItemActionsMenu = (props: {
   anchorEl: null | HTMLElement;
   closeHandler: () => void;
@@ -39,20 +42,28 @@ const ChecklistItemActionsMenu = (props: {
       open={open}
       onClose={closeHandler}
     >
-      <Grid container columns={16} spacing={2}>
-        <Grid container size={16} columns={16}>
-          <Grid size={3} />
-          <Grid size={10} display="flex" justifyContent="center">
+      <Grid container columns={12} rowGap={4}>
+        <Grid container size={12}>
+          <Grid size={2} />
+          <Grid
+            size={8}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
             <Typography variant="h6">Item actions</Typography>
           </Grid>
-          <Grid size={3}>
+          <Grid size={2} display="flex" justifyContent="flex-end">
             <IconButton color="inherit" onClick={closeHandler}>
               <CloseIcon fontSize="small" />
             </IconButton>
           </Grid>
+          <Grid size={12} display="flex" justifyContent="center">
+            <Divider sx={styles.divider} />
+          </Grid>
         </Grid>
         <Grid
-          size={16}
+          size={12}
           display="flex"
           justifyContent="center"
           alignItems="center"
