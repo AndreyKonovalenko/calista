@@ -1,8 +1,15 @@
-import React from 'react';
-import { Typography, Grid, Stack, IconButton } from '@mui/material';
+import React, { useState } from 'react';
+import {
+  Typography,
+  Grid,
+  Stack,
+  IconButton,
+  PopoverOrigin,
+} from '@mui/material';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import ChecklistItemActionsMenu from '../checklist-item-actions-menu/checklist-item-actions-menu';
 
 const styles = {
   cursor: {
@@ -20,12 +27,34 @@ const styles = {
   },
 };
 
+const anchorOrigin: PopoverOrigin = {
+  vertical: 'center',
+  horizontal: 'center',
+};
+const transformOrigin: PopoverOrigin = {
+  vertical: 'top',
+  horizontal: 'left',
+};
+
 const ChecklistItemContent = (props: {
   name: string;
   state: 'incomplite' | 'complite';
   handleChangeItemState: () => void;
+  hendleDeleteChecklistItem: () => void;
 }) => {
-  const { name, state, handleChangeItemState } = props;
+  const { name, state, handleChangeItemState, hendleDeleteChecklistItem } =
+    props;
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleOpenItemActionsMenu = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseItemActionsMenu = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Grid container size={18} columns={18} rowSpacing={1}>
       <Grid
@@ -55,10 +84,17 @@ const ChecklistItemContent = (props: {
           <IconButton
             color="inherit"
             aria-label="open item action"
-            onClick={() => {}}
+            onClick={handleOpenItemActionsMenu}
           >
             <MoreHorizIcon fontSize="small" />
           </IconButton>
+          <ChecklistItemActionsMenu
+            anchorEl={anchorEl}
+            closeHandler={handleCloseItemActionsMenu}
+            deleteHandler={hendleDeleteChecklistItem}
+            anchorOrigin={anchorOrigin}
+            transformOrigin={transformOrigin}
+          />
         </Stack>
       </Grid>
     </Grid>

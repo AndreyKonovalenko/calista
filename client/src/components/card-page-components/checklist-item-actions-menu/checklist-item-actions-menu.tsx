@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Menu,
-  Stack,
   Typography,
   Button,
   PopoverOrigin,
@@ -13,12 +12,6 @@ import CloseIcon from '@mui/icons-material/Close';
 const styles = {
   menu: {
     zIndex: 10000,
-  },
-  menuContent: {
-    pt: 1,
-    pb: 1,
-    pl: 2,
-    pr: 2,
   },
 };
 
@@ -46,22 +39,29 @@ const ChecklistItemActionsMenu = (props: {
       open={open}
       onClose={closeHandler}
     >
-      <Stack sx={styles.menuContent} spacing={2}>
-        <Grid container columns={12}>
-          <Grid size={1} />
-          <Grid>
+      <Grid container columns={16} spacing={2}>
+        <Grid container size={16} columns={16}>
+          <Grid size={3} />
+          <Grid size={10} display="flex" justifyContent="center">
             <Typography variant="h6">Item actions</Typography>
           </Grid>
-          <Grid size={1}>
+          <Grid size={3}>
             <IconButton color="inherit" onClick={closeHandler}>
               <CloseIcon fontSize="small" />
             </IconButton>
           </Grid>
         </Grid>
-        <Button variant="contained" onClick={deleteHandler}>
-          Delete
-        </Button>
-      </Stack>
+        <Grid
+          size={16}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Button variant="contained" onClick={deleteHandler}>
+            Delete
+          </Button>
+        </Grid>
+      </Grid>
     </Menu>
   );
 };

@@ -5,10 +5,14 @@ import {
   useChecklistItem,
   useChecklistItemActions,
 } from '../../../services/checklist-item-store';
+import { useDeleteChecklistItem } from '../../../api/checklist-items-api-queries';
+
 import { useUpdateChecklistItem } from '../../../api/checklist-items-api-queries';
 const ChecklistItem = (props: { _id: string }) => {
   const { _id } = props;
   const updateChecklistItemQuery = useUpdateChecklistItem();
+  const deleteChecklistItemQuery = useDeleteChecklistItem();
+
   const checklistItem = useChecklistItem(_id);
   const { updateChecklistItemState } = useChecklistItemActions();
   if (!checklistItem) {
@@ -18,13 +22,16 @@ const ChecklistItem = (props: { _id: string }) => {
 
   const handleChangeItemState = useCallback(() => {
     const itemState = state === 'incomplite' ? 'complite' : 'incomplite';
-    console.log(state);
     updateChecklistItemState(_id, itemState);
     updateChecklistItemQuery.mutate({
       id: _id,
       data: { state: itemState },
     });
   }, [_id, state]);
+
+  const hendleDeleteChecklistItem = useCallback(() => {
+    deleteChecklistItemQuery.mutate(_id);
+  }, [_id]);
 
   // const handleUpdateChecklistName = useCallback(
   //   (event: React.FormEvent<HTMLFormElement>) => {
@@ -45,6 +52,7 @@ const ChecklistItem = (props: { _id: string }) => {
         name={name}
         state={state}
         handleChangeItemState={handleChangeItemState}
+        hendleDeleteChecklistItem={hendleDeleteChecklistItem}
       />
     </ChecklistItemDndContainer>
   );

@@ -10,7 +10,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useDeleteCard } from '../../../api/cards-api-queries';
 import { useNavigate } from 'react-router';
 import DeleteItemMenu from '../delete-item-menu/delete-item-menu';
-
 import AddChecklistMenu from '../add-checklist-menu/add-checklist-menu';
 
 const styles = {
