@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { CardChecklistNameTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 import { handleFormSubmitEvent } from '../../../utils/utils';
+import { UseMutationResult  } from '@tanstack/react-query';
+import { TPutData } from '../../../api/calista-api';
 
 const styles = {
   textarea: {
@@ -14,20 +16,39 @@ const styles = {
       resize: 'none',
     },
   },
+  width: {
+    width: '256px',
+    height: '20px'
+  }
+
 };
 
 const ItemNameForm = (props: {
   name: string;
-  handleUpdateNameForm: (event: React.FormEvent<HTMLFormElement>) => void;
-  handleUpdateName: (itemId: string, perantId: string) => void;
+  updateQuery: UseMutationResult<void, Error, TPutData, unknown>;
+  handleUpdateName: (itemId: string, name: string) => void;
   itemId: string;
 }) => {
-  const { name, handleUpdateNameForm, handleUpdateName, itemId} = props;
+  const { name, updateQuery, handleUpdateName, itemId} = props;
   const [checklistName, setChecklistName] = useState(name);
   const [editing, setEditing] = useState(false);
   const handleSetEditing = () => {
     setEditing(true);
   };
+
+const handleUpdateNameForm = useCallback(
+      (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const checklistName = formData.get('itemName');
+        updateQuery.mutate({
+          id: itemId,
+          data: { name: checklistName },
+        });
+      },
+      [itemId],
+    );
+  
 
   const onChangeEventHandler = (
     event: React.ChangeEvent<HTMLTextAreaElement>,
@@ -81,7 +102,7 @@ const ItemNameForm = (props: {
     >
       {editing ? (
         <CardChecklistNameTextAreaStyled
-          name="checklistName"
+          name="itemName"
           autoFocus
           rows={1}
           value={checklistName}
@@ -96,6 +117,7 @@ const ItemNameForm = (props: {
           direction="column"
           justifyContent="center"
           onClick={handleSetEditing}
+          sx={styles.width}
         >
           <Typography
             sx={styles.textarea.box}

@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import {
-  Typography,
   Grid,
   Stack,
   IconButton,
   PopoverOrigin,
+  Typography
 } from '@mui/material';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ChecklistItemActionsMenu from '../checklist-item-actions-menu/checklist-item-actions-menu';
+// import ItemNameForm from '../item-name-form/item-name-form';
 
 const styles = {
   cursor: {
@@ -41,6 +42,7 @@ const ChecklistItemContent = (props: {
   state: 'incomplite' | 'complite';
   handleChangeItemState: () => void;
   hendleDeleteChecklistItem: () => void;
+  _id: string;
 }) => {
   const { name, state, handleChangeItemState, hendleDeleteChecklistItem } =
     props;
@@ -78,6 +80,12 @@ const ChecklistItemContent = (props: {
           justifyContent="space-between"
           alignItems="center"
         >
+          {/* <ItemNameForm
+            name={name}
+            itemId={_id}
+            handleUpdateName={()=>{}}
+            updateQuery={}
+          /> */}
           <Typography variant="body1" fontSize="large">
             {name}
           </Typography>

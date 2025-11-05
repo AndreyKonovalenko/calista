@@ -27,7 +27,7 @@ export type TData = {
   [key: string]: FormDataEntryValue | string | number | null;
 };
 
-type TPutData = { id: string; data: TData };
+export type TPutData = { id: string; data: TData };
 
 type TCustomErrorResponse = {
   message: string;

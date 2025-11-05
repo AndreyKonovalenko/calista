@@ -53,6 +53,7 @@ const ChecklistItem = (props: { _id: string }) => {
         state={state}
         handleChangeItemState={handleChangeItemState}
         hendleDeleteChecklistItem={hendleDeleteChecklistItem}
+        _id={_id}
       />
     </ChecklistItemDndContainer>
   );
