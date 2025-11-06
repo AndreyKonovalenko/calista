@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { Typography, Grid, Button, PopoverOrigin } from '@mui/material';
 import {
   useDeleteChecklist,
@@ -86,12 +86,13 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
         flexDirection="column"
         justifyContent="center"
       >
-       <ItemNameForm
+        <ItemNameForm
           name={name}
           updateQuery={updateChecklistNameQuery}
           handleUpdateName={updateChecklistName}
           itemId={_id}
-       />
+          fontStyle="500"
+        />
       </Grid>
       <Grid size={2}>
         <Button variant="text" onClick={handleOpenDeleteMenu}>

@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import {
-  Grid,
-  Stack,
-  IconButton,
-  PopoverOrigin,
-  Typography
-} from '@mui/material';
+import React, { useState, useCallback } from 'react';
+import { Grid, Stack, IconButton, PopoverOrigin } from '@mui/material';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ChecklistItemActionsMenu from '../checklist-item-actions-menu/checklist-item-actions-menu';
-// import ItemNameForm from '../item-name-form/item-name-form';
+import ItemNameForm from '../item-name-form/item-name-form';
+import {
+  useUpdateChecklistItem,
+  useDeleteChecklistItem,
+} from '../../../api/checklist-items-api-queries';
+import {
+  useChecklistItemActions,
+  useChecklistItem,
+} from '../../../services/checklist-item-store';
 
 const styles = {
   cursor: {
@@ -37,15 +39,18 @@ const transformOrigin: PopoverOrigin = {
   horizontal: 'left',
 };
 
-const ChecklistItemContent = (props: {
-  name: string;
-  state: 'incomplite' | 'complite';
-  handleChangeItemState: () => void;
-  hendleDeleteChecklistItem: () => void;
-  _id: string;
-}) => {
-  const { name, state, handleChangeItemState, hendleDeleteChecklistItem } =
-    props;
+const ChecklistItemContent = (props: { _id: string }) => {
+  const { _id } = props;
+  const updateChecklistItemQuery = useUpdateChecklistItem();
+  const deleteChecklistItemQuery = useDeleteChecklistItem();
+
+  const checklistItem = useChecklistItem(_id);
+  const { updateChecklistItemState, updateChecklistItemName } =
+    useChecklistItemActions();
+  if (!checklistItem) {
+    return null;
+  }
+  const { name, state } = checklistItem;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleOpenItemActionsMenu = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -56,6 +61,19 @@ const ChecklistItemContent = (props: {
   const handleCloseItemActionsMenu = () => {
     setAnchorEl(null);
   };
+
+  const handleChangeItemState = useCallback(() => {
+    const itemState = state === 'incomplite' ? 'complite' : 'incomplite';
+    updateChecklistItemState(_id, itemState);
+    updateChecklistItemQuery.mutate({
+      id: _id,
+      data: { state: itemState },
+    });
+  }, [_id, state]);
+
+  const hendleDeleteChecklistItem = useCallback(() => {
+    deleteChecklistItemQuery.mutate(_id);
+  }, [_id]);
 
   return (
     <Grid container size={18} columns={18} rowSpacing={1}>
@@ -80,15 +98,12 @@ const ChecklistItemContent = (props: {
           justifyContent="space-between"
           alignItems="center"
         >
-          {/* <ItemNameForm
+          <ItemNameForm
             name={name}
             itemId={_id}
-            handleUpdateName={()=>{}}
-            updateQuery={}
-          /> */}
-          <Typography variant="body1" fontSize="large">
-            {name}
-          </Typography>
+            handleUpdateName={updateChecklistItemName}
+            updateQuery={updateChecklistItemQuery}
+          />
           <IconButton
             color="inherit"
             aria-label="open item action"

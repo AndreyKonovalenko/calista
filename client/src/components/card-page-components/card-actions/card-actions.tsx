@@ -19,6 +19,10 @@ const styles = {
   extraPadding: {
     pb: 1,
   },
+  buttons: {
+    display: 'flex',
+    justifyContent: 'left',
+  },
 };
 const anchorOrigin: PopoverOrigin = {
   vertical: 'center',
@@ -70,8 +74,12 @@ const CardActions = (props: { cardId: string }) => {
         <Typography variant="h6">Actions</Typography>
       </Stack>
       <Divider orientation="horizontal" variant="middle" flexItem />
-      <Button onClick={handleOpenAddChecklistMenu}>ADD CHECKLIST</Button>
-      <Button onClick={handleOpenDeleteMenu}>DELETE CARD</Button>
+      <Button onClick={handleOpenAddChecklistMenu} sx={styles.buttons}>
+        ADD CHECKLIST
+      </Button>
+      <Button onClick={handleOpenDeleteMenu} sx={styles.buttons}>
+        DELETE CARD
+      </Button>
       <DeleteItemMenu
         anchorEl={anchorEl}
         closeHandler={handleCloseDeleteMenu}
