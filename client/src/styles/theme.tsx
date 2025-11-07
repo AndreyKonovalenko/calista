@@ -38,6 +38,7 @@ export const theme: Theme = createTheme({
     dropGuideColor: {
       main: '#A8A9AA',
     },
+    divider: 'rgba(0, 0, 0, 0.12)',
   },
   shape: {
     borderRadius: 8,

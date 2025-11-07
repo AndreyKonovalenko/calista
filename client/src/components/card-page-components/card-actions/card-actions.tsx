@@ -13,9 +13,6 @@ import DeleteItemMenu from '../delete-item-menu/delete-item-menu';
 import AddChecklistMenu from '../add-checklist-menu/add-checklist-menu';
 
 const styles = {
-  actions: {
-    width: '168px',
-  },
   extraPadding: {
     pb: 1,
   },
@@ -66,7 +63,7 @@ const CardActions = (props: { cardId: string }) => {
   };
 
   return (
-    <Stack sx={styles.actions}>
+    <Stack>
       <Stack direction="row" spacing={1} sx={styles.extraPadding}>
         <Stack direction="column" justifyContent="center">
           <MenuIcon fontSize="small" />
