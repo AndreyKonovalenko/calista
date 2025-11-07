@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Grid, Stack, IconButton, PopoverOrigin } from '@mui/material';
+import { Grid, IconButton, PopoverOrigin } from '@mui/material';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -91,12 +91,12 @@ const ChecklistItemContent = (props: { _id: string }) => {
           <CheckBoxIcon color="primary" fontSize="small" />
         )}
       </Grid>
-      <Grid size={17} sx={styles.itemBody}>
-        <Stack
+      <Grid size={17} container sx={styles.itemBody}>
+        <Grid
+          size={15}
           display="flex"
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
+          flexDirection="column"
+          justifyContent="center"
         >
           <ItemNameForm
             name={name}
@@ -104,6 +104,8 @@ const ChecklistItemContent = (props: { _id: string }) => {
             handleUpdateName={updateChecklistItemName}
             updateQuery={updateChecklistItemQuery}
           />
+        </Grid>
+        <Grid size={2}>
           <IconButton
             color="inherit"
             aria-label="open item action"
@@ -118,7 +120,7 @@ const ChecklistItemContent = (props: { _id: string }) => {
             anchorOrigin={anchorOrigin}
             transformOrigin={transformOrigin}
           />
-        </Stack>
+        </Grid>
       </Grid>
     </Grid>
   );

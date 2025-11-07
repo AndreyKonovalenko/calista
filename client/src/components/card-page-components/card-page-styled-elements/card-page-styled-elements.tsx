@@ -8,6 +8,7 @@ export const CardNameTextAreaStyled = styled('textarea')(({ theme }) => ({
   fontFamily: theme.typography.h4.fontFamily,
   border: `2px solid ${theme.palette.primary.dark}`,
   borderRadius: theme.spacing(1),
+  width: '100%',
   overflow: 'hidden',
   overflowWrap: 'anywhere',
   resize: 'none',

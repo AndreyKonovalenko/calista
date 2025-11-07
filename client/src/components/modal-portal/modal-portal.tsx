@@ -14,7 +14,7 @@ const overlay = {
 const modal = {
   position: 'fixed',
   height: '400px',
-  width: '768px',
+  width: '1000px',
   maxWidth: '100%',
   maxHeight: '100%',
   top: '28.5%',

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Stack, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { CardChecklistNameTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 import { handleFormSubmitEvent } from '../../../utils/utils';
 import { UseMutationResult } from '@tanstack/react-query';
@@ -81,8 +81,9 @@ const ItemNameForm = (props: {
   };
 
   return (
-    <Stack
-      direction="column"
+    <Box
+      display="flex"
+      flexDirection="column"
       justifyContent="center"
       component="form"
       onSubmit={onSubmit}
@@ -100,17 +101,13 @@ const ItemNameForm = (props: {
           onKeyDown={onKeyDownEventHandler}
         />
       ) : (
-        <Stack
-          direction="column"
-          justifyContent="center"
-          onClick={handleSetEditing}
-        >
+        <Box onClick={handleSetEditing}>
           <Typography sx={customStyle} variant="body1" fontSize="large">
             {itemName}
           </Typography>
-        </Stack>
+        </Box>
       )}
-    </Stack>
+    </Box>
   );
 };
 

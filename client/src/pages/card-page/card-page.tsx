@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { Paper, Stack, Box, Divider } from '@mui/material';
+import { Paper, Grid, Divider } from '@mui/material';
 import CardDescription from '../../components/card-page-components/card-descriprion/card-descritpion';
 import CardPageTitle from '../../components/card-page-components/card-page-styled-elements/card-title/card-title';
 import CardActions from '../../components/card-page-components/card-actions/card-actions';
@@ -13,13 +13,14 @@ import LoadingBage from '../../components/loading-bage/loading-bage';
 
 const styles = {
   container: {
-    width: '768px',
-    p: 2,
+    p: 3,
     borderRadius: 2,
+    flexGrow: 1,
   },
   closeButton: {
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'flex-end',
     justifyContent: 'center',
     cursor: 'pointer',
   },
@@ -27,7 +28,6 @@ const styles = {
     mt: 2,
   },
   overflow: {
-    width: '540px',
     minHeight: '512px',
     maxHeight: 'calc(100dvh - 256px)',
     overflowY: 'auto',
@@ -61,32 +61,39 @@ const CardPage = () => {
 
   return data ? (
     <Paper sx={styles.container}>
-      <Stack direction="row" justifyContent="space-between">
-        <CardPageTitle _id={data.card._id} name={data.card.name} />
-        <Box
-          onClick={() => navigate(`/boards/${boardId}`, { replace: true })}
-          sx={styles.closeButton}
-        >
-          <CloseIcon fontSize="large" />
-        </Box>
-      </Stack>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        sx={styles.mainContainer}
-      >
-        <Box sx={styles.overflow}>
-          <Stack direction="column" spacing={5} sx={styles.description}>
-            <CardDescription
-              cardId={data.card._id}
-              description={data.card.description}
-            />
-            <CheckListSection />
-          </Stack>
-        </Box>
-        <Divider orientation="vertical" variant="middle" flexItem />
-        <CardActions cardId={data.card._id} />
-      </Stack>
+      <Grid container>
+        <Grid container size={12}>
+          <Grid size={10}>
+            <CardPageTitle _id={data.card._id} name={data.card.name} />
+          </Grid>
+          <Grid
+            size={2}
+            onClick={() => navigate(`/boards/${boardId}`, { replace: true })}
+            sx={styles.closeButton}
+          >
+            <CloseIcon fontSize="large" />
+          </Grid>
+        </Grid>
+        <Grid container size={12} columns={18}>
+          <Grid size={14} container sx={styles.overflow}>
+            <Grid>
+              <CardDescription
+                cardId={data.card._id}
+                description={data.card.description}
+              />
+            </Grid>
+            <Grid>
+              <CheckListSection />
+            </Grid>
+          </Grid>
+          <Grid size={1} display="flex" justifyContent="center">
+            <Divider orientation="vertical" variant="middle" flexItem />
+          </Grid>
+          <Grid size={3}>
+            <CardActions cardId={data.card._id} />
+          </Grid>
+        </Grid>
+      </Grid>
     </Paper>
   ) : isLoading ? (
     <LoadingBage />
