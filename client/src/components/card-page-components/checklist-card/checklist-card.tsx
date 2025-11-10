@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Typography, Grid, Button, PopoverOrigin } from '@mui/material';
+import {
+  Typography,
+  Grid,
+  Button,
+  PopoverOrigin,
+  Stack,
+  Box,
+} from '@mui/material';
 import {
   useDeleteChecklist,
   useUpdateChecklist,
@@ -22,6 +29,19 @@ const anchorOrigin: PopoverOrigin = {
 const transformOrigin: PopoverOrigin = {
   vertical: 'top',
   horizontal: 'center',
+};
+
+const styles = {
+  item: {
+    pl: 1,
+    pr: 1,
+    pt: 0.5,
+    pb: 0.5,
+  },
+  progress: {
+    pl: 1,
+    pr: 1,
+  },
 };
 
 const ChecklistCard = (props: { _id: string; name: string }) => {
@@ -51,19 +71,6 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
     setAddAnItem(false);
   };
 
-  // const handleUpdateChecklistName = useCallback(
-  //   (event: React.FormEvent<HTMLFormElement>) => {
-  //     event.preventDefault();
-  //     const formData = new FormData(event.currentTarget);
-  //     const checklistName = formData.get('cheklistName');
-  //     updateChecklistNameQuery.mutate({
-  //       id: _id,
-  //       data: { name: checklistName },
-  //     });
-  //   },
-  //   [_id],
-  // );
-
   const checklistItmesList = sortedChecklistItems
     ? sortedChecklistItems.map(checklistItemId => (
         <ChecklistItem key={checklistItemId} _id={checklistItemId} />
@@ -71,7 +78,7 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
     : null;
 
   return (
-    <Grid container size={18} columns={18} rowSpacing={1}>
+    <Grid container size={18} columns={18}>
       <Grid
         size={1}
         display="flex"
@@ -81,33 +88,39 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
         <LibraryAddCheckOutlinedIcon color="primary" fontSize="small" />
       </Grid>
       <Grid
-        size={15}
+        size={17}
         display="flex"
         flexDirection="column"
         justifyContent="center"
+        sx={styles.item}
       >
-        <ItemNameForm
-          name={name}
-          updateQuery={updateChecklistNameQuery}
-          handleUpdateName={updateChecklistName}
-          itemId={_id}
-          fontStyle="500"
-        />
+        <Stack
+          display="flex"
+          flexGrow="1"
+          justifyContent="space-between"
+          flexDirection="row"
+        >
+          <ItemNameForm
+            name={name}
+            updateQuery={updateChecklistNameQuery}
+            handleUpdateName={updateChecklistName}
+            itemId={_id}
+            fontStyle="500"
+          />
+          <Button variant="text" onClick={handleOpenDeleteMenu}>
+            DELETE
+          </Button>
+          <DeleteItemMenu
+            anchorEl={anchorEl}
+            closeHandler={handleCloseDeleteMenu}
+            deleteHandler={handleDeleteChecklist}
+            prompt="Deleting a checklist is permanent and there is no way to get it back."
+            anchorOrigin={anchorOrigin}
+            transformOrigin={transformOrigin}
+          />
+        </Stack>
       </Grid>
-      <Grid size={2}>
-        <Button variant="text" onClick={handleOpenDeleteMenu}>
-          DELETE
-        </Button>
-        <DeleteItemMenu
-          anchorEl={anchorEl}
-          closeHandler={handleCloseDeleteMenu}
-          deleteHandler={handleDeleteChecklist}
-          prompt="Deleting a checklist is permanent and there is no way to get it back."
-          anchorOrigin={anchorOrigin}
-          transformOrigin={transformOrigin}
-        />
-      </Grid>
-      <Grid container size={18} columns={18} columnGap={1}>
+      <Grid container size={18} columns={18}>
         <Grid
           size={1}
           display="flex"
@@ -119,15 +132,16 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
           </Typography>
         </Grid>
         <Grid
-          size={16}
+          size={17}
           display="flex"
           flexDirection="column"
           justifyContent="center"
         >
-          <LinearProgress variant="determinate" value={progress} />
+          <Box sx={styles.progress}>
+            <LinearProgress variant="determinate" value={progress} />
+          </Box>
         </Grid>
       </Grid>
-
       <Grid size={18}>{checklistItmesList}</Grid>
       {addAnItem ? (
         <CheckListAddItemFrom

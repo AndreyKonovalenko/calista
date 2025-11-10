@@ -18,6 +18,12 @@ const styles = {
     textTransform: 'none',
     justifyContent: 'start',
   },
+  contentPadding: {
+    pl: 1,
+    pr: 1,
+    pt: 0.5,
+    pb: 0.5,
+  },
 };
 const descriptionPlaceholder = 'Add a more detailed descripion...';
 
@@ -62,8 +68,8 @@ const CardDescription = (props: {
   };
 
   return (
-    <Grid container rowSpacing={1} columns={18}>
-      <Grid container size={18} columns={18} rowSpacing={1}>
+    <Grid container columns={18}>
+      <Grid container size={18} columns={18}>
         <Grid
           size={1}
           display="flex"
@@ -72,8 +78,9 @@ const CardDescription = (props: {
         >
           <NotesIcon fontSize="small" />
         </Grid>
-        <Grid size={17}>
+        <Grid size={17} sx={styles.contentPadding}>
           <Stack
+            flexGrow="1"
             direction="row"
             justifyContent="space-between"
             alignItems="center"
@@ -94,6 +101,7 @@ const CardDescription = (props: {
           columns={18}
           rowSpacing={1}
           component="form"
+          sx={styles.contentPadding}
           onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
             handleUpdateDescription(event, cardId);
             setDescriptionEdit(false);
@@ -124,7 +132,7 @@ const CardDescription = (props: {
           </Grid>
         </Grid>
       ) : (
-        <Grid size={18} container columns={18}>
+        <Grid size={18} container columns={18} sx={styles.contentPadding}>
           <Grid size={1} />
           <Grid size={17}>
             {description ? (

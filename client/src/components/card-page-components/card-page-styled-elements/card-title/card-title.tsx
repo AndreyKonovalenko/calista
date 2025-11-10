@@ -49,6 +49,10 @@ const CardPageTitle = (props: { name: string; _id: string }) => {
   return (
     <Box
       component="form"
+      display="flex"
+      flexGrow="1"
+      flexDirection="column"
+      justifyContent="center"
       onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
         handleUpdateCardName(event, _id);
       }}

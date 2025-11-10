@@ -85,6 +85,7 @@ const ItemNameForm = (props: {
       display="flex"
       flexDirection="column"
       justifyContent="center"
+      flexGrow="1"
       component="form"
       onSubmit={onSubmit}
     >

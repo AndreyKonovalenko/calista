@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { Paper, Grid } from '@mui/material';
+import { Paper, Grid, Stack, Box } from '@mui/material';
 import CardDescription from '../../components/card-page-components/card-descriprion/card-descritpion';
 import CardPageTitle from '../../components/card-page-components/card-page-styled-elements/card-title/card-title';
 import CardActions from '../../components/card-page-components/card-actions/card-actions';
@@ -44,6 +44,9 @@ const styles = {
     borderTop: 'var(--Grid-borderWidth) solid',
     borderColor: 'divider',
   },
+  extraPedding: {
+    pb: 3,
+  },
 };
 
 const CardPage = () => {
@@ -55,10 +58,6 @@ const CardPage = () => {
     return null;
   }
   const { data, isSuccess, isLoading } = useFetchCardById(id);
-  // const [addCheckList, setAddCheckList] = useState(false)
-  // const handleAddChecklist = () =>{
-  //   setAddCheckList(!addCheckList)
-  // }
 
   useEffect(() => {
     if (isSuccess) {
@@ -69,34 +68,37 @@ const CardPage = () => {
 
   return data ? (
     <Paper sx={styles.container}>
-      <Grid container spacing={2}>
+      <Grid container sx={styles.extraPedding}>
         <Grid container size={12}>
-          <Grid size={10}>
-            <CardPageTitle _id={data.card._id} name={data.card.name} />
-          </Grid>
-          <Grid
-            size={2}
-            onClick={() => navigate(`/boards/${boardId}`, { replace: true })}
-            sx={styles.closeButton}
+          <Stack
+            flexGrow="1"
+            justifyContent="space-between"
+            flexDirection="row"
           >
-            <CloseIcon fontSize="large" />
+            <CardPageTitle _id={data.card._id} name={data.card.name} />
+            <Box
+              onClick={() => navigate(`/boards/${boardId}`, { replace: true })}
+              sx={styles.closeButton}
+            >
+              <CloseIcon fontSize="large" />
+            </Box>
+          </Stack>
+        </Grid>
+      </Grid>
+      <Grid container size={12} columns={18} sx={styles.dividerTop}>
+        <Grid size={14} container columns={18} sx={styles.overflow}>
+          <Grid size={18}>
+            <CardDescription
+              cardId={data.card._id}
+              description={data.card.description}
+            />
+          </Grid>
+          <Grid>
+            <CheckListSection />
           </Grid>
         </Grid>
-        <Grid container size={12} columns={18} sx={styles.dividerTop}>
-          <Grid size={14} container sx={styles.overflow}>
-            <Grid>
-              <CardDescription
-                cardId={data.card._id}
-                description={data.card.description}
-              />
-            </Grid>
-            <Grid>
-              <CheckListSection />
-            </Grid>
-          </Grid>
-          <Grid size={4}>
-            <CardActions cardId={data.card._id} />
-          </Grid>
+        <Grid size={4} container columns={12}>
+          <CardActions cardId={data.card._id} />
         </Grid>
       </Grid>
     </Paper>

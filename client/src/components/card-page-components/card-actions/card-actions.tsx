@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Stack,
-  Button,
-  Typography,
-  Divider,
-  PopoverOrigin,
-} from '@mui/material';
+import { Grid, Button, Typography, Stack, PopoverOrigin } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useDeleteCard } from '../../../api/cards-api-queries';
 import { useNavigate } from 'react-router';
@@ -13,12 +7,24 @@ import DeleteItemMenu from '../delete-item-menu/delete-item-menu';
 import AddChecklistMenu from '../add-checklist-menu/add-checklist-menu';
 
 const styles = {
-  extraPadding: {
-    pb: 1,
-  },
   buttons: {
     display: 'flex',
     justifyContent: 'left',
+  },
+  dividerTop: {
+    '--Grid-borderWidth': '1px',
+    borderTop: 'var(--Grid-borderWidth) solid',
+    borderColor: 'divider',
+    pl: 1,
+    pr: 1,
+    pt: 0.5,
+    pb: 0.5,
+  },
+  contentPadding: {
+    pl: 1,
+    pr: 1,
+    pt: 0.5,
+    pb: 0.5,
   },
 };
 const anchorOrigin: PopoverOrigin = {
@@ -63,33 +69,43 @@ const CardActions = (props: { cardId: string }) => {
   };
 
   return (
-    <Stack>
-      <Stack direction="row" spacing={1} sx={styles.extraPadding}>
-        <Stack direction="column" justifyContent="center">
+    <Grid size={12}>
+      <Grid container size={12} sx={styles.contentPadding}>
+        <Grid
+          size={2}
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+        >
           <MenuIcon fontSize="small" />
+        </Grid>
+        <Grid size={10}>
+          <Typography variant="h6">Actions</Typography>
+        </Grid>
+      </Grid>
+      <Grid container size={12} sx={styles.dividerTop}>
+        <Stack flexGrow="1">
+          <Button onClick={handleOpenAddChecklistMenu} sx={styles.buttons}>
+            ADD CHECKLIST
+          </Button>
+          <Button onClick={handleOpenDeleteMenu} sx={styles.buttons}>
+            DELETE CARD
+          </Button>
+          <DeleteItemMenu
+            anchorEl={anchorEl}
+            closeHandler={handleCloseDeleteMenu}
+            deleteHandler={handleDeleteCard}
+            prompt="Are you sure you wont to delete this card?"
+            anchorOrigin={anchorOrigin}
+            transformOrigin={transformOrigin}
+          />
+          <AddChecklistMenu
+            anchorEl={anchorSecondEl}
+            closeAddChecklistMenu={handleCloseAddChecklistMenu}
+          />
         </Stack>
-        <Typography variant="h6">Actions</Typography>
-      </Stack>
-      <Divider orientation="horizontal" variant="middle" flexItem />
-      <Button onClick={handleOpenAddChecklistMenu} sx={styles.buttons}>
-        ADD CHECKLIST
-      </Button>
-      <Button onClick={handleOpenDeleteMenu} sx={styles.buttons}>
-        DELETE CARD
-      </Button>
-      <DeleteItemMenu
-        anchorEl={anchorEl}
-        closeHandler={handleCloseDeleteMenu}
-        deleteHandler={handleDeleteCard}
-        prompt="Are you sure you wont to delete this card?"
-        anchorOrigin={anchorOrigin}
-        transformOrigin={transformOrigin}
-      />
-      <AddChecklistMenu
-        anchorEl={anchorSecondEl}
-        closeAddChecklistMenu={handleCloseAddChecklistMenu}
-      />
-    </Stack>
+      </Grid>
+    </Grid>
   );
 };
 
