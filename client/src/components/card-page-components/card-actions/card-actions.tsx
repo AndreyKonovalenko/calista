@@ -3,8 +3,8 @@ import { Grid, Button, Typography, Stack, PopoverOrigin } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useDeleteCard } from '../../../api/cards-api-queries';
 import { useNavigate } from 'react-router';
-import DeleteItemMenu from '../delete-item-menu/delete-item-menu';
-import AddChecklistMenu from '../add-checklist-menu/add-checklist-menu';
+import DeleteItemMenu from '../delete-item-popover/delete-item-Popover';
+import AddChecklistPopover from './add-checklist-popover/add-checklist-popover';
 
 const styles = {
   buttons: {
@@ -99,7 +99,7 @@ const CardActions = (props: { cardId: string }) => {
             anchorOrigin={anchorOrigin}
             transformOrigin={transformOrigin}
           />
-          <AddChecklistMenu
+          <AddChecklistPopover
             anchorEl={anchorSecondEl}
             closeAddChecklistMenu={handleCloseAddChecklistMenu}
           />

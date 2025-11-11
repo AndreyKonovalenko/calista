@@ -4,7 +4,7 @@ import {
   useChecklists,
   useSortedChecklists,
 } from '../../../services/checklist-store';
-import ChecklistCard from '../checklist-card/checklist-card';
+import Checklist from './checklist/checklist';
 
 const styles = {
   extraPadding: {
@@ -24,7 +24,7 @@ const CheckListSection = () => {
           index === sortedChecklists.length - 1
         ) {
           return (
-            <ChecklistCard
+            <Checklist
               key={id}
               _id={id}
               name={checklists[id].name}
@@ -33,7 +33,7 @@ const CheckListSection = () => {
           );
         } else {
           return (
-            <ChecklistCard
+            <Checklist
               key={id}
               _id={id}
               name={checklists[id].name}

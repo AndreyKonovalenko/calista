@@ -1,6 +1,5 @@
 import React from 'react';
-import { Menu, IconButton } from '@mui/material';
-import MenuItem from '@mui/material/MenuItem';
+import { IconButton, Menu, MenuItem } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useDeleteList } from '../../../api/lists-api-queries';
 
@@ -38,9 +37,6 @@ const BoardListActionMenu = (props: { _id: string }): JSX.Element => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
       >
         <MenuItem onClick={() => handleDeleteList(_id)}>Delete List</MenuItem>
       </Menu>
