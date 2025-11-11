@@ -18,6 +18,7 @@ const styles = {
     pb: 1,
     pl: 2,
     pr: 2,
+    outline: 'none',
   },
 };
 
@@ -116,18 +117,17 @@ const AddChecklistMenu = (props: {
         spacing={3}
         sx={styles.menuContent}
       >
-        <Stack direction="row" spacing={1}>
-          <CardChecklistTextAreaStyled
-            name="checklistName"
-            autoFocus
-            rows={1}
-            value={checklistName}
-            onChange={onChangeEventHandler}
-            onFocus={onFocusEventHandler}
-            onBlur={onBlurEventHandler}
-            onKeyDown={onEneterDownEventHandler}
-          />
-        </Stack>
+        <CardChecklistTextAreaStyled
+          name="checklistName"
+          autoFocus
+          rows={1}
+          value={checklistName}
+          onChange={onChangeEventHandler}
+          onFocus={onFocusEventHandler}
+          onBlur={onBlurEventHandler}
+          onKeyDown={onEneterDownEventHandler}
+        />
+
         <Stack direction="row" justifyContent="end" spacing={2}>
           <Button
             id="newChecklistSubmitButton"

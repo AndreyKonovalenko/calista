@@ -44,8 +44,12 @@ const styles = {
   },
 };
 
-const ChecklistCard = (props: { _id: string; name: string }) => {
-  const { _id, name } = props;
+const ChecklistCard = (props: {
+  _id: string;
+  name: string;
+  isLast: boolean;
+}) => {
+  const { _id, name, isLast } = props;
   const deleteChecklistQuery = useDeleteChecklist();
   const sortedChecklistItems = useSortedChecklistItemsByChecklistId(_id);
   const checklistItems = useChecklistItems();
@@ -78,7 +82,7 @@ const ChecklistCard = (props: { _id: string; name: string }) => {
     : null;
 
   return (
-    <Grid container size={18} columns={18}>
+    <Grid container size={18} columns={18} id={isLast ? 'isLastList' : ''}>
       <Grid
         size={1}
         display="flex"
