@@ -7,7 +7,7 @@ import {
 import { Stack, Button, Menu, PopoverOrigin } from '@mui/material';
 import { useCreateChecklist } from '../../../api/checklists-api-queries';
 import { handleFormSubmitEvent } from '../../../utils/utils';
-import { CardChecklistTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
+// import { CardChecklistTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 
 const styles = {
   menu: {
@@ -82,16 +82,17 @@ const AddChecklistMenu = (props: {
     event.target.select();
   };
 
-  const onBlurEventHandler = (event: React.FocusEvent<HTMLTextAreaElement>) => {
-    const submitButton = document.getElementById('newChecklistSubmitButton');
-    if (event.relatedTarget === submitButton) {
-      return;
-    }
-  };
+  // const onBlurEventHandler = (event: React.FocusEvent<HTMLTextAreaElement>) => {
+  //   const submitButton = document.getElementById('newChecklistSubmitButton');
+  //   if (event.relatedTarget === submitButton) {
+  //     return;
+  //   }
+  // };
 
   const onEneterDownEventHandler = (
     event: React.KeyboardEvent<HTMLTextAreaElement>,
   ) => {
+
     if (event.key === 'Enter') {
       event.preventDefault();
       handleFormSubmitEvent(event);
@@ -117,17 +118,15 @@ const AddChecklistMenu = (props: {
         spacing={3}
         sx={styles.menuContent}
       >
-        <CardChecklistTextAreaStyled
+        <textarea
           name="checklistName"
-          autoFocus
           rows={1}
           value={checklistName}
           onChange={onChangeEventHandler}
           onFocus={onFocusEventHandler}
-          onBlur={onBlurEventHandler}
+          // onBlur={onBlurEventHandler}
           onKeyDown={onEneterDownEventHandler}
         />
-
         <Stack direction="row" justifyContent="end" spacing={2}>
           <Button
             id="newChecklistSubmitButton"
