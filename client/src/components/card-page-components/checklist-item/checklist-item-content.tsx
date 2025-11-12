@@ -3,7 +3,7 @@ import { Grid, IconButton, PopoverOrigin, Stack } from '@mui/material';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlank from '@mui/icons-material/CheckBoxOutlineBlank';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import ChecklistItemActionsMenu from '../checklist-item-actions-menu/checklist-item-actions-menu';
+import ChecklistItemActionsPopover from './checklist-item-actions-popover/checklist-item-actions-popover';
 import ItemNameForm from '../item-name-form/item-name-form';
 import {
   useUpdateChecklistItem,
@@ -111,7 +111,7 @@ const ChecklistItemContent = (props: { _id: string }) => {
           >
             <MoreHorizIcon fontSize="small" />
           </IconButton>
-          <ChecklistItemActionsMenu
+          <ChecklistItemActionsPopover
             anchorEl={anchorEl}
             closeHandler={handleCloseItemActionsMenu}
             deleteHandler={hendleDeleteChecklistItem}
