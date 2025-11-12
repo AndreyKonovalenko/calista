@@ -8,6 +8,7 @@ import { Stack, Button, Popover, PopoverOrigin } from '@mui/material';
 import { useCreateChecklist } from '../../../../api/checklists-api-queries';
 import { handleFormSubmitEvent } from '../../../../utils/utils';
 import { CardChecklistTextAreaStyled } from '../../card-page-styled-elements/card-page-styled-elements';
+import { useUIAction } from '../../../../services/ui-store';
 
 const styles = {
   menu: {
@@ -39,6 +40,7 @@ const AddChecklistPopover = (props: {
   if (!id || !listId || !boardId) {
     return;
   }
+  const {setNewItemAdded} = useUIAction();
   const createChecklistQuery = useCreateChecklist();
   const checklists = useChecklists();
   const sortedChecklists = useSortedChecklists();
@@ -55,6 +57,7 @@ const AddChecklistPopover = (props: {
           checklists[sortedChecklists[sortedChecklists.length - 1]].pos + pos;
       }
       const formData = new FormData(event.currentTarget);
+      setNewItemAdded(true)
       createChecklistQuery.mutate({
         name: formData.get('checklistName'),
         boardId: boardId,
@@ -79,6 +82,7 @@ const AddChecklistPopover = (props: {
   const onFocusEventHandler = (
     event: React.FocusEvent<HTMLTextAreaElement>,
   ) => {
+    event.preventDefault()
     event.target.select();
   };
 
@@ -107,6 +111,7 @@ const AddChecklistPopover = (props: {
       sx={styles.menu}
       anchorOrigin={anchorOrigin}
       transformOrigin={transformOrigin}
+      TransitionProps={}
       anchorEl={anchorEl}
       open={open}
       onClose={closeAddChecklistMenu}
@@ -142,3 +147,25 @@ const AddChecklistPopover = (props: {
 };
 
 export default AddChecklistPopover;
+
+
+
+
+  // function MyPopover({ open, anchorEl, onClose }) {
+  //     const inputRef = useRef(null);
+
+  //     const handlePopoverEntered = () => {
+  //       if (inputRef.current) {
+  //         inputRef.current.focus();
+  //       }
+  //     };
+
+  //     return (
+  //       <Popover
+  //         open={open}
+  //         anchorEl={anchorEl}
+  //         onClose={onClose}
+  //         TransitionProps={{ onEntered: handlePopoverEntered }}
+  //       >
+  //         <TextField inputRef={inputRef} label="Enter text" />
+  //       </Popover>
