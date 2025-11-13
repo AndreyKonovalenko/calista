@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { useParams } from 'react-router';
 import {
   useSortedChecklists,
@@ -40,7 +40,8 @@ const AddChecklistPopover = (props: {
   if (!id || !listId || !boardId) {
     return;
   }
-  const {setNewItemAdded} = useUIAction();
+  const { setNewItemAdded } = useUIAction();
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const createChecklistQuery = useCreateChecklist();
   const checklists = useChecklists();
   const sortedChecklists = useSortedChecklists();
@@ -57,7 +58,7 @@ const AddChecklistPopover = (props: {
           checklists[sortedChecklists[sortedChecklists.length - 1]].pos + pos;
       }
       const formData = new FormData(event.currentTarget);
-      setNewItemAdded(true)
+      setNewItemAdded(true);
       createChecklistQuery.mutate({
         name: formData.get('checklistName'),
         boardId: boardId,
@@ -82,7 +83,7 @@ const AddChecklistPopover = (props: {
   const onFocusEventHandler = (
     event: React.FocusEvent<HTMLTextAreaElement>,
   ) => {
-    event.preventDefault()
+    event.preventDefault();
     event.target.select();
   };
 
@@ -106,12 +107,18 @@ const AddChecklistPopover = (props: {
     }
   };
 
+  const handlePopoverEntered = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
   return (
     <Popover
       sx={styles.menu}
       anchorOrigin={anchorOrigin}
       transformOrigin={transformOrigin}
-      TransitionProps={}
+      slotProps={{ transition: handlePopoverEntered }}
       anchorEl={anchorEl}
       open={open}
       onClose={closeAddChecklistMenu}
@@ -123,6 +130,7 @@ const AddChecklistPopover = (props: {
         sx={styles.menuContent}
       >
         <CardChecklistTextAreaStyled
+          ref={inputRef}
           name="checklistName"
           rows={1}
           value={checklistName}
@@ -148,24 +156,21 @@ const AddChecklistPopover = (props: {
 
 export default AddChecklistPopover;
 
+// function MyPopover({ open, anchorEl, onClose }) {
+//     const inputRef = useRef(null);
 
+//     const handlePopoverEntered = () => {
+//       if (inputRef.current) {
+//         inputRef.current.focus();
+//       }
+//     };
 
-
-  // function MyPopover({ open, anchorEl, onClose }) {
-  //     const inputRef = useRef(null);
-
-  //     const handlePopoverEntered = () => {
-  //       if (inputRef.current) {
-  //         inputRef.current.focus();
-  //       }
-  //     };
-
-  //     return (
-  //       <Popover
-  //         open={open}
-  //         anchorEl={anchorEl}
-  //         onClose={onClose}
-  //         TransitionProps={{ onEntered: handlePopoverEntered }}
-  //       >
-  //         <TextField inputRef={inputRef} label="Enter text" />
-  //       </Popover>
+//     return (
+//       <Popover
+//         open={open}
+//         anchorEl={anchorEl}
+//         onClose={onClose}
+//         TransitionProps={{ onEntered: handlePopoverEntered }}
+//       >
+//         <TextField inputRef={inputRef} label="Enter text" />
+//       </Popover>

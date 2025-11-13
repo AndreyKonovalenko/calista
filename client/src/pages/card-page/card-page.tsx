@@ -28,7 +28,7 @@ const styles = {
     mt: 2,
   },
   overflow: {
-    minHeight: '512px',
+    minHeight: '256px',
     maxHeight: 'calc(100dvh - 256px)',
     overflowY: 'auto',
     overflowX: 'hidden',
@@ -93,7 +93,7 @@ const CardPage = () => {
               description={data.card.description}
             />
           </Grid>
-          <Grid>
+          <Grid size={18}>
             <CheckListSection />
           </Grid>
         </Grid>

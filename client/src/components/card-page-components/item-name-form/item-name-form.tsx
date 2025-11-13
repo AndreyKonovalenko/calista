@@ -93,7 +93,6 @@ const ItemNameForm = (props: {
         <CardChecklistNameTextAreaStyled
           name="itemName"
           autoFocus
-          rows={1}
           value={itemName}
           placeholder={name}
           onChange={onChangeEventHandler}

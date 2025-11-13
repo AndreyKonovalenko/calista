@@ -39,14 +39,27 @@ const CheckListAddItemFrom = (props: {
             .pos + pos;
       }
       const formData = new FormData(event.currentTarget);
-      createChecklistItemQuery.mutate({
-        name: formData.get('checklistItemName'),
-        boardId: boardId,
-        listId: listId,
-        cardId: id,
-        checklistId: _id,
-        pos: pos,
-      });
+      const regExpPatter: RegExp = new RegExp(`\r?\n|\r`);
+      const name = formData.get('checklistItemName');
+
+      if (name) {
+        const nameArr = name.toString().split(regExpPatter);
+        if (nameArr.length > 60) {
+          return;
+        }
+        nameArr.forEach((element, index) => {
+          setTimeout(() => {
+            createChecklistItemQuery.mutate({
+              name: element,
+              boardId: boardId,
+              listId: listId,
+              cardId: id,
+              checklistId: _id,
+              pos: pos,
+            });
+          }, index * 500);
+        });
+      }
     },
     [id, checklistItems, sortedChecklistItems],
   );
@@ -99,7 +112,6 @@ const CheckListAddItemFrom = (props: {
         <CardChecklistNameTextAreaStyled
           name="checklistItemName"
           autoFocus
-          rows={1}
           value={checklistItemName}
           placeholder={'and an new item'}
           onChange={onChangeEventHandler}

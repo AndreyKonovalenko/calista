@@ -5,7 +5,7 @@ import {
   useSortedChecklists,
 } from '../../../services/checklist-store';
 import Checklist from '../checklist/checklist';
-import { useUIAction,  useIsNewItemAdded } from '../../../services/ui-store';
+import { useUIAction, useIsNewItemAdded } from '../../../services/ui-store';
 
 const styles = {
   extraPadding: {
@@ -16,7 +16,7 @@ const styles = {
 
 const CheckListSection = () => {
   const checklists = useChecklists();
-  const {setNewItemAdded} = useUIAction();
+  const { setNewItemAdded } = useUIAction();
   const isNewItemAdded = useIsNewItemAdded();
   const sortedChecklists = useSortedChecklists();
 
@@ -45,25 +45,25 @@ const CheckListSection = () => {
           );
         }
       })
-    : null; 
+    : null;
 
-  useEffect(()=>{
+  useEffect(() => {
     return () => {
-      if( isNewItemAdded === true){
-        setNewItemAdded(false)
+      if (isNewItemAdded === true) {
+        setNewItemAdded(false);
       }
-    }
-  },[isNewItemAdded])
+    };
+  }, [isNewItemAdded]);
 
   useEffect(() => {
     const lastChecklist = document.getElementById('isLastList');
-    if( isNewItemAdded) {
-    lastChecklist?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'end',
-      inline: 'nearest',
-    });
-  }
+    if (isNewItemAdded) {
+      lastChecklist?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+        inline: 'nearest',
+      });
+    }
   }, [sortedChecklists]);
 
   return (

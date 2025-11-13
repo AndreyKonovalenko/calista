@@ -1,4 +1,4 @@
-import { styled } from '@mui/material';
+import { styled, TextareaAutosize } from '@mui/material';
 
 export const CardNameTextAreaStyled = styled('textarea')(({ theme }) => ({
   backgroundColor: theme.palette.listBackground.main,
@@ -33,7 +33,7 @@ export const CardChecklistTextAreaStyled = styled('textarea')(({ theme }) => ({
   '&:focus-visible': { outline: 'none' },
 }));
 
-export const CardChecklistNameTextAreaStyled = styled('textarea')(
+export const CardChecklistNameTextAreaStyled = styled(TextareaAutosize)(
   ({ theme }) => ({
     fontSize: theme.typography.body1.fontSize,
     fontWeight: theme.typography.body1.fontWeight,
