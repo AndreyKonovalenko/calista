@@ -74,6 +74,7 @@ const ItemNameForm = (props: {
     }
     if (event.key === 'Escape') {
       setEditing(false);
+      setItemName(name);
     }
   };
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -85,7 +86,7 @@ const ItemNameForm = (props: {
       display="flex"
       flexDirection="column"
       justifyContent="center"
-      flexGrow="1"
+      flexGrow='1'
       component="form"
       onSubmit={onSubmit}
     >
@@ -101,7 +102,7 @@ const ItemNameForm = (props: {
           onKeyDown={onKeyDownEventHandler}
         />
       ) : (
-        <Box onClick={handleSetEditing}>
+        <Box onClick={handleSetEditing} flexGrow='1' display='flex' flexDirection="column" justifyContent='center'>
           <Typography sx={customStyle} variant="body1" fontSize="large">
             {itemName}
           </Typography>

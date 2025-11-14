@@ -73,7 +73,7 @@ const Checklist = (props: { _id: string; name: string; isLast: boolean }) => {
 
   const checklistItmesList = sortedChecklistItems
     ? sortedChecklistItems.map(checklistItemId => (
-        <ChecklistItem key={checklistItemId} _id={checklistItemId} />
+        <ChecklistItem key={checklistItemId} _id={checklistItemId} checklistId={_id} />
       ))
     : null;
 
