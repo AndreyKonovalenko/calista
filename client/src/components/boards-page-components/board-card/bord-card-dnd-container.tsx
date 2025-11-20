@@ -3,7 +3,7 @@ import { useLocation, Link as RouterLink } from 'react-router';
 import { Box, Link, ListItem } from '@mui/material';
 import { useDrop, useDrag } from 'react-dnd';
 import { TDraggableElement } from '../../../utils/types';
-import { useReNumCardsPosInBoard } from '../../../api/lists-api-queries';
+import { useReNumCardsPosInList } from '../../../api/lists-api-queries';
 import { useUpdateCard } from '../../../api/cards-api-queries';
 import {
   useSortedCardsByListId,
@@ -39,7 +39,7 @@ const BoardCardDndContainer = (props: {
 }) => {
   const ref = useRef<HTMLAnchorElement>(null);
   const { _id, children, listId } = props;
-  const reNumCardsPosInBoard = useReNumCardsPosInBoard();
+  const reNumCardsPosInList = useReNumCardsPosInList();
   const { moveCard, setCardCalculatedPos } = useCardActions();
   const cards = useCards();
   const sortedCardsByListId = useSortedCardsByListId(listId);
@@ -130,7 +130,7 @@ const BoardCardDndContainer = (props: {
           const dropResult: TDropCardResult = monitor.getDropResult();
           if (dropResult && dropResult.dropped) {
             if (dropResult.cardCalculatedPos === -1) {
-              reNumCardsPosInBoard.mutate({
+              reNumCardsPosInList.mutate({
                 id: dropResult.listId,
                 data: { action: 'renumbering' },
               });

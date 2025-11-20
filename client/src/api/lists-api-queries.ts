@@ -41,7 +41,7 @@ export const useDeleteList = () => {
   });
 };
 
-export const useReNumCardsPosInBoard = () => {
+export const useReNumCardsPosInList = () => {
   const queryClient = useQueryClient();
   const { id } = useParams();
   invariantId(id);

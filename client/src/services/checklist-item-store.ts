@@ -11,9 +11,7 @@ interface IChecklistItemActions {
     _id: string,
     state: 'incomplite' | 'complite',
   ) => void;
-  // moveCard: (draggedId: string, listId: string, pos: number) => void;
-  // updateCardDescription: (_id: string, description: string) => void;
-  // updateCardName: (_id: string, name: string) => void;
+  moveChecklistIetem: (draggedId: string, checklistId: string, pos: number) => void;
 }
 
 interface IChecklistItemStore {
@@ -64,6 +62,16 @@ const useChecklistItemStore = create<IChecklistItemStore>()(
             undefined,
             'setChecklistItemCalculatedPos',
           ),
+        moveChecklistIetem: (draggedId, checklistId, pos)=>set(state=>({
+          checklistItems:{
+            ...state.checklistItems,
+            [draggedId]: {
+              ...state.checklistItems[draggedId],
+              checklistId: checklistId,
+              pos: pos
+            }
+          }
+        }))
       },
     }),
     { name: 'checklistItemStore' },
@@ -74,6 +82,7 @@ export const useChecklistItems = () =>
   useChecklistItemStore(state => state.checklistItems);
 export const useChecklistItemActions = () =>
   useChecklistItemStore(state => state.actions);
+export const useChecklistItemsCalclulatedPos = () => useChecklistItemStore(state => state.checklistItemCalculatedPos)
 export const useChecklistItem = (id: string | undefined) => {
   if (!id) return null;
   return useChecklistItemStore(state =>

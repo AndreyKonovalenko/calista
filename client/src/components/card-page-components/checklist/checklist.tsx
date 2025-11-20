@@ -78,7 +78,7 @@ const Checklist = (props: { _id: string; name: string; isLast: boolean }) => {
     : null;
 
   return (
-    <Grid container size={18} columns={18} id={isLast ? 'isLastList' : ''}>
+    <Grid container size={18} columns={18} id={isLast ? 'isLastList' : ''} rowSpacing={1}>
       <Grid
         size={1}
         display="flex"
@@ -152,10 +152,11 @@ const Checklist = (props: { _id: string; name: string; isLast: boolean }) => {
         <React.Fragment>
           <Grid size={1} />
           <Grid
-            size={5}
+            size={17}
             display="flex"
             flexDirection="column"
             justifyContent="center"
+            alignItems='flex-start'
           >
             <Button variant="outlined" onClick={handleSetAddAnItem}>
               Add an item

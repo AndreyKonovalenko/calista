@@ -52,7 +52,7 @@ export async function updateListById(
             { pos: position },
             { new: true },
           );
-          position = position + 16348;
+          position += 16348;
         }
       }
     }

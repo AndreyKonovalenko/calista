@@ -34,6 +34,22 @@ export const useDeleteChecklist = () => {
   });
 };
 
+export const useReNumChecklistItemsPosInChecklist = () => {
+  const queryClient = useQueryClient();
+  const { id } = useParams();
+  //id - means cardId from url params
+  invariantId(id);
+  return useMutation({
+    mutationFn: api.checklists.updateChecklist,
+    onSuccess: () => {
+      return queryClient.invalidateQueries({
+        queryKey: ['fetchCardById', id],
+        exact: true,
+      });
+    },
+  });
+};
+
 export const useUpdateChecklist = () => {
   return useMutation({
     mutationFn: api.checklists.updateChecklist,
