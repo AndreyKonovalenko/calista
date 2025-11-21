@@ -6,12 +6,16 @@ import { IChecklistItem } from '../utils/types';
 interface IChecklistItemActions {
   setChecklistItems: (data: { [key: string]: IChecklistItem }) => void;
   updateChecklistItemName: (_id: string, name: string) => void;
-  setSetChecklistItemCalculatedPos: (pos: number | null) => void;
+  setChecklistItemCalculatedPos: (pos: number | null) => void;
   updateChecklistItemState: (
     _id: string,
     state: 'incomplite' | 'complite',
   ) => void;
-  moveChecklistIetem: (draggedId: string, checklistId: string, pos: number) => void;
+  moveChecklistIetem: (
+    draggedId: string,
+    checklistId: string,
+    pos: number,
+  ) => void;
 }
 
 interface IChecklistItemStore {
@@ -56,22 +60,23 @@ const useChecklistItemStore = create<IChecklistItemStore>()(
             undefined,
             'updateChecklistItemState',
           ),
-        setSetChecklistItemCalculatedPos: (pos: number | null) =>
+        setChecklistItemCalculatedPos: (pos: number | null) =>
           set(
             { checklistItemCalculatedPos: pos },
             undefined,
             'setChecklistItemCalculatedPos',
           ),
-        moveChecklistIetem: (draggedId, checklistId, pos)=>set(state=>({
-          checklistItems:{
-            ...state.checklistItems,
-            [draggedId]: {
-              ...state.checklistItems[draggedId],
-              checklistId: checklistId,
-              pos: pos
-            }
-          }
-        }))
+        moveChecklistIetem: (draggedId, checklistId, pos) =>
+          set(state => ({
+            checklistItems: {
+              ...state.checklistItems,
+              [draggedId]: {
+                ...state.checklistItems[draggedId],
+                checklistId: checklistId,
+                pos: pos,
+              },
+            },
+          })),
       },
     }),
     { name: 'checklistItemStore' },
@@ -82,7 +87,8 @@ export const useChecklistItems = () =>
   useChecklistItemStore(state => state.checklistItems);
 export const useChecklistItemActions = () =>
   useChecklistItemStore(state => state.actions);
-export const useChecklistItemsCalclulatedPos = () => useChecklistItemStore(state => state.checklistItemCalculatedPos)
+export const useChecklistItemsCalclulatedPos = () =>
+  useChecklistItemStore(state => state.checklistItemCalculatedPos);
 export const useChecklistItem = (id: string | undefined) => {
   if (!id) return null;
   return useChecklistItemStore(state =>

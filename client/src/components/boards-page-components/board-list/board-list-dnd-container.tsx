@@ -103,7 +103,6 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
         }
       },
       drop({ _id: draggedId }) {
-        console.log('drop list dnd');
         if (itemType === 'list') {
           setListCulclulatedPos(null);
         }

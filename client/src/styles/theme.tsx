@@ -23,7 +23,7 @@ export const theme: Theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'Chakra Petch',
+    fontFamily: ['Geologica'].join(','),
   },
   palette: {
     ochre: {

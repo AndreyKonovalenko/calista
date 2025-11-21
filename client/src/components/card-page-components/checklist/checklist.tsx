@@ -21,6 +21,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { progressCalc } from '../../../utils/utils';
 import DeleteItemMenu from '../delete-item-popover/delete-item-popover';
 import ItemNameForm from '../item-name-form/item-name-form';
+import ChecklistDndContainer from './checklist-dnd-container';
 
 const anchorOrigin: PopoverOrigin = {
   vertical: 'bottom',
@@ -73,12 +74,20 @@ const Checklist = (props: { _id: string; name: string; isLast: boolean }) => {
 
   const checklistItmesList = sortedChecklistItems
     ? sortedChecklistItems.map(checklistItemId => (
-        <ChecklistItem key={checklistItemId} _id={checklistItemId} checklistId={_id} />
+        <ChecklistItem
+          key={checklistItemId}
+          _id={checklistItemId}
+          checklistId={_id}
+        />
       ))
     : null;
 
   return (
-    <Grid container size={18} columns={18} id={isLast ? 'isLastList' : ''} rowSpacing={1}>
+    <ChecklistDndContainer
+      _id={_id}
+      isLast={isLast ? 'isLastList' : ''}
+      hasChecklistItems={sortedChecklistItems.length > 0 ? true : false}
+    >
       <Grid
         size={1}
         display="flex"
@@ -156,7 +165,7 @@ const Checklist = (props: { _id: string; name: string; isLast: boolean }) => {
             display="flex"
             flexDirection="column"
             justifyContent="center"
-            alignItems='flex-start'
+            alignItems="flex-start"
           >
             <Button variant="outlined" onClick={handleSetAddAnItem}>
               Add an item
@@ -164,7 +173,7 @@ const Checklist = (props: { _id: string; name: string; isLast: boolean }) => {
           </Grid>
         </React.Fragment>
       )}
-    </Grid>
+    </ChecklistDndContainer>
   );
 };
 

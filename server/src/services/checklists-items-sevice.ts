@@ -35,21 +35,21 @@ export async function updateChecklistItemById(
     [key: string]: string | Types.ObjectId | number;
   },
 ) {
-  if ( 'action' in data) {
-    if(data.action === 'renumbering'){
+  if ('action' in data) {
+    if (data.action === 'renumbering') {
       const checklistItems = await ChecklistItemModel.find({
-        checklistId: new Types.ObjectId(id)
+        checklistId: new Types.ObjectId(id),
       }).select(['pos']);
-      if(checklistItems.length > 0) {
+      if (checklistItems.length > 0) {
         checklistItems.sort(ascendingComparator);
         let position = 16384;
-        for (const element of checklistItems){
+        for (const element of checklistItems) {
           await ChecklistItemModel.findByIdAndUpdate(
             new Types.ObjectId(element._id),
-            {pos: position},
-            {new: true}
+            { pos: position },
+            { new: true },
           );
-          position += 16348
+          position += 16348;
         }
       }
     }
