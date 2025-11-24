@@ -19,7 +19,7 @@ import { useChecklistItems } from '../../../services/checklist-item-store';
 import { useSortedChecklistItemsByChecklistId } from '../../../services/checklist-item-store';
 import LinearProgress from '@mui/material/LinearProgress';
 import { progressCalc } from '../../../utils/utils';
-import DeleteItemMenu from '../delete-item-popover/delete-item-popover';
+import DeleteItemMenu from '../../general-components/delete-item-popover/delete-item-popover';
 import ItemNameForm from '../item-name-form/item-name-form';
 import ChecklistDndContainer from './checklist-dnd-container';
 

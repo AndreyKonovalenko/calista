@@ -3,7 +3,7 @@ import { Grid, Button, Typography, Stack, PopoverOrigin } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useDeleteCard } from '../../../api/cards-api-queries';
 import { useNavigate } from 'react-router';
-import DeleteItemPopover from '../delete-item-popover/delete-item-popover';
+import DeleteItemPopover from '../../general-components/delete-item-popover/delete-item-popover';
 import AddChecklistPopover from './add-checklist-popoever/add-checklist-popover';
 
 const styles = {
@@ -95,7 +95,7 @@ const CardActions = (props: { cardId: string }) => {
             anchorEl={anchorEl}
             closeHandler={handleCloseDeleteMenu}
             deleteHandler={handleDeleteCard}
-            prompt="Are you sure you wont to delete this card?"
+            prompt="Are you sure you want to delete this card?"
             anchorOrigin={anchorOrigin}
             transformOrigin={transformOrigin}
           />
