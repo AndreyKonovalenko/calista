@@ -62,6 +62,7 @@ export interface IChecklist {
 export interface IChecklistItem {
   _id: string;
   boardId: string;
+  cardId: string;
   listId: string;
   checklistId: string;
   name: string;

@@ -95,14 +95,17 @@ export const useChecklistItem = (id: string | undefined) => {
     state.checklistItems ? state.checklistItems[id] : null,
   );
 };
+export const useGetChecklistItemsStateStatByCardId = (cardId: string) => {
+  useChecklistItemStore(state=> getMemoizedChecklistItemsByCardId(state, cardId))
+}
 
 export const useSortedChecklistItemsByChecklistId = (checklistId: string) =>
-  useChecklistItemStore(state => getMemoizedChecklistItems(state, checklistId));
+  useChecklistItemStore(state => getMemoizedSortedChecklistItems(state, checklistId));
 const selectChecklistId = (_: IChecklistItemStore, checklistId: string) =>
   checklistId;
 const selectChecklistItems = (state: IChecklistItemStore) =>
   state.checklistItems;
-const getMemoizedChecklistItems = createSelector(
+const getMemoizedSortedChecklistItems = createSelector(
   [selectChecklistItems, selectChecklistId],
   (checklistItems: { [key: string]: IChecklistItem }, checklistId: string) => {
     const result = Object.keys(checklistItems)
@@ -115,6 +118,16 @@ const getMemoizedChecklistItems = createSelector(
         return 0;
       });
 
+    return result;
+  },
+);
+
+const cardId = (_:IChecklistItemStore, cardId: string) => cardId;
+const getMemoizedChecklistItemsByCardId = createSelector(
+  [selectChecklistItems, cardId],
+  (checklistItems: { [key: string]: IChecklistItem }, cardId: string) => {
+    const result = Object.keys(checklistItems)
+      .filter(key => checklistItems[key].cardId === cardId)
     return result;
   },
 );
