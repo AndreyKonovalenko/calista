@@ -28,7 +28,7 @@ const CheckListAddItemFrom = (props: {
   const handleAddNewChecklistItem = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      let pos = 16584;
+      let pos = 16384;
       if (
         checklistItems &&
         sortedChecklistItems &&
@@ -49,13 +49,14 @@ const CheckListAddItemFrom = (props: {
         }
         nameArr.forEach((element, index) => {
           setTimeout(() => {
+            const newPos = pos + index * 16384;
             createChecklistItemQuery.mutate({
               name: element,
               boardId: boardId,
               listId: listId,
               cardId: id,
               checklistId: _id,
-              pos: pos,
+              pos: newPos,
             });
           }, index * 500);
         });

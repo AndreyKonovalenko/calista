@@ -12,7 +12,7 @@ const BoardCard = (props: { _id: string }) => {
     return null;
   }
   const { listId, name } = card;
-  console.log(useGetChecklistItemsStateStatByCardId(_id))
+  console.log(useGetChecklistItemsStateStatByCardId(_id));
 
   return (
     <BoardCardDndContainer _id={_id} listId={listId}>

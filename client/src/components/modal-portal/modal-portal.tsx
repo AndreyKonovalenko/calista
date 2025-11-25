@@ -17,7 +17,7 @@ const modal = {
   width: '1000px',
   maxWidth: '100%',
   maxHeight: '100%',
-  top: '28.5%',
+  top: '25%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   opacity: 1,
