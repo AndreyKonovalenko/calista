@@ -11,6 +11,7 @@ import {
   updateBoardById,
   findListsByBoardId,
   findCardsByBoardId,
+  findChecklistItemsByBoardId,
 } from '../services/boards-service';
 
 // GET borads/
@@ -56,6 +57,14 @@ export const getBoard = async (
     const board = await findBoardById(req.params.id);
     const lists = await findListsByBoardId(req.params.id);
     const cards = await findCardsByBoardId(req.params.id);
+    const checklistItems = await findChecklistItemsByBoardId(req.params.id);
+    const stat = Object.fromEntries(
+      cards.map(element => [
+        element._id,
+        checklistItems.filter(item => item.cardId.equals(element._id)),
+      ]),
+    );
+
     if (!board) {
       res.status(StatusCodes.OK).send('Board not found');
     }
@@ -68,6 +77,7 @@ export const getBoard = async (
         },
         lists: Object.fromEntries(lists.map(element => [element._id, element])),
         cards: Object.fromEntries(cards.map(element => [element._id, element])),
+        stats: stat,
       });
     }
   } catch (error) {
