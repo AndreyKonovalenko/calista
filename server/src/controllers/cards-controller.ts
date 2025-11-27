@@ -44,9 +44,11 @@ export const getCard = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const card = await findCardById(req.params.id);
-    const checklists = await findChecklistsByCardId(req.params.id);
-    const checklistItems = await findChecklistItemsByCardId(req.params.id);
+     const [card, checklists, checklistItems] = await Promise.all([
+      findCardById(req.params.id),
+      findChecklistsByCardId(req.params.id), 
+      findChecklistItemsByCardId(req.params.id)
+    ]);
     if (!card) {
       res.status(StatusCodes.OK).send('Card not found');
     }

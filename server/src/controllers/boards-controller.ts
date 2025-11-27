@@ -54,17 +54,23 @@ export const getBoard = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const board = await findBoardById(req.params.id);
-    const lists = await findListsByBoardId(req.params.id);
-    const cards = await findCardsByBoardId(req.params.id);
-    const checklistItems = await findChecklistItemsByBoardId(req.params.id);
+    const [board, lists, cards, checklistItems] = await Promise.all([
+      findBoardById(req.params.id),
+      findListsByBoardId(req.params.id), 
+      findCardsByBoardId(req.params.id),
+      findChecklistItemsByBoardId(req.params.id)
+    ])
     const stat = Object.fromEntries(
-      cards.map(element => [
-        element._id,
-        checklistItems.filter(item => item.cardId.equals(element._id)),
-      ]),
+      cards.map(element => {
+        const filteredChecklistItems = checklistItems.filter(item => item.cardId.equals(element._id));
+        return [
+        element._id, {checklistItmes:{
+          quantity: filteredChecklistItems.length,
+          complite: filteredChecklistItems.filter(item=> item.state === 'complite').length
+        }}
+      ]
+      } ),
     );
-
     if (!board) {
       res.status(StatusCodes.OK).send('Board not found');
     }
