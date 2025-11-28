@@ -25,7 +25,7 @@ export const addChecklistItem = async (
       cardId: req.body.cardId,
       checklistId: req.body.checklistId,
       name: req.body.name,
-      state: 'incomplite',
+      state: 'incomplete',
       pos: req.body.pos ? req.body.pos : 16384,
     };
     await createChecklistItem(data);

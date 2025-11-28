@@ -64,7 +64,7 @@ export function progressCalc(
       (accumulator, currentValue) => {
         const complite =
           checklistItems[currentValue as keyof typeof checklistItems].state ===
-          'complite'
+          'complete'
             ? 1
             : 0;
         return accumulator + complite;

@@ -73,7 +73,9 @@ export const useCardCalculatedPos = () =>
 export const useCards = () => useCardStore(state => state.cards);
 export const useCard = (id: string | undefined) => {
   if (!id) return null;
-  return useCardStore(state => (state.cards ? state.cards[id] : null));
+  return useCardStore(state =>
+    Object.keys(state.cards).length > 0 ? state.cards[id] : null,
+  );
 };
 
 export const useSortedCardsByListId = (listId: string) =>

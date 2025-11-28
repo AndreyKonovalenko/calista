@@ -9,7 +9,7 @@ interface IChecklistItemActions {
   setChecklistItemCalculatedPos: (pos: number | null) => void;
   updateChecklistItemState: (
     _id: string,
-    state: 'incomplite' | 'complite',
+    state: 'incomplete' | 'complete',
   ) => void;
   moveChecklistIetem: (
     draggedId: string,

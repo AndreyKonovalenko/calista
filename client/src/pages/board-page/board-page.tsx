@@ -27,6 +27,7 @@ import {
   useLists,
 } from '../../services/list-store';
 import { useCardActions } from '../../services/card-store';
+import { useStatsActions } from '../../services/stats-store';
 
 const BoardPage = () => {
   // useGlobalDrop();
@@ -45,6 +46,7 @@ const BoardPage = () => {
   const { setBoard } = useBoardActions();
   const { setLists } = useListActions();
   const { setCards } = useCardActions();
+  const { setStats } = useStatsActions();
 
   const handleDeleteBoard = (): void => {
     deleteBoardQuery.mutate(id);
@@ -82,10 +84,11 @@ const BoardPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      const { board, lists, cards } = data;
+      const { board, lists, cards, stats } = data;
       setBoard(board);
       setLists(lists);
       setCards(cards);
+      setStats(stats);
     }
   }, [data, isSuccess]);
 

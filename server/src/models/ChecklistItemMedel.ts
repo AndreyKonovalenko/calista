@@ -7,7 +7,7 @@ export interface IChecklistItem {
   listId: Types.ObjectId;
   cardId: Types.ObjectId;
   name: string;
-  state: 'complite' | 'incomplite';
+  state: 'complete' | 'incomplete';
   pos: number;
 }
 

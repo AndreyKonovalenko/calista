@@ -29,6 +29,10 @@ const styles = {
     },
   },
 };
+import {
+  useStatsActions,
+  useGetStatsByCardId,
+} from '../../../services/stats-store';
 
 const anchorOrigin: PopoverOrigin = {
   vertical: 'center',
@@ -43,6 +47,7 @@ const ChecklistItemContent = (props: { _id: string }) => {
   const { _id } = props;
   const updateChecklistItemQuery = useUpdateChecklistItem();
   const deleteChecklistItemQuery = useDeleteChecklistItem();
+  const { updateChecklistItemsStats } = useStatsActions();
 
   const checklistItem = useChecklistItem(_id);
   const { updateChecklistItemState, updateChecklistItemName } =
@@ -50,7 +55,8 @@ const ChecklistItemContent = (props: { _id: string }) => {
   if (!checklistItem) {
     return null;
   }
-  const { name, state } = checklistItem;
+  const { name, state, cardId } = checklistItem;
+  const cardStats = useGetStatsByCardId(cardId);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleOpenItemActionsMenu = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -63,13 +69,28 @@ const ChecklistItemContent = (props: { _id: string }) => {
   };
 
   const handleChangeItemState = useCallback(() => {
-    const itemState = state === 'incomplite' ? 'complite' : 'incomplite';
+    const itemState = state === 'incomplete' ? 'complete' : 'incomplete';
     updateChecklistItemState(_id, itemState);
+    if (cardStats) {
+      let result = cardStats.checklistItems.complete;
+      if (itemState === 'incomplete') {
+        result = result - 1;
+      }
+      if (itemState === 'complete') {
+        result = result + 1;
+      }
+      updateChecklistItemsStats(
+        cardId,
+        cardStats?.checklistItems.quantity,
+        result,
+      );
+    }
+
     updateChecklistItemQuery.mutate({
       id: _id,
       data: { state: itemState },
     });
-  }, [_id, state]);
+  }, [_id, state, cardStats]);
 
   const hendleDeleteChecklistItem = useCallback(() => {
     deleteChecklistItemQuery.mutate(_id);
@@ -85,7 +106,7 @@ const ChecklistItemContent = (props: { _id: string }) => {
         onClick={handleChangeItemState}
         sx={styles.cursor}
       >
-        {state == 'incomplite' ? (
+        {state == 'incomplete' ? (
           <CheckBoxOutlineBlank color="primary" fontSize="small" />
         ) : (
           <CheckBoxIcon color="primary" fontSize="small" />
