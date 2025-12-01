@@ -10,6 +10,7 @@ import { useFetchCardById } from '../../api/cards-api-queries';
 import { useChecklistActions } from '../../services/checklist-store';
 import { useChecklistItemActions } from '../../services/checklist-item-store';
 import LoadingBage from '../../components/loading-bage/loading-bage';
+import { useLocation } from 'react-router'; 
 
 const styles = {
   container: {
@@ -51,6 +52,8 @@ const styles = {
 
 const CardPage = () => {
   const navigate = useNavigate();
+  const locatin = useLocation();
+  console.log(locatin)
   const { setChecklists } = useChecklistActions();
   const { setChecklistItems } = useChecklistItemActions();
   const { id, boardId } = useParams();
