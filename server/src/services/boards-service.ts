@@ -23,8 +23,10 @@ export async function findCardsByBoardId(id: string) {
 
 export async function findChecklistItemsByBoardId(id: string) {
   return await ChecklistItemModel.find({
-    boardId: new Types.ObjectId(id),
-  }).select('cardId state boardId');
+    boardId: new Types.ObjectId(id)})
+}
+export async function  findChecklistsByBoardId(id:string) {
+  return await ChecklistModel.find({boardId: new Types.ObjectId(id)})
 }
 
 export async function deleteBoardById(id: string) {

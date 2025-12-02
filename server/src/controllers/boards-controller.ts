@@ -12,6 +12,7 @@ import {
   findListsByBoardId,
   findCardsByBoardId,
   findChecklistItemsByBoardId,
+  findChecklistsByBoardId,
 } from '../services/boards-service';
 
 // GET borads/
@@ -54,30 +55,31 @@ export const getBoard = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const [board, lists, cards, checklistItems] = await Promise.all([
+    const [board, lists, cards, checklistItems, checklists] = await Promise.all([
       findBoardById(req.params.id),
       findListsByBoardId(req.params.id),
       findCardsByBoardId(req.params.id),
       findChecklistItemsByBoardId(req.params.id),
+      findChecklistsByBoardId(req.params.id)
     ]);
-    const stat = Object.fromEntries(
-      cards.map(element => {
-        const filteredChecklistItems = checklistItems.filter(item =>
-          item.cardId.equals(element._id),
-        );
-        return [
-          element._id,
-          {
-            checklistItems: {
-              quantity: filteredChecklistItems.length,
-              complete: filteredChecklistItems.filter(
-                item => item.state === 'complete',
-              ).length,
-            },
-          },
-        ];
-      }),
-    );
+    // const stat = Object.fromEntries(
+    //   cards.map(element => {
+    //     const filteredChecklistItems = checklistItems.filter(item =>
+    //       item.cardId.equals(element._id),
+    //     );
+    //     return [
+    //       element._id,
+    //       {
+    //         checklistItems: {
+    //           quantity: filteredChecklistItems.length,
+    //           complete: filteredChecklistItems.filter(
+    //             item => item.state === 'complete',
+    //           ).length,
+    //         },
+    //       },
+    //     ];
+    //   }),
+    // );
     if (!board) {
       res.status(StatusCodes.OK).send('Board not found');
     }
@@ -90,7 +92,8 @@ export const getBoard = async (
         },
         lists: Object.fromEntries(lists.map(element => [element._id, element])),
         cards: Object.fromEntries(cards.map(element => [element._id, element])),
-        stats: stat,
+        checklistItems: Object.fromEntries(checklistItems.map(element => [element._id, element])),
+        checklists: Object.fromEntries(checklists.map(element=> [element._id, element]))
       });
     }
   } catch (error) {

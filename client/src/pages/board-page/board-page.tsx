@@ -27,7 +27,9 @@ import {
   useLists,
 } from '../../services/list-store';
 import { useCardActions } from '../../services/card-store';
-import { useStatsActions } from '../../services/stats-store';
+// import { useStatsActions } from '../../services/stats-store';
+import { useChecklistActions } from '../../services/checklist-store';
+import { useChecklistItemActions } from '../../services/checklist-item-store';
 
 const BoardPage = () => {
   // useGlobalDrop();
@@ -46,7 +48,9 @@ const BoardPage = () => {
   const { setBoard } = useBoardActions();
   const { setLists } = useListActions();
   const { setCards } = useCardActions();
-  const { setStats } = useStatsActions();
+  const {setChecklists} = useChecklistActions();
+  const {setChecklistItems} = useChecklistItemActions()
+  // const { setStats } = useStatsActions();
 
   const handleDeleteBoard = (): void => {
     deleteBoardQuery.mutate(id);
@@ -84,11 +88,12 @@ const BoardPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      const { board, lists, cards, stats } = data;
+      const { board, lists, cards, checklists, checklistItems } = data;
       setBoard(board);
       setLists(lists);
       setCards(cards);
-      setStats(stats);
+      setChecklists(checklists);
+      setChecklistItems(checklistItems)
     }
   }, [data, isSuccess]);
 

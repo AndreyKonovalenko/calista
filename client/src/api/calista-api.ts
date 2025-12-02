@@ -10,7 +10,6 @@ import {
   IChecklistItem,
 } from '../utils/types';
 import validEnv from '../utils/utils';
-import { TStats } from '../services/stats-store';
 
 const BASE_URL = validEnv(process.env.BASE_URL);
 const LOGIN = validEnv(process.env.LOGIN);
@@ -79,7 +78,8 @@ const boards = {
       board: IBoard;
       lists: { [key: string]: IList };
       cards: { [key: string]: ICard };
-      stats: TStats;
+      checklists: {[key: string]: IChecklist};
+      checklistItems: {[key: string]: IChecklistItem}
     }>(`${BOARDS}/${id}`),
   deleteBoard: (id: string) => request.delete<void>(`${BOARDS}/${id}`),
   updateBoard: ({ id, data }: TPutData) =>

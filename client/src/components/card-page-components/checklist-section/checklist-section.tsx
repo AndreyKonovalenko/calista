@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Grid } from '@mui/material';
 import {
-  useChecklists,
+  useChecklistsByCardId,
   useSortedChecklists,
 } from '../../../services/checklist-store';
 import Checklist from '../checklist/checklist';
@@ -14,8 +14,9 @@ const styles = {
   },
 };
 
-const CheckListSection = () => {
-  const checklists = useChecklists();
+const CheckListSection = (props: {cardId: string}) => {
+  const {cardId}= props;
+  const checklists = useChecklistsByCardId(cardId);
   const { setNewItemAdded } = useUIAction();
   const isNewItemAdded = useIsNewItemAdded();
   const sortedChecklists = useSortedChecklists();
