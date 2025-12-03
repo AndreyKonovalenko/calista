@@ -13,6 +13,20 @@ export default [
         version: 'detect',
       },
     },
+    rules: {
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        args: "all",
+        argsIgnorePattern: "^_",
+        caughtErrors: "all",
+        caughtErrorsIgnorePattern: "^_",
+        destructuredArrayIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+        ignoreRestSiblings: true
+      }
+    ]
+  }
   },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,

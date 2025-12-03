@@ -29,10 +29,6 @@ const styles = {
     },
   },
 };
-import {
-  useStatsActions,
-  useGetStatsByCardId,
-} from '../../../services/stats-store';
 
 const anchorOrigin: PopoverOrigin = {
   vertical: 'center',
@@ -47,16 +43,15 @@ const ChecklistItemContent = (props: { _id: string }) => {
   const { _id } = props;
   const updateChecklistItemQuery = useUpdateChecklistItem();
   const deleteChecklistItemQuery = useDeleteChecklistItem();
-  const { updateChecklistItemsStats } = useStatsActions();
+  
 
   const checklistItem = useChecklistItem(_id);
-  const { updateChecklistItemState, updateChecklistItemName } =
+  const { updateChecklistItemState, updateChecklistItemName, deleteChecklistItem } =
     useChecklistItemActions();
   if (!checklistItem) {
     return null;
   }
-  const { name, state, cardId } = checklistItem;
-  const cardStats = useGetStatsByCardId(cardId);
+  const { name, state } = checklistItem;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleOpenItemActionsMenu = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -71,21 +66,6 @@ const ChecklistItemContent = (props: { _id: string }) => {
   const handleChangeItemState = useCallback(() => {
     const itemState = state === 'incomplete' ? 'complete' : 'incomplete';
     updateChecklistItemState(_id, itemState);
-    if (cardStats) {
-      let result = cardStats.checklistItems.complete;
-      if (itemState === 'incomplete') {
-        result = result - 1;
-      }
-      if (itemState === 'complete') {
-        result = result + 1;
-      }
-      updateChecklistItemsStats(
-        cardId,
-        cardStats?.checklistItems.quantity,
-        result,
-      );
-    }
-
     updateChecklistItemQuery.mutate({
       id: _id,
       data: { state: itemState },
@@ -93,16 +73,8 @@ const ChecklistItemContent = (props: { _id: string }) => {
   }, [_id, state]);
 
   const hendleDeleteChecklistItem = useCallback(() => {
+    deleteChecklistItem(_id)
     deleteChecklistItemQuery.mutate(_id);
-    if (cardStats?.checklistItems) {
-      updateChecklistItemsStats(
-        cardId,
-        cardStats?.checklistItems.quantity - 1,
-        state === 'complete'
-          ? cardStats?.checklistItems.complete - 1
-          : cardStats.checklistItems.complete,
-      );
-    }
   }, [_id]);
 
   return (
