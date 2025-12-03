@@ -78,8 +78,8 @@ const boards = {
       board: IBoard;
       lists: { [key: string]: IList };
       cards: { [key: string]: ICard };
-      checklists: {[key: string]: IChecklist};
-      checklistItems: {[key: string]: IChecklistItem}
+      checklists: { [key: string]: IChecklist };
+      checklistItems: { [key: string]: IChecklistItem };
     }>(`${BOARDS}/${id}`),
   deleteBoard: (id: string) => request.delete<void>(`${BOARDS}/${id}`),
   updateBoard: ({ id, data }: TPutData) =>

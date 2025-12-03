@@ -94,14 +94,15 @@ const ChecklistItemContent = (props: { _id: string }) => {
 
   const hendleDeleteChecklistItem = useCallback(() => {
     deleteChecklistItemQuery.mutate(_id);
-    if(cardStats?.checklistItems) {
-       updateChecklistItemsStats(cardId, 
-        (cardStats?.checklistItems.quantity -1), 
-        (state === 'complete' ? (
-          cardStats?.checklistItems.complete -1)
-          : cardStats.checklistItems.complete))
+    if (cardStats?.checklistItems) {
+      updateChecklistItemsStats(
+        cardId,
+        cardStats?.checklistItems.quantity - 1,
+        state === 'complete'
+          ? cardStats?.checklistItems.complete - 1
+          : cardStats.checklistItems.complete,
+      );
     }
-   
   }, [_id]);
 
   return (

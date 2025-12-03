@@ -48,8 +48,8 @@ const BoardPage = () => {
   const { setBoard } = useBoardActions();
   const { setLists } = useListActions();
   const { setCards } = useCardActions();
-  const {setChecklists} = useChecklistActions();
-  const {setChecklistItems} = useChecklistItemActions()
+  const { setChecklists } = useChecklistActions();
+  const { setChecklistItems } = useChecklistItemActions();
   // const { setStats } = useStatsActions();
 
   const handleDeleteBoard = (): void => {
@@ -93,7 +93,7 @@ const BoardPage = () => {
       setLists(lists);
       setCards(cards);
       setChecklists(checklists);
-      setChecklistItems(checklistItems)
+      setChecklistItems(checklistItems);
     }
   }, [data, isSuccess]);
 

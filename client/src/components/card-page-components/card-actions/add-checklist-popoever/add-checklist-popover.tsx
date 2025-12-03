@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { useParams } from 'react-router';
 import {
-  useSortedChecklists,
+  useSortedChecklistsKeys,
   useChecklists,
 } from '../../../../services/checklist-store';
 import { Stack, Button, Popover, PopoverOrigin } from '@mui/material';
@@ -44,7 +44,7 @@ const AddChecklistPopover = (props: {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const createChecklistQuery = useCreateChecklist();
   const checklists = useChecklists();
-  const sortedChecklists = useSortedChecklists();
+  const sortedChecklists = useSortedChecklistsKeys(id);
   const { anchorEl, closeAddChecklistMenu } = props;
   const [checklistName, setChecklistName] = useState('cheklist name');
   const open = Boolean(anchorEl);

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Grid } from '@mui/material';
 import {
-  useChecklistsByCardId,
-  useSortedChecklists,
+  useSortedChecklistsKeys,
+  useChecklists,
 } from '../../../services/checklist-store';
 import Checklist from '../checklist/checklist';
 import { useUIAction, useIsNewItemAdded } from '../../../services/ui-store';
@@ -14,18 +14,18 @@ const styles = {
   },
 };
 
-const CheckListSection = (props: {cardId: string}) => {
-  const {cardId}= props;
-  const checklists = useChecklistsByCardId(cardId);
+const CheckListSection = (props: { cardId: string }) => {
+  const { cardId } = props;
+  const checklists = useChecklists();
+  const sortedChecklistKeys = useSortedChecklistsKeys(cardId);
   const { setNewItemAdded } = useUIAction();
   const isNewItemAdded = useIsNewItemAdded();
-  const sortedChecklists = useSortedChecklists();
 
-  const checklistData = sortedChecklists
-    ? sortedChecklists.map((id, index) => {
+  const checklistData = sortedChecklistKeys
+    ? sortedChecklistKeys.map((id, index) => {
         if (
-          sortedChecklists.length > 0 &&
-          index === sortedChecklists.length - 1
+          sortedChecklistKeys.length > 0 &&
+          index === sortedChecklistKeys.length - 1
         ) {
           return (
             <Checklist
@@ -65,7 +65,7 @@ const CheckListSection = (props: {cardId: string}) => {
         inline: 'nearest',
       });
     }
-  }, [sortedChecklists]);
+  }, [sortedChecklistKeys]);
 
   return (
     <Grid container columns={18} rowSpacing={1} sx={styles.extraPadding}>

@@ -2,8 +2,11 @@ import React from 'react';
 import { useNavigate } from 'react-router';
 import { Paper, Grid, Stack, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
- 
-import { ICard, IChecklist, IChecklistItem } from '../../../utils/types';
+import CardPageTitle from '../card-page-styled-elements/card-title/card-title';
+import CardDescription from '../card-descriprion/card-descritpion';
+import CheckListSection from '../checklist-section/checklist-section';
+import CardActions from '../card-actions/card-actions';
+import { ICard } from '../../../utils/types';
 
 const styles = {
   container: {
@@ -43,11 +46,11 @@ const styles = {
   },
 };
 
-const Card = (props:{ card: ICard, checklists:{[key: string]: IChecklist}, checklistItems: {[key:string]: IChecklistItem}}) => {
+const Card = (props: { card: ICard }) => {
   const navigate = useNavigate();
-  const {card} = props;
+  const { card } = props;
 
-  return  (
+  return (
     <Paper sx={styles.container}>
       <Grid container sx={styles.extraPedding}>
         <Grid container size={12}>
@@ -58,7 +61,9 @@ const Card = (props:{ card: ICard, checklists:{[key: string]: IChecklist}, check
           >
             <CardPageTitle _id={card._id} name={card.name} />
             <Box
-              onClick={() => navigate(`/boards/${card.boardId}`, { replace: true })}
+              onClick={() =>
+                navigate(`/boards/${card.boardId}`, { replace: true })
+              }
               sx={styles.closeButton}
             >
               <CloseIcon fontSize="large" />
@@ -69,10 +74,7 @@ const Card = (props:{ card: ICard, checklists:{[key: string]: IChecklist}, check
       <Grid container size={12} columns={18} sx={styles.dividerTop}>
         <Grid size={14} container columns={18} sx={styles.overflow}>
           <Grid size={18}>
-            <CardDescription
-              cardId={card._id}
-              description={card.description}
-            />
+            <CardDescription cardId={card._id} description={card.description} />
           </Grid>
           <Grid size={18}>
             <CheckListSection cardId={card._id} />
@@ -83,7 +85,7 @@ const Card = (props:{ card: ICard, checklists:{[key: string]: IChecklist}, check
         </Grid>
       </Grid>
     </Paper>
-  )
+  );
 };
 
 export default Card;

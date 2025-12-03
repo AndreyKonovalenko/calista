@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import { CardChecklistNameTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 import { useCreateChecklistItem } from '../../../api/checklist-items-api-queries';
 import {
-  useSortedChecklistItemsByChecklistId,
+  useSortedChecklistsItemsKeys,
   useChecklistItems,
 } from '../../../services/checklist-item-store';
 import { handleFormSubmitEvent } from '../../../utils/utils';
@@ -18,7 +18,7 @@ const CheckListAddItemFrom = (props: {
     return null;
   }
   const { _id, handleCancelationAddAnItem } = props;
-  const sortedChecklistItems = useSortedChecklistItemsByChecklistId(_id);
+  const sortedChecklistItems = useSortedChecklistsItemsKeys(_id);
 
   const createChecklistItemQuery = useCreateChecklistItem();
   const [checklistItemName, setChecklistItemName] = useState(

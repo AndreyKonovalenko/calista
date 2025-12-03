@@ -16,12 +16,12 @@ import LibraryAddCheckOutlinedIcon from '@mui/icons-material/LibraryAddCheckOutl
 import CheckListAddItemFrom from '../chekclist-add-item-form/checklist-add-item-form';
 import { useChecklistActions } from '../../../services/checklist-store';
 import { useChecklistItems } from '../../../services/checklist-item-store';
-import { useSortedChecklistItemsByChecklistId } from '../../../services/checklist-item-store';
-import LinearProgress from '@mui/material/LinearProgress';
+import { useSortedChecklistsItemsKeys } from '../../../services/checklist-item-store';
 import { progressCalc } from '../../../utils/utils';
 import DeleteItemMenu from '../../general-components/delete-item-popover/delete-item-popover';
 import ItemNameForm from '../item-name-form/item-name-form';
 import ChecklistDndContainer from './checklist-dnd-container';
+import LinearProgress from '@mui/material/LinearProgress';
 
 const anchorOrigin: PopoverOrigin = {
   vertical: 'bottom',
@@ -48,13 +48,13 @@ const styles = {
 const Checklist = (props: { _id: string; name: string; isLast: boolean }) => {
   const { _id, name, isLast } = props;
   const deleteChecklistQuery = useDeleteChecklist();
-  const sortedChecklistItems = useSortedChecklistItemsByChecklistId(_id);
+  const sortedChecklistItemsKeys = useSortedChecklistsItemsKeys(_id);
   const checklistItems = useChecklistItems();
   const updateChecklistNameQuery = useUpdateChecklist();
   const { updateChecklistName } = useChecklistActions();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [addAnItem, setAddAnItem] = useState(false);
-  const progress = progressCalc(sortedChecklistItems, checklistItems);
+  const progress = progressCalc(sortedChecklistItemsKeys, checklistItems);
   const handleOpenDeleteMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -72,8 +72,8 @@ const Checklist = (props: { _id: string; name: string; isLast: boolean }) => {
     setAddAnItem(false);
   };
 
-  const checklistItmesList = sortedChecklistItems
-    ? sortedChecklistItems.map(checklistItemId => (
+  const checklistItmesList = sortedChecklistItemsKeys
+    ? sortedChecklistItemsKeys.map(checklistItemId => (
         <ChecklistItem
           key={checklistItemId}
           _id={checklistItemId}
@@ -86,7 +86,7 @@ const Checklist = (props: { _id: string; name: string; isLast: boolean }) => {
     <ChecklistDndContainer
       _id={_id}
       isLast={isLast ? 'isLastList' : ''}
-      hasChecklistItems={sortedChecklistItems.length > 0 ? true : false}
+      hasChecklistItems={sortedChecklistItemsKeys.length > 0 ? true : false}
     >
       <Grid
         size={1}

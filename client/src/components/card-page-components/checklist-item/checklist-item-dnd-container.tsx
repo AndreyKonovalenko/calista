@@ -6,7 +6,7 @@ import { useReNumChecklistItemsPosInChecklist } from '../../../api/checklists-ap
 import { useUpdateChecklistItem } from '../../../api/checklist-items-api-queries';
 import {
   useChecklistItemActions,
-  useSortedChecklistItemsByChecklistId,
+  useSortedChecklistsItemsKeys,
   useChecklistItems,
   useChecklistItemsCalclulatedPos,
 } from '../../../services/checklist-item-store';
@@ -39,7 +39,7 @@ const ChecklistItemDndContainer = memo(
       useChecklistItemActions();
     const updateChecklistItemQuery = useUpdateChecklistItem();
     const sortedChecklistItemsByChecklistId =
-      useSortedChecklistItemsByChecklistId(checklistId);
+      useSortedChecklistsItemsKeys(checklistId);
     const checklistItemCalculatedPos = useChecklistItemsCalclulatedPos();
     const checklistItems = useChecklistItems();
 

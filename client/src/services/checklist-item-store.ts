@@ -95,13 +95,8 @@ export const useChecklistItem = (id: string | undefined) => {
     state.checklistItems ? state.checklistItems[id] : null,
   );
 };
-export const useGetChecklistItemsStateStatByCardId = (cardId: string) => {
-  useChecklistItemStore(state =>
-    getMemoizedChecklistItemsByCardId(state, cardId),
-  );
-};
 
-export const useSortedChecklistItemsByChecklistId = (checklistId: string) =>
+export const useSortedChecklistsItemsKeys = (checklistId: string) =>
   useChecklistItemStore(state =>
     getMemoizedSortedChecklistItems(state, checklistId),
   );
@@ -122,17 +117,6 @@ const getMemoizedSortedChecklistItems = createSelector(
         return 0;
       });
 
-    return result;
-  },
-);
-
-const cardId = (_: IChecklistItemStore, cardId: string) => cardId;
-const getMemoizedChecklistItemsByCardId = createSelector(
-  [selectChecklistItems, cardId],
-  (checklistItems: { [key: string]: IChecklistItem }, cardId: string) => {
-    const result = Object.keys(checklistItems).filter(
-      key => checklistItems[key].cardId === cardId,
-    );
     return result;
   },
 );
