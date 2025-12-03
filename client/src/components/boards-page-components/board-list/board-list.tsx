@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { Box, List } from '@mui/material';
-import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router';
 import BoardCard from '../board-card/bard-card';
 import BoardListContent from './board-list-content';
@@ -45,7 +44,7 @@ const BoardList = (props: { _id: string }) => {
   );
 
   const cardsList = sorterdCards
-    ? sorterdCards.map(cardId => <BoardCard key={uuidv4()} _id={cardId} />)
+    ? sorterdCards.map(cardId => <BoardCard key={cardId} _id={cardId} />)
     : null;
 
   return (

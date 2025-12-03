@@ -120,3 +120,24 @@ const getMemoizedSortedChecklistItems = createSelector(
     return result;
   },
 );
+
+const selectCardId = (_: IChecklistItemStore, cardId: string) => cardId;
+const getMemoizedChecklistItems = createSelector(
+  [selectChecklistItems, selectCardId],
+  (checklistItems: { [key: string]: IChecklistItem }, cardId: string) => {
+    let quantity = 0;
+    let complete = 0;
+    Object.keys(checklistItems).forEach(element => {
+      if (checklistItems[element].cardId === cardId) {
+        quantity = quantity + 1;
+        if (checklistItems[element].state === 'complete') {
+          complete = complete + 1;
+        }
+      }
+    });
+    return { quantity, complete };
+  },
+);
+
+export const useChecklistsItemsStat = (cardId: string) =>
+  useChecklistItemStore(state => getMemoizedChecklistItems(state, cardId));
