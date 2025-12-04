@@ -4,13 +4,21 @@ import { invariantId } from '../utils/utils';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 
 export const useCreateChecklist = () => {
-  const { id } = useParams();
-  invariantId(id);
+  const { boardId, id} = useParams();
+  invariantId(boardId);
+  invariantId(id)
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: api.checklists.createChecklist,
-    onSuccess: () => {
-      return queryClient.invalidateQueries({
+    onSuccess: async () => {
+      // for onBackground Route fetchBoardById calling in Board Page
+      await queryClient.invalidateQueries({
+        queryKey: ['fetchBoardById', boardId],
+        exact: true,
+      });
+      // React location.state.background pattern limitaion
+      // for  empty Route there is no fetchBoardById call because no Board Page Loaded 
+      await queryClient.invalidateQueries({
         queryKey: ['fetchCardById', id],
         exact: true,
       });
