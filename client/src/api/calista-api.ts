@@ -1,6 +1,7 @@
-import axios, { AxiosResponse, AxiosError } from 'axios';
-import { toast } from 'react-toastify';
+import axios, { AxiosResponse } from 'axios';
+// import { toast } from 'react-toastify';
 import { TAuthState } from '../services/auth-store';
+// import { useNavigate } from 'react-router';
 import {
   IBoard,
   ICard,
@@ -29,29 +30,32 @@ export type TData = {
 
 export type TPutData = { id: string; data: TData };
 
-type TCustomErrorResponse = {
-  message: string;
-  stack?: string;
-  status: number;
-  success: boolean;
-};
-axios.interceptors.response.use(
-  res => {
-    return res;
-  },
-  (error: AxiosError<TCustomErrorResponse>) => {
-    if (error.response) {
-      const { data } = error.response!;
-      console.log(data.message);
-      toast.error(data.message);
-    } else if (error.request) {
-      toast(error.request.status);
-    } else {
-      toast.error(error.message);
-    }
-    return Promise.reject(error);
-  },
-);
+// type TCustomErrorResponse = {
+//   message: string;
+//   stack?: string;
+//   status: number;
+//   success: boolean;
+// };
+// axios.interceptors.response.use(
+//   res => {
+//     return res;
+//   },
+//   (error: AxiosError<TCustomErrorResponse>) => {
+//     if (error.response) {
+//       const { data } = error.response!;
+//       console.log(data.message, data.status);
+//       if(data.status === 400){
+//         navigate('/error-paga', {state: {massage: data.message}})
+//       }
+//       toast.error(data.message);
+//     } else if (error.request) {
+//       toast(error.request.status);
+//     } else {
+//       toast.error(error.message);
+//     }
+//     return Promise.reject(error);
+//   },
+// );
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 

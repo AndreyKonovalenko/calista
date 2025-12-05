@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastContainer } from 'react-toastify';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import AxiosInterceptorWrapper from './components/general-components/axios-interceptor-wrapper/axios-interceptor-wrapper';
 
 const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(
@@ -22,6 +23,7 @@ root.render(
           <CssBaseline />
           <ToastContainer />
           <BrowserRouter>
+            <AxiosInterceptorWrapper />
             <App />
           </BrowserRouter>
         </ThemeProvider>

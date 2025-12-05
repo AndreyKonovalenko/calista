@@ -7,7 +7,7 @@ interface IChecklistItemActions {
   setChecklistItems: (data: { [key: string]: IChecklistItem }) => void;
   updateChecklistItemName: (_id: string, name: string) => void;
   setChecklistItemCalculatedPos: (pos: number | null) => void;
-  deleteChecklistItem:(_id: string) => void; 
+  deleteChecklistItem: (_id: string) => void;
   updateChecklistItemState: (
     _id: string,
     state: 'incomplete' | 'complete',
@@ -61,11 +61,15 @@ const useChecklistItemStore = create<IChecklistItemStore>()(
             undefined,
             'updateChecklistItemState',
           ),
-        deleteChecklistItem: (_id) =>
-          set(state => {
-            const {[_id]: _, ...rest} = state.checklistItems;
-            return { checklistItems: rest}
-          }, undefined, 'deleteChecklistItem'),
+        deleteChecklistItem: _id =>
+          set(
+            state => {
+              const { [_id]: _, ...rest } = state.checklistItems;
+              return { checklistItems: rest };
+            },
+            undefined,
+            'deleteChecklistItem',
+          ),
         setChecklistItemCalculatedPos: (pos: number | null) =>
           set(
             { checklistItemCalculatedPos: pos },

@@ -6,6 +6,7 @@ import { IChecklist } from '../utils/types';
 interface IChecklistActions {
   setChecklists: (data: { [key: string]: IChecklist }) => void;
   updateChecklistName: (_id: string, name: string) => void;
+  deleteChecklist: (_id: string) => void;
 }
 
 interface IChecklistStore {
@@ -20,6 +21,15 @@ const useChecklistStore = create<IChecklistStore>()(
       actions: {
         setChecklists: checklists =>
           set({ checklists }, undefined, 'setChecklist'),
+        deleteChecklist: _id =>
+          set(
+            state => {
+              const { [_id]: _, ...rest } = state.checklists;
+              return { checklists: rest };
+            },
+            undefined,
+            'deleteChecklist',
+          ),
         updateChecklistName: (_id, name) =>
           set(
             state => ({
@@ -49,7 +59,6 @@ export const useChecklist = (id: string | undefined) => {
     state.checklists ? state.checklists[id] : null,
   );
 };
-
 export const useSortedChecklistsKeys = (cardId: string) =>
   useChecklistStore(state => getMemoizedChecklists(state, cardId));
 const selectChecklists = (state: IChecklistStore) => state.checklists;

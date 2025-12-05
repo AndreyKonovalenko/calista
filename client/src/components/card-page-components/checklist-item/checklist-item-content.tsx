@@ -43,11 +43,13 @@ const ChecklistItemContent = (props: { _id: string }) => {
   const { _id } = props;
   const updateChecklistItemQuery = useUpdateChecklistItem();
   const deleteChecklistItemQuery = useDeleteChecklistItem();
-  
 
   const checklistItem = useChecklistItem(_id);
-  const { updateChecklistItemState, updateChecklistItemName, deleteChecklistItem } =
-    useChecklistItemActions();
+  const {
+    updateChecklistItemState,
+    updateChecklistItemName,
+    deleteChecklistItem,
+  } = useChecklistItemActions();
   if (!checklistItem) {
     return null;
   }
@@ -73,7 +75,7 @@ const ChecklistItemContent = (props: { _id: string }) => {
   }, [_id, state]);
 
   const hendleDeleteChecklistItem = useCallback(() => {
-    deleteChecklistItem(_id)
+    deleteChecklistItem(_id);
     deleteChecklistItemQuery.mutate(_id);
   }, [_id]);
 

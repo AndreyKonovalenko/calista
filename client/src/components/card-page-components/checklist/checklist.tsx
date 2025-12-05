@@ -51,7 +51,7 @@ const Checklist = (props: { _id: string; name: string; isLast: boolean }) => {
   const sortedChecklistItemsKeys = useSortedChecklistsItemsKeys(_id);
   const checklistItems = useChecklistItems();
   const updateChecklistNameQuery = useUpdateChecklist();
-  const { updateChecklistName } = useChecklistActions();
+  const { updateChecklistName, deleteChecklist } = useChecklistActions();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [addAnItem, setAddAnItem] = useState(false);
   const progress = progressCalc(sortedChecklistItemsKeys, checklistItems);
@@ -62,16 +62,15 @@ const Checklist = (props: { _id: string; name: string; isLast: boolean }) => {
     setAnchorEl(null);
   };
   const handleDeleteChecklist = () => {
+    deleteChecklist(_id);
     deleteChecklistQuery.mutate(_id);
   };
-
   const handleSetAddAnItem = () => {
     setAddAnItem(true);
   };
   const handleCancelationAddAnItem = () => {
     setAddAnItem(false);
   };
-
   const checklistItmesList = sortedChecklistItemsKeys
     ? sortedChecklistItemsKeys.map(checklistItemId => (
         <ChecklistItem

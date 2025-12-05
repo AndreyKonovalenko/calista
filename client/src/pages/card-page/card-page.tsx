@@ -10,12 +10,14 @@ const CardPage = () => {
   const { setChecklists } = useChecklistActions();
   const { setChecklistItems } = useChecklistItemActions();
   const { id } = useParams();
+  console.log(id);
   if (!id) {
     return null;
   }
   const { data, isSuccess, isLoading } = useFetchCardById(id);
 
   useEffect(() => {
+    console.log(isSuccess);
     if (isSuccess) {
       setChecklists(data.checklists);
       setChecklistItems(data.checklistItems);

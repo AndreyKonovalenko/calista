@@ -50,7 +50,7 @@ export const getCard = async (
       findChecklistItemsByCardId(req.params.id),
     ]);
     if (!card) {
-      res.status(StatusCodes.OK).send('Card not found');
+      res.status(StatusCodes.OK).json({ message: 'Card not found' });
     }
     if (card) {
       res.status(StatusCodes.OK).json({
