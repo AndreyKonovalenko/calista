@@ -9,8 +9,13 @@ const CardPageOnBackground = () => {
     return;
   }
   const card = useCard(id);
-  console.log(card);
-  return card ? <Card card={card} /> : null;
+  if (!card) {
+    return;
+  }
+  const { _id, boardId, description, name } = card;
+  return card ? (
+    <Card _id={_id} boardId={boardId} name={name} description={description} />
+  ) : null;
 };
 
 export default CardPageOnBackground;

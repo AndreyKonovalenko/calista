@@ -83,7 +83,7 @@ export const getBoard = async (
     //   }),
     // );
     if (!board) {
-      res.status(StatusCodes.OK).send('Board not found');
+      res.status(StatusCodes.OK).json({ message: 'Board not found' });
     }
     if (board) {
       res.status(StatusCodes.OK).json({

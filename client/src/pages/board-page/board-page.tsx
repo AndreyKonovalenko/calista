@@ -1,13 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Box, Typography, IconButton, Toolbar, Stack } from '@mui/material';
-import { useParams } from 'react-router';
-import { useNavigate } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import BoardDrawer from '../../components/boards-page-components/board-drawer/board-drawer';
 import AddItem from '../../components/boards-page-components/add-item/add-item';
 import BoardList from '../../components/boards-page-components/board-list/board-list';
 import LoadingBage from '../../components/loading-bage/loading-bage';
-// import BoardCustomDragLayer from '../../components/boards-page-components/board-custom-drag-layer/board-custom-drag-layer';
 import {
   BoardsPageContent,
   BoardsPageContentPaperBar,
@@ -18,7 +16,6 @@ import {
 } from '../../api/boards-api-queries';
 import { useCreateList } from '../../api/lists-api-queries';
 import { useBoardName, useBoardActions } from '../../services/board-store';
-// import { useGlobalDrop } from '../../hooks/use-global-drop';
 import { HEADER } from '../../layout/config-layout';
 import { TO_MAIN } from '../../utils/route-constants';
 import {
@@ -27,7 +24,6 @@ import {
   useLists,
 } from '../../services/list-store';
 import { useCardActions } from '../../services/card-store';
-// import { useStatsActions } from '../../services/stats-store';
 import { useChecklistActions } from '../../services/checklist-store';
 import { useChecklistItemActions } from '../../services/checklist-item-store';
 
@@ -50,7 +46,6 @@ const BoardPage = () => {
   const { setCards } = useCardActions();
   const { setChecklists } = useChecklistActions();
   const { setChecklistItems } = useChecklistItemActions();
-  // const { setStats } = useStatsActions();
 
   const handleDeleteBoard = (): void => {
     deleteBoardQuery.mutate(id);
@@ -88,12 +83,17 @@ const BoardPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      const { board, lists, cards, checklists, checklistItems } = data;
-      setBoard(board);
-      setLists(lists);
-      setCards(cards);
-      setChecklists(checklists);
-      setChecklistItems(checklistItems);
+      if (!data.board) {
+        navigate(TO_MAIN);
+      }
+      if (data.board) {
+        const { board, lists, cards, checklists, checklistItems } = data;
+        setBoard(board);
+        setLists(lists);
+        setCards(cards);
+        setChecklists(checklists);
+        setChecklistItems(checklistItems);
+      }
     }
   }, [data, isSuccess]);
 

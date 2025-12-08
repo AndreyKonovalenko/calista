@@ -6,7 +6,6 @@ import CardPageTitle from '../card-page-styled-elements/card-title/card-title';
 import CardDescription from '../card-descriprion/card-descritpion';
 import CheckListSection from '../checklist-section/checklist-section';
 import CardActions from '../card-actions/card-actions';
-import { ICard } from '../../../utils/types';
 
 const styles = {
   container: {
@@ -46,9 +45,14 @@ const styles = {
   },
 };
 
-const Card = (props: { card: ICard }) => {
+const Card = (props: {
+  _id: string;
+  name: string;
+  description: string | undefined;
+  boardId: string;
+}) => {
   const navigate = useNavigate();
-  const { card } = props;
+  const { _id, boardId, description, name } = props;
 
   return (
     <Paper sx={styles.container}>
@@ -59,11 +63,9 @@ const Card = (props: { card: ICard }) => {
             justifyContent="space-between"
             flexDirection="row"
           >
-            <CardPageTitle _id={card._id} name={card.name} />
+            <CardPageTitle _id={_id} name={name} />
             <Box
-              onClick={() =>
-                navigate(`/boards/${card.boardId}`, { replace: true })
-              }
+              onClick={() => navigate(`/boards/${boardId}`, { replace: true })}
               sx={styles.closeButton}
             >
               <CloseIcon fontSize="large" />
@@ -74,14 +76,14 @@ const Card = (props: { card: ICard }) => {
       <Grid container size={12} columns={18} sx={styles.dividerTop}>
         <Grid size={14} container columns={18} sx={styles.overflow}>
           <Grid size={18}>
-            <CardDescription cardId={card._id} description={card.description} />
+            <CardDescription cardId={_id} description={description} />
           </Grid>
           <Grid size={18}>
-            <CheckListSection cardId={card._id} />
+            <CheckListSection cardId={_id} />
           </Grid>
         </Grid>
         <Grid size={4} container columns={12}>
-          <CardActions cardId={card._id} />
+          <CardActions cardId={_id} />
         </Grid>
       </Grid>
     </Paper>
