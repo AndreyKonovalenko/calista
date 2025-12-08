@@ -45,6 +45,7 @@ const App = (): JSX.Element => {
           <Route path="register" element={<RegisterPage />} />
         </Route>
         <Route path="error-page" element={<ErrorPage />} />
+        <Route path="not-found" element={<NotFoundPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       {background && (

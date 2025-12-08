@@ -2,6 +2,11 @@ import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import axios, { AxiosError } from 'axios';
+import {
+  TO_ERROR_PAGE,
+  TO_LOGIN,
+  TO_NOT_FOUND,
+} from '../../../utils/route-constants';
 
 type TCustomErrorResponse = {
   message: string;
@@ -17,22 +22,39 @@ const AxiosInterceptorWrapper = () => {
   useEffect(() => {
     interceptorId.current = axios.interceptors.response.use(
       res => {
-        const { data } = res;
-        console.log(data);
+        // const { data } = res;
+        // console.log(data);
         return res;
       },
       (error: AxiosError<TCustomErrorResponse>) => {
         if (error.response) {
-          const { data } = error.response!;
-          console.log(data.message, data.status);
-          if (data.status === 400) {
-            navigate('/error-page', { state: { message: data.message } });
+          const { data, status } = error.response;
+          switch (status) {
+            case 400:
+              navigate(TO_ERROR_PAGE, { state: { message: data.message } });
+              break;
+            case 401:
+              toast.error(data.message);
+              navigate(TO_LOGIN);
+              break;
+            case 404:
+              navigate(TO_NOT_FOUND);
+              break;
+            case 500:
+              navigate(TO_ERROR_PAGE, {
+                state: { message: 'Server error ocurred' },
+              });
+              break;
+            default:
+              toast.error(data.message);
+              break;
           }
-          toast.error(data.message);
         } else if (error.request) {
-          toast(error.request.status);
+          console.log(error.message);
+          toast.error('No respose recived from server');
         } else {
-          toast.error(error.message);
+          console.log(error.message);
+          toast.error(`Error during requeset setup', ${error.message}`);
         }
         return Promise.reject(error);
       },
