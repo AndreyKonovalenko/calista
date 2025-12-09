@@ -23,13 +23,20 @@ export const globalErrorHandler: ErrorRequestHandler = (
   res,
   _next,
 ) => {
-  console.log('Middleware Error Handling');
+  console.log(
+    'Middleware Error Handling',
+    Boolean(err instanceof MongooseError),
+  );
   let errStatus = StatusCodes.BAD_REQUEST;
   if (err instanceof CustomError) {
     errStatus = err.statusCode;
   }
   if (err instanceof TokenExpiredError) {
     errStatus = StatusCodes.UNAUTHORIZED;
+  }
+
+  if (err instanceof MongooseError && err.name === 'ValidationError') {
+    errStatus = StatusCodes.UNPROCESSABLE_ENTITY;
   }
 
   if (err instanceof MongooseError && err.name === '') {

@@ -9,6 +9,7 @@ export const validationHandler = (schema: Joi.Schema) => {
     try {
       const validated: ValidationResult = await schema.validateAsync(req.body);
       req.body = validated;
+      console.log(validated);
       next();
     } catch (err) {
       if (err instanceof ValidationError) {

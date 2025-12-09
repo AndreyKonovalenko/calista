@@ -22,8 +22,15 @@ const AxiosInterceptorWrapper = () => {
   useEffect(() => {
     interceptorId.current = axios.interceptors.response.use(
       res => {
-        // const { data } = res;
-        // console.log(data);
+        const { data } = res;
+        switch (data.message) {
+          case 'Board not found':
+            toast.error(data.message);
+            break;
+          case 'Card not found':
+            toast.error(data.message);
+            break;
+        }
         return res;
       },
       (error: AxiosError<TCustomErrorResponse>) => {
@@ -45,9 +52,11 @@ const AxiosInterceptorWrapper = () => {
                 state: { message: 'Server error ocurred' },
               });
               break;
-            default:
+            case 422:
               toast.error(data.message);
               break;
+            default:
+              toast.error(data.message);
           }
         } else if (error.request) {
           console.log(error.message);

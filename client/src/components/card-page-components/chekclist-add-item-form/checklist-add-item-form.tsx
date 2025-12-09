@@ -8,6 +8,7 @@ import {
   useChecklistItems,
 } from '../../../services/checklist-item-store';
 import { handleFormSubmitEvent } from '../../../utils/utils';
+import { toast } from 'react-toastify';
 const CheckListAddItemFrom = (props: {
   _id: string;
   handleCancelationAddAnItem: () => void;
@@ -44,7 +45,8 @@ const CheckListAddItemFrom = (props: {
 
       if (name) {
         const nameArr = name.toString().split(regExpPatter);
-        if (nameArr.length > 60) {
+        if (nameArr.length > 500) {
+          toast.error('checklist must not contain more than 500 elements');
           return;
         }
         nameArr.forEach((element, index) => {
@@ -58,7 +60,7 @@ const CheckListAddItemFrom = (props: {
               checklistId: _id,
               pos: newPos,
             });
-          }, index * 500);
+          }, index * 250);
         });
       }
     },
