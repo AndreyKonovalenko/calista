@@ -4,11 +4,13 @@ import bcrypt from 'bcrypt';
 export interface IUser {
   username: string;
   password: string;
+  email?: string;
 }
 
 const userSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  email: { type: String, unique: true },
 });
 
 const saltRounds = 10;
