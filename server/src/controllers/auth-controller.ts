@@ -76,6 +76,13 @@ export const logout = (_req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ message: 'Logged out successfully' });
 };
 
+
+export const varifyEmail = async (req: Request,res: Response) => {
+  const { token} = req.query;
+  if(!token) return res.status(StatusCodes.BAD_REQUEST).json({message: 'Toen is required'})
+
+}
+
 // //GET: auth/users @publict for tests
 // // get all users
 // export const getUsers = async (
