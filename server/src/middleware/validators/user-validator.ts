@@ -51,4 +51,5 @@ export const userValidator: Joi.ObjectSchema<IUser> = Joi.object({
     .noWhiteSpaces()
     .onlyLatinCharacters()
     .messages(customErrorMessages.password),
+  email: Joi.string().email().required(),
 });

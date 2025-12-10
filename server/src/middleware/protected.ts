@@ -29,6 +29,7 @@ export const protect = async (
     ).select('-password');
     if (user) {
       (req as CustomRequest).user = user;
+      // need to add isVarified checking
       next();
     }
   } catch (error) {

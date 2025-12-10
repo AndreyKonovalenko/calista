@@ -6,6 +6,7 @@ import { UserModel, IUser } from '../models/UserModel';
 import { CustomError } from '../utils/CustomError';
 import config from '../config';
 import jwt from 'jsonwebtoken';
+import { sendEmail } from '../utils/send-email';
 
 export async function registerServcie(
   data: IUser,
@@ -25,6 +26,14 @@ export async function registerServcie(
       StatusCodes.INTERNAL_SERVER_ERROR,
     );
   }
+  const vToken = generateVerificationTorken(newUser._id, newUser.email);
+  const verificationLink = `http://localhost:${config.app.port}/auth/verify-email?token=${vToken}`;
+
+  sendEmail({
+    subject: 'Verify Your Emali',
+    html: `<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`,
+  });
+
   return { _id: newUser._id, username: newUser.username };
 }
 
@@ -55,6 +64,19 @@ export function generateToken(
   return jwt.sign({ user_id }, config.app.jwtSecret!, {
     expiresIn: expiration,
   });
+}
+
+export function generateVerificationTorken(
+  user_id: Types.ObjectId,
+  user_email: string,
+) {
+  return jwt.sign(
+    { id: user_id, email: user_email },
+    config.app.jwtSecretVerification!,
+    {
+      expiresIn: config.app.vTokenExpiresIn,
+    },
+  );
 }
 
 export function setGeneratedToken(

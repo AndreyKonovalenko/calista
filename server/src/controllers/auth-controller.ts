@@ -35,10 +35,11 @@ export const register = async (
   try {
     const data: IUser = { ...req.body };
     const result = await registerServcie(data);
-    setGeneratedToken(res, result._id);
     res
       .status(StatusCodes.CREATED)
-      .send(`New user ${result.username} successfully created`);
+      .send(
+        `Registration successful, ${result.username} successfully created. Check yor email fro verification link`,
+      );
   } catch (error) {
     next(error);
   }

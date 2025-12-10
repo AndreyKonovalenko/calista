@@ -14,10 +14,19 @@ export default {
   app: {
     port: parseInt(<string>process.env.PORT, 10) || 3000,
     jwtSecret: <Secret>process.env.JWT_SECRET,
+    jwtSecretVerification: <Secret>process.env.JWT_SECREN_VERIFICATION,
     tokenExpiresIn: process.env.TOKEN_EXPIRES_IN,
+    vTokenExpiresIn: process.env.VTOKEN_EXPIRES_IN,
   },
   mongodb: {
     mongoUri: process.env.MONGO_URI,
     dbName: process.env.MONGO_DB,
+  },
+  smtp: {
+    emailService: process.env.EMAIL_SERVICE,
+    user: process.env.EMAIL_USERNAME,
+    pass: process.env.EMAIL_PASSWORD,
+    from_name: process.env.FROM_NAME,
+    from_email: process.env.FORM_EMAIL,
   },
 };
