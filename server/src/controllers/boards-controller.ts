@@ -14,21 +14,16 @@ import {
   findChecklistItemsByBoardId,
   findChecklistsByBoardId,
 } from '../services/boards-service';
+import { asyncHandler } from '../utils/async-handler';
 
 // GET borads/
-export const getBoards = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  const { user } = req as CustomRequest;
-  try {
+export const getBoards = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const { user } = req as CustomRequest;
     const boards: Array<HydratedDocument<IBoard>> = await findBoards(user._id);
     res.status(StatusCodes.OK).json(boards);
-  } catch (error) {
-    next(error);
-  }
-};
+  },
+);
 
 // POST boards/
 export const addBoard = async (
@@ -64,24 +59,6 @@ export const getBoard = async (
         findChecklistsByBoardId(req.params.id),
       ],
     );
-    // const stat = Object.fromEntries(
-    //   cards.map(element => {
-    //     const filteredChecklistItems = checklistItems.filter(item =>
-    //       item.cardId.equals(element._id),
-    //     );
-    //     return [
-    //       element._id,
-    //       {
-    //         checklistItems: {
-    //           quantity: filteredChecklistItems.length,
-    //           complete: filteredChecklistItems.filter(
-    //             item => item.state === 'complete',
-    //           ).length,
-    //         },
-    //       },
-    //     ];
-    //   }),
-    // );
     if (!board) {
       res.status(StatusCodes.OK).json({ message: 'Board not found' });
     }

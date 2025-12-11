@@ -7,7 +7,7 @@ import { ListModel } from '../models/ListModel';
 import { ascendingComparator } from '../utils/utils';
 
 export async function cerateBoard(data: IBoard) {
-  await BoardModel.create(data);
+  return await BoardModel.create(data);
 }
 
 export async function findBoards(id: Types.ObjectId) {

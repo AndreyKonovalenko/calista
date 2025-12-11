@@ -4,10 +4,12 @@ import {
   registerServcie,
   setGeneratedToken,
   loginService,
+  verifyToken,
 } from '../services/auth-service';
 import { IUser } from '../models/UserModel';
 import { CustomRequest } from '../middleware/protected';
 import config from '../config';
+import { asyncHandler } from '../utils/async-handler';
 
 //GET: auth/ @private
 export const getUser = (
@@ -76,12 +78,14 @@ export const logout = (_req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ message: 'Logged out successfully' });
 };
 
-
-export const varifyEmail = async (req: Request,res: Response) => {
-  const { token} = req.query;
-  if(!token) return res.status(StatusCodes.BAD_REQUEST).json({message: 'Toen is required'})
-
-}
+// GET: auth/vrify-email @public
+export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
+  const token = req.query.token as string;
+  await verifyToken(token);
+  res
+    .status(StatusCodes.OK)
+    .json({ message: 'Email varification successjully. You can now log in' });
+});
 
 // //GET: auth/users @publict for tests
 // // get all users

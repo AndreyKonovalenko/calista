@@ -5,7 +5,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { UserModel, IUser } from '../models/UserModel';
 import { CustomError } from '../utils/CustomError';
 import config from '../config';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { sendEmail } from '../utils/send-email';
 
 export async function registerServcie(
@@ -27,7 +27,7 @@ export async function registerServcie(
     );
   }
   const vToken = generateVerificationTorken(newUser._id, newUser.email);
-  const verificationLink = `http://localhost:${config.app.port}/auth/verify-email?token=${vToken}`;
+  const verificationLink = `http://localhost:${config.app.port}api/auth/verify-email?token=${vToken}`;
 
   sendEmail({
     subject: 'Verify Your Emali',
@@ -42,18 +42,16 @@ export async function loginService(
 ): Promise<{ _id: Types.ObjectId; username: string }> {
   const { username, password } = data;
   const user = await UserModel.findOne({ username });
-  if (!user) {
+  if (!user)
     throw new CustomError(
       `${ReasonPhrases.UNAUTHORIZED}: User ${username} not found`,
       StatusCodes.UNAUTHORIZED,
     );
-  }
-  if (!bcrypt.compareSync(password, user.password)) {
+  if (!bcrypt.compareSync(password, user.password))
     throw new CustomError(
       `${ReasonPhrases.UNAUTHORIZED}: Password is not correct`,
       StatusCodes.UNAUTHORIZED,
     );
-  }
   return { _id: user._id, username: user.username };
 }
 
@@ -90,6 +88,30 @@ export function setGeneratedToken(
     sameSite: 'strict',
     maxAge: parseInt(config.app.tokenExpiresIn!),
   });
+}
+
+export async function verifyToken(token: string) {
+  if (!token)
+    throw new CustomError('Token is requierd', StatusCodes.BAD_REQUEST);
+  return jwt.verify(
+    token,
+    config.app.jwtSecretVerification,
+    async (err, decoded) => {
+      if (err) {
+        throw new CustomError(
+          `Token verification failed ${err.message}`,
+          StatusCodes.FORBIDDEN,
+        );
+      } else {
+        const paylod = decoded as JwtPayload;
+        const user = await UserModel.findById(paylod.id);
+        if (!user)
+          throw new CustomError('User not found', StatusCodes.NOT_FOUND);
+        user.isVerified = true;
+        await user.save();
+      }
+    },
+  );
 }
 
 //  maxAge should be in env variables in milliseconds
