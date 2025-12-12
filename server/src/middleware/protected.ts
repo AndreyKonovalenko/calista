@@ -24,6 +24,7 @@ export const protect = async (
       );
     }
     const decoded = jwt.verify(token, config.app.jwtSecret) as JwtPayload;
+    // need to set expiration check
     const user: HydratedDocument<IUser> | null = await UserModel.findById(
       decoded.user_id,
     ).select('-password');
