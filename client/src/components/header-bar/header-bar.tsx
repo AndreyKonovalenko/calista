@@ -56,7 +56,7 @@ export default function HeaderBar() {
             to={TO_MAIN}
             color="inherit"
           >
-            Todo-boards
+            Doski
           </Link>
         </Box>
         {isAuth && (
