@@ -23,7 +23,9 @@ export default {
     dbName: process.env.MONGO_DB,
   },
   smtp: {
-    emailService: process.env.EMAIL_SERVICE,
+    // emailService: process.env.EMAIL_SERVICE,
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
     user: process.env.EMAIL_USERNAME,
     pass: process.env.EMAIL_PASSWORD,
     from_name: process.env.FROM_NAME,

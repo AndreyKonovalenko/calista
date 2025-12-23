@@ -11,30 +11,31 @@ import { sendEmail } from '../utils/send-email';
 export async function registerServcie(
   data: IUser,
 ): Promise<{ _id: Types.ObjectId; username: string }> {
-  const { username } = data;
-  const userExists = await UserModel.findOne({ username }).exec();
-  if (userExists) {
-    throw new CustomError(
-      `${ReasonPhrases.CONFLICT}: username: ${username} already exists`,
-      StatusCodes.CONFLICT,
-    );
-  }
-  const newUser = await UserModel.create(data);
-  if (!newUser) {
-    throw new CustomError(
-      `${ReasonPhrases.INTERNAL_SERVER_ERROR}: User ${username} was not created`,
-      StatusCodes.INTERNAL_SERVER_ERROR,
-    );
-  }
-  const vToken = generateVerificationTorken(newUser._id, newUser.email);
-  const verificationLink = `http://localhost:${config.app.port}api/auth/verify-email?token=${vToken}`;
-
+   const { username } = data;
+  // const userExists = await UserModel.findOne({ username }).exec();
+  // if (userExists) {
+  //   throw new CustomError(
+  //     `${ReasonPhrases.CONFLICT}: username: ${username} already exists`,
+  //     StatusCodes.CONFLICT,
+  //   );
+  // }
+  // const newUser = await UserModel.create(data);
+  // if (!newUser) {
+  //   throw new CustomError(
+  //     `${ReasonPhrases.INTERNAL_SERVER_ERROR}: User ${username} was not created`,
+  //     StatusCodes.INTERNAL_SERVER_ERROR,
+  //   );
+  // }
+  // const vToken = generateVerificationTorken(newUser._id, newUser.email);
+  // const verificationLink = `http://localhost:${config.app.port}api/auth/verify-email?token=${vToken}`;
+  const verificationLink = {username}
   sendEmail({
     subject: 'Verify Your Emali',
     html: `<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`,
   });
 
-  return { _id: newUser._id, username: newUser.username };
+  // return { _id: newUser._id, username: newUser.username };
+  return { _id: new Types.ObjectId("asdfasdfasdf"), username: 'test user' };
 }
 
 export async function loginService(
