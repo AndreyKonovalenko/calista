@@ -9,39 +9,42 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-// import { TO_REGISTER } from '../../utils/route-constants';
-
-// TODO remove, this demo shouldn't need to reset the theme.
-
-// const registerUser = async (user: {
-//   username: FormDataEntryValue | null;
-//   password: FormDataEntryValue | null;
-// }) => {
-//   const { username, password } = user;
-//   const response = await fetch(TO_REGISTER, {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({
-//       username: username,
-//       password: password,
-//     }),
-//   });
-//   return response.json();
-// };
+import { useRegister } from '../../api/auth-api-queries';
+import { toast } from 'react-toastify';
 
 export default function RegisterPage(): JSX.Element {
-  // const mutation = useMutation({
-  //   mutationFn: (formData) => {
-  //     return fetch(REGISTER_ROUTE, formData);
-  //   },
-  // });
-
+  const { mutate } = useRegister();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('register');
-    // mutation.mutate(new FormData(event.currentTarget));
+    const data = new FormData(event.currentTarget);
+    if (data.get('username') === '') {
+      toast.error('Username should not be empty.');
+      return;
+    }
+
+    if (data.get('email') === '') {
+      toast.error('Email should not be empty.');
+      return;
+    }
+
+    if (data.get('password') === '') {
+      toast.error('Password should not be empty.');
+      return;
+    }
+    if (data.get('confirmPassword') === '') {
+      toast.error('Confirmation password should not be empty.');
+      return;
+    }
+
+    if (data.get('password') != data.get('confirmPossword')) {
+      toast.error('The password and confirmation password do not match.');
+      return;
+    }
+    mutate({
+      username: data.get('username') as string,
+      email: data.get('email') as string,
+      password: data.get('password') as string,
+    });
   };
 
   return (
@@ -77,10 +80,10 @@ export default function RegisterPage(): JSX.Element {
               <TextField
                 required
                 fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
+                name="email"
+                label="Email"
+                type="email"
+                id="email"
                 autoComplete="new-password"
               />
             </Grid>
@@ -92,6 +95,17 @@ export default function RegisterPage(): JSX.Element {
                 label="Password"
                 type="password"
                 id="password"
+                autoComplete="new-password"
+              />
+            </Grid>
+            <Grid size={12}>
+              <TextField
+                required
+                fullWidth
+                name="confirmPossword"
+                label="Confirm password"
+                type="password"
+                id="confirmPossword"
                 autoComplete="new-password"
               />
             </Grid>

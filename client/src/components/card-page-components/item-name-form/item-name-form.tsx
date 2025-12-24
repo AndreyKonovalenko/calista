@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { CardChecklistNameTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 import { handleFormSubmitEvent } from '../../../utils/utils';
 import { UseMutationResult } from '@tanstack/react-query';
-import { TPutData } from '../../../api/calista-api';
+import { TPutData } from '../../../api/api';
 
 const ItemNameForm = (props: {
   name: string;

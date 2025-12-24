@@ -14,7 +14,7 @@ export default {
   app: {
     port: parseInt(<string>process.env.PORT, 10) || 3000,
     jwtSecret: <Secret>process.env.JWT_SECRET,
-    jwtSecretVerification: <Secret>process.env.JWT_SECREN_VERIFICATION,
+    jwtSecretVerification: <Secret>process.env.JWT_SECRET_VERIFICATION,
     tokenExpiresIn: process.env.TOKEN_EXPIRES_IN,
     vTokenExpiresIn: process.env.VTOKEN_EXPIRES_IN,
   },

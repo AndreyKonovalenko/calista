@@ -40,7 +40,7 @@ export const register = async (
     res
       .status(StatusCodes.CREATED)
       .send(
-        `Registration successful, ${result.username} successfully created. Check yor email fro verification link`,
+        `Registration successful, ${result.username} successfully created. Check yor email for verification link`,
       );
   } catch (error) {
     next(error);

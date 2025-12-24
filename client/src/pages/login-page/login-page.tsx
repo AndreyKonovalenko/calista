@@ -11,22 +11,19 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useAuthActions } from '../../services/auth-store';
 import { useEffect } from 'react';
-import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
-import api from '../../api/calista-api';
+import { useLogin } from '../../api/auth-api-queries';
 import { TO_MAIN } from '../../utils/route-constants';
 
 export default function LoginPage() {
-  const { mutate, data } = useMutation({
-    mutationFn: api.auth.login,
-  });
+  const { mutate, data } = useLogin();
   const navigate = useNavigate();
   const { setAuthStatus } = useAuthActions();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     mutate({
-      username: data.get('email') as string,
+      username: data.get('username') as string,
       password: data.get('password') as string,
     });
   };
@@ -59,10 +56,10 @@ export default function LoginPage() {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="username"
+            label="User Name"
+            name="username"
+            autoComplete="username"
             autoFocus
           />
           <TextField

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { TO_LOGIN } from '../../utils/route-constants';
 import { useAuthActions, useIsAuth } from '../../services/auth-store';
 import { useQuery } from '@tanstack/react-query';
-import api from '../../api/calista-api';
+import api from '../../api/api';
 import LoadingBage from '../loading-bage/loading-bage';
 
 type TProps = {

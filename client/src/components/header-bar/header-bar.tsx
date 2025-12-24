@@ -13,7 +13,7 @@ import {
 
 import { Link as RouterLink } from 'react-router';
 import Link from '@mui/material/Link';
-import api from '../../api/calista-api';
+import api from '../../api/api';
 
 import { TO_LOGIN, TO_MAIN } from '../../utils/route-constants';
 import { Stack, Typography } from '@mui/material';

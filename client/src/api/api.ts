@@ -14,6 +14,7 @@ import validEnv from '../utils/utils';
 
 const BASE_URL = validEnv(process.env.BASE_URL);
 const LOGIN = validEnv(process.env.LOGIN);
+const REGISTER = validEnv(process.env.REGISTER);
 const LOGOUT = validEnv(process.env.LOGOUT);
 const LISTS = validEnv(process.env.LISTS);
 const BOARDS = validEnv(process.env.BOARDS);
@@ -71,6 +72,7 @@ const request = {
 const auth = {
   fetchUser: () => request.get<TAuthState>(AUTH),
   login: (data: TData) => request.post<TAuthState>(LOGIN, data),
+  register: (data: TData) => request.post<TAuthState>(REGISTER, data),
   logout: () => request.post<void>(LOGOUT),
 };
 

@@ -1,5 +1,5 @@
 import { useParams } from 'react-router';
-import api from './calista-api';
+import api from './api';
 import { invariantId } from '../utils/utils';
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 
