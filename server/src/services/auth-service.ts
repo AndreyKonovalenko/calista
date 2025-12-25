@@ -10,7 +10,7 @@ import { sendEmail } from '../utils/send-email';
 
 export async function registerServcie(
   data: IUser,
-): Promise<{ _id: Types.ObjectId; username: string }> {
+): Promise<{ username: string; email: string }> {
   const { username, email } = data;
   const userExists = await UserModel.findOne({ username }).exec();
   if (userExists) {
@@ -19,7 +19,16 @@ export async function registerServcie(
       StatusCodes.CONFLICT,
     );
   }
-  const newUser = await UserModel.create(data);
+
+  const emailExists = await UserModel.findOne({ email }).exec();
+  if (emailExists) {
+    throw new CustomError(
+      `${ReasonPhrases.CONFLICT}: email: ${email} already exists`,
+      StatusCodes.CONFLICT,
+    );
+  }
+
+  const newUser = await UserModel.create({ ...data, isVerified: false });
   if (!newUser) {
     throw new CustomError(
       `${ReasonPhrases.INTERNAL_SERVER_ERROR}: User ${username} was not created`,
@@ -27,14 +36,14 @@ export async function registerServcie(
     );
   }
   const vToken = generateVerificationTorken(newUser._id, newUser.email);
-  const verificationLink = `http://localhost:${config.app.port}api/auth/verify-email?token=${vToken}`;
+  const verificationLink = `${config.app.domen}/api/auth/verify-email?token=${vToken}`;
   sendEmail({
     email: email,
     subject: 'Verify Your Emali',
-    html: `<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`,
+    message: `<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`,
   });
 
-  return { _id: newUser._id, username: newUser.username };
+  return { username: newUser.username, email: newUser.email };
 }
 
 export async function loginService(
@@ -51,6 +60,12 @@ export async function loginService(
     throw new CustomError(
       `${ReasonPhrases.UNAUTHORIZED}: Password is not correct`,
       StatusCodes.UNAUTHORIZED,
+    );
+
+  if (!user.isVerified)
+    throw new CustomError(
+      'you have not verified your account',
+      StatusCodes.FORBIDDEN,
     );
   return { _id: user._id, username: user.username };
 }

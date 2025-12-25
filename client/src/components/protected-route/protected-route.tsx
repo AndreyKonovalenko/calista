@@ -2,27 +2,17 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { TO_LOGIN } from '../../utils/route-constants';
 import { useAuthActions, useIsAuth } from '../../services/auth-store';
-import { useQuery } from '@tanstack/react-query';
-import api from '../../api/api';
 import LoadingBage from '../loading-bage/loading-bage';
+import { useFetchUser } from '../../api/auth-api-queries';
 
 type TProps = {
   element: JSX.Element;
 };
 
-const useUser = (isAuth: boolean) => {
-  return useQuery({
-    queryKey: ['auth'],
-    queryFn: api.auth.fetchUser,
-    enabled: !isAuth,
-    retry: false,
-  });
-};
-
 const ProtectedRoute = ({ element }: TProps): JSX.Element => {
   const { setAuthStatus } = useAuthActions();
   const isAuth = useIsAuth();
-  const { data, isPending, isSuccess } = useUser(isAuth);
+  const { data, isPending, isSuccess } = useFetchUser(isAuth);
   const navigate = useNavigate();
 
   useEffect(() => {

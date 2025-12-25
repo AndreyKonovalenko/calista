@@ -12,7 +12,7 @@ const userSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   email: { type: String, unique: true },
-  isVerified: { type: Boolean },
+  isVerified: { type: Boolean, required: true },
 });
 
 const saltRounds = 10;

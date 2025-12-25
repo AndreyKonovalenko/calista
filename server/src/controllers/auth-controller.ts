@@ -38,10 +38,11 @@ export const register = async (
     const data: IUser = { ...req.body };
     const result = await registerServcie(data);
     res
-      .status(StatusCodes.CREATED)
-      .send(
-        `Registration successful, ${result.username} successfully created. Check yor email for verification link`,
-      );
+      .status(StatusCodes.OK)
+      .json({
+        message: `Registration successful, ${result.username} successfully created. Check yor email ${result.email} for verification link`,
+        userCreated: true,
+      });
   } catch (error) {
     next(error);
   }

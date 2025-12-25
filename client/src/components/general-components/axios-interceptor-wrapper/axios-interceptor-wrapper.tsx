@@ -31,6 +31,10 @@ const AxiosInterceptorWrapper = () => {
             toast.error(data.message);
             break;
         }
+        if (data.userCreated) {
+          toast.success(data.message);
+          navigate(TO_LOGIN);
+        }
         return res;
       },
       (error: AxiosError<TCustomErrorResponse>) => {
@@ -41,6 +45,10 @@ const AxiosInterceptorWrapper = () => {
               navigate(TO_ERROR_PAGE, { state: { message: data.message } });
               break;
             case 401:
+              toast.error(data.message);
+              navigate(TO_LOGIN);
+              break;
+            case 403:
               toast.error(data.message);
               navigate(TO_LOGIN);
               break;

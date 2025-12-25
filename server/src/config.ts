@@ -17,6 +17,7 @@ export default {
     jwtSecretVerification: <Secret>process.env.JWT_SECRET_VERIFICATION,
     tokenExpiresIn: process.env.TOKEN_EXPIRES_IN,
     vTokenExpiresIn: process.env.VTOKEN_EXPIRES_IN,
+    domen: process.env.DOMEN,
   },
   mongodb: {
     mongoUri: process.env.MONGO_URI,
