@@ -20,7 +20,9 @@ const VerificationPage = (): JSX.Element => {
       >
         Email verification page.
       </Typography>
-      <Typography>{data ? data.message : null}</Typography>
+      <Typography>
+        {data && data.emailVerified ? data.message : null}
+      </Typography>
       <Link component={RouterLink} variant="h6" to={TO_LOGIN} underline="none">
         Go to Login Page.
       </Link>

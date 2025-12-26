@@ -37,7 +37,6 @@ export async function registerServcie(
   }
   const vToken = generateVerificationTorken(newUser._id, newUser.email);
   const verificationLink = `${config.app.domen}/verify-email?token=${vToken}`;
-  // `${config.app.domen}/api/auth/verify-email?token=${vToken}`;
   sendEmail({
     email: email,
     subject: 'Verify Your Emali',
@@ -114,10 +113,11 @@ export async function verifyToken(token: string) {
     config.app.jwtSecretVerification,
     async (err, decoded) => {
       if (err) {
-        throw new CustomError(
-          `Token verification failed ${err.message}`,
-          StatusCodes.FORBIDDEN,
-        );
+        return err;
+        // throw new CustomError(
+        //   `Token verification failed ${err.message}`,
+        //   StatusCodes.FORBIDDEN,
+        // );
       } else {
         const paylod = decoded as JwtPayload;
         const user = await UserModel.findById(paylod.id);

@@ -76,7 +76,9 @@ const auth = {
   register: (data: TData) => request.post<TAuthState>(REGISTER, data),
   logout: () => request.post<void>(LOGOUT),
   verifyEmail: (token: string) =>
-    request.get<{ message: string }>(`${AUTH}/${VERIFY_EMAIL}?token=${token}`),
+    request.get<{ message: string; emailVerified: boolean }>(
+      `${AUTH}/${VERIFY_EMAIL}?token=${token}`,
+    ),
 };
 
 const boards = {
