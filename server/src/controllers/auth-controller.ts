@@ -37,12 +37,10 @@ export const register = async (
   try {
     const data: IUser = { ...req.body };
     const result = await registerServcie(data);
-    res
-      .status(StatusCodes.OK)
-      .json({
-        message: `Registration successful, ${result.username} successfully created. Check yor email ${result.email} for verification link`,
-        userCreated: true,
-      });
+    res.status(StatusCodes.OK).json({
+      message: `Registration successful, ${result.username} successfully created. Check yor email ${result.email} for verification link`,
+      userCreated: true,
+    });
   } catch (error) {
     next(error);
   }

@@ -32,7 +32,7 @@ const AxiosInterceptorWrapper = () => {
             break;
         }
         if (data.userCreated) {
-          toast.success(data.message);
+          toast.success(data.message, { autoClose: false });
           navigate(TO_LOGIN);
         }
         return res;

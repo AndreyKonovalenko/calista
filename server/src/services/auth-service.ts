@@ -36,7 +36,8 @@ export async function registerServcie(
     );
   }
   const vToken = generateVerificationTorken(newUser._id, newUser.email);
-  const verificationLink = `${config.app.domen}/api/auth/verify-email?token=${vToken}`;
+  const verificationLink = `${config.app.domen}/verify-email?token=${vToken}`;
+  // `${config.app.domen}/api/auth/verify-email?token=${vToken}`;
   sendEmail({
     email: email,
     subject: 'Verify Your Emali',

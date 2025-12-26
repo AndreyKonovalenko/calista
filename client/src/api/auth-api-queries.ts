@@ -21,3 +21,11 @@ export const useFetchUser = (isAuth: boolean) => {
     retry: false,
   });
 };
+
+export const useVerifyEmail = (token: string) => {
+  return useQuery({
+    queryKey: ['verify-email', token],
+    queryFn: () => api.auth.verifyEmail(token),
+    enabled: !!token,
+  });
+};

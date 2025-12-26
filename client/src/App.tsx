@@ -1,6 +1,5 @@
 import React from 'react';
 import { Routes, Route, useLocation } from 'react-router';
-
 import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from './components/protected-route/protected-route';
 import MainPage from './pages/main-page/main-page';
@@ -14,6 +13,7 @@ import CardPage from './pages/card-page/card-page';
 import CardPageOnBackground from './pages/card-page/card-page-on-background';
 import ModalPortal from './components/modal-portal/modal-portal';
 import ErrorPage from './pages/error-page/error-page';
+import VerificationPage from './pages/verification-page/verification-page';
 
 const App = (): JSX.Element => {
   const location = useLocation();
@@ -42,6 +42,7 @@ const App = (): JSX.Element => {
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="login" element={<LoginPage />} />
+          <Route path="verify-email" element={<VerificationPage />} />
           <Route path="register" element={<RegisterPage />} />
         </Route>
         <Route path="error-page" element={<ErrorPage />} />

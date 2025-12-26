@@ -23,6 +23,7 @@ const AUTH = validEnv(process.env.AUTH);
 const SSE = validEnv(process.env.SSE);
 const CHECKLISTS = validEnv(process.env.CHECKLISTS);
 const CHECKLIST_ITEMS = validEnv(process.env.CHECKLIST_ITEMS);
+const VERIFY_EMAIL = validEnv(process.env.VERIFY_EMAIL);
 axios.defaults.baseURL = BASE_URL;
 
 export type TData = {
@@ -74,6 +75,8 @@ const auth = {
   login: (data: TData) => request.post<TAuthState>(LOGIN, data),
   register: (data: TData) => request.post<TAuthState>(REGISTER, data),
   logout: () => request.post<void>(LOGOUT),
+  verifyEmail: (token: string) =>
+    request.get<{ message: string }>(`${AUTH}/${VERIFY_EMAIL}?token=${token}`),
 };
 
 const boards = {
