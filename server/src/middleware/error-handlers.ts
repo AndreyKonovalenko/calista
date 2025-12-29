@@ -50,6 +50,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
     success: false,
     status: errStatus,
     message: errMsg,
+    options: err.options,
     stack:
       config.nodeEnv === 'development' || config.nodeEnv === 'test'
         ? err.stack

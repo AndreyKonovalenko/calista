@@ -113,11 +113,11 @@ export async function verifyToken(token: string) {
     config.app.jwtSecretVerification,
     async (err, decoded) => {
       if (err) {
-        return err;
-        // throw new CustomError(
-        //   `Token verification failed ${err.message}`,
-        //   StatusCodes.FORBIDDEN,
-        // );
+        throw new CustomError(
+          `Token verification failed ${err.message}`,
+          StatusCodes.UNAUTHORIZED,
+          { emailIsVerified: false },
+        );
       } else {
         const paylod = decoded as JwtPayload;
         const user = await UserModel.findById(paylod.id);

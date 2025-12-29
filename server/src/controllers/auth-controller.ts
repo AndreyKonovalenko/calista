@@ -9,6 +9,7 @@ import {
 import { IUser } from '../models/UserModel';
 import { CustomRequest } from '../middleware/protected';
 import config from '../config';
+import { asyncHandler } from '../utils/async-handler';
 // import { asyncHandler } from '../utils/async-handler';
 
 //GET: auth/ @private
@@ -78,18 +79,14 @@ export const logout = (_req: Request, res: Response) => {
 };
 
 // GET: auth/vrify-email @public
-export const verifyEmail = async (req: Request, res: Response) => {
+export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
   const token = req.query.token as string;
-  try {
-    await verifyToken(token);
-    res.status(StatusCodes.OK).json({
-      message: 'Email varification successjully. You can now log in',
-      emailVerified: true,
-    });
-  } catch (error) {
-    res.status(StatusCodes.OK).json(error);
-  }
-};
+  await verifyToken(token);
+  res.status(StatusCodes.OK).json({
+    message: 'Email varification successjully. You can now log in',
+    emailVerified: true,
+  });
+});
 
 // //GET: auth/users @publict for tests
 // // get all users

@@ -10,6 +10,7 @@ import {
 
 type TCustomErrorResponse = {
   message: string;
+  options?: { [key: string]: boolean };
   stack?: string;
   status: number;
   success: boolean;
@@ -45,8 +46,10 @@ const AxiosInterceptorWrapper = () => {
               navigate(TO_ERROR_PAGE, { state: { message: data.message } });
               break;
             case 401:
-              toast.error(data.message);
-              navigate(TO_LOGIN);
+              if (!data.options) {
+                toast.error(data.message);
+                navigate(TO_LOGIN);
+              }
               break;
             case 403:
               toast.error(data.message);
@@ -63,8 +66,8 @@ const AxiosInterceptorWrapper = () => {
             case 422:
               toast.error(data.message);
               break;
-            default:
-              toast.error(data.message);
+            // default:
+            //   toast.error(data.message);
           }
         } else if (error.request) {
           console.log(error.message);
