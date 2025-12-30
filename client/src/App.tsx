@@ -44,10 +44,10 @@ const App = (): JSX.Element => {
           <Route path="login" element={<LoginPage />} />
           <Route path="verify-email" element={<VerificationPage />} />
           <Route path="register" element={<RegisterPage />} />
+          <Route path="error-page" element={<ErrorPage />} />
+          <Route path="not-found" element={<NotFoundPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
-        <Route path="error-page" element={<ErrorPage />} />
-        <Route path="not-found" element={<NotFoundPage />} />
-        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       {background && (
         <Routes>

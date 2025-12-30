@@ -83,7 +83,7 @@ export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
   const token = req.query.token as string;
   await verifyToken(token);
   res.status(StatusCodes.OK).json({
-    message: 'Email varification successjully. You can now log in',
+    message: 'Verification successful. You can now log in',
     emailVerified: true,
   });
 });

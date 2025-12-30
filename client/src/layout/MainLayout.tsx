@@ -7,6 +7,21 @@ import { HEADER } from './config-layout';
 // import { TDraggableElement } from '../components/boards-page-components/board-list/board-list-draggable';
 // import { useDrop } from 'react-dnd';
 
+const styles = {
+  contanier: {
+    display: 'flex',
+    width: '100%',
+    overflow: 'hidden',
+    outline: 'none',
+  },
+  main: {
+    flexGrow: 1,
+    minHeight: `calc(100vh - ${HEADER.H_DESKTOP}px)`,
+    mt: `${HEADER.H_DESKTOP}px`,
+    overflowY: 'hidden',
+  },
+};
+
 const MainLayout = (): JSX.Element => {
   // const [, connectDrop] = useDrop<TDraggableElement, unknown>({
   //   accept: 'list',
@@ -15,24 +30,11 @@ const MainLayout = (): JSX.Element => {
   // connectDrop(ref);
   return (
     <Box
-      sx={{
-        display: 'flex',
-        width: '100%',
-        overflow: 'hidden',
-        outline: 'none',
-      }}
+      sx={styles.contanier}
       // ref={ref}
     >
       <HeaderBar />
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          minHeight: `calc(100vh - ${HEADER.H_DESKTOP}px)`,
-          mt: `${HEADER.H_DESKTOP}px`,
-          overflowY: 'hidden',
-        }}
-      >
+      <Box component="main" sx={styles.main}>
         <Outlet />
       </Box>
     </Box>

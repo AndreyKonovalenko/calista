@@ -48,84 +48,84 @@ export default function RegisterPage(): JSX.Element {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
+    <Container
+      component="main"
+      maxWidth="xs"
+      sx={{
+        marginTop: 8,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <LockOutlinedIcon />
+      </Avatar>
+      <Typography component="h1" variant="h5">
+        Create an account
+      </Typography>
+      <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Grid container spacing={2}>
+          <Grid size={12}>
+            <TextField
+              required
+              fullWidth
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
+              autoFocus
+            />
+          </Grid>
+          <Grid size={12}>
+            <TextField
+              required
+              fullWidth
+              name="email"
+              label="Email"
+              type="email"
+              id="email"
+              autoComplete="new-password"
+            />
+          </Grid>
+          <Grid size={12}>
+            <TextField
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="new-password"
+            />
+          </Grid>
+          <Grid size={12}>
+            <TextField
+              required
+              fullWidth
+              name="confirmPossword"
+              label="Confirm password"
+              type="password"
+              id="confirmPossword"
+              autoComplete="new-password"
+            />
+          </Grid>
+        </Grid>
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+        >
           Create an account
-        </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid size={12}>
-              <TextField
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
-                autoFocus
-              />
-            </Grid>
-            <Grid size={12}>
-              <TextField
-                required
-                fullWidth
-                name="email"
-                label="Email"
-                type="email"
-                id="email"
-                autoComplete="new-password"
-              />
-            </Grid>
-            <Grid size={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-              />
-            </Grid>
-            <Grid size={12}>
-              <TextField
-                required
-                fullWidth
-                name="confirmPossword"
-                label="Confirm password"
-                type="password"
-                id="confirmPossword"
-                autoComplete="new-password"
-              />
-            </Grid>
+        </Button>
+        <Grid container justifyContent="flex-end">
+          <Grid>
+            <Link href="/login" variant="body2">
+              Already have an account? Login
+            </Link>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Create an account
-          </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid>
-              <Link href="/login" variant="body2">
-                Already have an account? Login
-              </Link>
-            </Grid>
-          </Grid>
-        </Box>
+        </Grid>
       </Box>
     </Container>
   );
