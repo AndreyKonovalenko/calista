@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
-import { Response } from 'express';
+import { response, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { UserModel, IUser } from '../models/UserModel';
 import { CustomError } from '../utils/CustomError';
@@ -44,6 +44,26 @@ export async function registerServcie(
   });
 
   return { username: newUser.username, email: newUser.email };
+}
+
+export async function resendVerificationEmail(data:{email: string}):Promise<void> {
+  const {email} = data;
+  const user = await UserModel.findOne({email}).exec();
+  if (!user) {
+    throw new CustomError(
+      `${ReasonPhrases.UNAUTHORIZED}: User with email adress ${email} not found`,
+      StatusCodes.UNAUTHORIZED
+    )
+  }
+  const vToken = generateVerificationTorken(user._id, user.email);
+  const verificationLink = `${config.app.domen}/verify-email?token=${vToken}`;
+  sendEmail({
+    email: email,
+    subject: 'Verify Your Emali',
+    message: `<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`,
+  });
+
+  
 }
 
 export async function loginService(

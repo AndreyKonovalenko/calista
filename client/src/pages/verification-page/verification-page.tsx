@@ -40,7 +40,8 @@ const VerificationPage = (): JSX.Element => {
   const success =
     data && data.emailVerified ? (
       <>
-        <Typography variant="h6">{data.message}</Typography>
+        <Typography variant="h6">{data.message.split(".")[0]}</Typography>
+        <Typography variant="h6">{data.message.split(".")[1]}</Typography>
         <Link
           component={RouterLink}
           variant="h6"
