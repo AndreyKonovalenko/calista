@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { Types } from 'mongoose';
-import { response, Response } from 'express';
+import { Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { UserModel, IUser } from '../models/UserModel';
 import { CustomError } from '../utils/CustomError';
@@ -46,7 +46,7 @@ export async function registerServcie(
   return { username: newUser.username, email: newUser.email };
 }
 
-export async function resendVerificationEmail(data:{email: string}):Promise<void> {
+export async function resendVerificationLink(data:{email: string}):Promise<void> {
   const {email} = data;
   const user = await UserModel.findOne({email}).exec();
   if (!user) {

@@ -58,6 +58,9 @@ const AxiosInterceptorWrapper = () => {
             case 404:
               navigate(TO_NOT_FOUND);
               break;
+            case 409:
+              toast.error(data.message)
+              break;
             case 500:
               navigate(TO_ERROR_PAGE, {
                 state: { message: 'Server error ocurred' },

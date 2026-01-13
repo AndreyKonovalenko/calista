@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router';
 import { TO_LOGIN } from '../../utils/route-constants';
-import { useVerifyEmail } from '../../api/auth-api-queries';
+import { useResendLink, useVerifyEmail } from '../../api/auth-api-queries';
 import { isAxiosError } from 'axios';
 import LoadingBage from '../../components/loading-bage/loading-bage';
 import { theme } from '../../styles/theme';
@@ -35,8 +35,16 @@ const styles = {
 const VerificationPage = (): JSX.Element => {
   const [URLSearchParams] = useSearchParams();
   const token = URLSearchParams.get('token');
+  const {mutate,isSuccess} = useResendLink()
   const { data, error, isLoading } = useVerifyEmail(token ? token : '');
-
+   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      mutate({
+        email: data.get('email') as string,
+      });
+    };
+  
   const success =
     data && data.emailVerified ? (
       <>
@@ -56,7 +64,7 @@ const VerificationPage = (): JSX.Element => {
     <Grid
       container
       component="form"
-      onSubmit={() => {}}
+      onSubmit={handleSubmit}
       size={12}
       columns={12}
       spacing={2}
@@ -86,6 +94,13 @@ const VerificationPage = (): JSX.Element => {
           Send
         </Button>
       </Grid>
+      {isSuccess?       
+        <Grid size={12}>
+          <Typography variant="h6">
+            Confirmation link has been sent
+          </Typography>
+        </Grid>: null
+        }
     </Grid>
   ) : null;
 

@@ -5,6 +5,7 @@ import {
   logout,
   getUser,
   verifyEmail,
+  resendLink
 } from '../controllers/auth-controller';
 import { protect } from '../middleware/protected';
 import { userValidator } from '../middleware/validators/user-validator';
@@ -14,5 +15,6 @@ export const authRouter = express.Router();
 authRouter.get('/', protect, getUser);
 authRouter.post('/', validationHandler(userValidator), register);
 authRouter.get('/verify-email', verifyEmail);
+authRouter.post('/verify-email', resendLink);
 authRouter.post('/login', login);
 authRouter.post('/logout', logout);

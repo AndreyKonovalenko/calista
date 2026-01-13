@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import {
   registerServcie,
@@ -10,61 +10,48 @@ import { IUser } from '../models/UserModel';
 import { CustomRequest } from '../middleware/protected';
 import config from '../config';
 import { asyncHandler } from '../utils/async-handler';
-// import { asyncHandler } from '../utils/async-handler';
+import { resendVerificationLink } from '../services/auth-service';
 
 //GET: auth/ @private
-export const getUser = (
+export const getUser = asyncHandler(async( 
   req: Request,
   res: Response,
-  next: NextFunction,
-): void => {
+)=> {
   const { user } = req as CustomRequest;
-  try {
-    res.status(StatusCodes.OK).json({
-      isAuth: true,
-      username: user.username,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+  res.status(StatusCodes.OK).json({
+    isAuth: true,
+    username: user.username,
+  });
+})
 
 // POST: auth/ @public
-export const register = async (
+export const register = asyncHandler( async (
   req: Request,
   res: Response,
-  next: NextFunction,
 ): Promise<void> => {
-  try {
     const data: IUser = { ...req.body };
     const result = await registerServcie(data);
     res.status(StatusCodes.OK).json({
       message: `Registration successful, ${result.username} successfully created. Check yor email ${result.email} for verification link`,
       userCreated: true,
     });
-  } catch (error) {
-    next(error);
-  }
-};
+  } 
+);
 
 // POST: auth/login
-export const login = async (
+export const login = asyncHandler( async (
   req: Request,
   res: Response,
-  next: NextFunction,
 ): Promise<void> => {
   const data: IUser = { ...req.body };
-  try {
-    const result = await loginService(data);
-    setGeneratedToken(res, result._id);
-    res.status(StatusCodes.OK).json({
-      isAuth: true,
-      username: result.username,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+  const result = await loginService(data);
+  setGeneratedToken(res, result._id);
+  res.status(StatusCodes.OK).json({
+    isAuth: true,
+    username: result.username,
+  });
+  
+})
 
 // POST: auth/logout
 // clear cookies
@@ -78,7 +65,7 @@ export const logout = (_req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ message: 'Logged out successfully' });
 };
 
-// GET: auth/vrify-email @public
+// GET: auth/verify-email @public
 export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
   const token = req.query.token as string;
   await verifyToken(token);
@@ -87,6 +74,16 @@ export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
     emailVerified: true,
   });
 });
+
+// POST: auth/verify-email @public
+export const resendLink = asyncHandler(async(req:Request, res: Response)=>{
+  const data: {email: string} = {... req.body};
+  await resendVerificationLink(data);
+  res.status(StatusCodes.OK).json({
+    messege: 'Email confirmation link has been sent'
+  })
+
+})
 
 // //GET: auth/users @publict for tests
 // // get all users
