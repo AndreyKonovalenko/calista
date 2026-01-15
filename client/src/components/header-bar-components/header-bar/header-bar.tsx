@@ -1,34 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import { Person } from '@mui/icons-material';
 import { useMutation } from '@tanstack/react-query';
 import AccountMenu from '../account-menu/account-menu';
-import {
-  useAuthActions,
-  useIsAuth,
-} from '../../../services/auth-store';
 
 import { Link as RouterLink } from 'react-router';
 import Link from '@mui/material/Link';
+import Person from '@mui/icons-material/Person';
 import api from '../../../api/api';
-
+import { useAuthActions } from '../../../services/auth-store';
 import { TO_MAIN } from '../../../utils/route-constants';
-import { IconButton, Stack, PopoverOrigin } from '@mui/material';
+import {IconButton, PopoverOrigin } from '@mui/material';
 
 const styles = {
-  box: {
-    flexGrow: 1,
-  },
-  stack: {
-    alignItems: 'center',
-  },
-  link: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
+  toolbar: {
+    despley: "flex",
+    flexDirection: "row",
+    justifyContent:"space-between"
+        
+  }
 };
 
 const anchorOrigin: PopoverOrigin = {
@@ -42,16 +32,14 @@ const transformOrigin: PopoverOrigin = {
 
 
 export default function HeaderBar() {
-  const { setAuthStatus } = useAuthActions();
-  const isAuth = useIsAuth();
   // const username = useUsername();
-  const { mutate, isSuccess } = useMutation({
+  const {setAuthStatus} = useAuthActions();
+  const { mutate,  isSuccess} = useMutation({
     mutationFn: api.auth.logout,
   });
 
   const handleLogout = () => {
     setAnchorEl(null)
-    setAuthStatus({ isAuth: false, username: '' });
     mutate();
   };
 
@@ -65,44 +53,43 @@ export default function HeaderBar() {
     const handleCloseAccountMenu = () => {
       setAnchorEl(null);
     };
-  useEffect(()=> {
-    console.log(isSuccess)
-  },[isSuccess])
-
+    useEffect(()=>{
+      if(isSuccess){
+        setAuthStatus({isAuth: false, username: ""})
+      }
+    })
   return (
-    <AppBar position="fixed">
-      <Toolbar>
-        <Box sx={styles.box}>
-          <Link
-            component={RouterLink}
-            variant="h6"
-            underline="none"
-            to={TO_MAIN}
-            color="inherit"
-          >
-            Doski
-          </Link>
-        </Box>
-        {isAuth && (
-          <Stack direction="row" spacing={4}>
-              <IconButton
-                onClick={handleOpenAccountMenu}
-                size="small"
-                sx={{ ml: 2 }}
-              >
-                <Person color="inherit" fontSize="large" />
-              </IconButton>
-               <AccountMenu
-                  anchorEl={anchorEl}
-                  closeHandler={handleCloseAccountMenu}
-                  anchorOrigin={anchorOrigin}
-                  transformOrigin={transformOrigin}
-                  handleLogout={handleLogout}
-               />
-              {/* <Typography variant="h6">{username}</Typography> */}
-            </Stack>
-        )}
-      </Toolbar>
-    </AppBar>
+      <AppBar position="fixed">
+        <Toolbar sx={styles.toolbar}> 
+            <Link
+              component={RouterLink}
+              variant="h6"
+              underline="none"
+              to={TO_MAIN}
+              color="inherit"
+            >
+              Doski
+            </Link>
+            <IconButton
+              onClick={handleOpenAccountMenu}
+              size="small"
+              sx={{ ml: 2 }}
+              color="inherit" 
+            >
+              <Person color="inherit" fontSize="large" />
+            </IconButton>
+            <AccountMenu
+                anchorEl={anchorEl}
+                closeHandler={handleCloseAccountMenu}
+                anchorOrigin={anchorOrigin}
+                transformOrigin={transformOrigin}
+                handleLogout={handleLogout}
+            />
+            {/* <Typography variant="h6">{username}</Typography> */}
+        </Toolbar>
+      </AppBar>
+
+
+      
   );
 }

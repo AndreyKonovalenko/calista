@@ -1,7 +1,8 @@
 import React from 'react';
 import { Outlet } from 'react-router';
 import { Box } from '@mui/material';
-import HeaderBar from '../components/header-bar-components/header-bar/header-bar';
+// import HeaderBar from '../components/header-bar-components/header-bar/header-bar';
+import AuthHeaderBar from '../components/header-bar-components/auth-header-bar/auth-header-bar';
 import { HEADER } from './config-layout';
 
 const styles = {
@@ -22,7 +23,7 @@ const styles = {
 const AuthLayout = (): JSX.Element => {
   return (
     <Box sx={styles.contanier}>
-      <HeaderBar />
+      <AuthHeaderBar/>
       <Box sx={styles.main}>
         <Outlet />
       </Box>

@@ -14,6 +14,12 @@ declare module '@mui/material/styles' {
   }
 }
 
+declare module '@mui/material/AppBar'{
+  interface AppBarPropsColorOverrides {
+    ochre: true;
+  }
+}
+
 export const theme: Theme = createTheme({
   components: {
     MuiStack: {
