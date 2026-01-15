@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router';
 import { Box } from '@mui/material';
-import HeaderBar from '../components/header-bar/header-bar';
+import HeaderBar from '../components/header-bar-components/header-bar/header-bar';
 import { HEADER } from './config-layout';
 
 const styles = {
