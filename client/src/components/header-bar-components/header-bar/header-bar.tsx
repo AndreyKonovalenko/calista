@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { useMutation } from '@tanstack/react-query';
@@ -8,19 +8,17 @@ import { Link as RouterLink } from 'react-router';
 import Link from '@mui/material/Link';
 import Person from '@mui/icons-material/Person';
 import api from '../../../api/api';
-import { useAuthActions } from '../../../services/auth-store';
+import { useAuthActions, useEmail } from '../../../services/auth-store';
 import { TO_MAIN } from '../../../utils/route-constants';
-import {IconButton, PopoverOrigin } from '@mui/material';
+import { IconButton, PopoverOrigin } from '@mui/material';
 import { useUsername } from '../../../services/auth-store';
-
 
 const styles = {
   toolbar: {
-    despley: "flex",
-    flexDirection: "row",
-    justifyContent:"space-between"
-        
-  }
+    despley: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 };
 
 const anchorOrigin: PopoverOrigin = {
@@ -32,67 +30,65 @@ const transformOrigin: PopoverOrigin = {
   horizontal: 'right',
 };
 
-
 export default function HeaderBar() {
   const username = useUsername();
-  const {setAuthStatus} = useAuthActions();
-  const { mutate,  isSuccess} = useMutation({
+  const email = useEmail();
+  const { setAuthStatus } = useAuthActions();
+  const { mutate, isSuccess } = useMutation({
     mutationFn: api.auth.logout,
   });
 
   const handleLogout = () => {
-    setAnchorEl(null)
+    setAnchorEl(null);
     mutate();
   };
 
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const handleOpenAccountMenu = (
-      event: React.MouseEvent<HTMLButtonElement>,
-    ) => {
-      setAnchorEl(event.currentTarget);
-    };
-  
-    const handleCloseAccountMenu = () => {
-      setAnchorEl(null);
-    };
-    useEffect(()=>{
-      if(isSuccess){
-        setAuthStatus({isAuth: false, username: ""})
-      }
-    })
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleOpenAccountMenu = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseAccountMenu = () => {
+    setAnchorEl(null);
+  };
+  useEffect(() => {
+    if (isSuccess) {
+      setAuthStatus({ isAuth: false, username: '', email: '' });
+    }
+  }, [isSuccess]);
   return (
-      <AppBar position="fixed">
-        <Toolbar sx={styles.toolbar}> 
-            <Link
-              component={RouterLink}
-              variant="h6"
-              underline="none"
-              to={TO_MAIN}
-              color="inherit"
-            >
-              Doski
-            </Link>
-            <IconButton
-              onClick={handleOpenAccountMenu}
-              size="small"
-              sx={{ ml: 2 }}
-              color="inherit" 
-            >
-              <Person color="inherit" fontSize="large" />
-            </IconButton>
-            <AccountMenu
-                anchorEl={anchorEl}
-                closeHandler={handleCloseAccountMenu}
-                anchorOrigin={anchorOrigin}
-                transformOrigin={transformOrigin}
-                handleLogout={handleLogout}
-                username={username}
-            />
-            {/* <Typography variant="h6">{username}</Typography> */}
-        </Toolbar>
-      </AppBar>
-
-
-      
+    <AppBar position="fixed">
+      <Toolbar sx={styles.toolbar}>
+        <Link
+          component={RouterLink}
+          variant="h6"
+          underline="none"
+          to={TO_MAIN}
+          color="inherit"
+        >
+          Doski
+        </Link>
+        <IconButton
+          onClick={handleOpenAccountMenu}
+          size="small"
+          sx={{ ml: 2 }}
+          color="inherit"
+        >
+          <Person color="inherit" fontSize="large" />
+        </IconButton>
+        <AccountMenu
+          anchorEl={anchorEl}
+          closeHandler={handleCloseAccountMenu}
+          anchorOrigin={anchorOrigin}
+          transformOrigin={transformOrigin}
+          handleLogout={handleLogout}
+          username={username}
+          email={email}
+        />
+        {/* <Typography variant="h6">{username}</Typography> */}
+      </Toolbar>
+    </AppBar>
   );
 }

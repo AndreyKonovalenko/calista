@@ -14,7 +14,7 @@ declare module '@mui/material/styles' {
   }
 }
 
-declare module '@mui/material/AppBar'{
+declare module '@mui/material/AppBar' {
   interface AppBarPropsColorOverrides {
     ochre: true;
   }

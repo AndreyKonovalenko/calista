@@ -4,11 +4,16 @@ import { devtools } from 'zustand/middleware';
 export type TAuthState = {
   isAuth: boolean;
   username: string;
+  email: string;
   actions: IAuthActions;
 };
 
 type IAuthActions = {
-  setAuthStatus: (data: { isAuth: boolean; username: string }) => void;
+  setAuthStatus: (data: {
+    isAuth: boolean;
+    username: string;
+    email: string;
+  }) => void;
 };
 
 const useAuthStore = create<TAuthState>()(
@@ -16,11 +21,17 @@ const useAuthStore = create<TAuthState>()(
     set => ({
       isAuth: false,
       username: '',
+      email: '',
       actions: {
-        setAuthStatus: (data: { isAuth: boolean; username: string }) =>
+        setAuthStatus: (data: {
+          isAuth: boolean;
+          username: string;
+          email: string;
+        }) =>
           set({
             isAuth: data.isAuth,
             username: data.username,
+            email: data.email,
           }),
       },
     }),
@@ -30,4 +41,5 @@ const useAuthStore = create<TAuthState>()(
 
 export const useAuthActions = () => useAuthStore(state => state.actions);
 export const useUsername = () => useAuthStore(state => state.username);
+export const useEmail = () => useAuthStore(state => state.email);
 export const useIsAuth = () => useAuthStore(state => state.isAuth);

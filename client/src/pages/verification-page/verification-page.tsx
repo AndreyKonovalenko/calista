@@ -35,21 +35,21 @@ const styles = {
 const VerificationPage = (): JSX.Element => {
   const [URLSearchParams] = useSearchParams();
   const token = URLSearchParams.get('token');
-  const {mutate,isSuccess} = useResendLink()
+  const { mutate, isSuccess } = useResendLink();
   const { data, error, isLoading } = useVerifyEmail(token ? token : '');
-   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      const data = new FormData(event.currentTarget);
-      mutate({
-        email: data.get('email') as string,
-      });
-    };
-  
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    mutate({
+      email: data.get('email') as string,
+    });
+  };
+
   const success =
     data && data.emailVerified ? (
       <>
-        <Typography variant="h6">{data.message.split(".")[0]}</Typography>
-        <Typography variant="h6">{data.message.split(".")[1]}</Typography>
+        <Typography variant="h6">{data.message.split('.')[0]}</Typography>
+        <Typography variant="h6">{data.message.split('.')[1]}</Typography>
         <Link
           component={RouterLink}
           variant="h6"
@@ -94,13 +94,11 @@ const VerificationPage = (): JSX.Element => {
           Send
         </Button>
       </Grid>
-      {isSuccess?       
+      {isSuccess ? (
         <Grid size={12}>
-          <Typography variant="h6">
-            Confirmation link has been sent
-          </Typography>
-        </Grid>: null
-        }
+          <Typography variant="h6">Confirmation link has been sent</Typography>
+        </Grid>
+      ) : null}
     </Grid>
   ) : null;
 

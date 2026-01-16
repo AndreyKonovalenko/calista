@@ -32,6 +32,6 @@ export const useVerifyEmail = (token: string) => {
 
 export const useResendLink = () => {
   return useMutation({
-    mutationFn: api.auth.resendLink
-  })
-}
+    mutationFn: api.auth.resendLink,
+  });
+};

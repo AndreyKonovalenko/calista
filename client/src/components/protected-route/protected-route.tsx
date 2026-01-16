@@ -16,7 +16,7 @@ const ProtectedRoute = ({ element }: TProps): JSX.Element => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('fetch from protected route')
+    console.log('fetch from protected route');
     if (!isPending) {
       if (!isAuth && isSuccess) {
         setAuthStatus(data);

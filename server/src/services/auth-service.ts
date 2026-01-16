@@ -46,14 +46,16 @@ export async function registerServcie(
   return { username: newUser.username, email: newUser.email };
 }
 
-export async function resendVerificationLink(data:{email: string}):Promise<void> {
-  const {email} = data;
-  const user = await UserModel.findOne({email}).exec();
+export async function resendVerificationLink(data: {
+  email: string;
+}): Promise<void> {
+  const { email } = data;
+  const user = await UserModel.findOne({ email }).exec();
   if (!user) {
     throw new CustomError(
       `${ReasonPhrases.UNAUTHORIZED}: User with email adress ${email} not found`,
-      StatusCodes.UNAUTHORIZED
-    )
+      StatusCodes.UNAUTHORIZED,
+    );
   }
   const vToken = generateVerificationTorken(user._id, user.email);
   const verificationLink = `${config.app.domen}/verify-email?token=${vToken}`;
@@ -62,13 +64,13 @@ export async function resendVerificationLink(data:{email: string}):Promise<void>
     subject: 'Verify Your Emali',
     message: `<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`,
   });
-
-  
 }
 
-export async function loginService(
-  data: IUser,
-): Promise<{ _id: Types.ObjectId; username: string }> {
+export async function loginService(data: IUser): Promise<{
+  _id: Types.ObjectId;
+  username: string;
+  email: string;
+}> {
   const { username, password } = data;
   const user = await UserModel.findOne({ username });
   if (!user)
@@ -87,7 +89,7 @@ export async function loginService(
       'you have not verified your account',
       StatusCodes.FORBIDDEN,
     );
-  return { _id: user._id, username: user.username };
+  return { _id: user._id, username: user.username, email: user.email };
 }
 
 export function generateToken(

@@ -79,7 +79,8 @@ const auth = {
     request.get<{ message: string; emailVerified: boolean }>(
       `${AUTH}${VERIFY_EMAIL}?token=${token}`,
     ),
-  resendLink: (data: {email: string})=> request.post(`${AUTH}${VERIFY_EMAIL}`, data)
+  resendLink: (data: { email: string }) =>
+    request.post(`${AUTH}${VERIFY_EMAIL}`, data),
 };
 
 const boards = {

@@ -13,45 +13,41 @@ import { asyncHandler } from '../utils/async-handler';
 import { resendVerificationLink } from '../services/auth-service';
 
 //GET: auth/ @private
-export const getUser = asyncHandler(async( 
-  req: Request,
-  res: Response,
-)=> {
+export const getUser = asyncHandler(async (req: Request, res: Response) => {
   const { user } = req as CustomRequest;
   res.status(StatusCodes.OK).json({
     isAuth: true,
     username: user.username,
+    email: user.email,
   });
-})
+});
 
 // POST: auth/ @public
-export const register = asyncHandler( async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
+export const register = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
     const data: IUser = { ...req.body };
     const result = await registerServcie(data);
     res.status(StatusCodes.OK).json({
       message: `Registration successful, ${result.username} successfully created. Check yor email ${result.email} for verification link`,
       userCreated: true,
     });
-  } 
+  },
 );
 
 // POST: auth/login
-export const login = asyncHandler( async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
-  const data: IUser = { ...req.body };
-  const result = await loginService(data);
-  setGeneratedToken(res, result._id);
-  res.status(StatusCodes.OK).json({
-    isAuth: true,
-    username: result.username,
-  });
-  
-})
+export const login = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const data: IUser = { ...req.body };
+    const result = await loginService(data);
+    setGeneratedToken(res, result._id);
+    console.log(result);
+    res.status(StatusCodes.OK).json({
+      isAuth: true,
+      username: result.username,
+      email: result.email,
+    });
+  },
+);
 
 // POST: auth/logout
 // clear cookies
@@ -76,14 +72,13 @@ export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
 });
 
 // POST: auth/verify-email @public
-export const resendLink = asyncHandler(async(req:Request, res: Response)=>{
-  const data: {email: string} = {... req.body};
+export const resendLink = asyncHandler(async (req: Request, res: Response) => {
+  const data: { email: string } = { ...req.body };
   await resendVerificationLink(data);
   res.status(StatusCodes.OK).json({
-    messege: 'Email confirmation link has been sent'
-  })
-
-})
+    messege: 'Email confirmation link has been sent',
+  });
+});
 
 // //GET: auth/users @publict for tests
 // // get all users

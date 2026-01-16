@@ -23,7 +23,7 @@ const styles = {
 const AuthLayout = (): JSX.Element => {
   return (
     <Box sx={styles.contanier}>
-      <AuthHeaderBar/>
+      <AuthHeaderBar />
       <Box sx={styles.main}>
         <Outlet />
       </Box>
