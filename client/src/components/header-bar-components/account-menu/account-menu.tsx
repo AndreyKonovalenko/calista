@@ -12,8 +12,12 @@ import {
   Avatar,
 } from '@mui/material';
 // import Person from '@mui/icons-material/Person';
+
+import Link from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router';
 import Settings from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { TO_LOGIN } from '../../../utils/route-constants';
 
 const styles = {
   title: {
@@ -36,6 +40,11 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'start',
   },
+  avatarConteiner: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  }
 };
 
 const AccountMenu = (props: {
@@ -69,13 +78,13 @@ const AccountMenu = (props: {
         <Box sx={styles.title}>
           <Typography variant="body2">ACCOUNT</Typography>
         </Box>
-
         <Stack sx={styles.personData}>
-          <Avatar />
+          <Box sx={styles.avatarConteiner}>
+            <Avatar />
+          </Box>
           <Box>
             <Typography>
               {username}
-              {email}
             </Typography>
             <Typography>{email}</Typography>
           </Box>
@@ -89,10 +98,17 @@ const AccountMenu = (props: {
             Settings
           </MenuItem>
           <MenuItem onClick={handleLogout}>
+            <Link
+              component={RouterLink}
+              underline="none"
+              color="inherit"
+              to={TO_LOGIN}
+            >
             <ListItemIcon>
-              <LogoutIcon fontSize="small" />
-            </ListItemIcon>
-            Logout
+                <LogoutIcon fontSize="small" />
+              </ListItemIcon>
+              Logout
+            </Link>
           </MenuItem>
         </MenuList>
       </Box>
