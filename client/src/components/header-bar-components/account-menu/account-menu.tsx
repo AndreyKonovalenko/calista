@@ -11,13 +11,9 @@ import {
   Stack,
   Avatar,
 } from '@mui/material';
-// import Person from '@mui/icons-material/Person';
-
-import Link from '@mui/material/Link';
-import { Link as RouterLink } from 'react-router';
 import Settings from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { TO_LOGIN } from '../../../utils/route-constants';
+
 
 const styles = {
   title: {
@@ -98,17 +94,10 @@ const AccountMenu = (props: {
             Settings
           </MenuItem>
           <MenuItem onClick={handleLogout}>
-            <Link
-              component={RouterLink}
-              underline="none"
-              color="inherit"
-              to={TO_LOGIN}
-            >
-            <ListItemIcon>
-                <LogoutIcon fontSize="small" />
-              </ListItemIcon>
-              Logout
-            </Link>
+                <ListItemIcon> 
+              <LogoutIcon fontSize="small" />
+            </ListItemIcon>
+              Logout  
           </MenuItem>
         </MenuList>
       </Box>
