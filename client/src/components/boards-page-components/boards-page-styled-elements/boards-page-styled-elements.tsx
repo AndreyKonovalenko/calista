@@ -1,5 +1,5 @@
 import { styled } from '@mui/material';
-import { drawerWidth } from '../../../layout/config-layout';
+import { drawerWidth } from '../../../layouts/config-layout';
 import MuiPaper, { PaperProps as MuiPaperProps } from '@mui/material/Paper';
 
 interface PaperProps extends MuiPaperProps {

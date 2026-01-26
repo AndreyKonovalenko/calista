@@ -14,7 +14,6 @@ import {
 import Settings from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-
 const styles = {
   title: {
     pl: 2,
@@ -40,13 +39,14 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-  }
+  },
 };
 
 const AccountMenu = (props: {
   anchorEl: null | HTMLElement;
   closeHandler: () => void;
   handleLogout: () => void;
+  handleToSettings: () => void;
   anchorOrigin: PopoverOrigin;
   transformOrigin: PopoverOrigin;
   username: string;
@@ -58,6 +58,7 @@ const AccountMenu = (props: {
     anchorOrigin,
     transformOrigin,
     handleLogout,
+    handleToSettings,
     username,
     email,
   } = props;
@@ -79,25 +80,23 @@ const AccountMenu = (props: {
             <Avatar />
           </Box>
           <Box>
-            <Typography>
-              {username}
-            </Typography>
+            <Typography>{username}</Typography>
             <Typography>{email}</Typography>
           </Box>
         </Stack>
         <Divider />
         <MenuList>
-          <MenuItem>
+          <MenuItem onClick={handleToSettings}>
             <ListItemIcon>
               <Settings fontSize="small" />
             </ListItemIcon>
             Settings
           </MenuItem>
           <MenuItem onClick={handleLogout}>
-                <ListItemIcon> 
+            <ListItemIcon>
               <LogoutIcon fontSize="small" />
             </ListItemIcon>
-              Logout  
+            Logout
           </MenuItem>
         </MenuList>
       </Box>

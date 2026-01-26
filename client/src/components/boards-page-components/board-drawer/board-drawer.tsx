@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { drawerWidth } from '../../../layout/config-layout';
+import { drawerWidth } from '../../../layouts/config-layout';
 import DeleteItemPopover from '../../general-components/delete-item-popover/delete-item-popover';
 
 const DrawerHeader = styled('div')(({ theme }) => ({

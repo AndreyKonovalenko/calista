@@ -32,7 +32,7 @@ const transformOrigin: PopoverOrigin = {
 
 export default function HeaderBar() {
   const username = useUsername();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const email = useEmail();
   const { setAuthStatus } = useAuthActions();
   const { mutate, isSuccess } = useMutation({
@@ -41,8 +41,13 @@ export default function HeaderBar() {
 
   const handleLogout = () => {
     setAnchorEl(null);
-    navigate(TO_LOGIN)
+    navigate(TO_LOGIN);
     mutate();
+  };
+
+  const handleToSettings = () => {
+    setAnchorEl(null);
+    navigate('user/userId/account');
   };
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -59,8 +64,7 @@ export default function HeaderBar() {
     if (isSuccess) {
       setAuthStatus({ isAuth: false, username: '', email: '' });
     }
-
-  }, [isSuccess ]);
+  }, [isSuccess]);
   return (
     <AppBar position="fixed">
       <Toolbar sx={styles.toolbar}>
@@ -83,6 +87,7 @@ export default function HeaderBar() {
         </IconButton>
         <AccountMenu
           anchorEl={anchorEl}
+          handleToSettings={handleToSettings}
           closeHandler={handleCloseAccountMenu}
           anchorOrigin={anchorOrigin}
           transformOrigin={transformOrigin}

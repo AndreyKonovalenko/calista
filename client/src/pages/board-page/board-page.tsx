@@ -16,7 +16,7 @@ import {
 } from '../../api/boards-api-queries';
 import { useCreateList } from '../../api/lists-api-queries';
 import { useBoardName, useBoardActions } from '../../services/board-store';
-import { HEADER } from '../../layout/config-layout';
+import { HEADER } from '../../layouts/config-layout';
 import { TO_MAIN } from '../../utils/route-constants';
 import {
   useListActions,

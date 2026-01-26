@@ -4,16 +4,18 @@ import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from './components/protected-route/protected-route';
 import MainPage from './pages/main-page/main-page';
 import BoardPage from './pages/board-page/board-page';
-import MainLayout from './layout/MainLayout';
-import AuthLayout from './layout/AuthLayout';
+import MainLayout from './layouts/MainLayout';
+import AuthLayout from './layouts/AuthLayout';
 import LoginPage from './pages/login-page/login-page';
 import RegisterPage from './pages/register-page/register-page';
 import NotFoundPage from './pages/page-not-found/page-not-found';
 import CardPage from './pages/card-page/card-page';
 import CardPageOnBackground from './pages/card-page/card-page-on-background';
+import UserPage from './pages/user-page/user-page';
 import ModalPortal from './components/modal-portal/modal-portal';
 import ErrorPage from './pages/error-page/error-page';
 import VerificationPage from './pages/verification-page/verification-page';
+import UserLayout from './layouts/UserLayout';
 
 const App = (): JSX.Element => {
   const location = useLocation();
@@ -38,6 +40,12 @@ const App = (): JSX.Element => {
                 }
               />
             }
+          />
+        </Route>
+        <Route element={<UserLayout />}>
+          <Route
+            path="user/userId/account"
+            element={<ProtectedRoute element={<UserPage />} />}
           />
         </Route>
         <Route element={<AuthLayout />}>
