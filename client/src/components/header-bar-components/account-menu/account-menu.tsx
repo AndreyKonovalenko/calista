@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import Settings from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { TO_LOGIN, TO_USER } from '../../../utils/route-constants';
 
 const styles = {
   title: {
@@ -86,13 +87,13 @@ const AccountMenu = (props: {
         </Stack>
         <Divider />
         <MenuList>
-          <MenuItem onClick={handleToSettings}>
+          <MenuItem href={TO_USER} component="a" onClick={handleToSettings}>
             <ListItemIcon>
               <Settings fontSize="small" />
             </ListItemIcon>
             Settings
           </MenuItem>
-          <MenuItem onClick={handleLogout}>
+          <MenuItem href={TO_LOGIN} component="a" onClick={handleLogout}>
             <ListItemIcon>
               <LogoutIcon fontSize="small" />
             </ListItemIcon>

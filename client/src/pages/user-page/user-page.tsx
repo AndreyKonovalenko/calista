@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid } from '@mui/material';
+import { Grid, MenuList, MenuItem, Box } from '@mui/material';
 
 const styles = {
   container: {
@@ -7,10 +7,13 @@ const styles = {
     flexShrink: 0,
   },
   menu: {
+    minWidth: {xs: "100%", md:256},
+    maxWidth: {xs: "100%", md:256},
     flexShrink: 0,
     '--Grid-borderWidth': '1px',
-    borderRight: 'var(--Grid-borderWidth) solid',
-    borderColor: 'divider',
+    borderRight: {md: 'var(--Grid-borderWidth) solid', xs: null},
+    borderBottom: {md: null, xs: 'var(--Grid-borderWidth) solid'},
+    borderColor: {md: 'divider', xs: 'divider'},
     minHeight: { sx: '20vh', md: '100vh' },
   },
   content: {
@@ -23,10 +26,26 @@ const UserPage = () => {
   return (
     <Grid container size={12} sx={styles.container}>
       <Grid size={{ xs: 12, md: 2 }} sx={styles.menu}>
-        sfasdf
+        <Box sx={{p:2}}>
+          <MenuList>
+          <MenuItem onClick={()=>{}}>
+            Account
+          </MenuItem>
+          <MenuItem onClick={()=>{}}>
+            Profile
+          </MenuItem>
+          <MenuItem onClick={()=>{}}>
+           Email
+          </MenuItem>
+          <MenuItem onClick={()=>{}}>
+            Security & Privacy
+          </MenuItem>
+        </MenuList>   
+      </Box>
       </Grid>
       <Grid size={{ xs: 12, md: 10 }} sx={styles.content}>
-        afdf
+        <Box>
+        </Box>
       </Grid>
     </Grid>
   );

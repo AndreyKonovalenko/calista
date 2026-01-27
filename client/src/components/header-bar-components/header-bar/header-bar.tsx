@@ -4,12 +4,12 @@ import Toolbar from '@mui/material/Toolbar';
 import { useMutation } from '@tanstack/react-query';
 import AccountMenu from '../account-menu/account-menu';
 
-import { Link as RouterLink, useNavigate } from 'react-router';
+import { Link as RouterLink } from 'react-router';
 import Link from '@mui/material/Link';
 import Person from '@mui/icons-material/Person';
 import api from '../../../api/api';
 import { useAuthActions, useEmail } from '../../../services/auth-store';
-import { TO_LOGIN, TO_MAIN } from '../../../utils/route-constants';
+import { TO_MAIN } from '../../../utils/route-constants';
 import { IconButton, PopoverOrigin } from '@mui/material';
 import { useUsername } from '../../../services/auth-store';
 
@@ -32,7 +32,6 @@ const transformOrigin: PopoverOrigin = {
 
 export default function HeaderBar() {
   const username = useUsername();
-  const navigate = useNavigate();
   const email = useEmail();
   const { setAuthStatus } = useAuthActions();
   const { mutate, isSuccess } = useMutation({
@@ -41,13 +40,11 @@ export default function HeaderBar() {
 
   const handleLogout = () => {
     setAnchorEl(null);
-    navigate(TO_LOGIN);
     mutate();
   };
 
   const handleToSettings = () => {
     setAnchorEl(null);
-    navigate('user/userId/account');
   };
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
