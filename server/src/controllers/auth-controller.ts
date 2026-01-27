@@ -16,6 +16,7 @@ import { resendVerificationLink } from '../services/auth-service';
 export const getUser = asyncHandler(async (req: Request, res: Response) => {
   const { user } = req as CustomRequest;
   res.status(StatusCodes.OK).json({
+    _id: user._id,
     isAuth: true,
     username: user.username,
     email: user.email,
@@ -40,8 +41,8 @@ export const login = asyncHandler(
     const data: IUser = { ...req.body };
     const result = await loginService(data);
     setGeneratedToken(res, result._id);
-    console.log(result);
     res.status(StatusCodes.OK).json({
+      _id: result._id,
       isAuth: true,
       username: result.username,
       email: result.email,

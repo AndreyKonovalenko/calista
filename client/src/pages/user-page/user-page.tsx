@@ -1,5 +1,8 @@
 import React from 'react';
+
+import { Outlet, useParams } from 'react-router';
 import { Grid, MenuList, MenuItem, Box } from '@mui/material';
+import { TO_USER } from '../../utils/route-constants';
 
 const styles = {
   container: {
@@ -7,13 +10,13 @@ const styles = {
     flexShrink: 0,
   },
   menu: {
-    minWidth: {xs: "100%", md:256},
-    maxWidth: {xs: "100%", md:256},
+    minWidth: { xs: '100%', md: 256 },
+    maxWidth: { xs: '100%', md: 256 },
     flexShrink: 0,
     '--Grid-borderWidth': '1px',
-    borderRight: {md: 'var(--Grid-borderWidth) solid', xs: null},
-    borderBottom: {md: null, xs: 'var(--Grid-borderWidth) solid'},
-    borderColor: {md: 'divider', xs: 'divider'},
+    borderRight: { md: 'var(--Grid-borderWidth) solid', xs: null },
+    borderBottom: { md: null, xs: 'var(--Grid-borderWidth) solid' },
+    borderColor: { md: 'divider', xs: 'divider' },
     minHeight: { sx: '20vh', md: '100vh' },
   },
   content: {
@@ -23,29 +26,29 @@ const styles = {
 };
 
 const UserPage = () => {
+  const { userId } = useParams();
   return (
     <Grid container size={12} sx={styles.container}>
       <Grid size={{ xs: 12, md: 2 }} sx={styles.menu}>
-        <Box sx={{p:2}}>
+        <Box sx={{ p: 2 }}>
           <MenuList>
-          <MenuItem onClick={()=>{}}>
-            Account
-          </MenuItem>
-          <MenuItem onClick={()=>{}}>
-            Profile
-          </MenuItem>
-          <MenuItem onClick={()=>{}}>
-           Email
-          </MenuItem>
-          <MenuItem onClick={()=>{}}>
-            Security & Privacy
-          </MenuItem>
-        </MenuList>   
-      </Box>
+            <MenuItem component="a" href={`${TO_USER}/${userId}/account`}>
+              Account
+            </MenuItem>
+            <MenuItem component="a" href={`${TO_USER}/${userId}/profile`}>
+              Profile
+            </MenuItem>
+            <MenuItem component="a" href={`${TO_USER}/${userId}/email`}>
+              Email
+            </MenuItem>
+            <MenuItem component="a" href={`${TO_USER}/${userId}/security`}>
+              Security & Privacy
+            </MenuItem>
+          </MenuList>
+        </Box>
       </Grid>
       <Grid size={{ xs: 12, md: 10 }} sx={styles.content}>
-        <Box>
-        </Box>
+        <Outlet />
       </Grid>
     </Grid>
   );

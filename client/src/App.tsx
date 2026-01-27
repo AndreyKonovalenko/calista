@@ -44,9 +44,14 @@ const App = (): JSX.Element => {
         </Route>
         <Route element={<UserLayout />}>
           <Route
-            path="user/userId/account"
+            path="user/:userId"
             element={<ProtectedRoute element={<UserPage />} />}
-          />
+          >
+            <Route path="account" element={<div>Account</div>} />
+            <Route path="profile" element={<div>Profile</div>} />
+            <Route path="email" element={<div>Email</div>} />
+            <Route path="security" element={<div>Security</div>} />
+          </Route>
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="login" element={<LoginPage />} />

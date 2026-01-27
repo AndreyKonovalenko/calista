@@ -13,6 +13,7 @@ const styles = {
     p: 2,
     top: 10,
     right: 10,
+    zIndex: 999,
   },
 
   main: {

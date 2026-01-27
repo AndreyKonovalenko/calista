@@ -52,6 +52,7 @@ const AccountMenu = (props: {
   transformOrigin: PopoverOrigin;
   username: string;
   email: string;
+  userId: string;
 }) => {
   const {
     anchorEl,
@@ -62,6 +63,7 @@ const AccountMenu = (props: {
     handleToSettings,
     username,
     email,
+    userId,
   } = props;
   const open = Boolean(anchorEl);
   return (
@@ -87,7 +89,11 @@ const AccountMenu = (props: {
         </Stack>
         <Divider />
         <MenuList>
-          <MenuItem href={TO_USER} component="a" onClick={handleToSettings}>
+          <MenuItem
+            href={`${TO_USER}/${userId}/account`}
+            component="a"
+            onClick={handleToSettings}
+          >
             <ListItemIcon>
               <Settings fontSize="small" />
             </ListItemIcon>

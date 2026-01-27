@@ -8,10 +8,14 @@ import { Link as RouterLink } from 'react-router';
 import Link from '@mui/material/Link';
 import Person from '@mui/icons-material/Person';
 import api from '../../../api/api';
-import { useAuthActions, useEmail } from '../../../services/auth-store';
+import {
+  useAuthActions,
+  useEmail,
+  useUsername,
+  useUserId,
+} from '../../../services/auth-store';
 import { TO_MAIN } from '../../../utils/route-constants';
 import { IconButton, PopoverOrigin } from '@mui/material';
-import { useUsername } from '../../../services/auth-store';
 
 const styles = {
   toolbar: {
@@ -33,6 +37,7 @@ const transformOrigin: PopoverOrigin = {
 export default function HeaderBar() {
   const username = useUsername();
   const email = useEmail();
+  const userId = useUserId();
   const { setAuthStatus } = useAuthActions();
   const { mutate, isSuccess } = useMutation({
     mutationFn: api.auth.logout,
@@ -57,9 +62,10 @@ export default function HeaderBar() {
   const handleCloseAccountMenu = () => {
     setAnchorEl(null);
   };
+
   useEffect(() => {
     if (isSuccess) {
-      setAuthStatus({ isAuth: false, username: '', email: '' });
+      setAuthStatus({ isAuth: false, username: '', email: '', _id: '' });
     }
   }, [isSuccess]);
   return (
@@ -91,6 +97,7 @@ export default function HeaderBar() {
           handleLogout={handleLogout}
           username={username}
           email={email}
+          userId={userId}
         />
         {/* <Typography variant="h6">{username}</Typography> */}
       </Toolbar>
