@@ -1,11 +1,11 @@
 // import React, { useRef } from 'react';
-import React from 'react';
-import { Outlet } from 'react-router';
-import { Box, IconButton } from '@mui/material';
+import React, {useEffect} from 'react';
+import { Outlet, useParams } from 'react-router';
+import { Box, IconButton, Grid, MenuItem, MenuList } from '@mui/material';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 // import { TDraggableElement } from '../components/boards-page-components/board-list/board-list-draggable';
 // import { useDrop } from 'react-dnd';
-import { TO_MAIN } from '../utils/route-constants';
+import { TO_MAIN, TO_USER } from '../utils/route-constants';
 
 const styles = {
   closeButton: {
@@ -21,15 +21,61 @@ const styles = {
     minHeight: '100hv',
     overflowY: 'hidden',
   },
+
+    container: {
+    height: '100vh',
+    flexShrink: 0,
+  },
+  menu: {
+    minWidth: { xs: '100%', md: 256 },
+    maxWidth: { xs: '100%', md: 256 },
+    flexShrink: 0,
+    '--Grid-borderWidth': '1px',
+    borderRight: { md: 'var(--Grid-borderWidth) solid', xs: null },
+    borderBottom: { md: null, xs: 'var(--Grid-borderWidth) solid' },
+    borderColor: { md: 'divider', xs: 'divider' },
+    minHeight: { sx: '20vh', md: '100vh' },
+  },
+  content: {
+    flexShrink: 0,
+    minHeight: { xs: '80vh', md: '100vh' },
+  },
 };
 
 const UserLayout = (): JSX.Element => {
+  useEffect(()=>{
+    console.log('userLayout rerenders')
+  },[])
+  const {userId}=useParams()
   return (
     <Box component="main" sx={styles.main}>
       <IconButton size="medium" href={TO_MAIN} sx={styles.closeButton}>
         <CloseOutlinedIcon />
       </IconButton>
-      <Outlet />
+     <Grid container size={12} sx={styles.container}>
+      <Grid size={{ xs: 12, md: 2 }} sx={styles.menu}>
+        <Box sx={{ p: 2 }}>
+          <MenuList>
+            <MenuItem component="a" href={`${TO_USER}/${userId}/account`}>
+              Account
+            </MenuItem>
+            <MenuItem component="a" href={`${TO_USER}/${userId}/profile`}>
+              Profile
+            </MenuItem>
+            <MenuItem component="a" href={`${TO_USER}/${userId}/email`}>
+              Email
+            </MenuItem>
+            <MenuItem component="a" href={`${TO_USER}/${userId}/security`}>
+              Security & Privacy
+            </MenuItem>
+          </MenuList>
+        </Box>
+      </Grid>
+      <Grid size={{ xs: 12, md: 10 }} sx={styles.content}>
+        <Outlet />
+      </Grid>
+    </Grid>
+
     </Box>
   );
 };

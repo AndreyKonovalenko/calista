@@ -25,7 +25,7 @@ const styles = {
   },
 };
 
-const UserPage = () => {
+const UserAccountPage = () => {
   const { userId } = useParams();
   return (
     <Grid container size={12} sx={styles.container}>
@@ -54,4 +54,4 @@ const UserPage = () => {
   );
 };
 
-export default UserPage;
+export default UserAccountPage;
