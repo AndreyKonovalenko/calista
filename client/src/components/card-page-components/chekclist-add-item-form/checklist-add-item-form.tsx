@@ -60,7 +60,7 @@ const CheckListAddItemFrom = (props: {
               checklistId: _id,
               pos: newPos,
             });
-          }, index * 250);
+          }, index*150);
         });
       }
     },
