@@ -12,7 +12,6 @@ import {
   useAuthActions,
   useEmail,
   useUsername,
-  useUserId,
 } from '../../../services/auth-store';
 import { TO_MAIN } from '../../../utils/route-constants';
 import { IconButton, PopoverOrigin } from '@mui/material';
@@ -37,7 +36,6 @@ const transformOrigin: PopoverOrigin = {
 export default function HeaderBar() {
   const username = useUsername();
   const email = useEmail();
-  const userId = useUserId();
   const { setAuthStatus } = useAuthActions();
   const { mutate, isSuccess } = useMutation({
     mutationFn: api.auth.logout,
@@ -97,7 +95,6 @@ export default function HeaderBar() {
           handleLogout={handleLogout}
           username={username}
           email={email}
-          userId={userId}
         />
         {/* <Typography variant="h6">{username}</Typography> */}
       </Toolbar>

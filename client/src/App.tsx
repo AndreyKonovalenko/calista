@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, useLocation } from 'react-router';
+import { Routes, Route, useLocation, Navigate } from 'react-router';
 import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from './components/protected-route/protected-route';
 import MainPage from './pages/main-page/main-page';
@@ -41,12 +41,14 @@ const App = (): JSX.Element => {
             }
           />
         </Route>
-        <Route path="/user"element={<UserLayout />}>
-            {/* <Route index element = {<Navigate to="user/account"/>}/> */}
-          <Route path="account" element={<div>Account</div>} />
-          <Route path="profile" element={<div>Profile</div>} />
-          <Route path="email" element={<ProtectedRoute element={ <div>Email</div>} />} />
-          <Route path="security" element={<ProtectedRoute element={ <div>Security</div>} />} />
+        <Route element={<ProtectedRoute element={<UserLayout />} />}>
+          <Route path="user">
+            <Route index element={<Navigate to="account" />} />
+            <Route path="account" element={<div>Account</div>} />
+            <Route path="profile" element={<div>Profile</div>} />
+            <Route path="email" element={<div>Email</div>} />
+            <Route path="security" element={<div>Security</div>} />
+          </Route>
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="login" element={<LoginPage />} />

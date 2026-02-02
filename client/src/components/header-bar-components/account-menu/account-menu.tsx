@@ -53,7 +53,6 @@ const AccountMenu = (props: {
   transformOrigin: PopoverOrigin;
   username: string;
   email: string;
-  userId: string;
 }) => {
   const {
     anchorEl,

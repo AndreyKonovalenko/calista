@@ -1,5 +1,5 @@
 // import React, { useRef } from 'react';
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { Outlet } from 'react-router';
 import { Box } from '@mui/material';
 import HeaderBar from '../components/header-bar-components/header-bar/header-bar';
@@ -29,7 +29,9 @@ const MainLayout = (): JSX.Element => {
   // });
   // const ref = useRef<HTMLDivElement>(null);
   // connectDrop(ref);
-  useEffect(()=>{console.log('Main Layout rerenders')},[])
+  useEffect(() => {
+    console.log('Main Layout rerenders');
+  }, []);
   return (
     <Box
       sx={styles.contanier}

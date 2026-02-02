@@ -1,11 +1,11 @@
 // import React, { useRef } from 'react';
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { Outlet } from 'react-router';
 import { Box, IconButton, Grid } from '@mui/material';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 // import { TDraggableElement } from '../components/boards-page-components/board-list/board-list-draggable';
 // import { useDrop } from 'react-dnd';
-import { TO_MAIN} from '../utils/route-constants';
+import { TO_MAIN } from '../utils/route-constants';
 import UserPageSideBar from '../components/user-page-components/user-page-side-bar/user-page-side-bar';
 
 const styles = {
@@ -23,7 +23,7 @@ const styles = {
     overflowY: 'hidden',
   },
 
-    container: {
+  container: {
     height: '100vh',
     flexShrink: 0,
   },
@@ -44,23 +44,22 @@ const styles = {
 };
 
 const UserLayout = (): JSX.Element => {
-  useEffect(()=>{
-    console.log('userLayout rerenders')
-  },[])
+  useEffect(() => {
+    console.log('userLayout rerenders');
+  }, []);
   return (
     <Box component="main" sx={styles.main}>
       <IconButton size="medium" href={TO_MAIN} sx={styles.closeButton}>
         <CloseOutlinedIcon />
       </IconButton>
-     <Grid container size={12} sx={styles.container}>
-      <Grid size={{ xs: 12, md: 2 }} sx={styles.menu}>
-       <UserPageSideBar/>
+      <Grid container size={12} sx={styles.container}>
+        <Grid size={{ xs: 12, md: 2 }} sx={styles.menu}>
+          <UserPageSideBar />
+        </Grid>
+        <Grid size={{ xs: 12, md: 10 }} sx={styles.content}>
+          <Outlet />
+        </Grid>
       </Grid>
-      <Grid size={{ xs: 12, md: 10 }} sx={styles.content}>
-        <Outlet />
-      </Grid>
-    </Grid>
-
     </Box>
   );
 };
