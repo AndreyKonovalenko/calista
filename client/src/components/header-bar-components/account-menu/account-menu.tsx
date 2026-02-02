@@ -12,6 +12,7 @@ import {
   Avatar,
 } from '@mui/material';
 import Settings from '@mui/icons-material/Settings';
+import { Link as RouterLink } from 'react-router';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { TO_LOGIN, TO_USER } from '../../../utils/route-constants';
 
@@ -63,7 +64,6 @@ const AccountMenu = (props: {
     handleToSettings,
     username,
     email,
-    userId,
   } = props;
   const open = Boolean(anchorEl);
   return (
@@ -90,8 +90,8 @@ const AccountMenu = (props: {
         <Divider />
         <MenuList>
           <MenuItem
-            href={`${TO_USER}/${userId}/account`}
-            component="a"
+            to={`${TO_USER}/account`}
+            component={RouterLink}
             onClick={handleToSettings}
           >
             <ListItemIcon>
@@ -99,7 +99,7 @@ const AccountMenu = (props: {
             </ListItemIcon>
             Settings
           </MenuItem>
-          <MenuItem href={TO_LOGIN} component="a" onClick={handleLogout}>
+          <MenuItem to={TO_LOGIN} component={RouterLink} onClick={handleLogout}>
             <ListItemIcon>
               <LogoutIcon fontSize="small" />
             </ListItemIcon>
