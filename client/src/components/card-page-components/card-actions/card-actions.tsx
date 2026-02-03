@@ -13,14 +13,15 @@ const styles = {
   },
   dividerTop: {
     '--Grid-borderWidth': '1px',
-    borderTop: 'var(--Grid-borderWidth) solid',
-    borderColor: 'divider',
+    borderTop: { md: 'var(--Grid-borderWidth) solid', sx: null },
+    borderColor: { md: 'divider', sx: 'divider' },
     pl: 1,
     pr: 1,
     pt: 0.5,
     pb: 0.5,
   },
-  contentPadding: {
+  actionHeader: {
+    display: { xs: 'none', md: 'flex' },
     pl: 1,
     pr: 1,
     pt: 0.5,
@@ -69,22 +70,27 @@ const CardActions = (props: { cardId: string }) => {
   };
 
   return (
-    <Grid size={12}>
-      <Grid container size={12} sx={styles.contentPadding}>
+    <Grid size={{ md: 12 }}>
+      <Grid
+        container
+        size={{ md: 12 }}
+        columns={{ md: 12 }}
+        sx={styles.actionHeader}
+      >
         <Grid
-          size={2}
+          size={{ md: 2 }}
           display="flex"
           flexDirection="column"
           justifyContent="center"
         >
           <MenuIcon fontSize="small" />
         </Grid>
-        <Grid size={10}>
+        <Grid size={{ md: 10, xs: 17 }}>
           <Typography variant="h6">Actions</Typography>
         </Grid>
       </Grid>
       <Grid container size={12} sx={styles.dividerTop}>
-        <Stack flexGrow="1">
+        <Stack flexGrow="1" flexDirection={{ xs: 'row', md: 'column' }}>
           <Button onClick={handleOpenAddChecklistMenu} sx={styles.buttons}>
             ADD CHECKLIST
           </Button>

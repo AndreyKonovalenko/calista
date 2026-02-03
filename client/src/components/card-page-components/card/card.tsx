@@ -29,8 +29,9 @@ const styles = {
     overflowY: 'auto',
     overflowX: 'hidden',
     '--Grid-borderWidth': '1px',
-    borderRight: 'var(--Grid-borderWidth) solid',
-    borderColor: 'divider',
+    borderRight: { md: 'var(--Grid-borderWidth) solid', xs: 'none' },
+    borderTop: { md: 'none', xs: 'var(--Grid-borderWidth) solid' },
+    borderColor: { md: 'divider', xs: 'divider' },
   },
   description: {
     width: '512px',
@@ -74,7 +75,13 @@ const Card = (props: {
         </Grid>
       </Grid>
       <Grid container size={12} columns={18} sx={styles.dividerTop}>
-        <Grid size={14} container columns={18} sx={styles.overflow}>
+        <Grid
+          size={{ xs: 18, md: 14 }}
+          order={{ xs: 2, md: 1 }}
+          container
+          columns={18}
+          sx={styles.overflow}
+        >
           <Grid size={18}>
             <CardDescription cardId={_id} description={description} />
           </Grid>
@@ -82,7 +89,12 @@ const Card = (props: {
             <CheckListSection cardId={_id} />
           </Grid>
         </Grid>
-        <Grid size={4} container columns={12}>
+        <Grid
+          size={{ xs: 18, md: 4 }}
+          order={{ xs: 1, md: 2 }}
+          container
+          columns={12}
+        >
           <CardActions cardId={_id} />
         </Grid>
       </Grid>

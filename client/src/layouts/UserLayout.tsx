@@ -32,10 +32,10 @@ const styles = {
     maxWidth: { xs: '100%', md: 256 },
     flexShrink: 0,
     '--Grid-borderWidth': '1px',
-    borderRight: { md: 'var(--Grid-borderWidth) solid', xs: null },
-    borderBottom: { md: null, xs: 'var(--Grid-borderWidth) solid' },
+    borderRight: { md: 'var(--Grid-borderWidth) solid', xs: 'none' },
+    borderBottom: { md: 'none', xs: 'var(--Grid-borderWidth) solid' },
     borderColor: { md: 'divider', xs: 'divider' },
-    minHeight: { sx: '20vh', md: '100vh' },
+    minHeight: { xs: '20vh', md: '100vh' },
   },
   content: {
     flexShrink: 0,
