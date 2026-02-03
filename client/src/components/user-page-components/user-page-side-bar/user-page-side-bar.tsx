@@ -11,13 +11,6 @@ const UserPageSideBar = function UserPageSideBar() {
       <MenuList>
         <MenuItem
           component={RoutLink}
-          selected={location.pathname === `${TO_USER}/account` ? true : false}
-          to={`${TO_USER}/account`}
-        >
-          Account
-        </MenuItem>
-        <MenuItem
-          component={RoutLink}
           selected={location.pathname === `${TO_USER}/profile` ? true : false}
           to={`${TO_USER}/profile`}
         >
@@ -36,6 +29,13 @@ const UserPageSideBar = function UserPageSideBar() {
           to={`${TO_USER}/security`}
         >
           Security & Privacy
+        </MenuItem>
+        <MenuItem
+          component={RoutLink}
+          selected={location.pathname === `${TO_USER}/account` ? true : false}
+          to={`${TO_USER}/account`}
+        >
+          Account
         </MenuItem>
       </MenuList>
     </Box>

@@ -89,7 +89,7 @@ const AccountMenu = (props: {
         <Divider />
         <MenuList>
           <MenuItem
-            to={`${TO_USER}/account`}
+            to={`${TO_USER}/profile`}
             component={RouterLink}
             onClick={handleToSettings}
           >

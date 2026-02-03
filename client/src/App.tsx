@@ -15,6 +15,7 @@ import ModalPortal from './components/modal-portal/modal-portal';
 import ErrorPage from './pages/error-page/error-page';
 import VerificationPage from './pages/verification-page/verification-page';
 import UserLayout from './layouts/UserLayout';
+import UserProfilePage from './pages/user-pages/user-porfile-paage';
 
 const App = (): JSX.Element => {
   const location = useLocation();
@@ -43,11 +44,11 @@ const App = (): JSX.Element => {
         </Route>
         <Route element={<ProtectedRoute element={<UserLayout />} />}>
           <Route path="user">
-            <Route index element={<Navigate to="account" />} />
-            <Route path="account" element={<div>Account</div>} />
-            <Route path="profile" element={<div>Profile</div>} />
+            <Route index element={<Navigate to="profile" />} />
+            <Route path="profile" element={<UserProfilePage />} />
             <Route path="email" element={<div>Email</div>} />
             <Route path="security" element={<div>Security</div>} />
+            <Route path="account" element={<div>Account</div>} />
           </Route>
         </Route>
         <Route element={<AuthLayout />}>

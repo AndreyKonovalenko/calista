@@ -30,7 +30,6 @@ const styles = {
   menu: {
     minWidth: { xs: '100%', md: 256 },
     maxWidth: { xs: '100%', md: 256 },
-    flexShrink: 0,
     '--Grid-borderWidth': '1px',
     borderRight: { md: 'var(--Grid-borderWidth) solid', xs: 'none' },
     borderBottom: { md: 'none', xs: 'var(--Grid-borderWidth) solid' },
@@ -38,7 +37,7 @@ const styles = {
     minHeight: { xs: '20vh', md: '100vh' },
   },
   content: {
-    flexShrink: 0,
+    p: 2,
     minHeight: { xs: '80vh', md: '100vh' },
   },
 };
@@ -56,7 +55,7 @@ const UserLayout = (): JSX.Element => {
         <Grid size={{ xs: 12, md: 2 }} sx={styles.menu}>
           <UserPageSideBar />
         </Grid>
-        <Grid size={{ xs: 12, md: 10 }} sx={styles.content}>
+        <Grid size={{ xs: 12, md: 'grow' }} sx={styles.content}>
           <Outlet />
         </Grid>
       </Grid>
