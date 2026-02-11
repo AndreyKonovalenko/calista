@@ -16,6 +16,7 @@ import ErrorPage from './pages/error-page/error-page';
 import VerificationPage from './pages/verification-page/verification-page';
 import UserLayout from './layouts/UserLayout';
 import UserProfilePage from './pages/user-pages/user-porfile-paage';
+import UserEmailPage from './pages/user-pages/user-email-page';
 
 const App = (): JSX.Element => {
   const location = useLocation();
@@ -46,7 +47,7 @@ const App = (): JSX.Element => {
           <Route path="user">
             <Route index element={<Navigate to="profile" />} />
             <Route path="profile" element={<UserProfilePage />} />
-            <Route path="email" element={<div>Email</div>} />
+            <Route path="email" element={<UserEmailPage />} />
             <Route path="security" element={<div>Security</div>} />
             <Route path="account" element={<div>Account</div>} />
           </Route>
