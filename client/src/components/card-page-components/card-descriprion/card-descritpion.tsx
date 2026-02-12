@@ -24,6 +24,9 @@ const styles = {
     pt: 0.5,
     pb: 0.5,
   },
+  textNewLineOption:{
+    whiteSpace: 'pre-line'
+  }
 };
 const descriptionPlaceholder = 'Add a more detailed descripion...';
 
@@ -136,7 +139,7 @@ const CardDescription = (props: {
           <Grid size={1} />
           <Grid size={17}>
             {description ? (
-              <Typography>{description}</Typography>
+              <Typography sx={styles.textNewLineOption}>{description}</Typography>
             ) : (
               <Button
                 variant="outlined"
