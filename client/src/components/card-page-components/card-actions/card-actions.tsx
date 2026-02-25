@@ -5,6 +5,7 @@ import { useDeleteCard } from '../../../api/cards-api-queries';
 import { useNavigate } from 'react-router';
 import DeleteItemPopover from '../../general-components/delete-item-popover/delete-item-popover';
 import AddChecklistPopover from './add-checklist-popoever/add-checklist-popover';
+import { usePopulateCard } from '../../../services/card-store';
 
 const styles = {
   buttons: {
@@ -40,6 +41,7 @@ const transformOrigin: PopoverOrigin = {
 const CardActions = (props: { cardId: string }) => {
   const { cardId } = props;
   const navigate = useNavigate();
+  const populatedCard = usePopulateCard(cardId)
   const deleteCardQuery = useDeleteCard();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [anchorSecondEl, setAnchorSecondEl] = useState<null | HTMLElement>(
@@ -69,6 +71,15 @@ const CardActions = (props: { cardId: string }) => {
     navigate(-1);
   };
 
+  const handleCopyToClipboard = async () => {
+    try {
+      const  jsonString = JSON.stringify(populatedCard, null, 2);
+      await navigator.clipboard.writeText(jsonString)
+    } catch (err) {
+      console.log("Faild to copy to JSON: ", err)
+    }
+  }
+
   return (
     <Grid size={{ md: 12 }}>
       <Grid
@@ -96,6 +107,9 @@ const CardActions = (props: { cardId: string }) => {
           </Button>
           <Button onClick={handleOpenDeleteMenu} sx={styles.buttons}>
             DELETE CARD
+          </Button>
+          <Button onClick={handleCopyToClipboard} sx={styles.buttons}>
+            COPY CARD AS JSON
           </Button>
           <DeleteItemPopover
             anchorEl={anchorEl}

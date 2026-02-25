@@ -2,7 +2,10 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { createSelector } from 'reselect';
 import { ICard } from '../utils/types';
-
+import { useChecklists } from './checklist-store';
+import { useChecklistItems } from './checklist-item-store';
+import { useSortedChecklistsItemsKeys } from './checklist-item-store';
+import { useSortedChecklistsKeys } from './checklist-store';
 interface ICardActions {
   setCards: (data: { [kay: string]: ICard }) => void;
   moveCard: (draggedId: string, listId: string, pos: number) => void;
@@ -97,3 +100,24 @@ const getMemoizedCards = createSelector(
     return result;
   },
 );
+
+export const usePopulateCard = (id: string ) => {
+  const card =  useCard(id)
+  const checklists = useChecklists()
+  const checklistItems = useChecklistItems()
+  const sortedChecklistsByCardId = useSortedChecklistsKeys(id)
+  const  checklistsByCardId =  sortedChecklistsByCardId.map(checkistId => {
+    const sortedChecklistItems = useSortedChecklistsItemsKeys(checkistId)
+    const checlistItemsByChecklistId = sortedChecklistItems.map(checklistItemId => {
+      return { "name": checklistItems[checklistItemId].name} 
+    })
+    return {"name": checklists[checkistId].name,
+      "checlistItems": checlistItemsByChecklistId
+    }
+  })
+  return {
+    'name': card?.name,
+    "description": card?.description,
+    "checklists": checklistsByCardId
+  }
+}
