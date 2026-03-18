@@ -6,14 +6,14 @@ const UserEmailPage = () => {
   const email = useEmail();
   // const { mutate, data } = useLogin();
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      const data = new FormData(event.currentTarget);
-      console.log(data)
-      // mutate({
-      //   email: data.get('email') as string,
-      // });
-    };
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    console.log(data);
+    // mutate({
+    //   email: data.get('email') as string,
+    // });
+  };
   return (
     <Container>
       <Grid container spacing={4}>
@@ -22,9 +22,18 @@ const UserEmailPage = () => {
         </Grid>
         <Grid size={12}>
           <Typography variant="h6">Current email</Typography>
-          <Typography variant="body1">Your current email adress is {email}</Typography>
+          <Typography variant="body1">
+            Your current email adress is {email}
+          </Typography>
         </Grid>
-        <Grid component="form" onSubmit={handleSubmit} noValidate  size={12} container spacing={1}>
+        <Grid
+          component="form"
+          onSubmit={handleSubmit}
+          noValidate
+          size={12}
+          container
+          spacing={1}
+        >
           <Grid size={6}>
             <TextField
               margin="normal"
@@ -38,13 +47,10 @@ const UserEmailPage = () => {
             />
           </Grid>
           <Grid size={12}>
-             <Button
-              type="submit"
-              variant="contained"
-            >
+            <Button type="submit" variant="contained">
               Save change
             </Button>
-          </Grid>              
+          </Grid>
         </Grid>
       </Grid>
     </Container>

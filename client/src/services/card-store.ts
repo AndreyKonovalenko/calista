@@ -101,23 +101,29 @@ const getMemoizedCards = createSelector(
   },
 );
 
-export const usePopulateCard = (id: string ) => {
-  const card =  useCard(id)
-  const checklists = useChecklists()
-  const checklistItems = useChecklistItems()
-  const sortedChecklistsByCardId = useSortedChecklistsKeys(id)
-  const  checklistsByCardId =  sortedChecklistsByCardId.map(checkistId => {
-    const sortedChecklistItems = useSortedChecklistsItemsKeys(checkistId)
-    const checlistItemsByChecklistId = sortedChecklistItems.map(checklistItemId => {
-      return { "name": checklistItems[checklistItemId].name} 
-    })
-    return {"name": checklists[checkistId].name,
-      "checlistItems": checlistItemsByChecklistId
-    }
-  })
-  return {
-    'name': card?.name,
-    "description": card?.description,
-    "checklists": checklistsByCardId
+export const usePopulateCard = (id: string | null) => {
+  if (!id){
+    return;
   }
-}
+  const card = useCard(id);
+  const checklists = useChecklists();
+  const checklistItems = useChecklistItems();
+  const sortedChecklistsByCardId = useSortedChecklistsKeys(id);
+  const checklistsByCardId = sortedChecklistsByCardId.map(checkistId => {
+    const sortedChecklistItems = useSortedChecklistsItemsKeys(checkistId);
+    const checlistItemsByChecklistId = sortedChecklistItems.map(
+      checklistItemId => {
+        return { name: checklistItems[checklistItemId].name };
+      },
+    );
+    return {
+      name: checklists[checkistId].name,
+      checlistItems: checlistItemsByChecklistId,
+    };
+  });
+  return {
+    name: card?.name,
+    description: card?.description,
+    checklists: checklistsByCardId,
+  };
+};
