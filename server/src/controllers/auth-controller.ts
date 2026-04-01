@@ -11,6 +11,7 @@ import { CustomRequest } from '../middleware/protected';
 import config from '../config';
 import { asyncHandler } from '../utils/async-handler';
 import { resendVerificationLink } from '../services/auth-service';
+import { updateUserById } from '../services/auth-service';
 
 //GET: auth/ @private
 export const getUser = asyncHandler(async (req: Request, res: Response) => {
@@ -81,17 +82,11 @@ export const resendLink = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-// //GET: auth/users @publict for tests
-// // get all users
-// export const getUsers = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction,
-// ): Promise<void> => {
-//   try {
-//     const users = await UserModal.find({});
-//     res.status(StatusCodes.OK).json(users);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+
+// PUT: auth/:id @private
+export const updateUser = asyncHandler(async(req: Request, res: Response)=> {
+  const data = {...req.body}
+  await updateUserById(req.params.id, data);
+   res.status(StatusCodes.OK).send('user data successfully updated');
+})
+
