@@ -16,7 +16,7 @@ import {
 } from '../services/boards-service';
 import { asyncHandler } from '../utils/async-handler';
 
-// GET borads/
+// GET borads/ @private
 export const getBoards = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
     const { user } = req as CustomRequest;
@@ -25,7 +25,7 @@ export const getBoards = asyncHandler(
   },
 );
 
-// POST boards/
+// POST boards/ @pirvate
 export const addBoard = async (
   req: Request,
   res: Response,
@@ -44,6 +44,7 @@ export const addBoard = async (
   }
 };
 
+// GET boards/:id @private
 export const getBoard = async (
   req: Request,
   res: Response,
@@ -84,7 +85,7 @@ export const getBoard = async (
   }
 };
 
-// PUT boards/:id
+// PUT boards/:id @private
 export const upatedBoard = async (
   req: Request,
   res: Response,
@@ -99,7 +100,7 @@ export const upatedBoard = async (
   }
 };
 
-// DELETE: boards/:id
+// DELETE: boards/:id @privete
 export const deleteBoard = async (
   req: Request,
   res: Response,

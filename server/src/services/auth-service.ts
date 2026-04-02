@@ -158,18 +158,24 @@ export async function updateUserById(
     [key: string]: string | Types.ObjectId | Array<Types.ObjectId> | number;
   },
 ) {
-  if (Object.hasOwn(data,'email')) {
-    const vToken = generateVerificationTorken(user._id, user.email);
-    const verificationLink = `${config.app.domen}/verify-email?token=${vToken}`;
-    sendEmail({
-      email: data.email,
-      subject: 'Verify Your Emali',
-      message: `<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`,
-    });
-  }
-  await UserModel.findByIdAndUpdate(new Types.ObjectId(id), {...data, isVerified: false}, {
-    new: true,
-  });
+  const user = await UserModel.findById(id)
+  console.log('data from request', user, data)
+  //   new: true,
+  // })
+  // if (Object.hasOwn(data,'email')) {
+  //   const vToken = generateVerificationTorken(user._id, user.email);
+  //   const verificationLink = `${config.app.domen}/verify-email?token=${vToken}`;
+  //   sendEmail({
+  //     email: data.email,
+  //     subject: 'Verify Your Emali',
+  //     message: `<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`,
+  //   });
+  // }
+  // await UserModel.findByIdAndUpdate(new Types.ObjectId(id), {...data, isVerified: false}, {
+  //   new: true,
+  // });
 }
+  
+
 
 //  maxAge should be in env variables in milliseconds

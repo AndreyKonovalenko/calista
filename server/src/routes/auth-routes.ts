@@ -6,6 +6,7 @@ import {
   getUser,
   verifyEmail,
   resendLink,
+  updateUserEmail
 } from '../controllers/auth-controller';
 import { protect } from '../middleware/protected';
 import { userValidator } from '../middleware/validators/user-validator';
@@ -18,3 +19,4 @@ authRouter.get('/verify-email', verifyEmail);
 authRouter.post('/verify-email', resendLink);
 authRouter.post('/login', login);
 authRouter.post('/logout', logout);
+authRouter.patch('/me/upadte-email', protect, updateUserEmail)
