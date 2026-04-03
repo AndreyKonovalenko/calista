@@ -1,18 +1,19 @@
 import React from 'react';
 import { Container, Typography, Grid, TextField, Button } from '@mui/material';
 import { useEmail } from '../../services/auth-store';
+import { useUpdateEmail } from '../../api/auth-api-queries';
 
 const UserEmailPage = () => {
   const email = useEmail();
-  // const { mutate, data } = useLogin();
+  const { mutate } = useUpdateEmail();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log(data);
-    // mutate({
-    //   email: data.get('email') as string,
-    // });
+    mutate({
+      email: data.get('email') as string,
+    });
   };
   return (
     <Container>

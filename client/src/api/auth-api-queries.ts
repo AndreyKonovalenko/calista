@@ -35,3 +35,9 @@ export const useResendLink = () => {
     mutationFn: api.auth.resendLink,
   });
 };
+
+export const useUpdateEmail = () => {
+  return useMutation({
+    mutationFn: api.auth.updateEmail
+  })
+}

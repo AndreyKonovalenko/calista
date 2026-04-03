@@ -82,9 +82,8 @@ export const resendLink = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-
-// PATCH: auth/me/update-email @private
-export const updateUserEmail = asyncHandler(async(req: Request, res: Response)=> {
+// PATCH: auth/update-email @private
+export const updateEmail = asyncHandler(async(req: Request, res: Response)=> {
   const { user } = req as CustomRequest;
   const data = {...req.body}
   await updateUserById(user._id.toString(), data);
