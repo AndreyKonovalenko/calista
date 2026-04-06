@@ -5,6 +5,7 @@ export interface IUser {
   username: string;
   password: string;
   email: string;
+  pendingEmail: string;
   isVerified: boolean;
 }
 
@@ -12,7 +13,8 @@ const userSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   email: { type: String, unique: true },
-  isVerified: { type: Boolean, required: true },
+  pendingEmail: { type: String }, // Temporary storage
+  isVerified: { type: Boolean, required: true, default: false },
 });
 
 const saltRounds = 10;
