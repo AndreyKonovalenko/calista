@@ -24,7 +24,7 @@ const SSE = validEnv(process.env.SSE);
 const CHECKLISTS = validEnv(process.env.CHECKLISTS);
 const CHECKLIST_ITEMS = validEnv(process.env.CHECKLIST_ITEMS);
 const VERIFY_EMAIL = validEnv(process.env.VERIFY_EMAIL);
-const UPDATE_EMAIL = validEnv(process.env.UPDATE_EMAIL)
+const CHANGE_EMAIL = validEnv(process.env.CHANGE_EMAIL)
 axios.defaults.baseURL = BASE_URL;
 
 export type TData = {
@@ -83,7 +83,7 @@ const auth = {
     ),
   resendLink: (data: { email: string }) =>
     request.post(`${AUTH}${VERIFY_EMAIL}`, data),
-  updateEmail: (data: {email: string}) => request.patch<void>(`${AUTH}${UPDATE_EMAIL}`, data)
+  updateEmail: (data: {pendingEmail: string}) => request.patch<void>(`${AUTH}${CHANGE_EMAIL}`, data)
 };
 
 const boards = {

@@ -12,7 +12,7 @@ const UserEmailPage = () => {
     const data = new FormData(event.currentTarget);
     console.log(data);
     mutate({
-      email: data.get('email') as string,
+      pendingEmail: data.get('email') as string,
     });
   };
   return (

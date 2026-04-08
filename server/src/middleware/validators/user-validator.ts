@@ -53,3 +53,7 @@ export const userValidator: Joi.ObjectSchema<IUser> = Joi.object({
     .messages(customErrorMessages.password),
   email: Joi.string().email().required(),
 });
+
+export const pendingEmailValidator: Joi.ObjectSchema<IUser> = Joi.object({
+  pendingEmail: Joi.string().email()
+})

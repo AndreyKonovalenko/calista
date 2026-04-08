@@ -21,6 +21,7 @@ export const getUser = asyncHandler(async (req: Request, res: Response) => {
     isAuth: true,
     username: user.username,
     email: user.email,
+    pendignEmail: user.pendingEmail,
   });
 });
 
@@ -82,11 +83,11 @@ export const resendLink = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-// PATCH: auth/update-email @private
-export const updateEmail = asyncHandler(async(req: Request, res: Response)=> {
+// PATCH: auth/change-email @private
+export const changeEmail = asyncHandler(async(req: Request, res: Response)=> {
   const { user } = req as CustomRequest;
-  const data = {...req.body}
-  await updateUserById(user._id.toString(), data);
+  const pendingEmail = {...req.body}
+  await updateUserById(user._id.toString(), pendingEmail);
    res.status(StatusCodes.OK).send('user data successfully updated');
 })
 
