@@ -38,6 +38,6 @@ export const useResendLink = () => {
 
 export const useUpdateEmail = () => {
   return useMutation({
-    mutationFn: api.auth.updateEmail
-  })
-}
+    mutationFn: api.auth.updateEmail,
+  });
+};

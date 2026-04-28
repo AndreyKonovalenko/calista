@@ -5,13 +5,13 @@ import {
   setGeneratedToken,
   loginService,
   verifyToken,
+  updateEmailService,
 } from '../services/auth-service';
 import { IUser } from '../models/UserModel';
 import { CustomRequest } from '../middleware/protected';
 import config from '../config';
 import { asyncHandler } from '../utils/async-handler';
 import { resendVerificationLink } from '../services/auth-service';
-import { updateUserById } from '../services/auth-service';
 
 //GET: auth/ @private
 export const getUser = asyncHandler(async (req: Request, res: Response) => {
@@ -84,13 +84,12 @@ export const resendLink = asyncHandler(async (req: Request, res: Response) => {
 });
 
 // PATCH: auth/change-email @private
-export const changeEmail = asyncHandler(async(req: Request, res: Response)=> {
+export const changeEmail = asyncHandler(async (req: Request, res: Response) => {
   const { user } = req as CustomRequest;
-  const pendingEmail = {...req.body}
-  await updateUserById(user._id.toString(), pendingEmail);
-   res.status(StatusCodes.OK).send('user data successfully updated');
-})
-
+  const pendingEmail = { ...req.body };
+  await updateEmailService(user._id.toString(), pendingEmail);
+  res.status(StatusCodes.OK).send('user data successfully updated');
+});
 
 // POST: auth/forget-password
-// POST: auth/reset-possword 
+// POST: auth/reset-possword

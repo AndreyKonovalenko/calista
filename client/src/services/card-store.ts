@@ -102,7 +102,7 @@ const getMemoizedCards = createSelector(
 );
 
 export const usePopulateCard = (id: string | null) => {
-  if (!id){
+  if (!id) {
     return;
   }
   const card = useCard(id);

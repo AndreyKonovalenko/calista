@@ -46,6 +46,50 @@ export async function registerServcie(
   return { username: newUser.username, email: newUser.email };
 }
 
+export async function updateEmailService(
+  _id: string,
+  pendingEmail: {
+    [key: string]: string | Types.ObjectId | Array<Types.ObjectId> | number;
+  },
+): Promise<void> {
+  const newPendingEmail = await UserModel.findByIdAndUpdate(
+    new Types.ObjectId(_id),
+    pendingEmail,
+    {
+      new: true,
+    },
+  );
+  if (!newPendingEmail) {
+    throw new CustomError(
+      `${ReasonPhrases.INTERNAL_SERVER_ERROR}: User ${pendingEmail} was not created`,
+      StatusCodes.INTERNAL_SERVER_ERROR,
+    );
+  }
+
+  // const userExists = await UserModel.findOne({ username }).exec();
+  // if (userExists) {
+  //   throw new CustomError(
+  //     `${ReasonPhrases.CONFLICT}: username: ${username} already exists`,
+  //     StatusCodes.CONFLICT,
+  //   );
+  // }
+
+  // const newUser = await UserModel.create({ ...data, isVerified: false });
+  // if (!newUser) {
+  //   throw new CustomError(
+  //     `${ReasonPhrases.INTERNAL_SERVER_ERROR}: User ${username} was not created`,
+  //     StatusCodes.INTERNAL_SERVER_ERROR,
+  //   );
+  // }
+  // const vToken = generateVerificationTorken(newUser._id, newUser.email);
+  // const verificationLink = `${config.app.domen}/verify-email?token=${vToken}`;
+  // sendEmail({
+  //   email: email,
+  //   subject: 'Verify Your Emali',
+  //   message: `<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`,
+  // });
+}
+
 export async function resendVerificationLink(data: {
   email: string;
 }): Promise<void> {
@@ -162,7 +206,5 @@ export async function updateUserById(
     new: true,
   });
 }
-  
-
 
 //  maxAge should be in env variables in milliseconds

@@ -6,10 +6,13 @@ import {
   getUser,
   verifyEmail,
   resendLink,
-  changeEmail
+  changeEmail,
 } from '../controllers/auth-controller';
 import { protect } from '../middleware/protected';
-import { userValidator, pendingEmailValidator} from '../middleware/validators/user-validator';
+import {
+  userValidator,
+  pendingEmailValidator,
+} from '../middleware/validators/user-validator';
 import { validationHandler } from '../middleware/validation-handler';
 
 export const authRouter = express.Router();
@@ -19,4 +22,9 @@ authRouter.get('/verify-email', verifyEmail);
 authRouter.post('/verify-email', resendLink);
 authRouter.post('/login', login);
 authRouter.post('/logout', logout);
-authRouter.patch('/change-email', validationHandler(pendingEmailValidator), protect, changeEmail)
+authRouter.patch(
+  '/change-email',
+  validationHandler(pendingEmailValidator),
+  protect,
+  changeEmail,
+);

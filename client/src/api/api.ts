@@ -24,7 +24,7 @@ const SSE = validEnv(process.env.SSE);
 const CHECKLISTS = validEnv(process.env.CHECKLISTS);
 const CHECKLIST_ITEMS = validEnv(process.env.CHECKLIST_ITEMS);
 const VERIFY_EMAIL = validEnv(process.env.VERIFY_EMAIL);
-const CHANGE_EMAIL = validEnv(process.env.CHANGE_EMAIL)
+const CHANGE_EMAIL = validEnv(process.env.CHANGE_EMAIL);
 axios.defaults.baseURL = BASE_URL;
 
 export type TData = {
@@ -69,7 +69,8 @@ const request = {
   delete: <T>(url: string) => axios.delete<T>(url).then(responseBody),
   put: <T>(url: string, body?: object) =>
     axios.put<T>(url, body).then(responseBody),
-  patch: <T>(url:string, body?: object)=> axios.patch<T>(url, body).then(responseBody)
+  patch: <T>(url: string, body?: object) =>
+    axios.patch<T>(url, body).then(responseBody),
 };
 
 const auth = {
@@ -83,7 +84,8 @@ const auth = {
     ),
   resendLink: (data: { email: string }) =>
     request.post(`${AUTH}${VERIFY_EMAIL}`, data),
-  updateEmail: (data: {pendingEmail: string}) => request.patch<void>(`${AUTH}${CHANGE_EMAIL}`, data)
+  updateEmail: (data: { pendingEmail: string }) =>
+    request.patch<void>(`${AUTH}${CHANGE_EMAIL}`, data),
 };
 
 const boards = {

@@ -70,7 +70,6 @@ const CardActions = (props: { cardId: string }) => {
     navigate(-1);
   };
 
-
   // const handleCopyToClipboard = async () => {
   //   try {
   //     const jsonString = JSON.stringify(usePopulateCard(cardId), null, 2);
@@ -108,7 +107,7 @@ const CardActions = (props: { cardId: string }) => {
           <Button onClick={handleOpenDeleteMenu} sx={styles.buttons}>
             DELETE CARD
           </Button>
-          <Button onClick={()=>{}} sx={styles.buttons}>
+          <Button onClick={() => {}} sx={styles.buttons}>
             COPY CARD AS JSON
           </Button>
           <DeleteItemPopover

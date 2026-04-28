@@ -55,5 +55,5 @@ export const userValidator: Joi.ObjectSchema<IUser> = Joi.object({
 });
 
 export const pendingEmailValidator: Joi.ObjectSchema<IUser> = Joi.object({
-  pendingEmail: Joi.string().email()
-})
+  pendingEmail: Joi.string().email(),
+});
