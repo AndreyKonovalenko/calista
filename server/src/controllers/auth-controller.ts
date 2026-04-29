@@ -6,6 +6,7 @@ import {
   loginService,
   verifyToken,
   updateEmailService,
+  verifyTokenForPendingEmail,
 } from '../services/auth-service';
 import { IUser } from '../models/UserModel';
 import { CustomRequest } from '../middleware/protected';
@@ -73,6 +74,17 @@ export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
     emailVerified: true,
   });
 });
+
+//GET auth/verify-pending_email @public
+export const verifyPendingEmail = asyncHandler(async (req: Request, res: Response) => {
+  const token = req.query.token as string;
+  await verifyTokenForPendingEmail(token);
+  res.status(StatusCodes.OK).json({
+    message: 'Email changed successfully',
+    emailVerified: true,
+  });
+});
+
 
 // POST: auth/verify-email @public
 export const resendLink = asyncHandler(async (req: Request, res: Response) => {

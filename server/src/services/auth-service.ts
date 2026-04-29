@@ -39,7 +39,7 @@ export async function registerServcie(
   const verificationLink = `${config.app.domen}/verify-email?token=${vToken}`;
   sendEmail({
     email: email,
-    subject: 'Verify Your Emali',
+    subject: 'Verify Your Email',
     message: `<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`,
   });
 
@@ -59,35 +59,20 @@ export async function updateEmailService(
       new: true,
     },
   );
+  console.log(newPendingEmail)
   if (!newPendingEmail) {
     throw new CustomError(
       `${ReasonPhrases.INTERNAL_SERVER_ERROR}: User ${pendingEmail} was not created`,
       StatusCodes.INTERNAL_SERVER_ERROR,
     );
   }
-
-  // const userExists = await UserModel.findOne({ username }).exec();
-  // if (userExists) {
-  //   throw new CustomError(
-  //     `${ReasonPhrases.CONFLICT}: username: ${username} already exists`,
-  //     StatusCodes.CONFLICT,
-  //   );
-  // }
-
-  // const newUser = await UserModel.create({ ...data, isVerified: false });
-  // if (!newUser) {
-  //   throw new CustomError(
-  //     `${ReasonPhrases.INTERNAL_SERVER_ERROR}: User ${username} was not created`,
-  //     StatusCodes.INTERNAL_SERVER_ERROR,
-  //   );
-  // }
-  // const vToken = generateVerificationTorken(newUser._id, newUser.email);
-  // const verificationLink = `${config.app.domen}/verify-email?token=${vToken}`;
-  // sendEmail({
-  //   email: email,
-  //   subject: 'Verify Your Emali',
-  //   message: `<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`,
-  // });
+  const vToken = generateVerificationTorken(new Types.ObjectId(_id), newPendingEmail.pendingEmail);
+  const verificationLink = `${config.app.domen}/verify-pending_email?token=${vToken}`;
+  sendEmail({
+    email: newPendingEmail.pendingEmail,
+    subject: 'Verify your new email',
+    message: `<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`,
+  });
 }
 
 export async function resendVerificationLink(data: {
@@ -195,6 +180,33 @@ export async function verifyToken(token: string) {
     },
   );
 }
+
+export async function verifyTokenForPendingEmail(token: string) {
+  console.log(token)
+  if (!token)
+    throw new CustomError('Token is requierd', StatusCodes.BAD_REQUEST);
+  return jwt.verify(
+    token,
+    config.app.jwtSecretVerification,
+    async (err, decoded) => {
+      if (err) {
+        throw new CustomError(
+          `Token verification failed ${err.message}`,
+          StatusCodes.UNAUTHORIZED,
+          { emailIsVerified: false },
+        );
+      } else {
+        const paylod = decoded as JwtPayload;
+        const user = await UserModel.findById(paylod.id);
+        if (!user)
+          throw new CustomError('User not found', StatusCodes.NOT_FOUND);
+        user.email = user.pendingEmail;
+        await user.save();
+      }
+    },
+  );
+}
+
 
 export async function updateUserById(
   id: string,
