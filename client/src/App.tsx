@@ -13,7 +13,8 @@ import CardPage from './pages/card-page/card-page';
 import CardPageOnBackground from './pages/card-page/card-page-on-background';
 import ModalPortal from './components/modal-portal/modal-portal';
 import ErrorPage from './pages/error-page/error-page';
-import VerificationPage from './pages/verification-page/verification-page';
+import VerificationPage from './pages/verification-pages/verification-page';
+import PendingEmailVerificationPage from './pages/verification-pages/pending-email-verification-page';
 import UserLayout from './layouts/UserLayout';
 import UserProfilePage from './pages/user-pages/user-porfile-paage';
 import UserEmailPage from './pages/user-pages/user-email-page';
@@ -55,6 +56,7 @@ const App = (): JSX.Element => {
         <Route element={<AuthLayout />}>
           <Route path="login" element={<LoginPage />} />
           <Route path="verify-email" element={<VerificationPage />} />
+          <Route path="verify-pending_email" element={<PendingEmailVerificationPage/>} /> 
           <Route path="register" element={<RegisterPage />} />
           <Route path="error-page" element={<ErrorPage />} />
           <Route path="not-found" element={<NotFoundPage />} />
