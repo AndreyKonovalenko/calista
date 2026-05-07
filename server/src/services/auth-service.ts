@@ -59,7 +59,6 @@ export async function updateEmailService(
       new: true,
     },
   );
-  console.log(newPendingEmail)
   if (!newPendingEmail) {
     throw new CustomError(
       `${ReasonPhrases.INTERNAL_SERVER_ERROR}: User ${pendingEmail} was not created`,
@@ -206,7 +205,6 @@ export async function verifyTokenForPendingEmail(token: string) {
     },
   );
 }
-
 
 export async function updateUserById(
   id: string,

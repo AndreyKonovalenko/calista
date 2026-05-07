@@ -36,6 +36,9 @@ const AxiosInterceptorWrapper = () => {
           toast.success(data.message, { autoClose: false });
           navigate(TO_LOGIN);
         }
+        if (data.pendingEmail) { 
+          toast.success(data.message, { autoClose: false });
+        }
         return res;
       },
       (error: AxiosError<TCustomErrorResponse>) => {

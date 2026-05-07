@@ -91,7 +91,7 @@ export const resendLink = asyncHandler(async (req: Request, res: Response) => {
   const data: { email: string } = { ...req.body };
   await resendVerificationLink(data);
   res.status(StatusCodes.OK).json({
-    messege: 'Email confirmation link has been sent',
+    message: 'Email confirmation link has been sent',
   });
 });
 
@@ -100,7 +100,10 @@ export const changeEmail = asyncHandler(async (req: Request, res: Response) => {
   const { user } = req as CustomRequest;
   const pendingEmail = { ...req.body };
   await updateEmailService(user._id.toString(), pendingEmail);
-  res.status(StatusCodes.OK).send('user data successfully updated');
+  res.status(StatusCodes.OK).json({
+    message:'Check your new email inbox (including spam/junk folders) for a message with a verification link.', 
+    pendingEmail:true
+  });
 });
 
 // POST: auth/forget-password
