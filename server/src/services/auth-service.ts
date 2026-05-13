@@ -65,7 +65,10 @@ export async function updateEmailService(
       StatusCodes.INTERNAL_SERVER_ERROR,
     );
   }
-  const vToken = generateVerificationTorken(new Types.ObjectId(_id), newPendingEmail.pendingEmail);
+  const vToken = generateVerificationTorken(
+    new Types.ObjectId(_id),
+    newPendingEmail.pendingEmail,
+  );
   const verificationLink = `${config.app.domen}/verify-pending_email?token=${vToken}`;
   sendEmail({
     email: newPendingEmail.pendingEmail,
@@ -181,7 +184,7 @@ export async function verifyToken(token: string) {
 }
 
 export async function verifyTokenForPendingEmail(token: string) {
-  console.log(token)
+  console.log(token);
   if (!token)
     throw new CustomError('Token is requierd', StatusCodes.BAD_REQUEST);
   return jwt.verify(

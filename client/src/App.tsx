@@ -18,6 +18,7 @@ import PendingEmailVerificationPage from './pages/verification-pages/pending-ema
 import UserLayout from './layouts/UserLayout';
 import UserProfilePage from './pages/user-pages/user-porfile-paage';
 import UserEmailPage from './pages/user-pages/user-email-page';
+import UserSecurityPage from './pages/user-pages/user-security-page';
 
 const App = (): JSX.Element => {
   const location = useLocation();
@@ -49,14 +50,17 @@ const App = (): JSX.Element => {
             <Route index element={<Navigate to="profile" />} />
             <Route path="profile" element={<UserProfilePage />} />
             <Route path="email" element={<UserEmailPage />} />
-            <Route path="security" element={<div>Security</div>} />
+            <Route path="security" element={<UserSecurityPage />} />
             <Route path="account" element={<div>Account</div>} />
           </Route>
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="login" element={<LoginPage />} />
           <Route path="verify-email" element={<VerificationPage />} />
-          <Route path="verify-pending_email" element={<PendingEmailVerificationPage/>} /> 
+          <Route
+            path="verify-pending_email"
+            element={<PendingEmailVerificationPage />}
+          />
           <Route path="register" element={<RegisterPage />} />
           <Route path="error-page" element={<ErrorPage />} />
           <Route path="not-found" element={<NotFoundPage />} />

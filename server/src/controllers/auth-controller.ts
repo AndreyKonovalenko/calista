@@ -76,15 +76,16 @@ export const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
 });
 
 //GET auth/verify-pending_email @public
-export const verifyPendingEmail = asyncHandler(async (req: Request, res: Response) => {
-  const token = req.query.token as string;
-  await verifyTokenForPendingEmail(token);
-  res.status(StatusCodes.OK).json({
-    message: 'Email changed successfully',
-    emailVerified: true,
-  });
-});
-
+export const verifyPendingEmail = asyncHandler(
+  async (req: Request, res: Response) => {
+    const token = req.query.token as string;
+    await verifyTokenForPendingEmail(token);
+    res.status(StatusCodes.OK).json({
+      message: 'Email changed successfully',
+      emailVerified: true,
+    });
+  },
+);
 
 // POST: auth/verify-email @public
 export const resendLink = asyncHandler(async (req: Request, res: Response) => {
@@ -101,8 +102,9 @@ export const changeEmail = asyncHandler(async (req: Request, res: Response) => {
   const pendingEmail = { ...req.body };
   await updateEmailService(user._id.toString(), pendingEmail);
   res.status(StatusCodes.OK).json({
-    message:'Check your new email inbox (including spam/junk folders) for a message with a verification link.', 
-    pendingEmail:true
+    message:
+      'Check your new email inbox (including spam/junk folders) for a message with a verification link.',
+    pendingEmail: true,
   });
 });
 

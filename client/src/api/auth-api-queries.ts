@@ -30,13 +30,13 @@ export const useVerifyEmail = (token: string) => {
   });
 };
 
-export const useVerifyPendingEmail = (token: string)=> {
+export const useVerifyPendingEmail = (token: string) => {
   return useQuery({
     queryKey: ['verify-email', token],
     queryFn: () => api.auth.verifyPendingEmail(token),
     enabled: !!token,
-  })
-}
+  });
+};
 
 export const useResendLink = () => {
   return useMutation({

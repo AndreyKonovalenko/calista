@@ -20,7 +20,7 @@ export const authRouter = express.Router();
 authRouter.get('/', protect, getUser);
 authRouter.post('/', validationHandler(userValidator), register);
 authRouter.get('/verify-email', verifyEmail);
-authRouter.get('/verify-pending_email', verifyPendingEmail)
+authRouter.get('/verify-pending_email', verifyPendingEmail);
 authRouter.post('/verify-email', resendLink);
 authRouter.post('/login', login);
 authRouter.post('/logout', logout);

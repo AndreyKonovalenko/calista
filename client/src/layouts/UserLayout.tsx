@@ -1,5 +1,5 @@
 // import React, { useRef } from 'react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Outlet } from 'react-router';
 import { Box, IconButton, Grid } from '@mui/material';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
@@ -43,9 +43,6 @@ const styles = {
 };
 
 const UserLayout = (): JSX.Element => {
-  useEffect(() => {
-    console.log('userLayout rerenders');
-  }, []);
   return (
     <Box component="main" sx={styles.main}>
       <IconButton size="medium" href={TO_MAIN} sx={styles.closeButton}>

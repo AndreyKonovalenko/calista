@@ -24,7 +24,7 @@ const SSE = validEnv(process.env.SSE);
 const CHECKLISTS = validEnv(process.env.CHECKLISTS);
 const CHECKLIST_ITEMS = validEnv(process.env.CHECKLIST_ITEMS);
 const VERIFY_EMAIL = validEnv(process.env.VERIFY_EMAIL);
-const VERIFY_PENDING_EMAIL=validEnv(process.env.VERIFY_PENDING_EMAIL)
+const VERIFY_PENDING_EMAIL = validEnv(process.env.VERIFY_PENDING_EMAIL);
 const CHANGE_EMAIL = validEnv(process.env.CHANGE_EMAIL);
 axios.defaults.baseURL = BASE_URL;
 
@@ -83,8 +83,10 @@ const auth = {
     request.get<{ message: string; emailVerified: boolean }>(
       `${AUTH}${VERIFY_EMAIL}?token=${token}`,
     ),
-  verifyPendingEmail: (token: string) => 
-    request.get<({message: string, emailVerified:boolean})>(`${AUTH}${VERIFY_PENDING_EMAIL}?token=${token}`),
+  verifyPendingEmail: (token: string) =>
+    request.get<{ message: string; emailVerified: boolean }>(
+      `${AUTH}${VERIFY_PENDING_EMAIL}?token=${token}`,
+    ),
   resendLink: (data: { email: string }) =>
     request.post(`${AUTH}${VERIFY_EMAIL}`, data),
   updateEmail: (data: { pendingEmail: string }) =>
