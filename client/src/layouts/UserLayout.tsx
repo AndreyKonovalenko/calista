@@ -30,9 +30,8 @@ const styles = {
   menu: {
     minWidth: { xs: '100%', md: 256 },
     maxWidth: { xs: '100%', md: 256 },
-    '--Grid-borderWidth': '1px',
-    borderRight: { md: 'var(--Grid-borderWidth) solid', xs: 'none' },
-    borderBottom: { md: 'none', xs: 'var(--Grid-borderWidth) solid' },
+    borderRight: { md: '1px solid', xs: 'none' },
+    borderBottom: { md: 'none', xs: '1px solid' },
     borderColor: { md: 'divider', xs: 'divider' },
     minHeight: { xs: '20vh', md: '100vh' },
   },

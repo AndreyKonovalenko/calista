@@ -19,6 +19,7 @@ import UserLayout from './layouts/UserLayout';
 import UserProfilePage from './pages/user-pages/user-porfile-page';
 import UserEmailPage from './pages/user-pages/user-email-page';
 import UserSecurityPage from './pages/user-pages/user-security-page';
+import UserAccountPage from './pages/user-pages/user-account-page';
 
 const App = (): JSX.Element => {
   const location = useLocation();
@@ -51,7 +52,7 @@ const App = (): JSX.Element => {
             <Route path="profile" element={<UserProfilePage />} />
             <Route path="email" element={<UserEmailPage />} />
             <Route path="security" element={<UserSecurityPage />} />
-            <Route path="account" element={<div>Account</div>} />
+            <Route path="account" element={<UserAccountPage />} />
           </Route>
         </Route>
         <Route element={<AuthLayout />}>
