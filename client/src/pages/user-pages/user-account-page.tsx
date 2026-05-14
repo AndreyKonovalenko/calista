@@ -12,10 +12,8 @@ const styles = {
   menu: {
     minWidth: { xs: '100%', md: 256 },
     maxWidth: { xs: '100%', md: 256 },
-    flexShrink: 0,
-    '--Grid-borderWidth': '1px',
-    borderRight: { md: 'var(--Grid-borderWidth) solid', xs: null },
-    borderBottom: { md: null, xs: 'var(--Grid-borderWidth) solid' },
+    borderRight: { md: '1px solid', xs: 'none' },
+    borderBottom: { md: 'none', xs: '1px solid' },
     borderColor: { md: 'divider', xs: 'divider' },
     minHeight: { sx: '20vh', md: '100vh' },
   },
@@ -27,6 +25,7 @@ const styles = {
 
 const UserAccountPage = () => {
   const { userId } = useParams();
+  console.log(userId);
   return (
     <Grid container size={12} sx={styles.container}>
       <Grid size={{ xs: 12, md: 2 }} sx={styles.menu}>

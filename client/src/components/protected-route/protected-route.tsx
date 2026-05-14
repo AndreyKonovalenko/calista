@@ -4,6 +4,7 @@ import { TO_LOGIN } from '../../utils/route-constants';
 import { useAuthActions, useIsAuth } from '../../services/auth-store';
 import LoadingBage from '../loading-bage/loading-bage';
 import { useFetchUser } from '../../api/auth-api-queries';
+import { debugLog } from '../../utils/debug';
 
 type TProps = {
   element: JSX.Element;
@@ -16,7 +17,7 @@ const ProtectedRoute = ({ element }: TProps): JSX.Element => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('fetch from protected route');
+    debugLog('ProtectedRoute', { data, isPending, isSuccess });
     if (!isPending) {
       if (!isAuth && isSuccess) {
         setAuthStatus(data);

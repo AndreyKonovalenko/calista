@@ -16,7 +16,7 @@ import ErrorPage from './pages/error-page/error-page';
 import VerificationPage from './pages/verification-pages/verification-page';
 import PendingEmailVerificationPage from './pages/verification-pages/pending-email-verification-page';
 import UserLayout from './layouts/UserLayout';
-import UserProfilePage from './pages/user-pages/user-porfile-paage';
+import UserProfilePage from './pages/user-pages/user-porfile-page';
 import UserEmailPage from './pages/user-pages/user-email-page';
 import UserSecurityPage from './pages/user-pages/user-security-page';
 
