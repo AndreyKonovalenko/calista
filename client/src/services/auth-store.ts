@@ -1,24 +1,23 @@
+import { useMemo } from 'react';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
 export type TAuthState = {
   _id: string;
-  isAuth: boolean;
   username: string;
   email: string;
-  actions: IAuthActions;
 };
 
-type IAuthActions = {
+type TAuthActions = {
   setAuthStatus: (data: {
     _id: string;
-    isAuth: boolean;
     username: string;
     email: string;
   }) => void;
+  clearAuth: () => void;
 };
 
-const useAuthStore = create<TAuthState>()(
+const useAuthStore = create<TAuthState & { actions: TAuthActions }>()(
   devtools(
     set => ({
       _id: '',
@@ -28,15 +27,19 @@ const useAuthStore = create<TAuthState>()(
       actions: {
         setAuthStatus: (data: {
           _id: string;
-          isAuth: boolean;
           username: string;
           email: string;
         }) =>
           set({
             _id: data._id,
-            isAuth: data.isAuth,
             username: data.username,
             email: data.email,
+          }),
+        clearAuth: () =>
+          set({
+            _id: '',
+            username: '',
+            email: '',
           }),
       },
     }),
@@ -48,4 +51,18 @@ export const useAuthActions = () => useAuthStore(state => state.actions);
 export const useUsername = () => useAuthStore(state => state.username);
 export const useUserId = () => useAuthStore(state => state._id);
 export const useEmail = () => useAuthStore(state => state.email);
-export const useIsAuth = () => useAuthStore(state => state.isAuth);
+
+export const useIsAuth = () => {
+  const userId = useUserId();
+  return !!userId;
+};
+
+export const useUserData = () => {
+  const _id = useUserId();
+  const username = useUsername();
+  const email = useEmail();
+  return useMemo(() => {
+    if (!_id) return null;
+    return { _id, username, email };
+  }, [_id, username, email]);
+};

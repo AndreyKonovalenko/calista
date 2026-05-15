@@ -36,7 +36,7 @@ const transformOrigin: PopoverOrigin = {
 export default function HeaderBar() {
   const username = useUsername();
   const email = useEmail();
-  const { setAuthStatus } = useAuthActions();
+  const { clearAuth } = useAuthActions();
   const { mutate, isSuccess } = useMutation({
     mutationFn: api.auth.logout,
   });
@@ -63,7 +63,7 @@ export default function HeaderBar() {
 
   useEffect(() => {
     if (isSuccess) {
-      setAuthStatus({ isAuth: false, username: '', email: '', _id: '' });
+      clearAuth();
     }
   }, [isSuccess]);
   return (

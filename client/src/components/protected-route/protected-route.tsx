@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router';
-import { TO_LOGIN } from '../../utils/route-constants';
-import { useAuthActions, useIsAuth } from '../../services/auth-store';
+import { useAuthActions, useUserId } from '../../services/auth-store';
 import LoadingBage from '../loading-bage/loading-bage';
 import { useFetchUser } from '../../api/auth-api-queries';
 import { debugLog } from '../../utils/debug';
@@ -12,23 +10,22 @@ type TProps = {
 
 const ProtectedRoute = ({ element }: TProps): JSX.Element => {
   const { setAuthStatus } = useAuthActions();
-  const isAuth = useIsAuth();
-  const { data, isPending, isSuccess } = useFetchUser(isAuth);
-  const navigate = useNavigate();
+  const userId = useUserId();
+  const { data, isPending, isSuccess } = useFetchUser(!userId);
 
+  debugLog('ProtectedRoute', { data, isPending, isSuccess });
   useEffect(() => {
-    debugLog('ProtectedRoute', { data, isPending, isSuccess });
-    if (!isPending) {
-      if (!isAuth && isSuccess) {
-        setAuthStatus(data);
-      }
-      if (!isSuccess && !isAuth) {
-        navigate(TO_LOGIN);
-      }
+    if (data && !userId) {
+      setAuthStatus({
+        _id: data._id,
+        username: data.username,
+        email: data.email,
+      });
     }
-  }, [isAuth, data, isSuccess, setAuthStatus, isPending]);
+  }, [data, userId, setAuthStatus]);
 
-  return isAuth ? element : <LoadingBage />;
+  if (!userId && isPending) return <LoadingBage />;
+  return element;
 };
 
 export default ProtectedRoute;

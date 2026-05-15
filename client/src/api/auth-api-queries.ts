@@ -13,11 +13,11 @@ export const useRegister = () => {
   });
 };
 
-export const useFetchUser = (isAuth: boolean) => {
+export const useFetchUser = (enabled: boolean) => {
   return useQuery({
-    queryKey: ['auth'],
+    queryKey: ['currentUser'],
     queryFn: api.auth.fetchUser,
-    enabled: !isAuth,
+    enabled,
     retry: false,
   });
 };

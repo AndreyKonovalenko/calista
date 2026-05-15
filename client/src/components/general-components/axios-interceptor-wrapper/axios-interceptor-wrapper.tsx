@@ -7,6 +7,7 @@ import {
   TO_LOGIN,
   TO_NOT_FOUND,
 } from '../../../utils/route-constants';
+import { debugLog } from '../../../utils/debug';
 
 type TCustomErrorResponse = {
   message: string;
@@ -76,10 +77,10 @@ const AxiosInterceptorWrapper = () => {
             //   toast.error(data.message);
           }
         } else if (error.request) {
-          console.log(error.message);
+          debugLog('axios-interceptor-wrapper', { error: error.message });
           toast.error('No respose recived from server');
         } else {
-          console.log(error.message);
+          debugLog('axios-interceptor-wrapper', { error: error.message });
           toast.error(`Error during requeset setup', ${error.message}`);
         }
         return Promise.reject(error);

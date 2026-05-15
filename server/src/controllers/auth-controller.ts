@@ -46,7 +46,6 @@ export const login = asyncHandler(
     setGeneratedToken(res, result._id);
     res.status(StatusCodes.OK).json({
       _id: result._id,
-      isAuth: true,
       username: result.username,
       email: result.email,
     });

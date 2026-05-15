@@ -1,9 +1,7 @@
 import React from 'react';
 import { Container, Typography, Grid } from '@mui/material';
 
-
 const UserAccountPage = () => {
-
   return (
     <Container>
       <Grid container spacing={4}>
