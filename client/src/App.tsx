@@ -1,90 +1,86 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router';
 import 'react-toastify/dist/ReactToastify.css';
-import ProtectedRoute from './components/protected-route/protected-route';
-import MainPage from './pages/main-page/main-page';
-import BoardPage from './pages/board-page/board-page';
+
+// Layouts
 import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
-import LoginPage from './pages/login-page/login-page';
-import RegisterPage from './pages/register-page/register-page';
-import NotFoundPage from './pages/page-not-found/page-not-found';
-import CardPage from './pages/card-page/card-page';
-import CardPageOnBackground from './pages/card-page/card-page-on-background';
-import ModalPortal from './components/modal-portal/modal-portal';
-import ErrorPage from './pages/error-page/error-page';
-import VerificationPage from './pages/verification-pages/verification-page';
-import PendingEmailVerificationPage from './pages/verification-pages/pending-email-verification-page';
 import UserLayout from './layouts/UserLayout';
-import UserProfilePage from './pages/user-pages/user-porfile-page';
-import UserEmailPage from './pages/user-pages/user-email-page';
-import UserSecurityPage from './pages/user-pages/user-security-page';
-import UserAccountPage from './pages/user-pages/user-account-page';
 
+// Lazy load pages for better performance
+const MainPage = lazy(() => import('./pages/main-page/main-page'));
+const BoardPage = lazy(() => import('./pages/board-page/board-page'));
+const LoginPage = lazy(() => import('./pages/login-page/login-page'));
+const RegisterPage = lazy(() => import('./pages/register-page/register-page'));
+const NotFoundPage = lazy(() => import('./pages/page-not-found/page-not-found'));
+const CardPage = lazy(() => import('./pages/card-page/card-page'));
+const ErrorPage = lazy(() => import('./pages/error-page/error-page'));
+const VerificationPage = lazy(() => import('./pages/verification-pages/verification-page'));
+const PendingEmailVerificationPage = lazy(() => import('./pages/verification-pages/pending-email-verification-page'));
+const UserProfilePage = lazy(() => import('./pages/user-pages/user-profile-page'));
+const UserEmailPage = lazy(() => import('./pages/user-pages/user-email-page'));
+const UserSecurityPage = lazy(() => import('./pages/user-pages/user-security-page'));
+
+// Components
+import ProtectedRoute from './components/protected-route/protected-route';
+import ModalPortal from './components/modal-portal/modal-portal';
+import LoadingBage from './components/loading-bage/loading-bage';
+
+// routes
+import { ROUTES } from './utils/router-paths';
 const App = (): JSX.Element => {
   const location = useLocation();
-  const background = location.state && location.state.background;
+  const background = location.state?.background;
+
   return (
-    <React.Fragment>
+    <Suspense fallback={<LoadingBage />}>
       <Routes location={background || location}>
-        <Route element={<MainLayout />}>
-          <Route index element={<ProtectedRoute element={<MainPage />} />} />
-          <Route
-            path="boards/:id"
-            element={<ProtectedRoute element={<BoardPage />} />}
-          />
-          <Route
-            path="boards/:boardId/lists/:listId/cards/:id"
-            element={
-              <ProtectedRoute
-                element={
-                  <ModalPortal>
-                    <CardPage />
-                  </ModalPortal>
-                }
-              />
-            }
+        {/* Public routes with AuthLayout */}
+        <Route element={<AuthLayout />}>
+          <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+          <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
+          <Route path={ROUTES.VERIFY_EMAIL} element={<VerificationPage />} />
+          <Route path={ROUTES.VERIFY_PENDING} element={<PendingEmailVerificationPage />} />
+          <Route path={ROUTES.ERROR} element={<ErrorPage />} />
+          <Route path={ROUTES.NOT_FOUND} element={<NotFoundPage />} />
+          <Route path="*" element={<Navigate to={ROUTES.NOT_FOUND} replace />} />
+        </Route>
+
+        {/* Protected routes with MainLayout */}
+        <Route element={<ProtectedRoute element={<MainLayout />} />}>
+          <Route index element={<MainPage />} />
+          <Route path={ROUTES.board(':boardId')} element={<BoardPage />} />
+          <Route 
+            path={ROUTES.card(':boardId', ':listId', ':cardId')} 
+            element={<CardPage />} 
           />
         </Route>
+
+        {/* Protected user routes with UserLayout */}
         <Route element={<ProtectedRoute element={<UserLayout />} />}>
-          <Route path="user">
-            <Route index element={<Navigate to="profile" />} />
+          <Route path={ROUTES.USER.ROOT}>
+            <Route index element={<Navigate to={ROUTES.USER.PROFILE} replace />} />
             <Route path="profile" element={<UserProfilePage />} />
             <Route path="email" element={<UserEmailPage />} />
             <Route path="security" element={<UserSecurityPage />} />
-            <Route path="account" element={<UserAccountPage />} />
           </Route>
         </Route>
-        <Route element={<AuthLayout />}>
-          <Route path="login" element={<LoginPage />} />
-          <Route path="verify-email" element={<VerificationPage />} />
-          <Route
-            path="verify-pending_email"
-            element={<PendingEmailVerificationPage />}
-          />
-          <Route path="register" element={<RegisterPage />} />
-          <Route path="error-page" element={<ErrorPage />} />
-          <Route path="not-found" element={<NotFoundPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
       </Routes>
+
+      {/* Modal routes - rendered on top when background is present */}
       {background && (
         <Routes>
-          <Route
-            path="boards/:boardId/lists/:listId/cards/:id"
+          <Route 
+            path={ROUTES.card(':boardId', ':listId', ':cardId')} 
             element={
-              <ProtectedRoute
-                element={
-                  <ModalPortal>
-                    <CardPageOnBackground />
-                  </ModalPortal>
-                }
-              />
-            }
+              <ModalPortal>
+                <CardPage />
+              </ModalPortal>
+            } 
           />
         </Routes>
       )}
-    </React.Fragment>
+    </Suspense>
   );
 };
 
