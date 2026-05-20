@@ -21,25 +21,21 @@ import { TO_MAIN } from '../../utils/route-constants';
 import {
   useListActions,
   useSortedLists,
-  useLists,
 } from '../../services/list-store';
 import { useCardActions } from '../../services/card-store';
 import { useChecklistActions } from '../../services/checklist-store';
 import { useChecklistItemActions } from '../../services/checklist-item-store';
 
 const BoardPage = () => {
-  // useGlobalDrop();
   const navigate = useNavigate();
-  const lists = useLists();
   const name = useBoardName();
   const deleteBoardQuery = useDeleteBoard();
   const createListQuery = useCreateList();
   const [open, setOpen] = useState(false);
-  const { id } = useParams();
-  if (!id) {
-    return null;
-  }
-  const { data, isSuccess, isLoading } = useFetchBoardById(id);
+  const { boardId } = useParams();
+
+  // Move all hooks BEFORE conditional returns
+  const { data, isSuccess, isLoading } = useFetchBoardById(boardId || '');
   const sortedList = useSortedLists();
   const { setBoard } = useBoardActions();
   const { setLists } = useListActions();
@@ -47,8 +43,17 @@ const BoardPage = () => {
   const { setChecklists } = useChecklistActions();
   const { setChecklistItems } = useChecklistItemActions();
 
+  // Now conditional return
+
+
+  
   const handleDeleteBoard = (): void => {
-    deleteBoardQuery.mutate(id);
+    if (!boardId) {
+      console.error('Cannot delete board: No board ID available');
+    return;
+  }
+  
+    deleteBoardQuery.mutate(boardId);
     navigate(TO_MAIN);
   };
   const handleDrawerOpen = () => {
@@ -58,22 +63,17 @@ const BoardPage = () => {
     setOpen(false);
   };
 
-  const handleCreateNewList = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      let pos = 16384;
-      if (lists && sortedList && sortedList?.length > 0) {
-        pos = lists[sortedList[sortedList.length - 1]].pos + pos;
-      }
-      const formData = new FormData(event.currentTarget);
-      createListQuery.mutate({
-        name: formData.get('newItemName'),
-        boardId: id,
-        pos: pos,
-      });
-    },
-    [id, lists, sortedList],
-  );
+ const handleCreateNewList = useCallback(
+  (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    
+    createListQuery.mutate({
+      name: formData.get('newItemName') as string,
+    });
+  },
+  [createListQuery],
+);
 
   const boardLists = sortedList
     ? sortedList.map(key => {
@@ -96,7 +96,9 @@ const BoardPage = () => {
       }
     }
   }, [data, isSuccess]);
-
+  if (!boardId) {
+    return <LoadingBage />; // Or navigate to 404
+  }
   return (
     <Box
       sx={{

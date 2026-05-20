@@ -148,10 +148,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
           } | null = monitor.getDropResult();
           if (dropResult && dropResult.dropped) {
             if (dropResult.calculatedPos === -1) {
-              reNumListsPosInBoard.mutate({
-                id: _id,
-                data: { action: 'renumbering' },
-              });
+              reNumListsPosInBoard.mutate({ action: 'renumbering' });
             }
             if (dropResult.calculatedPos && dropResult.calculatedPos > 0) {
               handleUpdateListPos(draggedId, dropResult.calculatedPos);

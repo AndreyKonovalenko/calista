@@ -10,27 +10,35 @@ import { useSortedCardsByListId } from '../../../services/card-store';
 import { useCards } from '../../../services/card-store';
 
 const BoardList = (props: { _id: string }) => {
-  const { id: boardId } = useParams();
-  if (!boardId) {
-    return null;
-  }
   const { _id } = props;
+  
+  // ✅ ALL hooks at the top (unconditionally)
+  const { id: boardId } = useParams();
   const list = useList(_id);
-  if (!list) {
+  const sortedCards = useSortedCardsByListId(_id); // ← Fixed spelling
+  const cards = useCards();
+  const createCardQuery = useCreateCard();
+
+  // ✅ Early returns AFTER all hooks
+  if (!boardId) {
+    console.warn('BoardList: No boardId available');
     return null;
   }
-  const { name, pos } = list;
-  const sorterdCards = useSortedCardsByListId(_id);
-  const cards = useCards();
+  
+  if (!list) {
+    console.warn('BoardList: List not found for id:', _id);
+    return null;
+  }
 
-  const createCardQuery = useCreateCard();
+  const { name, pos } = list;
+
 
   const handleCreateNewCard = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       let pos = 16384;
-      if (cards && sorterdCards && sorterdCards?.length > 0) {
-        pos = cards[sorterdCards[sorterdCards.length - 1]].pos + pos;
+      if (cards && sortedCards && sortedCards?.length > 0) {
+        pos = cards[sortedCards[sortedCards.length - 1]].pos + pos;
       }
       const formData = new FormData(event.currentTarget);
       createCardQuery.mutate({
@@ -40,11 +48,11 @@ const BoardList = (props: { _id: string }) => {
         pos: pos,
       });
     },
-    [_id, cards, sorterdCards],
+    [_id, cards, sortedCards],
   );
 
-  const cardsList = sorterdCards
-    ? sorterdCards.map(cardId => <BoardCard key={cardId} _id={cardId} />)
+  const cardsList = sortedCards
+    ? sortedCards.map(cardId => <BoardCard key={cardId} _id={cardId} />)
     : null;
 
   return (

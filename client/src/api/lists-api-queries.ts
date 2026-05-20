@@ -2,18 +2,39 @@ import api from './api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router';
 import { invariantId } from '../utils/utils';
+import { useLists, useSortedLists} from '../services/list-store';
 
 export const useCreateList = () => {
-  const { id } = useParams();
-  invariantId(id);
+  const { id: boardId } = useParams();
   const queryClient = useQueryClient();
+  const lists = useLists(); // Get lists from store
+  const sortedList = useSortedLists();
+  
   return useMutation({
-    mutationFn: api.lists.createList,
+    mutationFn: (data: { name: string }) => {
+      if (!boardId) {
+        throw new Error('Board ID is required');
+      }
+      
+      // Calculate pos inside the hook
+      let pos = 16384;
+      if (lists && sortedList && sortedList.length > 0) {
+        const lastListId = sortedList[sortedList.length - 1];
+        const lastList = lists[lastListId];
+        if (lastList) {
+          pos = lastList.pos + 16384;
+        }
+      }
+      
+      return api.lists.createList({ boardId, name: data.name, pos });
+    },
     onSuccess: () => {
-      return queryClient.invalidateQueries({
-        queryKey: ['fetchBoardById', id],
-        exact: true,
-      });
+      if (boardId) {
+        return queryClient.invalidateQueries({
+          queryKey: ['fetchBoardById', boardId],
+          exact: true,
+        });
+      }
     },
   });
 };
