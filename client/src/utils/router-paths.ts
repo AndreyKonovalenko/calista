@@ -20,4 +20,8 @@ export const ROUTES = {
   board: (boardId: string) => `/boards/${boardId}`,
   card: (boardId: string, listId: string, cardId: string) => 
     `/boards/${boardId}/lists/${listId}/cards/${cardId}`,
+  
+  // Board PATTERNS - for route definition (with :params)
+  BOARD_PATTERN: '/boards/:boardId',
+  CARD_PATTERN: '/boards/:boardId/lists/:listId/cards/:cardId',
 } as const;

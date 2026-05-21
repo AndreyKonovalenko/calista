@@ -4,19 +4,26 @@ import { invariantId } from '../utils/utils';
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 
 export const useCreateCard = () => {
-  const { id } = useParams();
-  invariantId(id);
+  const { boardId } = useParams();
+  
   const queryClient = useQueryClient();
+  
   return useMutation({
-    mutationFn: api.cards.createCard,
+    mutationFn: (data: { name: string; listId: string; pos: number }) => {
+      if (!boardId) {
+        throw new Error('Board ID is required');
+      }
+      return api.cards.createCard({ boardId, ...data });
+    },
     onSuccess: () => {
       return queryClient.invalidateQueries({
-        queryKey: ['fetchBoardById', id],
+        queryKey: ['fetchBoardById', boardId],
         exact: true,
       });
     },
   });
 };
+
 
 export const useFetchCardById = (cardId: string) => {
   return useQuery({

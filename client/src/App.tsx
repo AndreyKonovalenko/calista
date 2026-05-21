@@ -49,9 +49,9 @@ const App = (): JSX.Element => {
         {/* Protected routes with MainLayout */}
         <Route element={<ProtectedRoute element={<MainLayout />} />}>
           <Route index element={<MainPage />} />
-          <Route path={ROUTES.board(':boardId')} element={<BoardPage />} />
+          <Route path={ROUTES.BOARD_PATTERN} element={<BoardPage />} />
           <Route 
-            path={ROUTES.card(':boardId', ':listId', ':cardId')} 
+            path={ROUTES.CARD_PATTERN} 
             element={<CardPage />} 
           />
         </Route>
@@ -71,7 +71,7 @@ const App = (): JSX.Element => {
       {background && (
         <Routes>
           <Route 
-            path={ROUTES.card(':boardId', ':listId', ':cardId')} 
+            path={ROUTES.CARD_PATTERN} 
             element={
               <ModalPortal>
                 <CardPage />

@@ -8,14 +8,16 @@ import { useCreateCard } from '../../../api/cards-api-queries';
 import { useList } from '../../../services/list-store';
 import { useSortedCardsByListId } from '../../../services/card-store';
 import { useCards } from '../../../services/card-store';
+import { debugLog } from '../../../utils/debug';
 
 const BoardList = (props: { _id: string }) => {
-  const { _id } = props;
+  const { _id: listId } = props;
   
   // ✅ ALL hooks at the top (unconditionally)
-  const { id: boardId } = useParams();
-  const list = useList(_id);
-  const sortedCards = useSortedCardsByListId(_id); // ← Fixed spelling
+  const { boardId } = useParams();
+  debugLog('BoardList', {boardId})
+  const list = useList(listId);
+  const sortedCards = useSortedCardsByListId(listId); // ← Fixed spelling
   const cards = useCards();
   const createCardQuery = useCreateCard();
 
@@ -26,7 +28,7 @@ const BoardList = (props: { _id: string }) => {
   }
   
   if (!list) {
-    console.warn('BoardList: List not found for id:', _id);
+    console.warn('BoardList: List not found for id:', listId);
     return null;
   }
 
@@ -39,16 +41,19 @@ const BoardList = (props: { _id: string }) => {
       let pos = 16384;
       if (cards && sortedCards && sortedCards?.length > 0) {
         pos = cards[sortedCards[sortedCards.length - 1]].pos + pos;
+
       }
       const formData = new FormData(event.currentTarget);
+      const name = formData.get('newItemName') as string
+      if (!name?.trim()) return;
+
       createCardQuery.mutate({
-        name: formData.get('newItemName'),
-        boardId: boardId,
-        listId: _id,
-        pos: pos,
+        name,
+        listId,
+        pos,
       });
     },
-    [_id, cards, sortedCards],
+    [listId, cards, sortedCards, createCardQuery],
   );
 
   const cardsList = sortedCards
@@ -63,14 +68,14 @@ const BoardList = (props: { _id: string }) => {
       }}
     >
       <BoardListDndContainer
-        _id={_id}
+        _id={listId}
         name={name}
         pos={pos}
         hasCards={cardsList && cardsList?.length > 0 ? true : false}
       >
         <BoardListContent
           name={name}
-          _id={_id}
+          _id={listId}
           handleCreateNewCard={handleCreateNewCard}
         >
           <List

@@ -18,14 +18,9 @@ export const useCreateList = () => {
       
       // Calculate pos inside the hook
       let pos = 16384;
-      if (lists && sortedList && sortedList.length > 0) {
-        const lastListId = sortedList[sortedList.length - 1];
-        const lastList = lists[lastListId];
-        if (lastList) {
-          pos = lastList.pos + 16384;
-        }
+      if (lists && sortedList && sortedList?.length > 0) {
+        pos = lists[sortedList[sortedList.length - 1]].pos + pos;
       }
-      
       return api.lists.createList({ boardId, name: data.name, pos });
     },
     onSuccess: () => {
