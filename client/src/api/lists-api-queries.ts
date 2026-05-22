@@ -43,16 +43,20 @@ export const useCreateList = () => {
 // };
 
 export const useDeleteList = () => {
-  const { id } = useParams();
-  invariantId(id);
+  const { id:boardId } = useParams();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: api.lists.deleteList,
+    mutationFn:(listId:string) => {
+      invariantId(listId)
+      return api.lists.deleteList(listId)
+    }, 
     onSuccess: () => {
+      if(boardId){
       return queryClient.invalidateQueries({
-        queryKey: ['fetchBoardById', id],
+        queryKey: ['fetchBoardById', boardId],
         exact: true,
       });
+    }
     },
   });
 };
@@ -65,6 +69,7 @@ export const useReNumCardsPosInList = () => {
     mutationFn: api.lists.updateList,
     onSuccess: () => {
       return queryClient.invalidateQueries({
+    
         queryKey: ['fetchBoardById', id],
         exact: true,
       });

@@ -1,6 +1,7 @@
 import api from './api';
 import { useParams } from 'react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { invariantId } from '../utils/utils';
 
 export const useFetchBoards = () => {
   return useQuery({
@@ -26,7 +27,6 @@ export const useFetchBoardById = (boardId: string) => {
   return useQuery({
     queryKey: ['fetchBoardById', boardId],
     queryFn: () => { 
-      console.log('Fetching board with id:', boardId);
       return api.boards.fetchBoardById(boardId)},
     enabled: !!boardId,
   });
@@ -65,21 +65,19 @@ export const useDeleteBoard = () => {
 // };
 
 export const useReNumListsPosInBoard = () => {
-  const { id } = useParams();
+  const { id: boardId } = useParams();
   const queryClient = useQueryClient();
   
   return useMutation({
     mutationFn: (data: { action: string }) => {
-       if (!id) {
-        throw new Error('Board ID is required for lists renumbering');
-      }
+      invariantId(boardId)
       return api.boards.updateBoard(
-        {id, data: {action: data.action}});
+        {id: boardId, data: {action: data.action}});
     },
     onSuccess: () => {
-      if (id) {
+      if (boardId) {
         return queryClient.invalidateQueries({
-          queryKey: ['fetchBoardById', id],
+          queryKey: ['fetchBoardById', boardId],
           exact: true,
         });
       }

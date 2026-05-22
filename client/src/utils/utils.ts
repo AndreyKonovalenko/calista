@@ -7,11 +7,8 @@ export default function validEnv(name: string | undefined): string {
   return name;
 }
 
-export function invariantId(value: string | undefined): asserts value {
-  if (value) {
-    return;
-  }
-  throw new Error('Invariant violation');
+export function invariantId(value: string | undefined): asserts value is string {
+  if (!value) throw new Error('Missing required ID param');
 }
 
 export function calculateNewPosByTargetPart(

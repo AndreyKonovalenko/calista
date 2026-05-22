@@ -10,9 +10,7 @@ export const useCreateCard = () => {
   
   return useMutation({
     mutationFn: (data: { name: string; listId: string; pos: number }) => {
-      if (!boardId) {
-        throw new Error('Board ID is required');
-      }
+      invariantId(boardId)
       return api.cards.createCard({ boardId, ...data });
     },
     onSuccess: () => {
@@ -24,7 +22,6 @@ export const useCreateCard = () => {
   });
 };
 
-
 export const useFetchCardById = (cardId: string) => {
   return useQuery({
     queryKey: ['fetchCardById', cardId],
@@ -35,10 +32,12 @@ export const useFetchCardById = (cardId: string) => {
 
 export const useDeleteCard = () => {
   const { boardId } = useParams();
-  invariantId(boardId);
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: api.cards.deleteCard,
+    mutationFn: () => {
+      invariantId(boardId)
+      return api.cards.deleteCard(boardId )
+    },
     onSuccess: () => {
       return queryClient.invalidateQueries({
         queryKey: ['fetchBoardById', boardId],
@@ -50,10 +49,10 @@ export const useDeleteCard = () => {
 
 export const useUpdateCard = () => {
   const { id } = useParams();
-  invariantId(id);
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: api.cards.updateCard,
+  return useMutation(()=>{
+    return mutationFn: api.cards.updateCard
+    },
     onSuccess: () => {
       return queryClient.invalidateQueries({
         queryKey: ['fetchCardById', id],

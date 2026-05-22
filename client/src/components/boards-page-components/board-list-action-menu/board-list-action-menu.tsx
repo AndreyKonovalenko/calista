@@ -5,7 +5,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useDeleteList } from '../../../api/lists-api-queries';
 
 const BoardListActionMenu = (props: { _id: string }): JSX.Element => {
-  const { _id } = props;
+  const { _id: listId } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -17,7 +17,7 @@ const BoardListActionMenu = (props: { _id: string }): JSX.Element => {
     setAnchorEl(null);
   };
 
-  const handleDeleteList = (listId: string) => {
+  const handleDeleteList = () => {
     deleteListQuery.mutate(listId);
   };
 
@@ -42,7 +42,7 @@ const BoardListActionMenu = (props: { _id: string }): JSX.Element => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={() => handleDeleteList(_id)}>Delete List</MenuItem>
+        <MenuItem onClick={handleDeleteList}>Delete List</MenuItem>
       </Menu>
     </div>
   );
