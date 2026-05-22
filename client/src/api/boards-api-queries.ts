@@ -26,8 +26,9 @@ export const useCreateBoard = () => {
 export const useFetchBoardById = (boardId: string) => {
   return useQuery({
     queryKey: ['fetchBoardById', boardId],
-    queryFn: () => { 
-      return api.boards.fetchBoardById(boardId)},
+    queryFn: () => {
+      return api.boards.fetchBoardById(boardId);
+    },
     enabled: !!boardId,
   });
 };
@@ -54,7 +55,7 @@ export const useDeleteBoard = () => {
 //         throw new Error('Board ID is required for list renumbering')
 //       }
 //       return api.boards.updateBoard(id, data),
-//     },    
+//     },
 //     onSuccess: () => {
 //       return queryClient.invalidateQueries({
 //         queryKey: ['fetchBoardById', id],
@@ -67,12 +68,14 @@ export const useDeleteBoard = () => {
 export const useReNumListsPosInBoard = () => {
   const { id: boardId } = useParams();
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: (data: { action: string }) => {
-      invariantId(boardId)
-      return api.boards.updateBoard(
-        {id: boardId, data: {action: data.action}});
+      invariantId(boardId);
+      return api.boards.updateBoard({
+        id: boardId,
+        data: { action: data.action },
+      });
     },
     onSuccess: () => {
       if (boardId) {
@@ -81,7 +84,7 @@ export const useReNumListsPosInBoard = () => {
           exact: true,
         });
       }
-    }
+    },
   });
 };
 

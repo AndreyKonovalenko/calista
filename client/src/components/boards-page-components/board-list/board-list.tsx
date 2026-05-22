@@ -12,10 +12,10 @@ import { debugLog } from '../../../utils/debug';
 
 const BoardList = (props: { _id: string }) => {
   const { _id: listId } = props;
-  
+
   // ✅ ALL hooks at the top (unconditionally)
   const { boardId } = useParams();
-  debugLog('BoardList', {boardId})
+  debugLog('BoardList', { boardId });
   const list = useList(listId);
   const sortedCards = useSortedCardsByListId(listId); // ← Fixed spelling
   const cards = useCards();
@@ -26,7 +26,7 @@ const BoardList = (props: { _id: string }) => {
     console.warn('BoardList: No boardId available');
     return null;
   }
-  
+
   if (!list) {
     console.warn('BoardList: List not found for id:', listId);
     return null;
@@ -34,17 +34,15 @@ const BoardList = (props: { _id: string }) => {
 
   const { name, pos } = list;
 
-
   const handleCreateNewCard = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       let pos = 16384;
       if (cards && sortedCards && sortedCards?.length > 0) {
         pos = cards[sortedCards[sortedCards.length - 1]].pos + pos;
-
       }
       const formData = new FormData(event.currentTarget);
-      const name = formData.get('newItemName') as string
+      const name = formData.get('newItemName') as string;
       if (!name?.trim()) return;
 
       createCardQuery.mutate({

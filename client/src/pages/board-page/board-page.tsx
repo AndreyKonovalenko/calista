@@ -18,10 +18,7 @@ import { useCreateList } from '../../api/lists-api-queries';
 import { useBoardName, useBoardActions } from '../../services/board-store';
 import { HEADER } from '../../layouts/config-layout';
 import { TO_MAIN } from '../../utils/route-constants';
-import {
-  useListActions,
-  useSortedLists,
-} from '../../services/list-store';
+import { useListActions, useSortedLists } from '../../services/list-store';
 import { useCardActions } from '../../services/card-store';
 import { useChecklistActions } from '../../services/checklist-store';
 import { useChecklistItemActions } from '../../services/checklist-item-store';
@@ -45,14 +42,12 @@ const BoardPage = () => {
 
   // Now conditional return
 
-
-  
   const handleDeleteBoard = (): void => {
     if (!boardId) {
       console.error('Cannot delete board: No board ID available');
-    return;
-  }
-  
+      return;
+    }
+
     deleteBoardQuery.mutate(boardId);
     navigate(TO_MAIN);
   };
@@ -63,17 +58,17 @@ const BoardPage = () => {
     setOpen(false);
   };
 
- const handleCreateNewList = useCallback(
-  (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    
-    createListQuery.mutate({
-      name: formData.get('newItemName') as string,
-    });
-  },
-  [createListQuery],
-);
+  const handleCreateNewList = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+
+      createListQuery.mutate({
+        name: formData.get('newItemName') as string,
+      });
+    },
+    [createListQuery],
+  );
 
   const boardLists = sortedList
     ? sortedList.map(key => {

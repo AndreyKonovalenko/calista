@@ -12,14 +12,24 @@ const MainPage = lazy(() => import('./pages/main-page/main-page'));
 const BoardPage = lazy(() => import('./pages/board-page/board-page'));
 const LoginPage = lazy(() => import('./pages/login-page/login-page'));
 const RegisterPage = lazy(() => import('./pages/register-page/register-page'));
-const NotFoundPage = lazy(() => import('./pages/page-not-found/page-not-found'));
+const NotFoundPage = lazy(
+  () => import('./pages/page-not-found/page-not-found'),
+);
 const CardPage = lazy(() => import('./pages/card-page/card-page'));
 const ErrorPage = lazy(() => import('./pages/error-page/error-page'));
-const VerificationPage = lazy(() => import('./pages/verification-pages/verification-page'));
-const PendingEmailVerificationPage = lazy(() => import('./pages/verification-pages/pending-email-verification-page'));
-const UserProfilePage = lazy(() => import('./pages/user-pages/user-profile-page'));
+const VerificationPage = lazy(
+  () => import('./pages/verification-pages/verification-page'),
+);
+const PendingEmailVerificationPage = lazy(
+  () => import('./pages/verification-pages/pending-email-verification-page'),
+);
+const UserProfilePage = lazy(
+  () => import('./pages/user-pages/user-profile-page'),
+);
 const UserEmailPage = lazy(() => import('./pages/user-pages/user-email-page'));
-const UserSecurityPage = lazy(() => import('./pages/user-pages/user-security-page'));
+const UserSecurityPage = lazy(
+  () => import('./pages/user-pages/user-security-page'),
+);
 
 // Components
 import ProtectedRoute from './components/protected-route/protected-route';
@@ -40,26 +50,32 @@ const App = (): JSX.Element => {
           <Route path={ROUTES.LOGIN} element={<LoginPage />} />
           <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
           <Route path={ROUTES.VERIFY_EMAIL} element={<VerificationPage />} />
-          <Route path={ROUTES.VERIFY_PENDING} element={<PendingEmailVerificationPage />} />
+          <Route
+            path={ROUTES.VERIFY_PENDING}
+            element={<PendingEmailVerificationPage />}
+          />
           <Route path={ROUTES.ERROR} element={<ErrorPage />} />
           <Route path={ROUTES.NOT_FOUND} element={<NotFoundPage />} />
-          <Route path="*" element={<Navigate to={ROUTES.NOT_FOUND} replace />} />
+          <Route
+            path="*"
+            element={<Navigate to={ROUTES.NOT_FOUND} replace />}
+          />
         </Route>
 
         {/* Protected routes with MainLayout */}
         <Route element={<ProtectedRoute element={<MainLayout />} />}>
           <Route index element={<MainPage />} />
           <Route path={ROUTES.BOARD_PATTERN} element={<BoardPage />} />
-          <Route 
-            path={ROUTES.CARD_PATTERN} 
-            element={<CardPage />} 
-          />
+          <Route path={ROUTES.CARD_PATTERN} element={<CardPage />} />
         </Route>
 
         {/* Protected user routes with UserLayout */}
         <Route element={<ProtectedRoute element={<UserLayout />} />}>
           <Route path={ROUTES.USER.ROOT}>
-            <Route index element={<Navigate to={ROUTES.USER.PROFILE} replace />} />
+            <Route
+              index
+              element={<Navigate to={ROUTES.USER.PROFILE} replace />}
+            />
             <Route path="profile" element={<UserProfilePage />} />
             <Route path="email" element={<UserEmailPage />} />
             <Route path="security" element={<UserSecurityPage />} />
@@ -70,13 +86,13 @@ const App = (): JSX.Element => {
       {/* Modal routes - rendered on top when background is present */}
       {background && (
         <Routes>
-          <Route 
-            path={ROUTES.CARD_PATTERN} 
+          <Route
+            path={ROUTES.CARD_PATTERN}
             element={
               <ModalPortal>
                 <CardPage />
               </ModalPortal>
-            } 
+            }
           />
         </Routes>
       )}
