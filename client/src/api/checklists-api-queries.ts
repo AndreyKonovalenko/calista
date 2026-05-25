@@ -1,5 +1,5 @@
 import { useParams } from 'react-router';
-import api from './api';
+import api, { TPutData } from './api';
 import { invariantId } from '../utils/utils';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 
@@ -32,33 +32,39 @@ export const useCreateChecklist = () => {
 };
 
 export const useDeleteChecklist = () => {
-  const { id } = useParams();
-  //id - means cardId from url params
-  invariantId(id);
+  const { cardId } = useParams();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: api.checklists.deleteChecklist,
+    mutationFn: (checklistId: string) => { 
+      invariantId(checklistId)
+      return api.checklists.deleteChecklist(checklistId) } ,
     onSuccess: () => {
-      return queryClient.invalidateQueries({
-        queryKey: ['fetchCardById', id],
+      if( cardId) {
+        return queryClient.invalidateQueries({
+        queryKey: ['fetchCardById', cardId],
         exact: true,
       });
+      }
     },
   });
 };
 
 export const useReNumChecklistItemsPosInChecklist = () => {
   const queryClient = useQueryClient();
-  const { id } = useParams();
+  const { cardId } = useParams();
   //id - means cardId from url params
-  invariantId(id);
   return useMutation({
-    mutationFn: api.checklists.updateChecklist,
+    mutationFn: (
+      {id, data}: TPutData)=> {
+        invariantId(id)
+        return api.checklists.updateChecklist({id, data})},
     onSuccess: () => {
+      if(cardId){
       return queryClient.invalidateQueries({
-        queryKey: ['fetchCardById', id],
+        queryKey: ['fetchCardById', cardId],
         exact: true,
       });
+      }
     },
   });
 };

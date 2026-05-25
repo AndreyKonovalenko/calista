@@ -48,7 +48,7 @@ export const useDeleteCard = () => {
 };
 
 export const useUpdateCard = () => {
-  const { id: cardId } = useParams();
+  const { cardId } = useParams();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn:({id, data}: TPutData)=> {
