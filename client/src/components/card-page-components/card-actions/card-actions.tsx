@@ -65,7 +65,6 @@ const CardActions = (props: { cardId: string }) => {
   };
 
   const handleDeleteCard = () => {
-    if (!cardId) return;
     deleteCardQuery.mutate(cardId);
     navigate(-1);
   };

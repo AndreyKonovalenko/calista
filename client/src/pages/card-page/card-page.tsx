@@ -7,17 +7,18 @@ import { useChecklistItemActions } from '../../services/checklist-item-store';
 import LoadingBage from '../../components/loading-bage/loading-bage';
 import Card from '../../components/card-page-components/card/card';
 import { TO_MAIN } from '../../utils/route-constants';
-
+import { debugLog } from '../../utils/debug';
 const CardPage = () => {
   const { setChecklists } = useChecklistActions();
   const { setChecklistItems } = useChecklistItemActions();
-  const { id } = useParams();
-  if (!id) {
+  const { cardId } = useParams();
+  if (!cardId) {
     return null;
   }
-  const { data, isSuccess, isLoading } = useFetchCardById(id);
+  const { data, isSuccess, isLoading } = useFetchCardById(cardId);
 
   useEffect(() => {
+    debugLog('cardPage', {data, isSuccess,isLoading})
     if (isSuccess) {
       setChecklists(data.checklists);
       setChecklistItems(data.checklistItems);

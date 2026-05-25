@@ -1,4 +1,4 @@
-import api from './api';
+import api, { TPutData } from './api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router';
 import { invariantId } from '../utils/utils';
@@ -63,22 +63,28 @@ export const useDeleteList = () => {
 
 export const useReNumCardsPosInList = () => {
   const queryClient = useQueryClient();
-  const { id } = useParams();
-  invariantId(id);
+  const { id: boardId } = useParams();
   return useMutation({
-    mutationFn: api.lists.updateList,
+    mutationFn: ({id, data}: TPutData)=> {
+      invariantId(id)
+      return api.lists.updateList({id, data})
+    }, 
     onSuccess: () => {
-      return queryClient.invalidateQueries({
-        queryKey: ['fetchBoardById', id],
+      if(boardId){
+        return queryClient.invalidateQueries({
+        queryKey: ['fetchBoardById', boardId],
         exact: true,
       });
+      }
     },
   });
 };
 
 export const useUpdateList = () => {
   return useMutation({
-    mutationFn: api.lists.updateList,
+    mutationFn: ({id, data}: TPutData) => { 
+      invariantId(id)
+      return api.lists.updateList({id, data})}
   });
   // const queryClient = useQueryClient();
   // return useMutation({

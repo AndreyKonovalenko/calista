@@ -1,5 +1,5 @@
 import { useParams } from 'react-router';
-import api from './api';
+import api, { TPutData } from './api';
 import { invariantId } from '../utils/utils';
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 
@@ -34,9 +34,9 @@ export const useDeleteCard = () => {
   const { boardId } = useParams();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => {
-      invariantId(boardId)
-      return api.cards.deleteCard(boardId )
+    mutationFn: (cardId: string) => {
+      invariantId(cardId)
+      return api.cards.deleteCard(cardId )
     },
     onSuccess: () => {
       return queryClient.invalidateQueries({
@@ -48,16 +48,20 @@ export const useDeleteCard = () => {
 };
 
 export const useUpdateCard = () => {
-  const { id } = useParams();
+  const { id: cardId } = useParams();
   const queryClient = useQueryClient();
-  return useMutation(()=>{
-    return mutationFn: api.cards.updateCard
+  return useMutation({
+    mutationFn:({id, data}: TPutData)=> {
+      invariantId(id)
+      return api.cards.updateCard({id , data})
     },
     onSuccess: () => {
-      return queryClient.invalidateQueries({
-        queryKey: ['fetchCardById', id],
+      if(cardId){
+              return queryClient.invalidateQueries({
+        queryKey: ['fetchCardById', cardId],
         exact: true,
       });
+      }
     },
   });
 };

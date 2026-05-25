@@ -1,5 +1,5 @@
 import React, { useRef, useMemo } from 'react';
-import { useLocation, Link as RouterLink } from 'react-router';
+import { useLocation, Link as RouterLink, useParams } from 'react-router';
 import { Box, Link, ListItem } from '@mui/material';
 import { useDrop, useDrag } from 'react-dnd';
 import { TDraggableElement } from '../../../utils/types';
@@ -12,6 +12,7 @@ import {
   useCardCalculatedPos,
 } from '../../../services/card-store';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
+import { ROUTES } from '../../../utils/router-paths';
 
 export type TDropCardResult = {
   dropped: boolean;
@@ -38,6 +39,7 @@ const BoardCardDndContainer = (props: {
   children: React.ReactNode;
 }) => {
   const ref = useRef<HTMLAnchorElement>(null);
+  const {boardId} = useParams()
   const { _id, children, listId } = props;
   const reNumCardsPosInList = useReNumCardsPosInList();
   const { moveCard, setCardCalculatedPos } = useCardActions();
@@ -46,6 +48,12 @@ const BoardCardDndContainer = (props: {
   const cardCalculatedPos = useCardCalculatedPos();
   const location = useLocation();
   const updateCardQuery = useUpdateCard();
+  
+  if (!boardId) {
+    console.warn('BoardList: No boardId available');
+    return null;
+  }
+
 
   const handleUpdateCardPos = (
     cardId: string,
@@ -168,12 +176,14 @@ const BoardCardDndContainer = (props: {
   connectDrag(ref);
   connectDrop(ref);
 
+  const cardPath = ROUTES.card(boardId, listId, _id)
+
   return (
     <ListItem>
       <Link
         sx={dragStyle}
         ref={ref}
-        to={`lists/${listId}/cards/${_id}`}
+        to={cardPath}
         component={RouterLink}
         state={{ background: location }}
         underline="none"
