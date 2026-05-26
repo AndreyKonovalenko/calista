@@ -1,5 +1,5 @@
 import request from 'supertest';
-import expressLoader from '../../loaders/express-loader';
+import expressLoader from './../../src/loaders/express-loader';
 import express from 'express';
 
 const app = express();

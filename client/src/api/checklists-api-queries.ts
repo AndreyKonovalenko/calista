@@ -35,15 +35,16 @@ export const useDeleteChecklist = () => {
   const { cardId } = useParams();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (checklistId: string) => { 
-      invariantId(checklistId)
-      return api.checklists.deleteChecklist(checklistId) } ,
+    mutationFn: (checklistId: string) => {
+      invariantId(checklistId);
+      return api.checklists.deleteChecklist(checklistId);
+    },
     onSuccess: () => {
-      if( cardId) {
+      if (cardId) {
         return queryClient.invalidateQueries({
-        queryKey: ['fetchCardById', cardId],
-        exact: true,
-      });
+          queryKey: ['fetchCardById', cardId],
+          exact: true,
+        });
       }
     },
   });
@@ -54,16 +55,16 @@ export const useReNumChecklistItemsPosInChecklist = () => {
   const { cardId } = useParams();
   //id - means cardId from url params
   return useMutation({
-    mutationFn: (
-      {id, data}: TPutData)=> {
-        invariantId(id)
-        return api.checklists.updateChecklist({id, data})},
+    mutationFn: ({ id, data }: TPutData) => {
+      invariantId(id);
+      return api.checklists.updateChecklist({ id, data });
+    },
     onSuccess: () => {
-      if(cardId){
-      return queryClient.invalidateQueries({
-        queryKey: ['fetchCardById', cardId],
-        exact: true,
-      });
+      if (cardId) {
+        return queryClient.invalidateQueries({
+          queryKey: ['fetchCardById', cardId],
+          exact: true,
+        });
       }
     },
   });

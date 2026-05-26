@@ -1,20 +1,18 @@
 import express from 'express';
 import request from 'supertest';
-import expressLoader from '../../loaders/express-loader';
+import expressLoader from './../../src/loaders/express-loader';
 import { clearCollections, dbConnect, dbDisconnect } from './db-handler';
 import { Types } from 'mongoose';
 
-import { BoardModel, IBoard } from '../../models/BoardModel';
-import { ListModel } from '../../models/ListModel';
-import { CardModel } from '../../models/CardModel';
-import {
-  CheckListItemModel,
-  CheckListModel,
-} from '../../models/ChecklistModel';
-import { generateToken } from '../../services/auth-service';
+import { BoardModel, IBoard } from './../../src/models/BoardModel';
+import { ListModel } from './../../src/models/ListModel';
+import { CardModel } from './../../src/models/CardModel';
+import { ChecklistModel } from './../../src/models/ChecklistModel';
+import { ChecklistItemModel } from '../../src/models/ChecklistItemMedel';
+import { generateToken } from './../../src/services/auth-service';
 import { setUpMockDb } from './mock-data-db';
-import { UserModel } from '../../models/UserModel';
-import customErrorMessages from '../../middleware/validators/custom-error-messages';
+import { UserModel } from './../../src/models/UserModel';
+import customErrorMessages from './../../src/middleware/validators/custom-error-messages';
 
 const app = express();
 beforeAll(async () => dbConnect());
@@ -119,8 +117,8 @@ describe('BoardsController', () => {
       expect((await BoardModel.find({})).length).toBe(0);
       expect((await ListModel.find({})).length).toBe(0);
       expect((await CardModel.find({})).length).toBe(0);
-      expect((await CheckListModel.find({})).length).toBe(0);
-      expect((await CheckListItemModel.find({})).length).toBe(0);
+      expect((await ChecklistModel.find({})).length).toBe(0);
+      expect((await ChecklistItemModel.find({})).length).toBe(0);
       expect(response.status).toBe(200);
     });
   });

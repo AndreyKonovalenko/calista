@@ -18,7 +18,7 @@ const CardPage = () => {
   const { data, isSuccess, isLoading } = useFetchCardById(cardId);
 
   useEffect(() => {
-    debugLog('cardPage', {data, isSuccess,isLoading})
+    debugLog('cardPage', { data, isSuccess, isLoading });
     if (isSuccess) {
       setChecklists(data.checklists);
       setChecklistItems(data.checklistItems);

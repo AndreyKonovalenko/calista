@@ -1,9 +1,9 @@
 import request from 'supertest';
 import express from 'express';
-import expressLoader from '../../loaders/express-loader';
+import expressLoader from './../../src/loaders/express-loader';
 import { dbConnect, dbDisconnect } from './db-handler';
-import { generateToken } from '../../services/auth-service';
-import { UserModel } from '../../models/UserModel';
+import { generateToken } from './../../src/services/auth-service';
+import { UserModel } from './../../src/models/UserModel';
 
 const testUser = {
   username: 'Marck.7_cker-berg',

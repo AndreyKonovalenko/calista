@@ -65,16 +65,16 @@ export const useReNumCardsPosInList = () => {
   const queryClient = useQueryClient();
   const { id: boardId } = useParams();
   return useMutation({
-    mutationFn: ({id, data}: TPutData)=> {
-      invariantId(id)
-      return api.lists.updateList({id, data})
-    }, 
+    mutationFn: ({ id, data }: TPutData) => {
+      invariantId(id);
+      return api.lists.updateList({ id, data });
+    },
     onSuccess: () => {
-      if(boardId){
+      if (boardId) {
         return queryClient.invalidateQueries({
-        queryKey: ['fetchBoardById', boardId],
-        exact: true,
-      });
+          queryKey: ['fetchBoardById', boardId],
+          exact: true,
+        });
       }
     },
   });
@@ -82,9 +82,10 @@ export const useReNumCardsPosInList = () => {
 
 export const useUpdateList = () => {
   return useMutation({
-    mutationFn: ({id, data}: TPutData) => { 
-      invariantId(id)
-      return api.lists.updateList({id, data})}
+    mutationFn: ({ id, data }: TPutData) => {
+      invariantId(id);
+      return api.lists.updateList({ id, data });
+    },
   });
   // const queryClient = useQueryClient();
   // return useMutation({

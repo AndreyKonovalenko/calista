@@ -39,7 +39,7 @@ const BoardCardDndContainer = (props: {
   children: React.ReactNode;
 }) => {
   const ref = useRef<HTMLAnchorElement>(null);
-  const {boardId} = useParams()
+  const { boardId } = useParams();
   const { _id, children, listId } = props;
   const reNumCardsPosInList = useReNumCardsPosInList();
   const { moveCard, setCardCalculatedPos } = useCardActions();
@@ -48,12 +48,11 @@ const BoardCardDndContainer = (props: {
   const cardCalculatedPos = useCardCalculatedPos();
   const location = useLocation();
   const updateCardQuery = useUpdateCard();
-  
+
   if (!boardId) {
     console.warn('BoardList: No boardId available');
     return null;
   }
-
 
   const handleUpdateCardPos = (
     cardId: string,
@@ -176,7 +175,7 @@ const BoardCardDndContainer = (props: {
   connectDrag(ref);
   connectDrop(ref);
 
-  const cardPath = ROUTES.card(boardId, listId, _id)
+  const cardPath = ROUTES.card(boardId, listId, _id);
 
   return (
     <ListItem>
