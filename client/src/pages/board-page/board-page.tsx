@@ -22,6 +22,7 @@ import { useListActions, useSortedLists } from '../../services/list-store';
 import { useCardActions } from '../../services/card-store';
 import { useChecklistActions } from '../../services/checklist-store';
 import { useChecklistItemActions } from '../../services/checklist-item-store';
+import { ROUTES } from '../../utils/router-paths';
 
 const BoardPage = () => {
   const navigate = useNavigate();
@@ -43,13 +44,8 @@ const BoardPage = () => {
   // Now conditional return
 
   const handleDeleteBoard = (): void => {
-    if (!boardId) {
-      console.error('Cannot delete board: No board ID available');
-      return;
-    }
-
-    deleteBoardQuery.mutate(boardId);
-    navigate(TO_MAIN);
+    deleteBoardQuery.mutate()
+    navigate(ROUTES.MAIN);
   };
   const handleDrawerOpen = () => {
     setOpen(true);

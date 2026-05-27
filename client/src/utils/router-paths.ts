@@ -1,6 +1,6 @@
 export const ROUTES = {
   // Public routes
-  HOME: '/',
+  MAIN: '/',
   LOGIN: '/login',
   REGISTER: '/register',
   VERIFY_EMAIL: '/verify-email',

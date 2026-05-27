@@ -1,11 +1,12 @@
-// import '@testing-library/jest-dom';
+import '@testing-library/jest-dom';
 
-// // Only mock what you actually need
-// Object.defineProperty(window, 'matchMedia', {
-//   writable: true,
-//   value: jest.fn().mockImplementation(() => ({
-//     matches: false,
-//     addEventListener: jest.fn(),
-//     removeEventListener: jest.fn(),
-//   })),
-// });
+// Suppress React 18 console errors/warnings during tests (optional)
+const originalError = console.error;
+beforeAll(() => {
+  console.error = (...args: string[]) => {
+    if (args[0]?.includes('Warning: ReactDOM.render is no longer supported')) {
+      return;
+    }
+    originalError.call(console, args);
+  };
+});

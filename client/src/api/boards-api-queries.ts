@@ -36,14 +36,20 @@ export const useFetchBoardById = (boardId: string) => {
 };
 
 export const useDeleteBoard = () => {
+  const {boardId} = useParams()
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: api.boards.deleteBoard,
+    mutationFn:() => {
+      invariantId(boardId)
+      return api.boards.deleteBoard(boardId)
+    }, 
     onSuccess: () => {
-      return queryClient.invalidateQueries({
+      if(boardId) {
+        return queryClient.invalidateQueries({
         queryKey: ['fetchBoards'],
         exact: true,
       });
+      }   
     },
   });
 };

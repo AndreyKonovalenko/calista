@@ -1,54 +1,11 @@
 {
   "preset": "ts-jest",
   "testEnvironment": "jsdom",
-  "rootDir": ".",
-  "setupFiles": ["dotenv/config"],
   "testMatch": [
-    "<rootDir>/src/**/*.test.ts",
-    "<rootDir>/src/**/*.test.tsx",
-    "<rootDir>/src/**/*.spec.ts",
-    "<rootDir>/src/**/*.spec.tsx"
+    "**/?(*.)+(spec|test).[tj]s?(x)",
+    "**/__tests__/**/*.[tj]s?(x)"
   ],
-  "moduleNameMapper": {
-    "^@/(.*)$": "<rootDir>/src/$1",
-    "^@components/(.*)$": "<rootDir>/src/components/$1",
-    "^@pages/(.*)$": "<rootDir>/src/pages/$1",
-    "^@services/(.*)$": "<rootDir>/src/services/$1",
-    "^@api/(.*)$": "<rootDir>/src/api/$1",
-    "^@utils/(.*)$": "<rootDir>/src/utils/$1",
-    "^@hooks/(.*)$": "<rootDir>/src/hooks/$1",
-    "^@types/(.*)$": "<rootDir>/src/types/$1",
-    "\\.(css|less|scss|sass)$": "identity-obj-proxy",
-    "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js"
-  },
-  "setupFilesAfterEnv": ["<rootDir>/test/setup.ts"],
-  "transform": {
-    "^.+\\.(ts|tsx)$": [
-      "ts-jest",
-      {
-        "tsconfig": "<rootDir>/tsconfig.json",
-        "isolatedModules": true
-      }
-    ],
-    "^.+\\.(js|jsx)$": "babel-jest"
-  },
-  "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
-  "testPathIgnorePatterns": ["/node_modules/", "/dist/", "/coverage/"],
-  "collectCoverageFrom": [
-    "src/**/*.{ts,tsx}",
-    "!src/**/*.d.ts",
-    "!src/main.tsx",
-    "!src/vite-env.d.ts",
-    "!src/**/*.stories.{ts,tsx}",
-    "!src/**/*.test.{ts,tsx}"
-  ],
-  "coverageDirectory": "<rootDir>/coverage",
-  "coverageReporters": ["text", "lcov", "html"],
   "verbose": true,
-  "clearMocks": true,
-  "restoreMocks": true,
-  "watchPlugins": [
-    "jest-watch-typeahead/filename",
-    "jest-watch-typeahead/testname"
-  ]
+  "forceExit": false,
+  "setupFiles": ["dotenv/config"]
 }
