@@ -1,4 +1,4 @@
-import api from './api';
+import api, { TPutData } from './api';
 import { useParams } from 'react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { invariantId } from '../utils/utils';
@@ -56,7 +56,7 @@ export const useDeleteBoard = () => {
 
 export const useReNumListsPosInBoard = () => {
   const { boardId } = useParams();
-  debugLog('useRumListsPOsInBoard', { boardId });
+  debugLog('useRumListsPosInBoard', { boardId });
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: { action: string }) => {
@@ -79,6 +79,9 @@ export const useReNumListsPosInBoard = () => {
 
 export const useUpdateBoard = () => {
   return useMutation({
-    mutationFn: api.boards.updateBoard,
+    mutationFn: ({id, data}: TPutData)=> {
+      invariantId(id)
+      return api.boards.updateBoard({id, data})
+    }, 
   });
 };

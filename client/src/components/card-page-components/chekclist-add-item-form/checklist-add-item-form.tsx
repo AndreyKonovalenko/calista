@@ -13,9 +13,9 @@ const CheckListAddItemFrom = (props: {
   _id: string;
   handleCancelationAddAnItem: () => void;
 }) => {
-  const { boardId, listId, id } = useParams();
+  const { boardId, listId, cardId } = useParams();
   const checklistItems = useChecklistItems();
-  if (!id || !boardId || !listId) {
+  if (!cardId || !boardId || !listId) {
     return null;
   }
   const { _id, handleCancelationAddAnItem } = props;
@@ -56,7 +56,7 @@ const CheckListAddItemFrom = (props: {
               name: element,
               boardId: boardId,
               listId: listId,
-              cardId: id,
+              cardId: cardId,
               checklistId: _id,
               pos: newPos,
             });
@@ -64,7 +64,7 @@ const CheckListAddItemFrom = (props: {
         });
       }
     },
-    [id, checklistItems, sortedChecklistItems],
+    [cardId, checklistItems, sortedChecklistItems],
   );
 
   const onSubmitEventHandler = (event: React.FormEvent<HTMLFormElement>) => {
