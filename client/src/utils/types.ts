@@ -1,6 +1,4 @@
-export type TForm = {
-  [key: string]: string;
-};
+export type TForm = Record<string, string>;
 
 export type TDraggableElement = {
   _id: string;
@@ -13,11 +11,8 @@ export interface IBoard {
   name: string;
 }
 
-export type TBoard = {
-  _id: string;
-  createrId: string;
-  name: string;
-  lists: { [key: string]: TList };
+export type TBoard = IBoard & {
+  lists: Record<string, TList>;
 };
 
 export interface IBoardTrimmed {
