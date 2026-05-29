@@ -38,9 +38,13 @@ import LoadingBage from './components/loading-bage/loading-bage';
 
 // routes
 import { ROUTES } from './utils/router-paths';
+import { useAxiosInterceptor } from './hooks/useAxiosInterceptor';
+
 const App = (): JSX.Element => {
   const location = useLocation();
   const background = location.state?.background;
+
+  useAxiosInterceptor();
 
   return (
     <Suspense fallback={<LoadingBage />}>
