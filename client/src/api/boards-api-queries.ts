@@ -36,20 +36,20 @@ export const useFetchBoardById = (boardId: string) => {
 };
 
 export const useDeleteBoard = () => {
-  const {boardId} = useParams()
+  const { boardId } = useParams();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn:() => {
-      invariantId(boardId)
-      return api.boards.deleteBoard(boardId)
-    }, 
+    mutationFn: () => {
+      invariantId(boardId);
+      return api.boards.deleteBoard(boardId);
+    },
     onSuccess: () => {
-      if(boardId) {
+      if (boardId) {
         return queryClient.invalidateQueries({
-        queryKey: ['fetchBoards'],
-        exact: true,
-      });
-      }   
+          queryKey: ['fetchBoards'],
+          exact: true,
+        });
+      }
     },
   });
 };
@@ -79,9 +79,9 @@ export const useReNumListsPosInBoard = () => {
 
 export const useUpdateBoard = () => {
   return useMutation({
-    mutationFn: ({id, data}: TPutData)=> {
-      invariantId(id)
-      return api.boards.updateBoard({id, data})
-    }, 
+    mutationFn: ({ id, data }: TPutData) => {
+      invariantId(id);
+      return api.boards.updateBoard({ id, data });
+    },
   });
 };

@@ -28,11 +28,39 @@ const VERIFY_PENDING_EMAIL = validEnv(process.env.VERIFY_PENDING_EMAIL);
 const CHANGE_EMAIL = validEnv(process.env.CHANGE_EMAIL);
 axios.defaults.baseURL = BASE_URL;
 
-export type TData = {
-  [key: string]: FormDataEntryValue | string | number | null;
-};
+export type TData = Record<string, string | number | FormDataEntryValue | null>;
 
 export type TPutData = { id: string; data: TData };
+
+type TApiBoardPayload = {
+  name: string;
+};
+type TApiListPayload = {
+  boardId: string;
+  name: string;
+  pos: number;
+};
+type TApiCardPayload = {
+  boardId: string;
+  listId: string;
+  name: string;
+  pos: number;
+};
+type TApiChecklistPayload = {
+  boardId: string;
+  listId: string;
+  cardId: string;
+  name: string;
+  pos: number;
+};
+type TApiChecklistItemPaylod = {
+  boardId: string;
+  listId: string;
+  cardId: string;
+  checklistId: string;
+  name: string;
+  pos: number;
+};
 
 // type TCustomErrorResponse = {
 //   message: string;
@@ -95,7 +123,7 @@ const auth = {
 
 const boards = {
   fetchBoards: () => request.get<Array<IBoardTrimmed>>(BOARDS),
-  createBoard: (data: TData) => request.post<void>(BOARDS, data),
+  createBoard: (data: TApiBoardPayload) => request.post<void>(BOARDS, data),
   fetchBoardById: (id: string) =>
     request.get<{
       board: IBoard;
@@ -120,7 +148,12 @@ const lists = {
 };
 
 const cards = {
-  createCard: (data: TData) => request.post<void>(CARDS, data),
+  createCard: (data: {
+    boardId: string;
+    name: string;
+    listId: string;
+    pos: number;
+  }) => request.post<void>(CARDS, data),
   fetchCardById: (id: string) =>
     request.get<{
       card: ICard;

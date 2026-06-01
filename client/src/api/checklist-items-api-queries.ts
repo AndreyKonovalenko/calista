@@ -8,7 +8,7 @@ import { useQueryClient, useMutation } from '@tanstack/react-query';
 //   const queryClient = useQueryClient();
 //   return useMutation({
 //     mutationFn: (data: TData) =>  {
-//       invariantId(cardId)  
+//       invariantId(cardId)
 //       return api.checklistItems.createChecklistItem(data)
 //     },
 //     onSuccess: () => {
@@ -32,17 +32,16 @@ import { useQueryClient, useMutation } from '@tanstack/react-query';
 //         queryClient.invalidateQueries({
 //         queryKey: ['fetchCardById', cardId],
 //         exact: true,
-//         }); 
-//       }  
+//         });
+//       }
 //     },
 //   });
 // };
 
-
 // First, update the hook
 export const useCreateChecklistItem = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: (data: TData) => {
       // No useParams here! Just use what's passed
@@ -50,16 +49,16 @@ export const useCreateChecklistItem = () => {
     },
     onSuccess: (_, variables) => {
       // variables contains everything passed to mutate()
-       // for onBackground Route fetchBoardById calling in Board Page
-      if(variables.boardId) {
+      // for onBackground Route fetchBoardById calling in Board Page
+      if (variables.boardId) {
         queryClient.invalidateQueries({
           queryKey: ['fetchBoardById', variables.boardId],
           exact: true,
         });
       }
-       // React location.state.background pattern limitaion
-       // for  empty Route there is no fetchBoardById call because no Board Page Loaded
-      if(variables.cardId) {
+      // React location.state.background pattern limitaion
+      // for  empty Route there is no fetchBoardById call because no Board Page Loaded
+      if (variables.cardId) {
         queryClient.invalidateQueries({
           queryKey: ['fetchCardById', variables.cardId],
           exact: true,
@@ -68,8 +67,6 @@ export const useCreateChecklistItem = () => {
     },
   });
 };
-
-
 
 export const useDeleteChecklistItem = () => {
   const { id } = useParams();

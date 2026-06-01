@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { Box, List } from '@mui/material';
-import { useParams } from 'react-router';
 import BoardCard from '../board-card/bard-card';
 import BoardListContent from './board-list-content';
 import BoardListDndContainer from './board-list-dnd-container';
@@ -8,24 +7,13 @@ import { useCreateCard } from '../../../api/cards-api-queries';
 import { useList } from '../../../services/list-store';
 import { useSortedCardsByListId } from '../../../services/card-store';
 import { useCards } from '../../../services/card-store';
-import { debugLog } from '../../../utils/debug';
 
 const BoardList = (props: { _id: string }) => {
   const { _id: listId } = props;
-
-  // ✅ ALL hooks at the top (unconditionally)
-  const { boardId } = useParams();
-  debugLog('BoardList', { boardId });
   const list = useList(listId);
   const sortedCards = useSortedCardsByListId(listId); // ← Fixed spelling
   const cards = useCards();
   const createCardQuery = useCreateCard();
-
-  // ✅ Early returns AFTER all hooks
-  if (!boardId) {
-    console.warn('BoardList: No boardId available');
-    return null;
-  }
 
   if (!list) {
     console.warn('BoardList: List not found for id:', listId);

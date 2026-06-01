@@ -52,7 +52,9 @@ export const useAxiosInterceptor = () => {
             case 401:
               // Unauthorized - clear auth state and redirect to login
               if (!data?.options) {
-                toast.error(data?.message || 'Session expired. Please login again');
+                toast.error(
+                  data?.message || 'Session expired. Please login again',
+                );
                 clearAuth();
                 navigate(ROUTES.LOGIN);
               }
@@ -77,8 +79,8 @@ export const useAxiosInterceptor = () => {
               break;
             default:
               if (process.env.NODE_ENV === 'development') {
-                toast.error(`Unhandled error: ${data?.message}`)
-              }  
+                toast.error(`Unhandled error: ${data?.message}`);
+              }
           }
         } else if (error.request) {
           debugLog('axios-interceptor-wrapper', { error: error.message });

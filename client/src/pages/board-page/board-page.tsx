@@ -44,7 +44,7 @@ const BoardPage = () => {
   // Now conditional return
 
   const handleDeleteBoard = (): void => {
-    deleteBoardQuery.mutate()
+    deleteBoardQuery.mutate();
     navigate(ROUTES.MAIN);
   };
   const handleDrawerOpen = () => {

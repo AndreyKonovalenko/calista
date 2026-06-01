@@ -5,13 +5,12 @@ import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 
 export const useCreateCard = () => {
   const { boardId } = useParams();
-
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: (data: { name: string; listId: string; pos: number }) => {
       invariantId(boardId);
-      return api.cards.createCard({ boardId, ...data });
+      // add boardId from useParams to creatate card object
+      return api.cards.createCard(data);
     },
     onSuccess: () => {
       return queryClient.invalidateQueries({

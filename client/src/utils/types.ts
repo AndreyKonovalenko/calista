@@ -11,9 +11,9 @@ export interface IBoard {
   name: string;
 }
 
-export type TBoard = IBoard & {
-  lists: Record<string, TList>;
-};
+// export type TBoard = IBoard & {
+//   lists: Record<string, TList>;
+// };
 
 export interface IBoardTrimmed {
   _id: string;
@@ -26,12 +26,12 @@ export interface IList {
   pos: number;
 }
 
-export type TList = {
-  _id: string;
-  name: string;
-  cards: { [key: string]: ICardTrimmed };
-  pos: number;
-};
+// export type TList = {
+//   _id: string;
+//   name: string;
+//   cards: { [key: string]: ICardTrimmed };
+//   pos: number;
+// };
 
 export interface ICard {
   _id: string;
