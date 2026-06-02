@@ -28,13 +28,58 @@ const VERIFY_PENDING_EMAIL = validEnv(process.env.VERIFY_PENDING_EMAIL);
 const CHANGE_EMAIL = validEnv(process.env.CHANGE_EMAIL);
 axios.defaults.baseURL = BASE_URL;
 
-export type TData = Record<string, string | number | FormDataEntryValue | null>;
 
-export type TPutData = { id: string; data: TData };
 
-type TApiBoardPayload = {
-  name: string;
+
+export type TApiPayload = Record<string, string | number | FormDataEntryValue | null> ;
+
+export type TApiUpdatePayload = { id: string; data: TApiPayload };
+
+
+
+
+type TFetchUserResponse = {
+  _id:string;
+  username: string,
+  email: string
+}
+
+type TFetchBoardsResponse = {
+  boards: Array<{_id: string, name: string}>
+}
+
+type TFetchBoardResponse = {
+  board: IBoard;
+  lists: Record<string, IList>;
+  cards: Record<string, ICard>;
+  checklists: Record<string, IChecklist>;
+  checklistItems: Record<string, IChecklistItem> 
+}
+
+type TFetchCardRrespose = {
+  card: ICard;
+  checklists: Record<string, IChecklist>;
+  checklistItems: Record<string, IChecklistItem>;
+}
+
+type TVerifyEmailResponse = {
+  message: string;
+  emailVerified: boolean;
 };
+
+type TApiLoginPayload = {
+  username: string;
+  password: string;
+}
+type TApiRegisterPayload = {
+  username: string;
+  email: string, 
+  password: string,
+}
+type TApiBoardPayload = {
+  name: string
+}
+
 type TApiListPayload = {
   boardId: string;
   name: string;
@@ -53,7 +98,7 @@ type TApiChecklistPayload = {
   name: string;
   pos: number;
 };
-type TApiChecklistItemPaylod = {
+type TApiChecklistItemPayload = {
   boardId: string;
   listId: string;
   cardId: string;
@@ -62,32 +107,6 @@ type TApiChecklistItemPaylod = {
   pos: number;
 };
 
-// type TCustomErrorResponse = {
-//   message: string;
-//   stack?: string;
-//   status: number;
-//   success: boolean;
-// };
-// axios.interceptors.response.use(
-//   res => {
-//     return res;
-//   },
-//   (error: AxiosError<TCustomErrorResponse>) => {
-//     if (error.response) {
-//       const { data } = error.response!;
-//       console.log(data.message, data.status);
-//       if(data.status === 400){
-//         navigate('/error-paga', {state: {massage: data.message}})
-//       }
-//       toast.error(data.message);
-//     } else if (error.request) {
-//       toast(error.request.status);
-//     } else {
-//       toast.error(error.message);
-//     }
-//     return Promise.reject(error);
-//   },
-// );
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
@@ -103,16 +122,16 @@ const request = {
 };
 
 const auth = {
-  fetchUser: () => request.get<TAuthState>(AUTH),
-  login: (data: TData) => request.post<TAuthState>(LOGIN, data),
-  register: (data: TData) => request.post<TAuthState>(REGISTER, data),
+  fetchUser: () => request.get<TFetchUserResponse >(AUTH),
+  login: (data: TApiLoginPayload) => request.post<TAuthState>(LOGIN, data),
+  register: (data: TApiRegisterPayload) => request.post<TAuthState>(REGISTER, data),
   logout: () => request.post<void>(LOGOUT),
   verifyEmail: (token: string) =>
-    request.get<{ message: string; emailVerified: boolean }>(
+    request.get<TVerifyEmailResponse>(
       `${AUTH}${VERIFY_EMAIL}?token=${token}`,
     ),
   verifyPendingEmail: (token: string) =>
-    request.get<{ message: string; emailVerified: boolean }>(
+    request.get<TVerifyEmailResponse>(
       `${AUTH}${VERIFY_PENDING_EMAIL}?token=${token}`,
     ),
   resendLink: (data: { email: string }) =>
