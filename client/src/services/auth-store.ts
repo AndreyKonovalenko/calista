@@ -9,7 +9,7 @@ export type TAuthState = {
 };
 
 type TAuthActions = {
-  setAuthStatus: (data: {
+  setAuthState: (data: {
     _id: string;
     username: string;
     email: string;
@@ -25,7 +25,7 @@ const useAuthStore = create<TAuthState & { actions: TAuthActions }>()(
       username: '',
       email: '',
       actions: {
-        setAuthStatus: (data: {
+        setAuthState: (data: {
           _id: string;
           username: string;
           email: string;

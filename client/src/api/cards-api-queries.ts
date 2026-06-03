@@ -1,5 +1,5 @@
 import { useParams } from 'react-router';
-import api, { TPutData } from './api';
+import api, { TApiUpdatePayload, TApiCardPayload } from './api';
 import { invariantId } from '../utils/utils';
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 
@@ -7,7 +7,7 @@ export const useCreateCard = () => {
   const { boardId } = useParams();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: { name: string; listId: string; pos: number }) => {
+    mutationFn: (data: TApiCardPayload) => {
       invariantId(boardId);
       // add boardId from useParams to creatate card object
       return api.cards.createCard(data);
@@ -50,7 +50,7 @@ export const useUpdateCard = () => {
   const { cardId } = useParams();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: TPutData) => {
+    mutationFn: ({ id, data }: TApiUpdatePayload) => {
       invariantId(id);
       return api.cards.updateCard({ id, data });
     },

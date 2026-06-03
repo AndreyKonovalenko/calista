@@ -17,7 +17,7 @@ import { TO_MAIN } from '../../utils/route-constants';
 export default function LoginPage() {
   const { mutate, data } = useLogin();
   const navigate = useNavigate();
-  const { setAuthStatus } = useAuthActions();
+  const { setAuthState } = useAuthActions();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -29,10 +29,10 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (data) {
-      setAuthStatus(data);
+      setAuthState(data);
       navigate(TO_MAIN);
     }
-  }, [data, setAuthStatus]);
+  }, [data, setAuthState]);
   return (
     <Container component="main" maxWidth="xs">
       <Box

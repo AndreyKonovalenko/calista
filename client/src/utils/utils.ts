@@ -1,8 +1,15 @@
 import { ICard, IChecklistItem, IList } from './types';
 
-export default function validEnv(name: string | undefined): string {
+export default function validEnv(
+  name: string | undefined,
+  variableName?: string,
+): string {
   if (!name) {
-    throw new Error('missing env');
+    throw new Error(
+      variableName
+        ? `Missing evironment variable:${variableName}`
+        : 'Missing required environment variable',
+    );
   }
   return name;
 }

@@ -22,12 +22,11 @@ export interface IBoardTrimmed {
 
 export interface IList {
   _id: string;
-  creterId: string,
-  boardId: string,
+  creterId: string;
+  boardId: string;
   name: string;
   pos: number;
 }
-
 
 export interface ICard {
   _id: string;
@@ -47,7 +46,7 @@ export interface ICardTrimmed {
 
 export interface IChecklist {
   _id: string;
-  createrId:string;
+  createrId: string;
   baoardId: string;
   listId: string;
   cardId: string;

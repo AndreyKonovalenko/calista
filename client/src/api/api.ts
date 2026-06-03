@@ -1,11 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
-// import { toast } from 'react-toastify';
-import { TAuthState } from '../services/auth-store';
-// import { useNavigate } from 'react-router';
 import {
   IBoard,
   ICard,
-  IBoardTrimmed,
   IList,
   IChecklist,
   IChecklistItem,
@@ -27,78 +23,79 @@ const VERIFY_EMAIL = validEnv(process.env.VERIFY_EMAIL);
 const VERIFY_PENDING_EMAIL = validEnv(process.env.VERIFY_PENDING_EMAIL);
 const CHANGE_EMAIL = validEnv(process.env.CHANGE_EMAIL);
 axios.defaults.baseURL = BASE_URL;
+axios.defaults.withCredentials = true;
 
-
-
-
-export type TApiPayload = Record<string, string | number | FormDataEntryValue | null> ;
-
+export type TApiPayload = Record<
+  string,
+  string | number | undefined | null | boolean
+>;
 export type TApiUpdatePayload = { id: string; data: TApiPayload };
 
-
-
-
 type TFetchUserResponse = {
-  _id:string;
-  username: string,
-  email: string
-}
+  _id: string;
+  username: string;
+  email: string;
+};
 
 type TFetchBoardsResponse = {
-  boards: Array<{_id: string, name: string}>
-}
+  boards: Array<{ _id: string; name: string }>;
+};
 
 type TFetchBoardResponse = {
   board: IBoard;
   lists: Record<string, IList>;
   cards: Record<string, ICard>;
   checklists: Record<string, IChecklist>;
-  checklistItems: Record<string, IChecklistItem> 
-}
+  checklistItems: Record<string, IChecklistItem>;
+};
 
-type TFetchCardRrespose = {
+type TFetchCardRespose = {
   card: ICard;
   checklists: Record<string, IChecklist>;
   checklistItems: Record<string, IChecklistItem>;
-}
+};
 
-type TVerifyEmailResponse = {
+export type TVerifyEmailResponse = {
   message: string;
   emailVerified: boolean;
 };
 
-type TApiLoginPayload = {
+export type TApiLoginPayload = {
   username: string;
   password: string;
-}
-type TApiRegisterPayload = {
+};
+export type TApiRegisterPayload = {
   username: string;
-  email: string, 
-  password: string,
-}
-type TApiBoardPayload = {
-  name: string
-}
+  email: string;
+  password: string;
+};
 
-type TApiListPayload = {
+export type TApiBoardPayload = {
+  name: string;
+};
+
+export type TApiListPayload = {
   boardId: string;
   name: string;
   pos: number;
 };
-type TApiCardPayload = {
+
+export type TApiCardPayload = {
   boardId: string;
   listId: string;
   name: string;
   pos: number;
 };
-type TApiChecklistPayload = {
+
+export type TApiChecklistPayload = {
   boardId: string;
   listId: string;
   cardId: string;
   name: string;
   pos: number;
 };
-type TApiChecklistItemPayload = {
+
+export type TApiChecklistItemPayload = {
   boardId: string;
   listId: string;
   cardId: string;
@@ -106,7 +103,6 @@ type TApiChecklistItemPayload = {
   name: string;
   pos: number;
 };
-
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
@@ -122,14 +118,13 @@ const request = {
 };
 
 const auth = {
-  fetchUser: () => request.get<TFetchUserResponse >(AUTH),
-  login: (data: TApiLoginPayload) => request.post<TAuthState>(LOGIN, data),
-  register: (data: TApiRegisterPayload) => request.post<TAuthState>(REGISTER, data),
+  fetchUser: () => request.get<TFetchUserResponse>(AUTH),
+  login: (data: TApiLoginPayload) =>
+    request.post<TFetchUserResponse>(LOGIN, data),
+  register: (data: TApiRegisterPayload) => request.post<void>(REGISTER, data),
   logout: () => request.post<void>(LOGOUT),
   verifyEmail: (token: string) =>
-    request.get<TVerifyEmailResponse>(
-      `${AUTH}${VERIFY_EMAIL}?token=${token}`,
-    ),
+    request.get<TVerifyEmailResponse>(`${AUTH}${VERIFY_EMAIL}?token=${token}`),
   verifyPendingEmail: (token: string) =>
     request.get<TVerifyEmailResponse>(
       `${AUTH}${VERIFY_PENDING_EMAIL}?token=${token}`,
@@ -141,68 +136,55 @@ const auth = {
 };
 
 const boards = {
-  fetchBoards: () => request.get<Array<IBoardTrimmed>>(BOARDS),
   createBoard: (data: TApiBoardPayload) => request.post<void>(BOARDS, data),
+  fetchBoards: () => request.get<TFetchBoardsResponse>(BOARDS),
   fetchBoardById: (id: string) =>
-    request.get<{
-      board: IBoard;
-      lists: { [key: string]: IList };
-      cards: { [key: string]: ICard };
-      checklists: { [key: string]: IChecklist };
-      checklistItems: { [key: string]: IChecklistItem };
-    }>(`${BOARDS}/${id}`),
+    request.get<TFetchBoardResponse>(`${BOARDS}/${id}`),
   deleteBoard: (id: string) => request.delete<void>(`${BOARDS}/${id}`),
-  updateBoard: ({ id, data }: TPutData) =>
+  updateBoard: ({ id, data }: TApiUpdatePayload) =>
     request.put<void>(`${BOARDS}/${id}`, data),
 };
 
 const lists = {
-  createList: (data: TData) => request.post<void>(LISTS, data),
-  // fetchListById: (id: string) => {
-  //   request.get<IList>(`${LISTS}/${id}`);
-  // },
+  createList: (data: TApiListPayload) => request.post<void>(LISTS, data),
   deleteList: (id: string) => request.delete<void>(`${LISTS}/${id}`),
-  updateList: ({ id, data }: TPutData) =>
+  updateList: ({ id, data }: TApiUpdatePayload) =>
     request.put<void>(`${LISTS}/${id}`, data),
 };
 
 const cards = {
-  createCard: (data: {
-    boardId: string;
-    name: string;
-    listId: string;
-    pos: number;
-  }) => request.post<void>(CARDS, data),
+  createCard: (data: TApiCardPayload) => request.post<void>(CARDS, data),
   fetchCardById: (id: string) =>
-    request.get<{
-      card: ICard;
-      checklists: { [key: string]: IChecklist };
-      checklistItems: { [key: string]: IChecklistItem };
-    }>(`${CARDS}/${id}`),
+    request.get<TFetchCardRespose>(`${CARDS}/${id}`),
   deleteCard: (id: string) => request.delete<void>(`${CARDS}/${id}`),
-  updateCard: ({ id, data }: TPutData) =>
+  updateCard: ({ id, data }: TApiUpdatePayload) =>
     request.put<void>(`${CARDS}/${id}`, data),
 };
 
 const checklists = {
-  createChecklist: (data: TData) => request.post<void>(CHECKLISTS, data),
+  createChecklist: (data: TApiChecklistPayload) =>
+    request.post<void>(CHECKLISTS, data),
   deleteChecklist: (id: string) => request.delete<void>(`${CHECKLISTS}/${id}`),
-  updateChecklist: ({ id, data }: TPutData) =>
+  updateChecklist: ({ id, data }: TApiUpdatePayload) =>
     request.put<void>(`${CHECKLISTS}/${id}`, data),
 };
 
 const checklistItems = {
-  createChecklistItem: (data: TData) =>
+  createChecklistItem: (data: TApiChecklistItemPayload) =>
     request.post<void>(CHECKLIST_ITEMS, data),
   deleteChecklistItem: (id: string) =>
     request.delete<void>(`${CHECKLIST_ITEMS}/${id}`),
-  updateChecklistItem: ({ id, data }: TPutData) =>
+  updateChecklistItem: ({ id, data }: TApiUpdatePayload) =>
     request.put<void>(`${CHECKLIST_ITEMS}/${id}`, data),
 };
 
 const sse = {
-  setConnection: () =>
-    new EventSource(BASE_URL + SSE, { withCredentials: true }),
+  setConnection: () => {
+    const source = new EventSource(BASE_URL + SSE, { withCredentials: true });
+    // Add reconnect logic
+    source.onerror = error => console.error('SSE error:', error);
+    return source;
+  },
 };
 
 const api = {

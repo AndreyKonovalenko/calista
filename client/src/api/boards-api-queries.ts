@@ -1,4 +1,4 @@
-import api, { TPutData } from './api';
+import api, { TApiUpdatePayload, TApiBoardPayload } from './api';
 import { useParams } from 'react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { invariantId } from '../utils/utils';
@@ -14,7 +14,9 @@ export const useFetchBoards = () => {
 export const useCreateBoard = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: api.boards.createBoard,
+    mutationFn: (data: TApiBoardPayload) => {
+      return api.boards.createBoard(data);
+    },
     onSuccess: () => {
       return queryClient.invalidateQueries({
         queryKey: ['fetchBoards'],
@@ -79,7 +81,7 @@ export const useReNumListsPosInBoard = () => {
 
 export const useUpdateBoard = () => {
   return useMutation({
-    mutationFn: ({ id, data }: TPutData) => {
+    mutationFn: ({ id, data }: TApiUpdatePayload) => {
       invariantId(id);
       return api.boards.updateBoard({ id, data });
     },

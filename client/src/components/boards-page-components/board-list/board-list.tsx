@@ -8,8 +8,8 @@ import { useList } from '../../../services/list-store';
 import { useSortedCardsByListId } from '../../../services/card-store';
 import { useCards } from '../../../services/card-store';
 
-const BoardList = (props: { _id: string }) => {
-  const { _id: listId } = props;
+const BoardList = (props: { listId: string; boardId: string }) => {
+  const { listId, boardId } = props;
   const list = useList(listId);
   const sortedCards = useSortedCardsByListId(listId); // ← Fixed spelling
   const cards = useCards();
@@ -34,8 +34,9 @@ const BoardList = (props: { _id: string }) => {
       if (!name?.trim()) return;
 
       createCardQuery.mutate({
-        name,
+        boardId,
         listId,
+        name,
         pos,
       });
     },

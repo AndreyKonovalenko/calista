@@ -43,6 +43,10 @@ const BoardPage = () => {
 
   // Now conditional return
 
+  if (!boardId) {
+    return <LoadingBage />; // Or navigate to 404
+  }
+
   const handleDeleteBoard = (): void => {
     deleteBoardQuery.mutate();
     navigate(ROUTES.MAIN);
@@ -68,7 +72,7 @@ const BoardPage = () => {
 
   const boardLists = sortedList
     ? sortedList.map(key => {
-        return <BoardList _id={key} key={key} />;
+        return <BoardList listId={key} key={key} boardId={boardId} />;
       })
     : null;
 
@@ -87,9 +91,7 @@ const BoardPage = () => {
       }
     }
   }, [data, isSuccess]);
-  if (!boardId) {
-    return <LoadingBage />; // Or navigate to 404
-  }
+
   return (
     <Box
       sx={{

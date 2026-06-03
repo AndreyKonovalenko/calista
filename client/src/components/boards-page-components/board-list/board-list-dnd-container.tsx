@@ -4,7 +4,7 @@ import { useDrop, useDrag } from 'react-dnd';
 import { Identifier } from 'dnd-core';
 import { useUpdateList } from '../../../api/lists-api-queries';
 import { useReNumListsPosInBoard } from '../../../api/boards-api-queries';
-import { TDraggableElement, IList } from '../../../utils/types';
+import { TDraggableElement } from '../../../utils/types';
 import {
   useListActions,
   useListCalculatedPos,
@@ -24,7 +24,9 @@ const previewStyle = {
 };
 
 const BoardListDndContainer = memo(function BoradListDndContainer(
-  props: IList & { children: React.ReactNode } & { hasCards: boolean },
+  props: { _id: string; name: string; pos: number } & {
+    children: React.ReactNode;
+  } & { hasCards: boolean },
 ) {
   const { _id, children, name, hasCards } = props;
   const { updateListPosByListId, setListCulclulatedPos } = useListActions();
