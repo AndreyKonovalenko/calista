@@ -10,6 +10,8 @@ import { handleFormSubmitEvent } from '../../../../utils/utils';
 import { CardChecklistTextAreaStyled } from '../../card-page-styled-elements/card-page-styled-elements';
 import { useUIAction } from '../../../../services/ui-store';
 
+import { TApiChecklistPayload } from '../../../../api/api';
+
 const styles = {
   menu: {
     zIndex: 10000,
@@ -36,15 +38,15 @@ const AddChecklistPopover = (props: {
   anchorEl: null | HTMLElement;
   closeAddChecklistMenu: () => void;
 }) => {
-  const { id, listId, boardId } = useParams();
-  if (!id || !listId || !boardId) {
+  const { cardId, listId, boardId } = useParams();
+  if (!cardId || !listId || !boardId) {
     return;
   }
   const { setNewItemAdded } = useUIAction();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const createChecklistQuery = useCreateChecklist();
   const checklists = useChecklists();
-  const sortedChecklists = useSortedChecklistsKeys(id);
+  const sortedChecklists = useSortedChecklistsKeys(cardId);
   const { anchorEl, closeAddChecklistMenu } = props;
   const [checklistName, setChecklistName] = useState('cheklist name');
   const open = Boolean(anchorEl);
@@ -59,15 +61,16 @@ const AddChecklistPopover = (props: {
       }
       const formData = new FormData(event.currentTarget);
       setNewItemAdded(true);
-      createChecklistQuery.mutate({
-        name: formData.get('checklistName'),
+      const checklistPayload: TApiChecklistPayload = {
         boardId: boardId,
         listId: listId,
-        cardId: id,
+        cardId: cardId,
+        name: formData.get('name')?.toString() || '',
         pos: pos,
-      });
+      };
+      createChecklistQuery.mutate(checklistPayload);
     },
-    [id, checklists, sortedChecklists],
+    [cardId, checklists, sortedChecklists],
   );
 
   const onSubmitEventHandler = (event: React.FormEvent<HTMLFormElement>) => {

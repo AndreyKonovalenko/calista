@@ -18,11 +18,16 @@ import { useCreateList } from '../../api/lists-api-queries';
 import { useBoardName, useBoardActions } from '../../services/board-store';
 import { HEADER } from '../../layouts/config-layout';
 import { TO_MAIN } from '../../utils/route-constants';
-import { useListActions, useSortedLists } from '../../services/list-store';
+import {
+  useLists,
+  useListActions,
+  useSortedLists,
+} from '../../services/list-store';
 import { useCardActions } from '../../services/card-store';
 import { useChecklistActions } from '../../services/checklist-store';
 import { useChecklistItemActions } from '../../services/checklist-item-store';
 import { ROUTES } from '../../utils/router-paths';
+import { TApiListPayload } from '../../api/api';
 
 const BoardPage = () => {
   const navigate = useNavigate();
@@ -34,6 +39,7 @@ const BoardPage = () => {
 
   // Move all hooks BEFORE conditional returns
   const { data, isSuccess, isLoading } = useFetchBoardById(boardId || '');
+  const lists = useLists();
   const sortedList = useSortedLists();
   const { setBoard } = useBoardActions();
   const { setLists } = useListActions();
@@ -62,10 +68,16 @@ const BoardPage = () => {
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
-
-      createListQuery.mutate({
-        name: formData.get('newItemName') as string,
-      });
+      let pos = 16384;
+      if (lists && sortedList && sortedList?.length > 0) {
+        pos = lists[sortedList[sortedList.length - 1]].pos + pos;
+      }
+      const listPayload: TApiListPayload = {
+        boardId: boardId,
+        name: formData.get('name')?.toString() || '',
+        pos: pos,
+      };
+      createListQuery.mutate(listPayload);
     },
     [createListQuery],
   );

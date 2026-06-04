@@ -47,7 +47,7 @@ export interface ICardTrimmed {
 export interface IChecklist {
   _id: string;
   createrId: string;
-  baoardId: string;
+  boardId: string;
   listId: string;
   cardId: string;
   name: string;

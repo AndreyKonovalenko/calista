@@ -1,6 +1,5 @@
 import { useParams } from 'react-router';
-import api, { TData } from './api';
-import { invariantId } from '../utils/utils';
+import api, { TApiChecklistItemPayload } from './api';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 
 // export const useCreateChecklistItem = () => {
@@ -41,9 +40,8 @@ import { useQueryClient, useMutation } from '@tanstack/react-query';
 // First, update the hook
 export const useCreateChecklistItem = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: (data: TData) => {
+    mutationFn: (data: TApiChecklistItemPayload) => {
       // No useParams here! Just use what's passed
       return api.checklistItems.createChecklistItem(data);
     },
@@ -69,17 +67,19 @@ export const useCreateChecklistItem = () => {
 };
 
 export const useDeleteChecklistItem = () => {
-  const { id } = useParams();
-  //id - means cardId from url params
-  invariantId(id);
+  const { cardId } = useParams();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: api.checklistItems.deleteChecklistItem,
+    mutationFn: (checklistItemId: string) => {
+      return api.checklistItems.deleteChecklistItem(checklistItemId);
+    },
     onSuccess: () => {
-      return queryClient.invalidateQueries({
-        queryKey: ['fetchCardById', id],
-        exact: true,
-      });
+      if (cardId) {
+        return queryClient.invalidateQueries({
+          queryKey: ['fetchCardById', cardId],
+          exact: true,
+        });
+      }
     },
   });
 };

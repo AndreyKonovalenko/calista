@@ -1,32 +1,34 @@
 import { useParams } from 'react-router';
-import api, { TPutData } from './api';
+import api, { TApiChecklistPayload, TApiUpdatePayload } from './api';
 import { invariantId } from '../utils/utils';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 
 export const useCreateChecklist = () => {
-  const { boardId, id } = useParams();
-  invariantId(boardId);
-  invariantId(id);
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: api.checklists.createChecklist,
-    onSuccess: () => {
+    mutationFn: (data: TApiChecklistPayload) => {
+      return api.checklists.createChecklist(data);
+    },
+    onSuccess: (_, variables) => {
       // To get all active query keys
       // const queryCache = queryClient.getQueryCache()
       // const allQueryKeys = queryCache.getAll().map(query => query.queryKey);
       // console.log(allQueryKeys)
-
       // for onBackground Route fetchBoardById calling in Board Page
-      queryClient.invalidateQueries({
-        queryKey: ['fetchBoardById', boardId],
-        exact: true,
-      });
+      if (variables.boardId) {
+        queryClient.invalidateQueries({
+          queryKey: ['fetchBoardById', variables.boardId],
+          exact: true,
+        });
+      }
       // React location.state.background pattern limitaion
       // for  empty Route there is no fetchBoardById call because no Board Page Loaded
-      queryClient.invalidateQueries({
-        queryKey: ['fetchCardById', id],
-        exact: true,
-      });
+      if (variables.cardId) {
+        queryClient.invalidateQueries({
+          queryKey: ['fetchCardById', variables.cardId],
+          exact: true,
+        });
+      }
     },
   });
 };
@@ -55,7 +57,7 @@ export const useReNumChecklistItemsPosInChecklist = () => {
   const { cardId } = useParams();
   //id - means cardId from url params
   return useMutation({
-    mutationFn: ({ id, data }: TPutData) => {
+    mutationFn: ({ id, data }: TApiUpdatePayload) => {
       invariantId(id);
       return api.checklists.updateChecklist({ id, data });
     },
