@@ -29,6 +29,7 @@ const MainLayout = (): JSX.Element => {
   // });
   // const ref = useRef<HTMLDivElement>(null);
   // connectDrop(ref);
+
   return (
     <Box
       sx={styles.contanier}

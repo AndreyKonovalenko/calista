@@ -9,19 +9,25 @@ import { v4 as uuidv4 } from 'uuid';
 // import useSse from '../../hooks/useSse';
 import { useEscapeKey } from '../../hooks/use-escape-key';
 import { useFetchBoards, useCreateBoard } from '../../api/boards-api-queries';
+import { TApiBoardPayload } from '../../api/api';
 
 const MainPage = () => {
   // useSse();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState(false);
   const { data, isLoading } = useFetchBoards();
-  const { mutate } = useCreateBoard();
+  const createBoardQuery = useCreateBoard();
 
   const handleCreateNewBoard = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    mutate({ name: data.get('text') });
+    const formData = new FormData(event.currentTarget);
+    const payload: TApiBoardPayload = {
+      name: formData.get('boardName')?.toString() || ''
+    }
+    createBoardQuery.mutate(payload)
+    
   };
+
   const handleAddBoardMenuOpen = (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {

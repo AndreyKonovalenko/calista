@@ -39,9 +39,9 @@ const AddBoardPopper = (props: TBoardPopper) => {
                 margin="normal"
                 required
                 fullWidth
-                id="text"
+                id="boardName"
                 label="Board name"
-                name="text"
+                name="boardName"
                 autoComplete="text"
                 autoFocus
               />

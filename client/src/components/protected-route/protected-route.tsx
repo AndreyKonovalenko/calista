@@ -9,20 +9,20 @@ type TProps = {
 };
 
 const ProtectedRoute = ({ element }: TProps): JSX.Element => {
-  const { setAuthStatus } = useAuthActions();
+  const { setAuthState } = useAuthActions();
   const userId = useUserId();
   const { data, isPending, isSuccess } = useFetchUser(!userId);
 
   debugLog('ProtectedRoute', { data, isPending, isSuccess });
   useEffect(() => {
     if (data && !userId) {
-      setAuthStatus({
+      setAuthState({
         _id: data._id,
         username: data.username,
         email: data.email,
       });
     }
-  }, [data, userId, setAuthStatus]);
+  }, [data, userId, setAuthState]);
 
   if (!userId && isPending) return <LoadingBage />;
   return element;

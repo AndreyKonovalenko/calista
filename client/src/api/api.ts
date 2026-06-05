@@ -37,9 +37,8 @@ type TFetchUserResponse = {
   email: string;
 };
 
-type TFetchBoardsResponse = {
-  boards: Array<{ _id: string; name: string }>;
-};
+type TFetchBoardsResponse = Array<{ _id: string; name: string }>;
+
 
 type TFetchBoardResponse = {
   board: IBoard;

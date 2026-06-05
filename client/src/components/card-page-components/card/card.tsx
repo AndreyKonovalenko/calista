@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useCallback} from 'react';
 import { useNavigate } from 'react-router';
 import { Paper, Grid, Stack, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -6,6 +6,7 @@ import CardPageTitle from '../card-page-styled-elements/card-title/card-title';
 import CardDescription from '../card-descriprion/card-descritpion';
 import CheckListSection from '../checklist-section/checklist-section';
 import CardActions from '../card-actions/card-actions';
+import { ROUTES } from '../../../utils/router-paths';
 
 const styles = {
   container: {
@@ -55,6 +56,12 @@ const Card = (props: {
   const navigate = useNavigate();
   const { _id, boardId, description, name } = props;
 
+  const handleClose = useCallback(() => {
+  if (boardId) {
+    navigate(ROUTES.board(boardId), { replace: true });
+  }
+}, [boardId, navigate]);
+
   return (
     <Paper sx={styles.container}>
       <Grid container sx={styles.extraPedding}>
@@ -66,7 +73,7 @@ const Card = (props: {
           >
             <CardPageTitle _id={_id} name={name} />
             <Box
-              onClick={() => navigate(`/boards/${boardId}`, { replace: true })}
+              onClick={handleClose}
               sx={styles.closeButton}
             >
               <CloseIcon fontSize="large" />

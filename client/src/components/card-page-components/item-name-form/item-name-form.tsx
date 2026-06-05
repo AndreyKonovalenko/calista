@@ -3,11 +3,11 @@ import { Box, Typography } from '@mui/material';
 import { CardChecklistNameTextAreaStyled } from '../card-page-styled-elements/card-page-styled-elements';
 import { handleFormSubmitEvent } from '../../../utils/utils';
 import { UseMutationResult } from '@tanstack/react-query';
-import { TPutData } from '../../../api/api';
+import { TApiUpdatePayload } from '../../../api/api';
 
 const ItemNameForm = (props: {
   name: string;
-  updateQuery: UseMutationResult<void, Error, TPutData, unknown>;
+  updateQuery: UseMutationResult<void, Error, TApiUpdatePayload, unknown>;
   handleUpdateName: (itemId: string, name: string) => void;
   itemId: string;
   fontStyle?: string;
@@ -28,11 +28,11 @@ const ItemNameForm = (props: {
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
-      const itemName = formData.get('itemName');
-      updateQuery.mutate({
+      const payload: TApiUpdatePayload = {
         id: itemId,
-        data: { name: itemName },
-      });
+        data: {name: formData.get('itemName')?.toString() || ''}
+      }
+      updateQuery.mutate(payload);
     },
     [itemId],
   );

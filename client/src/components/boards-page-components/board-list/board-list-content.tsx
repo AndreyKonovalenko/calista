@@ -7,6 +7,7 @@ import { useListActions } from '../../../services/list-store';
 import { handleFormSubmitEvent } from '../../../utils/utils';
 import { useUpdateList } from '../../../api/lists-api-queries';
 import AddItem from '../add-item/add-item';
+import { TApiUpdatePayload } from '../../../api/api';
 
 const styles = {
   container: {
@@ -45,7 +46,6 @@ const BoardListContent = (props: {
   const { updateListNameBylistId } = useListActions();
   const [listName, setListName] = useState(name);
   const [editing, setEditing] = useState(false);
-
   const updateListQuery = useUpdateList();
 
   const handleUpdateListName = (
@@ -54,12 +54,14 @@ const BoardListContent = (props: {
   ) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const listName = formData.get('listName');
+    const payload: TApiUpdatePayload = {
+      id: listId,
+      data: {
+        name: formData.get('listName')?.toString() || ''
+      }
+    }
     if (listName !== name) {
-      updateListQuery.mutate({
-        id: listId,
-        data: { name: listName },
-      });
+      updateListQuery.mutate(payload);
     }
   };
 

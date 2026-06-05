@@ -4,6 +4,7 @@ import { CardNameTextAreaStyled } from '../card-page-styled-elements';
 import { useCardActions } from '../../../../services/card-store';
 import { useUpdateCard } from '../../../../api/cards-api-queries';
 import { handleFormSubmitEvent } from '../../../../utils/utils';
+import { TApiUpdatePayload } from '../../../../api/api';
 
 const styles = {
   textarea: {
@@ -31,12 +32,14 @@ const CardPageTitle = (props: { name: string; _id: string }) => {
   ) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const cardName = formData.get('cardName');
+    const payload: TApiUpdatePayload = {
+      id: cardId,
+      data: {
+        name: formData.get('cardName')?.toString() || ''
+      }
+    }
     if (cardName !== name) {
-      updateListQuery.mutate({
-        id: cardId,
-        data: { name: cardName },
-      });
+      updateListQuery.mutate(payload);
     }
   };
 
