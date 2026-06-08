@@ -22,10 +22,9 @@ const MainPage = () => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const payload: TApiBoardPayload = {
-      name: formData.get('boardName')?.toString() || ''
-    }
-    createBoardQuery.mutate(payload)
-    
+      name: formData.get('boardName')?.toString() || '',
+    };
+    createBoardQuery.mutate(payload);
   };
 
   const handleAddBoardMenuOpen = (

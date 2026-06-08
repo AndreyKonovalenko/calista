@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { Box } from '@mui/material';
 const overlay = {
   position: 'fixed',
@@ -26,9 +26,9 @@ const modal = {
 
 const ModalPortal = (props: { children: React.ReactNode }) => {
   const { children } = props;
-  useEffect(()=>{
-    console.log('Modal Portal')
-  })
+  useEffect(() => {
+    console.log('Modal Portal');
+  });
   return (
     <React.Fragment>
       <Box sx={modal}>{children}</Box>

@@ -57,9 +57,9 @@ const BoardListContent = (props: {
     const payload: TApiUpdatePayload = {
       id: listId,
       data: {
-        name: formData.get('listName')?.toString() || ''
-      }
-    }
+        name: formData.get('listName')?.toString() || '',
+      },
+    };
     if (listName !== name) {
       updateListQuery.mutate(payload);
     }

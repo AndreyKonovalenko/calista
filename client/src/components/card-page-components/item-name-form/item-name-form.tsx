@@ -30,8 +30,8 @@ const ItemNameForm = (props: {
       const formData = new FormData(event.currentTarget);
       const payload: TApiUpdatePayload = {
         id: itemId,
-        data: {name: formData.get('itemName')?.toString() || ''}
-      }
+        data: { name: formData.get('itemName')?.toString() || '' },
+      };
       updateQuery.mutate(payload);
     },
     [itemId],

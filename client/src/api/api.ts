@@ -39,7 +39,6 @@ type TFetchUserResponse = {
 
 type TFetchBoardsResponse = Array<{ _id: string; name: string }>;
 
-
 type TFetchBoardResponse = {
   board: IBoard;
   lists: Record<string, IList>;

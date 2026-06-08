@@ -35,9 +35,9 @@ const CardPageTitle = (props: { name: string; _id: string }) => {
     const payload: TApiUpdatePayload = {
       id: cardId,
       data: {
-        name: formData.get('cardName')?.toString() || ''
-      }
-    }
+        name: formData.get('cardName')?.toString() || '',
+      },
+    };
     if (cardName !== name) {
       updateListQuery.mutate(payload);
     }

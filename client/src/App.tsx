@@ -70,7 +70,14 @@ const App = (): JSX.Element => {
         <Route element={<ProtectedRoute element={<MainLayout />} />}>
           <Route index element={<MainPage />} />
           <Route path={ROUTES.BOARD_PATTERN} element={<BoardPage />} />
-          <Route path={ROUTES.CARD_PATTERN} element={<ModalPortal><CardPage /></ModalPortal>} />
+          <Route
+            path={ROUTES.CARD_PATTERN}
+            element={
+              <ModalPortal>
+                <CardPage />
+              </ModalPortal>
+            }
+          />
         </Route>
 
         {/* Protected user routes with UserLayout */}
@@ -93,11 +100,13 @@ const App = (): JSX.Element => {
           <Route
             path={ROUTES.CARD_PATTERN}
             element={
-              <ProtectedRoute element={
-                <ModalPortal>
-                  <CardPage />
-                </ModalPortal>
-              }/>
+              <ProtectedRoute
+                element={
+                  <ModalPortal>
+                    <CardPage />
+                  </ModalPortal>
+                }
+              />
             }
           />
         </Routes>

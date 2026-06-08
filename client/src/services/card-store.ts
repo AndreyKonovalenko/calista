@@ -1,13 +1,12 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
+import { useShallow } from 'zustand/react/shallow';
 import { createSelector } from 'reselect';
 import { ICard } from '../utils/types';
-import { useChecklists } from './checklist-store';
-import { useChecklistItems } from './checklist-item-store';
-import { useSortedChecklistsItemsKeys } from './checklist-item-store';
-import { useSortedChecklistsKeys } from './checklist-store';
+import { useCallback } from 'react';
+
 interface ICardActions {
-  setCards: (data: { [kay: string]: ICard }) => void;
+  setCards: (data: Record<string, ICard>) => void;
   moveCard: (draggedId: string, listId: string, pos: number) => void;
   setCardCalculatedPos: (pos: number | null) => void;
   updateCardDescription: (_id: string, description: string) => void;
@@ -15,7 +14,7 @@ interface ICardActions {
 }
 
 interface ICardStore {
-  cards: { [key: string]: ICard };
+  cards: Record<string, ICard>;
   cardCalculatedPos: number | null;
   actions: ICardActions;
 }
@@ -73,57 +72,30 @@ const useCardStore = create<ICardStore>()(
 export const useCardActions = () => useCardStore(state => state.actions);
 export const useCardCalculatedPos = () =>
   useCardStore(state => state.cardCalculatedPos);
-export const useCards = () => useCardStore(state => state.cards);
+export const useCards = () => useCardStore(useShallow(state => state.cards));
+
 export const useCard = (id: string | undefined) => {
-  if (!id) return null;
-  return useCardStore(state =>
-    Object.keys(state.cards).length > 0 ? state.cards[id] : null,
+  const selector = useCallback(
+    (state: ICardStore) => {
+      if (!id) return null;
+      return state.cards[id] ?? null;
+    },
+    [id],
   );
+  return useCardStore(useShallow(selector));
 };
 
 export const useSortedCardsByListId = (listId: string) =>
-  useCardStore(state => getMemoizedCards(state, listId));
+  useCardStore(useShallow(state => getMemoizedCards(state, listId)));
+
 const selectCards = (state: ICardStore) => state.cards;
 const selectListId = (_: ICardStore, listId: string) => listId;
+
 const getMemoizedCards = createSelector(
   [selectCards, selectListId],
-  (cards: { [key: string]: ICard }, listId: string) => {
-    const result = Object.keys(cards)
+  (cards: Record<string, ICard>, listId: string) => {
+    return Object.keys(cards)
       .filter(key => cards[key].listId === listId)
-      .sort((a: string, b: string): number => {
-        if (cards) {
-          if (cards[a].pos < cards[b].pos) return -1;
-          if (cards[a].pos > cards[b].pos) return 1;
-        }
-        return 0;
-      });
-    return result;
+      .sort((a, b) => cards[a].pos - cards[b].pos);
   },
 );
-
-export const usePopulateCard = (id: string | null) => {
-  if (!id) {
-    return;
-  }
-  const card = useCard(id);
-  const checklists = useChecklists();
-  const checklistItems = useChecklistItems();
-  const sortedChecklistsByCardId = useSortedChecklistsKeys(id);
-  const checklistsByCardId = sortedChecklistsByCardId.map(checkistId => {
-    const sortedChecklistItems = useSortedChecklistsItemsKeys(checkistId);
-    const checlistItemsByChecklistId = sortedChecklistItems.map(
-      checklistItemId => {
-        return { name: checklistItems[checklistItemId].name };
-      },
-    );
-    return {
-      name: checklists[checkistId].name,
-      checlistItems: checlistItemsByChecklistId,
-    };
-  });
-  return {
-    name: card?.name,
-    description: card?.description,
-    checklists: checklistsByCardId,
-  };
-};

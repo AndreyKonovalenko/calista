@@ -1,4 +1,4 @@
-import React,{useCallback} from 'react';
+import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { Paper, Grid, Stack, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -57,10 +57,10 @@ const Card = (props: {
   const { _id, boardId, description, name } = props;
 
   const handleClose = useCallback(() => {
-  if (boardId) {
-    navigate(ROUTES.board(boardId), { replace: true });
-  }
-}, [boardId, navigate]);
+    if (boardId) {
+      navigate(ROUTES.board(boardId), { replace: true });
+    }
+  }, [boardId, navigate]);
 
   return (
     <Paper sx={styles.container}>
@@ -72,10 +72,7 @@ const Card = (props: {
             flexDirection="row"
           >
             <CardPageTitle _id={_id} name={name} />
-            <Box
-              onClick={handleClose}
-              sx={styles.closeButton}
-            >
+            <Box onClick={handleClose} sx={styles.closeButton}>
               <CloseIcon fontSize="large" />
             </Box>
           </Stack>
