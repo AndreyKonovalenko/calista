@@ -61,11 +61,12 @@ const AddChecklistPopover = (props: {
       }
       const formData = new FormData(event.currentTarget);
       setNewItemAdded(true);
+      console.log(formData)
       const checklistPayload: TApiChecklistPayload = {
         boardId: boardId,
         listId: listId,
         cardId: cardId,
-        name: formData.get('name')?.toString() || '',
+        name: formData.get('checklistName')?.toString() || '',
         pos: pos,
       };
       createChecklistQuery.mutate(checklistPayload);
