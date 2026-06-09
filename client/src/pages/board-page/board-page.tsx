@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { Box, Typography, IconButton, Toolbar, Stack } from '@mui/material';
 import { useParams, useNavigate } from 'react-router';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -41,9 +41,9 @@ const BoardPage = () => {
   const { data, isSuccess, isLoading } = useFetchBoardById(boardId || '');
   const lists = useLists();
   const sortedList = useSortedLists();
-  const { setBoard } = useBoardActions();
-  const { setLists } = useListActions();
-  const { setCards } = useCardActions();
+  const { setBoard, clearBoard } = useBoardActions();
+  const { setLists, clearLists } = useListActions();
+  const { setCards, clearCards } = useCardActions();
   const { setChecklists } = useChecklistActions();
   const { setChecklistItems } = useChecklistItemActions();
 
@@ -82,11 +82,13 @@ const BoardPage = () => {
     [createListQuery],
   );
 
-  const boardLists = sortedList
-    ? sortedList.map(key => {
-        return <BoardList listId={key} key={key} boardId={boardId} />;
-      })
-    : null;
+  const boardLists = useMemo(() => {
+    return (
+      sortedList?.map(key => (
+        <BoardList listId={key} key={key} boardId={boardId} />
+      )) ?? null
+    );
+  }, [sortedList, boardId]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -102,6 +104,13 @@ const BoardPage = () => {
         setChecklistItems(checklistItems);
       }
     }
+
+    //  cleanup when upmounting
+    return () => {
+      clearBoard();
+      clearCards();
+      clearLists();
+    };
   }, [data, isSuccess]);
 
   return (

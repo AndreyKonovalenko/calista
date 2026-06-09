@@ -1,14 +1,16 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
+import { useShallow } from 'zustand/react/shallow';
 import { IBoard } from '../utils/types';
 
 interface IBoardActions {
   setBoard: (data: IBoard) => void;
+  clearBoard: () => void;
 }
 
 interface IBoardState {
   _id: string;
-  createrId: string;
+  creatorId: string;
   name: string;
   actions: IBoardActions;
 }
@@ -17,20 +19,27 @@ export const useBoardStore = create<IBoardState>()(
   devtools(
     set => ({
       _id: '',
-      createrId: '',
+      creatorId: '',
       name: '',
       actions: {
         setBoard: data =>
           set(
-            { _id: data._id, createrId: data.createrId, name: data.name },
+            { _id: data._id, creatorId: data.creatorId, name: data.name },
             undefined,
             'setBoard',
           ),
+        clearBoard: () =>
+          set({
+            _id: '',
+            creatorId: '',
+            name: '',
+          }),
       },
     }),
     { name: 'boardStore' },
   ),
 );
 
-export const useBoardName = () => useBoardStore(state => state.name);
+export const useBoardName = () =>
+  useBoardStore(useShallow(state => state.name));
 export const useBoardActions = () => useBoardStore(state => state.actions);

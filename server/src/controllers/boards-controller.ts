@@ -34,7 +34,7 @@ export const addBoard = async (
   const { user } = req as CustomRequest;
   const data: IBoard = {
     name: req.body.name,
-    createrId: user._id,
+    creatorId: user._id,
   };
   try {
     await cerateBoard(data);
@@ -68,7 +68,7 @@ export const getBoard = async (
         board: {
           _id: board._id,
           name: board.name,
-          createrId: board.createrId,
+          creatorId: board.creatorId,
         },
         lists: Object.fromEntries(lists.map(element => [element._id, element])),
         cards: Object.fromEntries(cards.map(element => [element._id, element])),

@@ -2,11 +2,11 @@ import { Types, Schema, model } from 'mongoose';
 
 export interface IBoard {
   name: string;
-  createrId: Types.ObjectId;
+  creatorId: Types.ObjectId;
 }
 
 const boardSchema = new Schema<IBoard>({
-  createrId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  creatorId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   name: { type: String, required: true },
 });
 

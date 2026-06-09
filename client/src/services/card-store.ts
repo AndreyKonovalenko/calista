@@ -11,6 +11,7 @@ interface ICardActions {
   setCardCalculatedPos: (pos: number | null) => void;
   updateCardDescription: (_id: string, description: string) => void;
   updateCardName: (_id: string, name: string) => void;
+  clearCards: () => void;
 }
 
 interface ICardStore {
@@ -63,6 +64,11 @@ const useCardStore = create<ICardStore>()(
             undefined,
             'moveCard',
           ),
+        clearCards: () =>
+          set({
+            cards: {},
+            cardCalculatedPos: null,
+          }),
       },
     }),
     { name: 'cardStore' },

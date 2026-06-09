@@ -1,7 +1,7 @@
 import { Types, Schema, model } from 'mongoose';
 
 export interface IChecklistItem {
-  createrId: Types.ObjectId;
+  creatorId: Types.ObjectId;
   checklistId: Types.ObjectId;
   boardId: Types.ObjectId;
   listId: Types.ObjectId;
@@ -12,7 +12,7 @@ export interface IChecklistItem {
 }
 
 const checklistItemSchema = new Schema<IChecklistItem>({
-  createrId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  creatorId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   checklistId: {
     type: Schema.Types.ObjectId,
     ref: 'Checklist',

@@ -19,7 +19,7 @@ export const addList = async (
 ): Promise<void> => {
   const { user } = req as CustomRequest;
   const data: IList = {
-    createrId: user._id,
+    creatorId: user._id,
     boardId: req.body.boardId,
     name: req.body.name,
     pos: req.body.pos ? req.body.pos : 16384,

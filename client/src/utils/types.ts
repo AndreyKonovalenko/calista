@@ -7,7 +7,7 @@ export type TDraggableElement = {
 
 export interface IBoard {
   _id: string;
-  createrId: string;
+  creatorId: string;
   name: string;
 }
 
@@ -22,7 +22,7 @@ export interface IBoardTrimmed {
 
 export interface IList {
   _id: string;
-  creterId: string;
+  cretorId: string;
   boardId: string;
   name: string;
   pos: number;
@@ -30,7 +30,7 @@ export interface IList {
 
 export interface ICard {
   _id: string;
-  createrId: string;
+  creatorId: string;
   boardId: string;
   listId: string;
   name: string;
@@ -46,7 +46,7 @@ export interface ICardTrimmed {
 
 export interface IChecklist {
   _id: string;
-  createrId: string;
+  creatorId: string;
   boardId: string;
   listId: string;
   cardId: string;
@@ -56,7 +56,7 @@ export interface IChecklist {
 
 export interface IChecklistItem {
   _id: string;
-  createrId: string;
+  creatorId: string;
   boardId: string;
   cardId: string;
   listId: string;

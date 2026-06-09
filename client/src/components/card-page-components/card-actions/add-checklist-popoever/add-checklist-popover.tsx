@@ -61,7 +61,7 @@ const AddChecklistPopover = (props: {
       }
       const formData = new FormData(event.currentTarget);
       setNewItemAdded(true);
-      console.log(formData)
+      console.log(formData);
       const checklistPayload: TApiChecklistPayload = {
         boardId: boardId,
         listId: listId,

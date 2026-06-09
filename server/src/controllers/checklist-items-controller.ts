@@ -19,7 +19,7 @@ export const addChecklistItem = async (
   try {
     const { user } = req as CustomRequest;
     const data: IChecklistItem = {
-      createrId: user._id,
+      creatorId: user._id,
       boardId: req.body.boardId,
       listId: req.body.listId,
       cardId: req.body.cardId,

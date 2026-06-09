@@ -6,8 +6,9 @@ import { createSelector } from 'reselect';
 interface IListActions {
   setLists: (data: { [key: string]: IList }) => void;
   updateListPosByListId: (draggedId: string, pos: number) => void;
-  setListCulclulatedPos: (pos: number | null) => void;
+  setListCalclulatedPos: (pos: number | null) => void;
   updateListNameBylistId: (id: string, name: string) => void;
+  clearLists: () => void;
 }
 
 interface IListState {
@@ -37,7 +38,7 @@ const useListStore = create<IListState>()(
             undefined,
             'updateListPos',
           ),
-        setListCulclulatedPos: (pos: number | null) =>
+        setListCalclulatedPos: (pos: number | null) =>
           set({ listCalculatedPos: pos }, undefined, 'setListCalculatedPos'),
         updateListNameBylistId: (_id, name) =>
           set(state => ({
@@ -49,6 +50,11 @@ const useListStore = create<IListState>()(
               },
             },
           })),
+        clearLists: () =>
+          set({
+            lists: {},
+            listCalculatedPos: null,
+          }),
       },
     }),
     { name: 'listStore' },
