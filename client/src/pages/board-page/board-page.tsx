@@ -17,7 +17,6 @@ import {
 import { useCreateList } from '../../api/lists-api-queries';
 import { useBoardName, useBoardActions } from '../../services/board-store';
 import { HEADER } from '../../layouts/config-layout';
-import { TO_MAIN } from '../../utils/route-constants';
 import {
   useLists,
   useListActions,
@@ -44,8 +43,8 @@ const BoardPage = () => {
   const { setBoard, clearBoard } = useBoardActions();
   const { setLists, clearLists } = useListActions();
   const { setCards, clearCards } = useCardActions();
-  const { setChecklists } = useChecklistActions();
-  const { setChecklistItems } = useChecklistItemActions();
+  const { setChecklists, clearChecklists } = useChecklistActions();
+  const { setChecklistItems, clearChecklistItems } = useChecklistItemActions();
 
   // Now conditional return
 
@@ -93,7 +92,7 @@ const BoardPage = () => {
   useEffect(() => {
     if (isSuccess) {
       if (!data.board) {
-        navigate(TO_MAIN);
+        navigate(ROUTES.MAIN);
       }
       if (data.board) {
         const { board, lists, cards, checklists, checklistItems } = data;
@@ -110,6 +109,8 @@ const BoardPage = () => {
       clearBoard();
       clearCards();
       clearLists();
+      clearChecklists();
+      clearChecklistItems();
     };
   }, [data, isSuccess]);
 

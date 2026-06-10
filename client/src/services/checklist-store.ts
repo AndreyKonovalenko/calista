@@ -7,10 +7,11 @@ interface IChecklistActions {
   setChecklists: (data: { [key: string]: IChecklist }) => void;
   updateChecklistName: (_id: string, name: string) => void;
   deleteChecklist: (_id: string) => void;
+  clearChecklists: () => void;
 }
 
 interface IChecklistStore {
-  checklists: { [key: string]: IChecklist };
+  checklists: Record<string, IChecklist>;
   actions: IChecklistActions;
 }
 
@@ -44,6 +45,10 @@ const useChecklistStore = create<IChecklistStore>()(
             undefined,
             'updateChecklistName',
           ),
+        clearChecklists: () =>
+          set({
+            checklists: {},
+          }),
       },
     }),
     { name: 'checklistStore' },
@@ -61,8 +66,11 @@ export const useChecklist = (id: string | undefined) => {
 };
 export const useSortedChecklistsKeys = (cardId: string) =>
   useChecklistStore(state => getMemoizedChecklists(state, cardId));
+
 const selectChecklists = (state: IChecklistStore) => state.checklists;
+
 const selectCardId = (_: IChecklistStore, selectCardId: string) => selectCardId;
+
 const getMemoizedChecklists = createSelector(
   [selectChecklists, selectCardId],
   (checklists: { [key: string]: IChecklist }, cardId: string) => {

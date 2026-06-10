@@ -16,7 +16,7 @@ import LibraryAddCheckOutlinedIcon from '@mui/icons-material/LibraryAddCheckOutl
 import CheckListAddItemFrom from '../chekclist-add-item-form/checklist-add-item-form';
 import { useChecklistActions } from '../../../services/checklist-store';
 import { useChecklistItems } from '../../../services/checklist-item-store';
-import { useSortedChecklistsItemsKeys } from '../../../services/checklist-item-store';
+import { useSortedChecklistItemsKeys } from '../../../services/checklist-item-store';
 import { progressCalc } from '../../../utils/utils';
 import DeleteItemMenu from '../../general-components/delete-item-popover/delete-item-popover';
 import ItemNameForm from '../item-name-form/item-name-form';
@@ -48,7 +48,7 @@ const styles = {
 const Checklist = (props: { _id: string; name: string; isLast: boolean }) => {
   const { _id, name, isLast } = props;
   const deleteChecklistQuery = useDeleteChecklist();
-  const sortedChecklistItemsKeys = useSortedChecklistsItemsKeys(_id);
+  const sortedChecklistItemsKeys = useSortedChecklistItemsKeys(_id);
   const checklistItems = useChecklistItems();
   const updateChecklistNameQuery = useUpdateChecklist();
   const { updateChecklistName, deleteChecklist } = useChecklistActions();

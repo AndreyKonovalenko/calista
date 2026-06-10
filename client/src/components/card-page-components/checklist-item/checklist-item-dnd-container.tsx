@@ -6,9 +6,9 @@ import { useReNumChecklistItemsPosInChecklist } from '../../../api/checklists-ap
 import { useUpdateChecklistItem } from '../../../api/checklist-items-api-queries';
 import {
   useChecklistItemActions,
-  useSortedChecklistsItemsKeys,
+  useSortedChecklistItemsKeys,
   useChecklistItems,
-  useChecklistItemsCalclulatedPos,
+  useChecklistItemsCalculatedPos,
 } from '../../../services/checklist-item-store';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
 
@@ -35,12 +35,12 @@ const ChecklistItemDndContainer = memo(
     const { children, _id, checklistId } = props;
     const reNumChecklistItemInChecklist =
       useReNumChecklistItemsPosInChecklist();
-    const { moveChecklistIetem, setChecklistItemCalculatedPos } =
+    const { moveChecklistItem, setChecklistItemCalculatedPos } =
       useChecklistItemActions();
     const updateChecklistItemQuery = useUpdateChecklistItem();
     const sortedChecklistItemsByChecklistId =
-      useSortedChecklistsItemsKeys(checklistId);
-    const checklistItemCalculatedPos = useChecklistItemsCalclulatedPos();
+      useSortedChecklistItemsKeys(checklistId);
+    const checklistItemCalculatedPos = useChecklistItemsCalculatedPos();
     const checklistItems = useChecklistItems();
 
     const handleUpdateChecklistItemPos = (
@@ -91,7 +91,7 @@ const ChecklistItemDndContainer = memo(
           );
           setChecklistItemCalculatedPos(newPos);
           if (newPos !== -1) {
-            moveChecklistIetem(draggedId, checklistId, newPos);
+            moveChecklistItem(draggedId, checklistId, newPos);
           }
         },
         drop({ _id: draggedId }) {

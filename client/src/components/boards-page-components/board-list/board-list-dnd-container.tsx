@@ -29,7 +29,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
   } & { hasCards: boolean },
 ) {
   const { _id, children, name, hasCards } = props;
-  const { updateListPosByListId, setListCulclulatedPos } = useListActions();
+  const { updateListPosByListId, setListCalclulatedPos } = useListActions();
   const { moveCard, setCardCalculatedPos } = useCardActions();
   const lists = useLists();
   const sortedLists = useSortedLists();
@@ -94,7 +94,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
               targetPart,
             );
             if (newPos && newPos !== 1) {
-              setListCulclulatedPos(newPos);
+              setListCalclulatedPos(newPos);
               updateListPosByListId(draggedId, newPos);
             }
           }
@@ -106,7 +106,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
       },
       drop({ _id: draggedId }) {
         if (itemType === 'list') {
-          setListCulclulatedPos(null);
+          setListCalclulatedPos(null);
         }
         if (itemType === 'list') {
           return {
@@ -155,7 +155,7 @@ const BoardListDndContainer = memo(function BoradListDndContainer(
             if (dropResult.calculatedPos && dropResult.calculatedPos > 0) {
               handleUpdateListPos(draggedId, dropResult.calculatedPos);
             }
-            setListCulclulatedPos(null);
+            setListCalclulatedPos(null);
           }
         }
       },

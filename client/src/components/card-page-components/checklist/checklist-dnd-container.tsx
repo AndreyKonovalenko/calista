@@ -4,7 +4,7 @@ import { useChecklistItemActions } from '../../../services/checklist-item-store'
 import { useDrop } from 'react-dnd';
 import { Identifier } from 'dnd-core';
 import { TDraggableElement } from '../../../utils/types';
-import { useChecklistItemsCalclulatedPos } from '../../../services/checklist-item-store';
+import { useChecklistItemsCalculatedPos } from '../../../services/checklist-item-store';
 
 const ChecklistDndContainer = (props: {
   children: React.ReactNode;
@@ -13,9 +13,9 @@ const ChecklistDndContainer = (props: {
   isLast: string;
 }) => {
   const { _id, children, hasChecklistItems, isLast } = props;
-  const { moveChecklistIetem, setChecklistItemCalculatedPos } =
+  const { moveChecklistItem, setChecklistItemCalculatedPos } =
     useChecklistItemActions();
-  const checklistItemCalculatedPos = useChecklistItemsCalclulatedPos();
+  const checklistItemCalculatedPos = useChecklistItemsCalculatedPos();
   const ref = useRef<HTMLDivElement>(null);
 
   const [{ itemType }, connectDrop] = useDrop<
@@ -34,7 +34,7 @@ const ChecklistDndContainer = (props: {
           return;
         }
         if (itemType === 'checklistItem' && !hasChecklistItems) {
-          moveChecklistIetem(draggedId, _id, 16384);
+          moveChecklistItem(draggedId, _id, 16384);
           setChecklistItemCalculatedPos(16384);
         }
       },
