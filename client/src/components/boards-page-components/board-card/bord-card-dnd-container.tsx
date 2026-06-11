@@ -1,10 +1,11 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useCallback } from 'react';
 import { useLocation, Link as RouterLink, useParams } from 'react-router';
 import { Box, Link, ListItem } from '@mui/material';
-import { useDrop, useDrag } from 'react-dnd';
+import { useDrop, useDrag, DropTargetMonitor } from 'react-dnd';
 import { TDraggableElement } from '../../../utils/types';
 import { useReNumCardsPosInList } from '../../../api/lists-api-queries';
 import { useUpdateCard } from '../../../api/cards-api-queries';
+import { debugLog } from '../../../utils/debug';
 import {
   useSortedCardsByListId,
   useCards,
@@ -13,6 +14,7 @@ import {
 } from '../../../services/card-store';
 import { calculateNewPosByTargetPart } from '../../../utils/utils';
 import { ROUTES } from '../../../utils/router-paths';
+const IVALID_POS = -1;
 
 export type TDropCardResult = {
   dropped: boolean;
@@ -37,10 +39,11 @@ const BoardCardDndContainer = (props: {
   _id: string;
   listId: string;
   children: React.ReactNode;
-}) => {
+}): React.ReactElement | null => {
   const ref = useRef<HTMLAnchorElement>(null);
   const { boardId } = useParams();
   const { _id, children, listId } = props;
+
   const reNumCardsPosInList = useReNumCardsPosInList();
   const { moveCard, setCardCalculatedPos } = useCardActions();
   const cards = useCards();
@@ -49,12 +52,8 @@ const BoardCardDndContainer = (props: {
   const location = useLocation();
   const updateCardQuery = useUpdateCard();
 
-  if (!boardId) {
-    console.warn('BoardList: No boardId available');
-    return null;
-  }
 
-  const handleUpdateCardPos = (
+  const handleUpdateCardPos = useCallback((
     cardId: string,
     newPos: number,
     newListId: string,
@@ -63,19 +62,10 @@ const BoardCardDndContainer = (props: {
       id: cardId,
       data: { pos: newPos, listId: newListId },
     });
-  };
+  },[updateCardQuery]);
 
-  const [{ isOver }, connectDrop] = useDrop<
-    TDraggableElement & { listId: string },
-    unknown,
-    {
-      isOver: boolean;
-    }
-  >(
-    {
-      accept: ['card'],
-      hover({ _id: draggedId }, monitor) {
-        if (
+  const handleHover = useCallback(({_id:draggedId}: {_id:string}, monitor: DropTargetMonitor<TDraggableElement & { listId: string }, unknown>)=> {
+      if (
           !ref.current ||
           draggedId === _id ||
           !cards ||
@@ -96,7 +86,7 @@ const BoardCardDndContainer = (props: {
           return;
         }
         const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-        const targetPart = hoverClientY > hoverMiddleY ? 'before' : 'after';
+        const targetPart = hoverClientY > hoverMiddleY ? 'after' : 'before';
         const newPos = calculateNewPosByTargetPart(
           cards,
           sortedCardsByListId,
@@ -104,16 +94,27 @@ const BoardCardDndContainer = (props: {
           targetPart,
         );
         setCardCalculatedPos(newPos);
-        if (newPos !== -1) {
+        if (newPos !== IVALID_POS) {
           moveCard(draggedId, listId, newPos);
         }
-      },
+      },[_id,  listId, cardCalculatedPos, cards, sortedCardsByListId, moveCard, setCardCalculatedPos])
+
+  const [{ isOver }, connectDrop] = useDrop<
+    TDraggableElement & { listId: string },
+    unknown,
+    {
+      isOver: boolean;
+    }
+  >(
+    {
+      accept: ['card'],
+      hover: handleHover,
       drop({ _id: draggedId }) {
         return {
           listId: listId,
           draggedId: draggedId,
           dropped: true,
-          tragetType: 'card',
+          targetType: 'card',
           cardCalculatedPos: cardCalculatedPos,
         };
       },
@@ -121,7 +122,7 @@ const BoardCardDndContainer = (props: {
         isOver: monitor.isOver({ shallow: true }),
       }),
     },
-    [_id, children, listId, cardCalculatedPos],
+    [_id, children, listId, cardCalculatedPos,  handleHover],
   );
 
   const [{ isDragging }, connectDrag] = useDrag<
@@ -174,6 +175,11 @@ const BoardCardDndContainer = (props: {
   );
   connectDrag(ref);
   connectDrop(ref);
+
+  if (!boardId) {
+    debugLog('board-card-dnd-container', {boardId, massage: 'no boaridId'})
+  return null;
+  }
 
   const cardPath = ROUTES.card(boardId, listId, _id);
 
