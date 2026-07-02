@@ -12,6 +12,7 @@ const BoardCard = (props: { _id: string }) => {
     return null;
   }
   const stats = useChecklistsItemsStat(_id);
+
   const { listId, name } = card;
 
   return (

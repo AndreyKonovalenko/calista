@@ -150,14 +150,12 @@ const getMemoizedChecklistItems = createSelector(
     const items = Object.values(checklistItems).filter(
       item => item.cardId === cardId,
     );
-    return {
-      quantity: items.length,
-      complete: items.filter(item => item.state === 'complete').length,
-    };
+
+    const quantity = items.length;
+    const complete = items.filter(item => item.state === 'complete').length;
+    return { quantity, complete };
   },
 );
 
 export const useChecklistsItemsStat = (cardId: string) =>
-  useChecklistItemStore(
-    useShallow(state => getMemoizedChecklistItems(state, cardId)),
-  );
+  useChecklistItemStore(state => getMemoizedChecklistItems(state, cardId));

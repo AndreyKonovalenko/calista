@@ -52,52 +52,62 @@ const BoardCardDndContainer = (props: {
   const location = useLocation();
   const updateCardQuery = useUpdateCard();
 
+  const handleUpdateCardPos = useCallback(
+    (cardId: string, newPos: number, newListId: string) => {
+      updateCardQuery.mutate({
+        id: cardId,
+        data: { pos: newPos, listId: newListId },
+      });
+    },
+    [updateCardQuery],
+  );
 
-  const handleUpdateCardPos = useCallback((
-    cardId: string,
-    newPos: number,
-    newListId: string,
-  ) => {
-    updateCardQuery.mutate({
-      id: cardId,
-      data: { pos: newPos, listId: newListId },
-    });
-  },[updateCardQuery]);
+  const handleHover = useCallback(
+    (
+      { _id: draggedId }: { _id: string },
+      monitor: DropTargetMonitor<
+        TDraggableElement & { listId: string },
+        unknown
+      >,
+    ) => {
+      if (!ref.current || draggedId === _id || !cards || !sortedCardsByListId) {
+        return;
+      }
 
-  const handleHover = useCallback(({_id:draggedId}: {_id:string}, monitor: DropTargetMonitor<TDraggableElement & { listId: string }, unknown>)=> {
-      if (
-          !ref.current ||
-          draggedId === _id ||
-          !cards ||
-          !sortedCardsByListId
-        ) {
-          return;
-        }
-
-        // Determine rectangle on screen
-        const hoverBoundingRect = ref.current.getBoundingClientRect();
-        // Get vertical middle
-        const hoverMiddleY =
-          (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-        // Determine mouse position
-        const clientOffset = monitor.getClientOffset();
-        // Get pixels to the top
-        if (!clientOffset) {
-          return;
-        }
-        const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-        const targetPart = hoverClientY > hoverMiddleY ? 'after' : 'before';
-        const newPos = calculateNewPosByTargetPart(
-          cards,
-          sortedCardsByListId,
-          _id,
-          targetPart,
-        );
-        setCardCalculatedPos(newPos);
-        if (newPos !== IVALID_POS) {
-          moveCard(draggedId, listId, newPos);
-        }
-      },[_id,  listId, cardCalculatedPos, cards, sortedCardsByListId, moveCard, setCardCalculatedPos])
+      // Determine rectangle on screen
+      const hoverBoundingRect = ref.current.getBoundingClientRect();
+      // Get vertical middle
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      // Determine mouse position
+      const clientOffset = monitor.getClientOffset();
+      // Get pixels to the top
+      if (!clientOffset) {
+        return;
+      }
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      const targetPart = hoverClientY > hoverMiddleY ? 'after' : 'before';
+      const newPos = calculateNewPosByTargetPart(
+        cards,
+        sortedCardsByListId,
+        _id,
+        targetPart,
+      );
+      setCardCalculatedPos(newPos);
+      if (newPos !== IVALID_POS) {
+        moveCard(draggedId, listId, newPos);
+      }
+    },
+    [
+      _id,
+      listId,
+      cardCalculatedPos,
+      cards,
+      sortedCardsByListId,
+      moveCard,
+      setCardCalculatedPos,
+    ],
+  );
 
   const [{ isOver }, connectDrop] = useDrop<
     TDraggableElement & { listId: string },
@@ -122,7 +132,7 @@ const BoardCardDndContainer = (props: {
         isOver: monitor.isOver({ shallow: true }),
       }),
     },
-    [_id, children, listId, cardCalculatedPos,  handleHover],
+    [_id, children, listId, cardCalculatedPos, handleHover],
   );
 
   const [{ isDragging }, connectDrag] = useDrag<
@@ -177,8 +187,8 @@ const BoardCardDndContainer = (props: {
   connectDrop(ref);
 
   if (!boardId) {
-    debugLog('board-card-dnd-container', {boardId, massage: 'no boaridId'})
-  return null;
+    debugLog('board-card-dnd-container', { boardId, massage: 'no boaridId' });
+    return null;
   }
 
   const cardPath = ROUTES.card(boardId, listId, _id);
