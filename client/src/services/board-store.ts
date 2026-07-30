@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { useShallow } from 'zustand/react/shallow';
 import { IBoard } from '../utils/types';
 
 interface IBoardActions {
@@ -41,5 +40,5 @@ export const useBoardStore = create<IBoardState>()(
 );
 
 export const useBoardName = () =>
-  useBoardStore(useShallow(state => state.name));
+  useBoardStore(state => state.name);
 export const useBoardActions = () => useBoardStore(state => state.actions);

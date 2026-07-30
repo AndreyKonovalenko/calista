@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { useShallow } from 'zustand/react/shallow';
 import { createSelector } from 'reselect';
 import { IChecklistItem } from '../utils/types';
 import { useCallback } from 'react';
@@ -102,7 +101,7 @@ const useChecklistItemStore = create<IChecklistItemStore>()(
 );
 
 export const useChecklistItems = () =>
-  useChecklistItemStore(useShallow(state => state.checklistItems));
+  useChecklistItemStore(state => state.checklistItems);
 
 export const useChecklistItemActions = () =>
   useChecklistItemStore(state => state.actions);
@@ -118,12 +117,12 @@ export const useChecklistItem = (id: string | undefined) => {
     },
     [id],
   );
-  return useChecklistItemStore(useShallow(selector));
+  return useChecklistItemStore((selector));
 };
 
 export const useSortedChecklistItemsKeys = (checklistId: string) =>
   useChecklistItemStore(
-    useShallow(state => getMemoizedSortedChecklistItems(state, checklistId)),
+    state => getMemoizedSortedChecklistItems(state, checklistId),
   );
 
 const selectChecklistId = (_: IChecklistItemStore, checklistId: string) =>
@@ -142,20 +141,31 @@ const getMemoizedSortedChecklistItems = createSelector(
   },
 );
 
-const selectCardId = (_: IChecklistItemStore, cardId: string) => cardId;
+// const selectCardId = (_: IChecklistItemStore, cardId: string) => cardId;
 
-const getMemoizedChecklistItems = createSelector(
-  [selectChecklistItems, selectCardId],
-  (checklistItems: Record<string, IChecklistItem>, cardId: string) => {
-    const items = Object.values(checklistItems).filter(
-      item => item.cardId === cardId,
+// const getMemoizedChecklistItems = createSelector(
+//   [selectChecklistItems, selectCardId],
+//   (checklistItems: Record<string, IChecklistItem>, cardId: string) => {
+//     const items = Object.values(checklistItems).filter(
+//       item => item.cardId === cardId,
+//     );
+//     console.log(items)
+
+//     const quantity = items.length;
+//     const complete = items.filter(item => item.state === 'complete').length;
+//     return { quantity, complete };
+//   },
+// );
+
+// export const useChecklistsItemsStat = (cardId: string) =>
+//   useChecklistItemStore(state => getMemoizedChecklistItems(state, cardId));
+
+export const useChecklistsItemsStat = (cardId: string) => {
+    const items = Object.values(useChecklistItemStore(state=> state.checklistItems)).filter(
+    item => item.cardId === cardId,
     );
-
     const quantity = items.length;
     const complete = items.filter(item => item.state === 'complete').length;
     return { quantity, complete };
-  },
-);
+  }
 
-export const useChecklistsItemsStat = (cardId: string) =>
-  useChecklistItemStore(state => getMemoizedChecklistItems(state, cardId));

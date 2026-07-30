@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { useShallow } from 'zustand/react/shallow';
+// import { useShallow } from 'zustand/react/shallow';
 import { createSelector } from 'reselect';
 import { ICard } from '../utils/types';
 import { useCallback } from 'react';
@@ -78,7 +78,7 @@ const useCardStore = create<ICardStore>()(
 export const useCardActions = () => useCardStore(state => state.actions);
 export const useCardCalculatedPos = () =>
   useCardStore(state => state.cardCalculatedPos);
-export const useCards = () => useCardStore(useShallow(state => state.cards));
+export const useCards = () => useCardStore(state => state.cards);
 
 export const useCard = (id: string | undefined) => {
   const selector = useCallback(
@@ -88,11 +88,11 @@ export const useCard = (id: string | undefined) => {
     },
     [id],
   );
-  return useCardStore(useShallow(selector));
+  return useCardStore(selector);
 };
 
 export const useSortedCardsByListId = (listId: string) =>
-  useCardStore(useShallow(state => getMemoizedCards(state, listId)));
+  useCardStore(state => getMemoizedCards(state, listId));
 
 const selectCards = (state: ICardStore) => state.cards;
 const selectListId = (_: ICardStore, listId: string) => listId;
