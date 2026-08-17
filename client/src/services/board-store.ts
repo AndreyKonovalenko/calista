@@ -39,6 +39,5 @@ export const useBoardStore = create<IBoardState>()(
   ),
 );
 
-export const useBoardName = () =>
-  useBoardStore(state => state.name);
+export const useBoardName = () => useBoardStore(state => state.name);
 export const useBoardActions = () => useBoardStore(state => state.actions);

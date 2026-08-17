@@ -1,9 +1,11 @@
 import { create } from 'zustand';
+import { useMemo } from 'react';
 import { devtools } from 'zustand/middleware';
-// import { useShallow } from 'zustand/react/shallow';
+import { useShallow } from 'zustand/react/shallow';
 import { createSelector } from 'reselect';
 import { ICard } from '../utils/types';
-import { useCallback } from 'react';
+import { produce } from 'immer';
+// import { useCallback } from 'react';
 
 interface ICardActions {
   setCards: (data: Record<string, ICard>) => void;
@@ -30,15 +32,21 @@ const useCardStore = create<ICardStore>()(
         setCardCalculatedPos: (pos: number | null) =>
           set({ cardCalculatedPos: pos }, undefined, 'setCardCalculatedPos'),
         updateCardDescription: (_id, description) =>
-          set(state => ({
-            cards: {
-              ...state.cards,
-              [_id]: {
-                ...state.cards[_id],
-                description: description,
+          set(state => {
+            if (!state.cards[_id]) {
+              console.warn(`Card ${_id} not found`);
+              return state;
+            }
+            return {
+              cards: {
+                ...state.cards,
+                [_id]: {
+                  ...state.cards[_id],
+                  description: description,
+                },
               },
-            },
-          })),
+            };
+          }),
         updateCardName: (_id, name) =>
           set(state => ({
             cards: {
@@ -51,15 +59,9 @@ const useCardStore = create<ICardStore>()(
           })),
         moveCard: (draggedId, listId, pos) =>
           set(
-            state => ({
-              cards: {
-                ...state.cards,
-                [draggedId]: {
-                  ...state.cards[draggedId],
-                  listId: listId,
-                  pos: pos,
-                },
-              },
+            produce(state => {
+              state.cards[draggedId].listId = listId;
+              state.cards[draggedId].pos = pos;
             }),
             undefined,
             'moveCard',
@@ -80,19 +82,33 @@ export const useCardCalculatedPos = () =>
   useCardStore(state => state.cardCalculatedPos);
 export const useCards = () => useCardStore(state => state.cards);
 
+// export const useCard = (id: string | undefined) => {
+//   const selector = useCallback(
+//     (state: ICardStore) => {
+//       if (!id) return null;
+//       return state.cards[id] ?? null;
+//     },
+//     [id],
+//   );
+//   return useCardStore(selector);
+// };
+
 export const useCard = (id: string | undefined) => {
-  const selector = useCallback(
-    (state: ICardStore) => {
-      if (!id) return null;
-      return state.cards[id] ?? null;
-    },
-    [id],
+  return useCardStore(
+    useShallow(state => (id ? (state.cards[id] ?? null) : null)),
   );
-  return useCardStore(selector);
 };
 
-export const useSortedCardsByListId = (listId: string) =>
-  useCardStore(state => getMemoizedCards(state, listId));
+// export const useSortedCardsByListId = (listId: string) =>
+//   useCardStore(state => getMemoizedCards(state, listId));
+
+export const useSortedCardsByListId = (listId: string) => {
+  const selector = useMemo(
+    () => (state: ICardStore) => getMemoizedCards(state, listId),
+    [listId],
+  );
+  return useCardStore(useShallow(selector));
+};
 
 const selectCards = (state: ICardStore) => state.cards;
 const selectListId = (_: ICardStore, listId: string) => listId;

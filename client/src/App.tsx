@@ -16,7 +16,9 @@ const NotFoundPage = lazy(
   () => import('./pages/page-not-found/page-not-found'),
 );
 const CardPage = lazy(() => import('./pages/card-page/card-page'));
-const CardPageOnBackground = lazy(()=> import('./pages/card-page/card-page-on-background'))
+const CardPageOnBackground = lazy(
+  () => import('./pages/card-page/card-page-on-background'),
+);
 const ErrorPage = lazy(() => import('./pages/error-page/error-page'));
 const VerificationPage = lazy(
   () => import('./pages/verification-pages/verification-page'),

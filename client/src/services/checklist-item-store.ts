@@ -117,12 +117,12 @@ export const useChecklistItem = (id: string | undefined) => {
     },
     [id],
   );
-  return useChecklistItemStore((selector));
+  return useChecklistItemStore(selector);
 };
 
 export const useSortedChecklistItemsKeys = (checklistId: string) =>
-  useChecklistItemStore(
-    state => getMemoizedSortedChecklistItems(state, checklistId),
+  useChecklistItemStore(state =>
+    getMemoizedSortedChecklistItems(state, checklistId),
   );
 
 const selectChecklistId = (_: IChecklistItemStore, checklistId: string) =>
@@ -161,11 +161,10 @@ const getMemoizedSortedChecklistItems = createSelector(
 //   useChecklistItemStore(state => getMemoizedChecklistItems(state, cardId));
 
 export const useChecklistsItemsStat = (cardId: string) => {
-    const items = Object.values(useChecklistItemStore(state=> state.checklistItems)).filter(
-    item => item.cardId === cardId,
-    );
-    const quantity = items.length;
-    const complete = items.filter(item => item.state === 'complete').length;
-    return { quantity, complete };
-  }
-
+  const items = Object.values(
+    useChecklistItemStore(state => state.checklistItems),
+  ).filter(item => item.cardId === cardId);
+  const quantity = items.length;
+  const complete = items.filter(item => item.state === 'complete').length;
+  return { quantity, complete };
+};
