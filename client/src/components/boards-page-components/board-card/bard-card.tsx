@@ -4,8 +4,9 @@ import BoardCardDndContainer from './bord-card-dnd-container';
 import BoardCardContent from './bord-card-content';
 import { useCard } from '../../../services/card-store';
 import { useChecklistsItemsStat } from '../../../services/checklist-item-store';
+import { withProfiler } from '../../../utils/withProfiler';
 
-const BoardCard = (props: { _id: string }) => {
+const BoardCard = withProfiler((props: { _id: string }) => {
   const { _id } = props;
   const card = useCard(_id);
   if (!card) {
@@ -24,6 +25,6 @@ const BoardCard = (props: { _id: string }) => {
       />
     </BoardCardDndContainer>
   );
-};
+},{id: 'Board Card'});
 
 export default BoardCard;
